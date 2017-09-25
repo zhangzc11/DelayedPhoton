@@ -8,5 +8,5 @@ setup
 cmsrel CMSSW_9_2_5
 cd CMSSW_9_2_5/src
 cmsenv
-git clone https://github.com/zhangzc11/DelayedPhoton.git
+git clone git@github.com:zhangzc11/DelayedPhoton.git
 ```
