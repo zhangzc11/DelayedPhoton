@@ -38,26 +38,43 @@ print "QCD tree: "
 print fileNameQCD
 
 
+print "NTotal before cut: "
 
 fileData = TFile(fileNameData)
 treeData = fileData.Get("DelayedPhoton")
+hNEventsData = fileData.Get("NEvents")
+NEventsData = hNEventsData.GetBinContent(1)
+print "Data: " + str(NEventsData)
 
 fileSig = TFile(fileNameSig)
 treeSig = fileSig.Get("DelayedPhoton")
+hNEventsSig = fileSig.Get("NEvents")
+NEventsSig = hNEventsSig.GetBinContent(1)
+print "Sig: " + str(NEventsSig)
 
 treeGJets = {}
+NEventsGJets = []
 treeQCD = {}
-
+NEventsQCD = []
 
 for i in range(0,len(fileNameGJets)):
 	treeGJets[i] = TChain("DelayedPhoton")
 	treeGJets[i].AddFile(fileNameGJets[i])
 	SetOwnership( treeGJets[i], True)
+	fileThis = TFile(fileNameGJets[i])
+	hNEventsGJets = fileThis.Get("NEvents")
+	NEventsGJets.append(hNEventsGJets.GetBinContent(1))
+	print "GJets - " + str(i) + str(hNEventsGJets.GetBinContent(1))
 
 for i in range(0,len(fileNameQCD)):
 	treeQCD[i] = TChain("DelayedPhoton")
 	treeQCD[i].AddFile(fileNameQCD[i])
 	SetOwnership( treeQCD[i], True)
+	fileThis = TFile(fileNameQCD[i])
+	hNEventsQCD = fileThis.Get("NEvents")
+	NEventsQCD.append(hNEventsQCD.GetBinContent(1))
+	print "QCD - " + str(i) + str(hNEventsQCD.GetBinContent(1))
+
 
 print "\n cut = " + cut
 
@@ -78,26 +95,25 @@ for plot in plots:
 
 	#sig
 	print "#signal before/after cut: " + str(treeSig.GetEntries()) + " => " + str(treeSig.GetEntries(cut))
-	print "#signal xsec * lumi  " + str(xsecSig*lumi) 
-	normSig = treeSig.GetEntries("weight")
+	normSig = NEventsSig * 1.0  #treeSig.GetEntries("weight") / effSelSig
 	histSig = TH1F(plot[1]+"_histSig","",plot[3],plot[4],plot[5])	
 	treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut)
 	histSig.Scale(lumi*xsecSig/normSig)
 	histSig.SetLineWidth( 2 )
 	histSig.SetLineColor( kRed )
+	print "#signal xsec * lumi * cut  " + str(histSig.Integral()) 
 
 	#QCD
 	histQCD = TH1F(plot[1]+"_histQCD","",plot[3],plot[4],plot[5])	
 	for i in range(0, len(treeQCD)):
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut))
-		print "#QCD - "+str(i)+" xsec*lumi  " + str(lumi*xsecQCD[i])
-
-		normQCD = treeQCD[i].GetEntries("weight")	
+		normQCD = NEventsQCD[i] * 1.0  # treeQCD[i].GetEntries("weight") / effSelQCD[i]
 		histThis = TH1F(plot[1]+"_histQCD"+str(i),"",plot[3],plot[4],plot[5])	
 		treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut)
 		if histThis.Integral()>0:
 			histThis.Scale(lumi*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
+		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 	histQCD.SetFillColor(kOrange - 9)
 	histQCD.SetLineColor(kOrange - 9)
 	
@@ -106,21 +122,20 @@ for plot in plots:
 	histGJets = TH1F(plot[1]+"_histGJets","",plot[3],plot[4],plot[5])	
 	for i in range(0, len(treeGJets)):
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut))
-		print "#GJets - "+str(i)+" xsec*lumi  " + str(lumi*xsecGJets[i])
-	
-		normGJets = treeGJets[i].GetEntries("weight")	
+		normGJets = NEventsGJets[i] * 1.0  # treeGJets[i].GetEntries("weight") / effSelGJets[i]
 		histThis = TH1F(plot[1]+"_histGJets"+str(i),"",plot[3],plot[4],plot[5])	
 		treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut)
 		if histThis.Integral()>0:
 			histThis.Scale(lumi*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
+		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 	histGJets.SetFillColor(kAzure + 7)
 	histGJets.SetLineColor(kAzure + 7)
 
 	thisStack.Add(histGJets, "histo")
 	thisStack.Add(histQCD,"histo")
 	
-	#histMC.Add(histSig)
+	histMC.Add(histSig)
 	histMC.Add(histGJets)
 	histMC.Add(histQCD)
 
@@ -139,7 +154,7 @@ for plot in plots:
 	leg.AddEntry(histQCD, "QCD (MC)", "f")
 
 
-	print "#MC all - xsec*lumi  " + str(histMC.Integral())
+	print "#MC all - xsec * lumi * cut " + str(histMC.Integral())
 		
 	myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
 	myC.SetHighLightColor(2)
