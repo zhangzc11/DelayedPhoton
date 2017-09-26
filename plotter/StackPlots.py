@@ -12,6 +12,9 @@ gStyle.SetOptStat(0)
 gStyle.SetOptFit(111)
 
 os.system("mkdir -p "+outputDir)
+os.system("cp ../config.py "+outputDir)
+os.system("cp StackPlots.py "+outputDir)
+
 #################plot settings###########################
 axisTitleSize = 0.06
 axisTitleOffset = .8
@@ -80,16 +83,21 @@ print "\n cut = " + cut
 
 weightedcut = "(weight) * " + cut 
 
-for plot in plots:
+for plot in splots:
 	print "\n plotting stack plots for " + plot[1]
 	thisStack = THStack(plot[1]+"_stack",plot[1]+"_stack")
 	#data
 	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut))
 	histData = TH1F(plot[1]+"_histData","",plot[3],plot[4],plot[5])	
+	histDataOOT = TH1F(plot[1]+"_histDataOOT","",plot[3],plot[4],plot[5])	
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histData",cut)
+	treeData.Draw(plot[0]+">>"+plot[1]+"_histDataOOT",cut+" && !pho1isStandardPhoton")
 	histData.SetMarkerStyle( 20 )
+	histDataOOT.SetMarkerStyle( 22 )
 	histData.SetMarkerColor( kBlack )
+	histDataOOT.SetMarkerColor( 6 )
 	histData.SetLineColor( kBlack )
+	histDataOOT.SetLineColor( 6 )
 
 	histMC = TH1F(plot[1]+"_histMC","",plot[3],plot[4],plot[5])
 
@@ -98,7 +106,10 @@ for plot in plots:
 	normSig = NEventsSig * 1.0  #treeSig.GetEntries("weight") / effSelSig
 	histSig = TH1F(plot[1]+"_histSig","",plot[3],plot[4],plot[5])	
 	treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut)
-	histSig.Scale(lumi*xsecSig/normSig)
+	if plot[6]:
+		histSig.Scale(lumi*xsecSig/normSig)
+	else:
+		histSig.Scale(lumi*xsecSig/normSig)
 	histSig.SetLineWidth( 2 )
 	histSig.SetLineColor( kRed )
 	print "#signal xsec * lumi * cut  " + str(histSig.Integral()) 
@@ -111,7 +122,7 @@ for plot in plots:
 		histThis = TH1F(plot[1]+"_histQCD"+str(i),"",plot[3],plot[4],plot[5])	
 		treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut)
 		if histThis.Integral()>0:
-			histThis.Scale(lumi*xsecQCD[i]/(normQCD))
+			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 	histQCD.SetFillColor(kOrange - 9)
@@ -126,7 +137,7 @@ for plot in plots:
 		histThis = TH1F(plot[1]+"_histGJets"+str(i),"",plot[3],plot[4],plot[5])	
 		treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut)
 		if histThis.Integral()>0:
-			histThis.Scale(lumi*xsecGJets[i]/(normGJets))
+			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 	histGJets.SetFillColor(kAzure + 7)
@@ -139,8 +150,8 @@ for plot in plots:
 	histMC.Add(histGJets)
 	histMC.Add(histQCD)
 
-	leg = TLegend(0.4, 0.7, 0.93, 0.89)
-	leg.SetNColumns(2)
+	leg = TLegend(0.18, 0.7, 0.93, 0.89)
+	leg.SetNColumns(3)
 	leg.SetBorderSize(0)
 	leg.SetTextSize(0.03)
 	leg.SetLineColor(1)
@@ -149,7 +160,12 @@ for plot in plots:
 	leg.SetFillColor(0)
 	leg.SetFillStyle(1001)
 	leg.AddEntry(histData, "data","lep")
-	leg.AddEntry(histSig, sigLegend)
+	leg.AddEntry(histDataOOT, "data - OOT photon","lep")
+	if plot[6]:
+		leg.AddEntry(histSig, sigLegend)
+	else:
+		leg.AddEntry(histSig, sigLegend)
+
 	leg.AddEntry(histGJets, "#gamma + jets (MC)", "f")
 	leg.AddEntry(histQCD, "QCD (MC)", "f")
 
@@ -172,7 +188,7 @@ for plot in plots:
 	pad1.SetBottomMargin(0)
 	pad1.SetRightMargin( rightMargin )
 	pad1.SetLeftMargin( leftMargin )
-	pad1.SetLogy(1)
+	pad1.SetLogy(plot[6])
 	pad1.Draw()
 
 	pad2 = TPad("pad2","pad2", 0.05, 0.02, 0.95, 0.29)
@@ -193,11 +209,17 @@ for plot in plots:
   	thisStack.GetYaxis().SetTitleSize( axisTitleSize )
   	thisStack.GetYaxis().SetTitleOffset( axisTitleOffset )
 	thisStack.GetYaxis().SetTitle("events")
-	thisStack.SetMaximum(50*thisStack.GetMaximum() )
-	thisStack.SetMinimum(0.001)
+	if plot[6]:
+		thisStack.SetMaximum(200*thisStack.GetMaximum() )
+		thisStack.SetMinimum(0.1)
+	else:
+		thisStack.SetMaximum(1.3*thisStack.GetMaximum() )
+		thisStack.SetMinimum(0)
+		
 	pad1.Update()
 	histSig.Draw("samehisto")
 	histData.Draw("sameE")	
+	histDataOOT.Draw("sameE")	
 	leg.Draw()
 		
 	pad2.cd()
@@ -226,6 +248,6 @@ for plot in plots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+plot[1]+".pdf")
-	myC.SaveAs(outputDir+plot[1]+".png")
-	myC.SaveAs(outputDir+plot[1]+".C")
+	myC.SaveAs(outputDir+"/"+plot[1]+".pdf")
+	myC.SaveAs(outputDir+"/"+plot[1]+".png")
+	myC.SaveAs(outputDir+"/"+plot[1]+".C")

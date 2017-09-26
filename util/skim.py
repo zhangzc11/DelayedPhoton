@@ -1,7 +1,8 @@
 from ROOT import *
 import os, sys
+
 sys.path.insert(0, '../')
-from config_skim import *
+from config import *
 
 gROOT.SetBatch(True)
 
@@ -28,63 +29,61 @@ bottomMargin = 0.12
 print "\n"
 print "input file names: "
 print "Data tree: "
-print fileNameData
+print fileNameDataSkim
 print "Sig tree: "
-print fileNameSig
+print fileNameSigSkim
 print "GJets tree: "
-print fileNameGJets
+print fileNameGJetsSkim
 print "QCD tree: "
-print fileNameQCD
+print fileNameQCDSkim
 
-'''
-for i in range(0,len(fileNameData)):
+
+for i in range(0,len(fileNameDataSkim)):
 	print "Data file "+str(i)+"  ... "
-	fileThis = TFile(fileNameData[i], "READ")
+	fileThis = TFile(fileNameDataSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
+	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameData[i].replace("private_REMINIAOD","private_REMINIAOD/skim"),"RECREATE")
+	outputFile = TFile(fileNameDataSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
 	
-'''
-for i in range(0,len(fileNameSig)):
+for i in range(0,len(fileNameSigSkim)):
 	print "Sig file "+str(i)+"  ... "
-	fileThis = TFile(fileNameSig[i], "READ")
+	fileThis = TFile(fileNameSigSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
+	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameSig[i].replace("private_REMINIAOD","private_REMINIAOD/skim"),"RECREATE")
+	outputFile = TFile(fileNameSigSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
-	
-'''
-for i in range(0,len(fileNameGJets)):
+for i in range(0,len(fileNameGJetsSkim)):
 	print "GJets file "+str(i)+"  ... "
-	fileThis = TFile(fileNameGJets[i], "READ")
+	fileThis = TFile(fileNameGJetsSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
+	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameGJets[i].replace("private_REMINIAOD","private_REMINIAOD/skim"),"RECREATE")
+	outputFile = TFile(fileNameGJetsSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
-	
-for i in range(0,len(fileNameQCD)):
+for i in range(0,len(fileNameQCDSkim)):
 	print "QCD file "+str(i)+"  ... "
-	fileThis = TFile(fileNameQCD[i], "READ")
+	fileThis = TFile(fileNameQCDSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
+	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameQCD[i].replace("private_REMINIAOD","private_REMINIAOD/skim"),"RECREATE")
+	outputFile = TFile(fileNameQCDSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
 	outputTree = inputTree.CopyTree(cut_skim)
 	outputTree.Write()
 	NEvents_out.Write()
-	
-'''
