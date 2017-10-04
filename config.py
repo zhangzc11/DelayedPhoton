@@ -36,14 +36,18 @@ scaleBkg = 1.0
 ###############cuts and outputs########################
 #cut = 'pho1Pt > 100 && abs(pho1Eta)<1.44 && pho1passIsoMedium && pho1passEleVeto && n_Jets > 2 && pho1Smajor>0.1'
 #cut = 'pho1Pt > 100 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Smajor>0.1 && pho1Sminor>0.1 && pho1Sminor<0.53 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0'
-cut = 'pho1SC_Pt > 100 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Smajor>0.1 && pho1Sminor>0.1 && pho1Sminor<0.53 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1)'
+cut = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Smajor>0.1 && pho1Sminor>0.1 && pho1Sminor<0.53 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2'
 cut_skim = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets >= 2 && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
-outputDir = '/afs/cern.ch/user/z/zhicaiz/www/sharebox/DelayedPhoton/25Sept2017/cut_7TeV_HLTPhoton42/'
+outputDir = '/afs/cern.ch/user/z/zhicaiz/www/sharebox/DelayedPhoton/25Sept2017/cut_7TeV_HLTPhoton42_twoPhotons/'
 
 ############define the plot you want to make##########
 ##for stack plots
 splots = []
 #variable name in the tree, output plot file name, description/title, Nbins, lowX, upX, useLogy
+splots.append(["pho1Pt", "phoPt_linear", "p_{T}^{#gamma} [GeV]", 100,50,2000, False])
+splots.append(["pho1Pt", "phoPt_log", "p_{T}^{#gamma} [GeV]", 100,50,2000, True])
+
+'''
 splots.append(["pho1Sminor", "Sminor_linear", "S_{minor}", 50,0,0.5, False])
 splots.append(["pho1Sminor", "Sminor_log", "S_{minor}", 50,0,0.5, True])
 splots.append(["sqrt(pho1Sminor)", "SminorSqrt_linear", "#sqrt{S_{minor}}", 50,0,1, False])
@@ -72,7 +76,7 @@ splots.append(["pho1Sminor/pho1Smajor", "SminorOverSmajor_linear", "S_{minor}/S_
 splots.append(["pho1Sminor/pho1Smajor", "SminorOverSmajor_log", "S_{minor}/S_{major}", 50,0,1.1, True])
 splots.append(["sqrt(pho1Sminor)/sqrt(pho1Smajor)", "SminorSqrtOverSmajorSqrt_linear", "#sqrt{S_{minor}}/#sqrt{S_{major}}", 50,0,1.1, False])
 splots.append(["sqrt(pho1Sminor)/sqrt(pho1Smajor)", "SminorSqrtOverSmajorSqrt_log", "#sqrt{S_{minor}}/#sqrt{S_{major}}", 50,0,1.1, True])
-
+'''
 
 #############################input files to skim script#####################
 

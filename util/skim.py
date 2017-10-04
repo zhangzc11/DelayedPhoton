@@ -37,12 +37,10 @@ print fileNameGJetsSkim
 print "QCD tree: "
 print fileNameQCDSkim
 
-
 for i in range(0,len(fileNameDataSkim)):
 	print "Data file "+str(i)+"  ... "
 	fileThis = TFile(fileNameDataSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameDataSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
@@ -50,12 +48,11 @@ for i in range(0,len(fileNameDataSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
-	
+'''
 for i in range(0,len(fileNameSigSkim)):
 	print "Sig file "+str(i)+"  ... "
 	fileThis = TFile(fileNameSigSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameSigSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
@@ -63,11 +60,11 @@ for i in range(0,len(fileNameSigSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
+
 for i in range(0,len(fileNameGJetsSkim)):
 	print "GJets file "+str(i)+"  ... "
 	fileThis = TFile(fileNameGJetsSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameGJetsSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
@@ -79,7 +76,6 @@ for i in range(0,len(fileNameQCDSkim)):
 	print "QCD file "+str(i)+"  ... "
 	fileThis = TFile(fileNameQCDSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	inputTree.SetBranchStatus("HLTPrescale",0)
 	NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameQCDSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
@@ -87,3 +83,4 @@ for i in range(0,len(fileNameQCDSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	outputTree.Write()
 	NEvents_out.Write()
+'''

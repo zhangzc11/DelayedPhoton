@@ -146,7 +146,7 @@ for plot in splots:
 	thisStack.Add(histGJets, "histo")
 	thisStack.Add(histQCD,"histo")
 	
-	histMC.Add(histSig)
+	#histMC.Add(histSig)
 	histMC.Add(histGJets)
 	histMC.Add(histQCD)
 
@@ -210,10 +210,10 @@ for plot in splots:
   	thisStack.GetYaxis().SetTitleOffset( axisTitleOffset )
 	thisStack.GetYaxis().SetTitle("events")
 	if plot[6]:
-		thisStack.SetMaximum(200*thisStack.GetMaximum() )
+		thisStack.SetMaximum(200*max(histData.GetMaximum(), thisStack.GetMaximum(),histSig.GetMaximum())  )
 		thisStack.SetMinimum(0.1)
 	else:
-		thisStack.SetMaximum(1.3*thisStack.GetMaximum() )
+		thisStack.SetMaximum(1.5*max(histData.GetMaximum(), thisStack.GetMaximum(),histSig.GetMaximum())  )
 		thisStack.SetMinimum(0)
 		
 	pad1.Update()
@@ -235,7 +235,7 @@ for plot in splots:
 	ratio.GetYaxis().SetTitleOffset( axisTitleOffsetRatioY )
 	ratio.SetMarkerColor( kBlue )
 	ratio.SetLineColor( kBlue )
-	ratio.GetYaxis().SetRangeUser( 0.0, 2.0 )
+	ratio.GetYaxis().SetRangeUser( 0.0, 2.5 )
 	ratio.SetTitle("")
 	ratio.GetYaxis().SetTitle("data / mc")
 	ratio.GetYaxis().CenterTitle( True )
