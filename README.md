@@ -7,6 +7,10 @@ setup
 ```
 cmsrel CMSSW_9_2_5
 cd CMSSW_9_2_5/src
+mkdir -p HiggsAnalysis
+cd HiggsAnalysis
 cmsenv
 git clone git@github.com:zhangzc11/DelayedPhoton.git
+cd DelayedPhoton
+make
 ```
