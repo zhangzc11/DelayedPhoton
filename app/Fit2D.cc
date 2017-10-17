@@ -5,6 +5,7 @@
 #include <TTree.h>
 #include <TMath.h>
 #include <TH1F.h>
+#include <TH2F.h>
 #include <TROOT.h>
 #include <THStack.h>
 #include <TColor.h>
@@ -113,7 +114,7 @@ cout<<"fraction of Gjets = "<<nGJets_value_SigmaIetaIeta<<" / "<<nGJets_value_Si
 cout<<"fraction of Gjets = "<<nQCD_value_SigmaIetaIeta<<" / "<<nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta<<" = "<<nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta)<<endl;
 
 */
-
+/*
 TH1F *h1_PhoPt_data = new TH1F("h1_PhoPt_data","h1_PhoPt_data", 100, 50, 1000);
 tree_data->Draw("pho1Pt>>h1_PhoPt_data", cut.c_str());
 TH1F *h1_PhoPt_GJets = new TH1F("h1_PhoPt_GJets","h1_PhoPt_GJets", 100, 50, 1000);
@@ -174,26 +175,6 @@ cout<<"result of fit with nJets: " <<endl;
 cout<<"fraction of Gjets = "<<nGJets_value_nJets<<" / "<<nGJets_value_nJets+nQCD_value_nJets<<" = "<<nGJets_value_nJets/(nGJets_value_nJets+nQCD_value_nJets)<<endl;
 cout<<"fraction of QCD = "<<nQCD_value_nJets<<" / "<<nGJets_value_nJets+nQCD_value_nJets<<" = "<<nQCD_value_nJets/(nGJets_value_nJets+nQCD_value_nJets)<<endl;
 
-//another fit with sigmaEOverE
-TH1F *h1_sigmaEOverE_data = new TH1F("h1_sigmaEOverE_data","h1_sigmaEOverE_data", 100,0.,0.5);
-tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_data", cut.c_str());
-TH1F *h1_sigmaEOverE_GJets = new TH1F("h1_sigmaEOverE_GJets","h1_sigmaEOverE_GJets", 100,0.,0.5);
-tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_GJets", cut_GJets.c_str());
-TH1F *h1_sigmaEOverE_QCD = new TH1F("h1_sigmaEOverE_QCD","h1_sigmaEOverE_QCD", 100,0.,0.5);
-tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
-h1_sigmaEOverE_GJets->Scale(1.0*h1_sigmaEOverE_data->Integral()/h1_sigmaEOverE_GJets->Integral());
-h1_sigmaEOverE_QCD->Scale(1.0*h1_sigmaEOverE_data->Integral()/h1_sigmaEOverE_QCD->Integral());
-
-TFractionFitter* fit_sigmaEOverE;
-fit_sigmaEOverE = FitDataBkgFractionFilter(h1_sigmaEOverE_data, h1_sigmaEOverE_GJets, h1_sigmaEOverE_QCD);
-Double_t nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err;
-fit_sigmaEOverE->GetResult(0, nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err);
-fit_sigmaEOverE->GetResult(1, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err);
-
-cout<<"result of fit with sigmaEOverE: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_sigmaEOverE<<" / "<<nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE<<" = "<<nGJets_value_sigmaEOverE/(nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE)<<endl;
-cout<<"fraction of QCD = "<<nQCD_value_sigmaEOverE<<" / "<<nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE<<" = "<<nQCD_value_sigmaEOverE/(nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE)<<endl;
-
 //another fit with Smajor
 TH1F *h1_Smajor_data = new TH1F("h1_Smajor_data","h1_Smajor_data", 100, 0., 1.0);
 tree_data->Draw("pho1Smajor>>h1_Smajor_data", cut.c_str());
@@ -214,6 +195,59 @@ cout<<"result of fit with Smajor: " <<endl;
 cout<<"fraction of Gjets = "<<nGJets_value_Smajor<<" / "<<nGJets_value_Smajor+nQCD_value_Smajor<<" = "<<nGJets_value_Smajor/(nGJets_value_Smajor+nQCD_value_Smajor)<<endl;
 cout<<"fraction of QCD = "<<nQCD_value_Smajor<<" / "<<nGJets_value_Smajor+nQCD_value_Smajor<<" = "<<nQCD_value_Smajor/(nGJets_value_Smajor+nQCD_value_Smajor)<<endl;
 
+
+*/
+
+//another fit with sigmaEOverE
+TH1F *h1_sigmaEOverE_data = new TH1F("h1_sigmaEOverE_data","h1_sigmaEOverE_data", 100,0.,0.5);
+tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_data", cut.c_str());
+TH1F *h1_sigmaEOverE_GJets = new TH1F("h1_sigmaEOverE_GJets","h1_sigmaEOverE_GJets", 100,0.,0.5);
+tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_GJets", cut_GJets.c_str());
+TH1F *h1_sigmaEOverE_QCD = new TH1F("h1_sigmaEOverE_QCD","h1_sigmaEOverE_QCD", 100,0.,0.5);
+tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+h1_sigmaEOverE_GJets->Scale(1.0*h1_sigmaEOverE_data->Integral()/h1_sigmaEOverE_GJets->Integral());
+h1_sigmaEOverE_QCD->Scale(1.0*h1_sigmaEOverE_data->Integral()/h1_sigmaEOverE_QCD->Integral());
+
+TFractionFitter* fit_sigmaEOverE;
+fit_sigmaEOverE = FitDataBkgFractionFilter(h1_sigmaEOverE_data, h1_sigmaEOverE_GJets, h1_sigmaEOverE_QCD);
+Double_t nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err;
+fit_sigmaEOverE->GetResult(0, nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err);
+fit_sigmaEOverE->GetResult(1, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err);
+
+cout<<"result of fit with sigmaEOverE: " <<endl;
+cout<<"fraction of Gjets = "<<nGJets_value_sigmaEOverE<<" / "<<nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE<<" = "<<nGJets_value_sigmaEOverE/(nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE)<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_sigmaEOverE<<" / "<<nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE<<" = "<<nQCD_value_sigmaEOverE/(nGJets_value_sigmaEOverE+nQCD_value_sigmaEOverE)<<endl;
+
+
+/*********2D fit of time and MET to obtain signal and background yield***********/
+
+TH2F * h2Data = new TH2F("h2Data","h2Data", 100, -15, 15, 100, 0, 1000);
+TH2F * h2GJets = new TH2F("h2GJets","h2GJets", 100, -15, 15, 100, 0, 1000);
+TH2F * h2QCD = new TH2F("h2QCD","h2QCD", 100, -15, 15, 100, 0, 1000);
+
+tree_data->Draw("MET:pho1ClusterTime>>h2Data", cut.c_str());
+tree_data->Draw("MET:pho1ClusterTime>>h2GJets", cut_GJets.c_str());
+tree_data->Draw("MET:pho1ClusterTime>>h2QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+
+h2GJets->Scale((1.0*h2Data->Integral())/(1.0*h2GJets->Integral()));
+h2QCD->Scale((1.0*h2Data->Integral())/(1.0*h2QCD->Integral()));
+
+RooWorkspace * w_DataBkg;
+
+//w_DataBkg = Fit2DMETTimeDataBkg( tree_data->CopyTree( cut.c_str() ), tree_data->CopyTree( cut_GJets.c_str() ), tree_data->CopyTree( (cut_loose + " && ! (" + cut + ")").c_str() ), nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err);
+w_DataBkg = Fit2DMETTimeDataBkg( h2Data, h2GJets, h2QCD, nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err);
+w_DataBkg->Write("w_DataBkg");
+
+
+float nGJets_2DFit_DataBkg = w_DataBkg->var("nGJets")->getValV();
+float nQCD_2DFit_DataBkg = w_DataBkg->var("nQCD")->getValV();
+
+int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
+
+cout<<"result of 2D fit with background only: " <<endl;
+cout<<"N_obs in data = "<<N_obs_total<<endl;
+cout<<"GJets yield = "<<N_obs_total*nGJets_2DFit_DataBkg<<" (fraction: "<<nGJets_2DFit_DataBkg<<" )"<<endl;
+cout<<"QCD yield = "<<N_obs_total*nQCD_2DFit_DataBkg<<" (fraction: "<<nQCD_2DFit_DataBkg<<" )"<<endl;
 
 return 0;
 }

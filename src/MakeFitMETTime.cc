@@ -9,6 +9,8 @@
 #include <TString.h>
 #include <TFile.h>
 #include <TH1D.h>
+#include <TH1F.h>
+#include <TH2F.h>
 #include <TF1.h>
 #include <TBox.h>
 #include <TCanvas.h>
@@ -136,3 +138,178 @@ TFractionFitter* FitDataBkgFractionFilter(TH1F * h1_data, TH1F * h1_GJets, TH1F 
 	return fit;
 };
 
+
+RooWorkspace* Fit2DMETTimeDataBkg( TTree * treeData, TTree * treeGJets, TTree * treeQCD,  float fracGJets, float fracGJetsErr, float fracQCD, float fracQCDErr)
+{
+	RooWorkspace* ws = new RooWorkspace( "ws", "" );
+	// define variables
+	RooRealVar pho1ClusterTime("pho1ClusterTime","#gamma cluster time ",-15.0,15.0,"ns");
+	RooRealVar MET("MET","#slash{E}_{T} ",0,1000,"GeV");
+
+	RooRealVar nGJets ("nGJets", "nGJets", fracGJets, fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr);
+	RooRealVar nQCD ("nQCD", "nQCD", fracQCD, fracQCD-3.0*fracQCDErr, fracQCD+3.0*fracQCDErr);
+	//RooRealVar nGJets ("nGJets", "nGJets", 0.5,0.0,1.0);
+	//RooRealVar nQCD ("nQCD", "nQCD", 0.5,0.0,1.0);
+
+	RooRealVar weightGJets("weightGJets", "weightGJets", (treeData->GetEntries()*1.0)/(treeGJets->GetEntries()*1.0));
+	RooRealVar weightQCD("weightQCD", "weightQCD", (treeData->GetEntries()*1.0)/(treeQCD->GetEntries()*1.0));
+
+	//data sets
+	RooDataSet data( "data", "data", RooArgSet(pho1ClusterTime, MET), RooFit::Import(*treeData));
+	RooDataSet dataGJets( "dataGJets", "dataGJets", RooArgSet(pho1ClusterTime, MET), RooFit::Import(*treeGJets), RooFit::WeightVar("weightGJets"));
+	//RooDataSet dataGJets( "dataGJets", "dataGJets", RooArgSet(pho1ClusterTime, MET), RooFit::Import(*treeGJets));
+	RooDataSet dataQCD( "dataQCD", "dataQCD", RooArgSet(pho1ClusterTime, MET), RooFit::Import(*treeQCD), RooFit::WeightVar("weightQCD"));
+	//RooDataSet dataQCD( "dataQCD", "dataQCD", RooArgSet(pho1ClusterTime, MET), RooFit::Import(*treeQCD));
+
+	//dataGJets.setWeightVar(weightGJets);
+	//dataQCD.setWeightVar(weightQCD);
+
+	//RooDataSet -> RooDataHist
+	RooDataHist* rhGJets = new RooDataHist("rhGJets", "rhGJets", RooArgSet(pho1ClusterTime, MET), dataGJets);	
+	RooDataHist* rhQCD = new RooDataHist("rhQCD", "rhQCD", RooArgSet(pho1ClusterTime, MET), dataQCD);	
+	//RooDataHist -> RooHistPdf
+	RooHistPdf * rpGJets = new RooHistPdf("rpGJets", "rpGJets", RooArgSet(pho1ClusterTime, MET), *rhGJets);
+	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(pho1ClusterTime, MET), *rhQCD);
+	//RooHistPdf -> RooAbsPdf
+	RooAbsPdf * fitModel = new RooAddPdf("fitModel", "fitModel", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));	
+
+	//fit
+	RooAbsReal* nll = fitModel->createNLL(data, RooFit::NumCPU(8)) ;
+	RooMinimizer m(*nll);
+
+	m.migrad() ;	
+	
+	//RooFitResult * fres = fitModel->fitTo( data, RooFit::Strategy(2), RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+	//RooFitResult * fres = fitModel->fitTo( data, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+	RooFitResult * fres1 = m.save();
+
+	int _status = -1;
+	_status    = fres1->status();
+	
+	if(_status!=0)
+        {
+      		m.minimize("Minuit2", "Hesse");
+        }
+	RooFitResult * fres = m.save();
+	_status    = fres->status();
+
+        nGJets.Print();
+        nQCD.Print();
+
+        RooPlot * frame_pho1ClusterTime = pho1ClusterTime.frame(-15.0, 15.0, 100);
+        data.plotOn( frame_pho1ClusterTime );
+        fitModel->plotOn( frame_pho1ClusterTime, RooFit::Components("rpGJets"), RooFit::LineColor(kViolet + 10) );
+        fitModel->plotOn( frame_pho1ClusterTime, RooFit::Components("rpQCD"), RooFit::LineColor(kOrange + 9) );
+        fitModel->plotOn( frame_pho1ClusterTime, RooFit::Components("fitModel"), RooFit::LineColor(kGreen) );
+        frame_pho1ClusterTime->SetName("pho1ClusterTime_frame");
+	
+        RooPlot * frame_pho1ClusterTime_LL = pho1ClusterTime.frame(-15.0, 15.0, 100);
+	nll->plotOn(frame_pho1ClusterTime_LL, RooFit::ShiftToZero()) ;
+	frame_pho1ClusterTime_LL->SetName("pho1ClusterTime_frame_Likelihood");
+       
+	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
+        data.plotOn( frame_MET );
+        fitModel->plotOn( frame_MET, RooFit::Components("rpGJets"), RooFit::LineColor(kViolet + 10) );
+        fitModel->plotOn( frame_MET, RooFit::Components("rpQCD"), RooFit::LineColor(kOrange + 9) );
+        fitModel->plotOn( frame_MET, RooFit::Components("fitModel"), RooFit::LineColor(kGreen) );
+        frame_MET->SetName("MET_frame");
+        
+	RooPlot * frame_MET_LL = MET.frame(0, 1000.0, 100);
+	nll->plotOn(frame_MET_LL, RooFit::ShiftToZero()) ;
+        frame_MET_LL->SetName("MET_frame_Likelihood");
+	
+
+	ws->import(data);
+        ws->import(dataGJets);
+        ws->import(dataQCD);
+        ws->import(*fitModel);
+        ws->import(*frame_pho1ClusterTime);
+        ws->import(*frame_pho1ClusterTime_LL);
+        ws->import(*frame_MET);
+        ws->import(*frame_MET_LL);
+        ws->import(*fres);
+
+        return ws;
+	
+};
+
+RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  float fracGJets, float fracGJetsErr, float fracQCD, float fracQCDErr)
+{
+	
+	RooWorkspace* ws = new RooWorkspace( "ws", "" );
+	// define variables
+	RooRealVar pho1ClusterTime("pho1ClusterTime","#gamma cluster time ",-15.0,15.0,"ns");
+	RooRealVar MET("MET","#slash{E}_{T} ",0,1000,"GeV");
+
+	RooRealVar nGJets ("nGJets", "nGJets", fracGJets, fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr);
+	RooRealVar nQCD ("nQCD", "nQCD", fracQCD, fracQCD-3.0*fracQCDErr, fracQCD+3.0*fracQCDErr);
+	//RooRealVar nGJets ("nGJets", "nGJets", 0.5,0.0,1.0);
+	//RooRealVar nQCD ("nQCD", "nQCD", 0.5,0.0,1.0);
+
+	//RooDataHist
+	RooDataHist* data = new RooDataHist("data", "data", RooArgSet(pho1ClusterTime, MET), h2Data);	
+	RooDataHist* rhGJets = new RooDataHist("rhGJets", "rhGJets", RooArgSet(pho1ClusterTime, MET), h2GJets);	
+	RooDataHist* rhQCD = new RooDataHist("rhQCD", "rhQCD", RooArgSet(pho1ClusterTime, MET), h2QCD);	
+	//RooDataHist -> RooHistPdf
+	RooHistPdf * rpGJets = new RooHistPdf("rpGJets", "rpGJets", RooArgSet(pho1ClusterTime, MET), *rhGJets, 0);
+	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(pho1ClusterTime, MET), *rhQCD, 0);
+	//RooHistPdf -> RooAbsPdf
+	RooAbsPdf * fitModel = new RooAddPdf("fitModel", "fitModel", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));	
+
+	//fit
+	RooAbsReal* nll = fitModel->createNLL(*data, RooFit::NumCPU(8)) ;
+	RooMinimizer m(*nll);
+
+	m.migrad() ;	
+	
+	//RooFitResult * fres = fitModel->fitTo( data, RooFit::Strategy(2), RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+	//RooFitResult * fres = fitModel->fitTo( data, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+	RooFitResult * fres1 = m.save();
+
+	int _status = -1;
+	_status    = fres1->status();
+	
+	if(_status!=0)
+        {
+      		m.minimize("Minuit2", "Hesse");
+        }
+	RooFitResult * fres = m.save();
+	_status    = fres->status();
+
+        nGJets.Print();
+        nQCD.Print();
+
+        RooPlot * frame_pho1ClusterTime = pho1ClusterTime.frame(-15.0, 15.0, 100);
+        data->plotOn( frame_pho1ClusterTime );
+        fitModel->plotOn( frame_pho1ClusterTime, RooFit::Components("rpGJets"), RooFit::LineColor(kViolet + 10) );
+        fitModel->plotOn( frame_pho1ClusterTime, RooFit::Components("rpQCD"), RooFit::LineColor(kOrange + 9) );
+        fitModel->plotOn( frame_pho1ClusterTime, RooFit::Components("fitModel"), RooFit::LineColor(kGreen) );
+        frame_pho1ClusterTime->SetName("pho1ClusterTime_frame");
+	
+        RooPlot * frame_pho1ClusterTime_LL = pho1ClusterTime.frame(-15.0, 15.0, 100);
+	nll->plotOn(frame_pho1ClusterTime_LL, RooFit::ShiftToZero()) ;
+	frame_pho1ClusterTime_LL->SetName("pho1ClusterTime_frame_Likelihood");
+       
+	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
+        data->plotOn( frame_MET );
+        fitModel->plotOn( frame_MET, RooFit::Components("rpGJets"), RooFit::LineColor(kViolet + 10) );
+        fitModel->plotOn( frame_MET, RooFit::Components("rpQCD"), RooFit::LineColor(kOrange + 9) );
+        fitModel->plotOn( frame_MET, RooFit::Components("fitModel"), RooFit::LineColor(kGreen) );
+        frame_MET->SetName("MET_frame");
+        
+	RooPlot * frame_MET_LL = MET.frame(0, 1000.0, 100);
+	nll->plotOn(frame_MET_LL, RooFit::ShiftToZero()) ;
+        frame_MET_LL->SetName("MET_frame_Likelihood");
+	
+	ws->import(*data);
+        ws->import(*rhGJets);
+        ws->import(*rhQCD);
+        ws->import(*fitModel);
+        ws->import(*frame_pho1ClusterTime);
+        ws->import(*frame_pho1ClusterTime_LL);
+        ws->import(*frame_MET);
+        ws->import(*frame_MET_LL);
+        ws->import(*fres);
+        return ws;
+	
+};
