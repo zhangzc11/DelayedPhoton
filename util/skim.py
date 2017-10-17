@@ -48,7 +48,7 @@ for i in range(0,len(fileNameDataSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
-'''
+
 for i in range(0,len(fileNameSigSkim)):
 	print "Sig file "+str(i)+"  ... "
 	fileThis = TFile(fileNameSigSkim[i], "READ")
@@ -83,4 +83,3 @@ for i in range(0,len(fileNameQCDSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	outputTree.Write()
 	NEvents_out.Write()
-'''
