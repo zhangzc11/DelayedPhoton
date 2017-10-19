@@ -297,7 +297,7 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	nGJets.Print();
         nQCD.Print();
 
-	//draw some plots
+	//draw some fit_results
 	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
 	myC->SetHighLightColor(2);
         myC->SetFillColor(0);
@@ -339,9 +339,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	leg_pho1ClusterTime->Draw();
 
 	myC->SetTitle("");
-	myC->SaveAs("plots/fit_bkgonly_pho1ClusterTime.pdf");
-	myC->SaveAs("plots/fit_bkgonly_pho1ClusterTime.png");
-	myC->SaveAs("plots/fit_bkgonly_pho1ClusterTime.C");
+	myC->SaveAs("fit_results/fit_bkgonly_pho1ClusterTime.pdf");
+	myC->SaveAs("fit_results/fit_bkgonly_pho1ClusterTime.png");
+	myC->SaveAs("fit_results/fit_bkgonly_pho1ClusterTime.C");
 	
 	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
         data->plotOn( frame_MET, RooFit::Name("MET_data") );
@@ -371,9 +371,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	leg_MET->Draw();
 
      	myC->SetTitle("");
-        myC->SaveAs("plots/fit_bkgonly_MET.pdf");
-        myC->SaveAs("plots/fit_bkgonly_MET.png");
-        myC->SaveAs("plots/fit_bkgonly_MET.C");
+        myC->SaveAs("fit_results/fit_bkgonly_MET.pdf");
+        myC->SaveAs("fit_results/fit_bkgonly_MET.png");
+        myC->SaveAs("fit_results/fit_bkgonly_MET.C");
 	
         RooPlot * frame_nGJets_LL = nGJets.frame(fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr, 100);
 	RooAbsReal* pll_nGJets = nll->createProfile(nGJets) ;
@@ -403,9 +403,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	ph2->GetZaxis()->SetTitleOffset(1.8);
 	ph2->GetZaxis()->SetRangeUser(1e-8, 0.1);
 	ph2->Draw("SURF1");
-	myC->SaveAs("plots/fit_bkgonly_2D_pdf.pdf");
-	myC->SaveAs("plots/fit_bkgonly_2D_pdf.png");
-	myC->SaveAs("plots/fit_bkgonly_2D_pdf.C");
+	myC->SaveAs("fit_results/fit_bkgonly_2D_pdf.pdf");
+	myC->SaveAs("fit_results/fit_bkgonly_2D_pdf.png");
+	myC->SaveAs("fit_results/fit_bkgonly_2D_pdf.C");
 	
 	ws->import(*data);
         ws->import(*rhGJets);
@@ -504,7 +504,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
         nQCD.Print();
         nSig.Print();
 
-	//draw some plots
+	//draw some plot-s
 	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
 	myC->SetHighLightColor(2);
         myC->SetFillColor(0);
@@ -549,9 +549,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	leg_pho1ClusterTime->Draw();
 
 	myC->SetTitle("");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgsig_pho1ClusterTime.pdf");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgsig_pho1ClusterTime.png");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgsig_pho1ClusterTime.C");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_pho1ClusterTime.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_pho1ClusterTime.png");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_pho1ClusterTime.C");
 	
 	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
         if(useToy) data_toy->plotOn( frame_MET, RooFit::Name("MET_data") );
@@ -584,9 +584,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	leg_MET->Draw();
 
      	myC->SetTitle("");
-        myC->SaveAs("plots/"+modelName+"_fit_bkgsig_MET.pdf");
-        myC->SaveAs("plots/"+modelName+"_fit_bkgsig_MET.png");
-        myC->SaveAs("plots/"+modelName+"_fit_bkgsig_MET.C");
+        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.pdf");
+        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.png");
+        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.C");
 	
         RooPlot * frame_nGJets_LL = nGJets.frame(fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr, 100);
 	RooAbsReal* pll_nGJets = nll->createProfile(nGJets) ;
@@ -619,9 +619,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	ph2->GetZaxis()->SetTitleOffset(1.8);
 	ph2->GetZaxis()->SetRangeUser(1e-8, 0.1);
 	ph2->Draw("SURF1");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgsig_2D_pdf.pdf");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgsig_2D_pdf.png");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgsig_2D_pdf.C");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_2D_pdf.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_2D_pdf.png");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_2D_pdf.C");
 	
 	TH2F * ph2_bkg = new TH2F("fit2D_bkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); PDF",100,-15,15,100,0,1000);
 	fitModelBkg->fillHistogram(ph2_bkg, RooArgList(pho1ClusterTime, MET));
@@ -634,9 +634,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	ph2_bkg->GetZaxis()->SetTitleOffset(1.8);
 	ph2_bkg->GetZaxis()->SetRangeUser(1e-8, 0.1);
 	ph2_bkg->Draw("SURF1");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgonly_2D_pdf.pdf");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgonly_2D_pdf.png");
-	myC->SaveAs("plots/"+modelName+"_fit_bkgonly_2D_pdf.C");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgonly_2D_pdf.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgonly_2D_pdf.png");
+	myC->SaveAs("fit_results/"+modelName+"_fit_bkgonly_2D_pdf.C");
 
 		
 	TH2F * h2Data_toy = new TH2F("h2Data_toy","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events",100,-15,15,100,0,1000);
@@ -650,9 +650,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	h2Data_toy->GetZaxis()->SetTitleOffset(1.8);
 	h2Data_toy->GetZaxis()->SetRangeUser(0, 1e3);
 	h2Data_toy->Draw("LEGO2");
-	myC->SaveAs("plots/"+modelName+"_data_toy_2D.pdf");
-	myC->SaveAs("plots/"+modelName+"_data_toy_2D.png");
-	myC->SaveAs("plots/"+modelName+"_data_toy_2D.C");
+	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.png");
+	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.C");
 
 	h2Data->GetXaxis()->SetTitleOffset(2.0);
 	h2Data->GetXaxis()->SetRangeUser(-5,5);
@@ -663,9 +663,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	h2Data->GetZaxis()->SetTitleOffset(1.8);
 	h2Data->GetZaxis()->SetRangeUser(0, 1e3);
 	h2Data->Draw("LEGO2");
-	myC->SaveAs("plots/"+modelName+"_data_2D.pdf");
-	myC->SaveAs("plots/"+modelName+"_data_2D.png");
-	myC->SaveAs("plots/"+modelName+"_data_2D.C");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D.png");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D.C");
 
 	ws->import(*data);
         ws->import(*rhGJets);

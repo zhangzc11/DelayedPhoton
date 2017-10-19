@@ -26,8 +26,8 @@ gStyle->SetPalette(1);
 
 std::string inputFileName_data = argv[1];
 std::string inputFileName_signal = argv[2];
-std::string sigModelName = "M1000GeV_500mm";
-std::string sigModelTitle = "#tilde{g}#rightarrow#tilde{#chi}_{1}^{0}#rightarrow#gamma#tilde{G} (500mm)";
+std::string sigModelName = argv[3]; //"M1000GeV_500mm";
+std::string sigModelTitle = argv[4]; //"#tilde{g}#rightarrow#tilde{#chi}_{1}^{0}#rightarrow#gamma#tilde{G} (500mm)";
 
 std::string treeName = "DelayedPhoton";
 
@@ -64,7 +64,7 @@ file_signal = new TFile(inputFileName_signal.c_str(), "READ");
 tree_signal = (TTree*)file_signal->Get(treeName.c_str());
 
 
-TFile *f_Out = new TFile("result.root","recreate");
+TFile *f_Out = new TFile(("fit_results/fit_ws_"+sigModelName+".root").c_str(),"recreate");
 
 int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
 
@@ -163,13 +163,13 @@ cout<<"fraction of Gjets = "<<nQCD_value_Smajor<<" +/- "<<nQCD_value_Smajor_err<
 
 //nJets
 TH1F *h1_nJets_Data = new TH1F("h1_nJets_Data","h1_nJets_Data", 15,-0.5,14.5);
-tree_data->Draw("nJets>>h1_nJets_Data", cut.c_str());
+tree_data->Draw("n_Jets>>h1_nJets_Data", cut.c_str());
 
 TH1F *h1_nJets_GJets = new TH1F("h1_nJets_GJets","h1_nJets_GJets", 15,-0.5,14.5);
-tree_data->Draw("nJets>>h1_nJets_GJets", cut_GJets.c_str());
+tree_data->Draw("n_Jets>>h1_nJets_GJets", cut_GJets.c_str());
 
 TH1F *h1_nJets_QCD = new TH1F("h1_nJets_QCD","h1_nJets_QCD", 15,-0.5,14.5);
-tree_data->Draw("nJets>>h1_nJets_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+tree_data->Draw("n_Jets>>h1_nJets_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
 
 h1_nJets_GJets->Scale((1.0*h1_nJets_Data->Integral())/h1_nJets_GJets->Integral());
 h1_nJets_QCD->Scale((1.0*h1_nJets_Data->Integral())/h1_nJets_QCD->Integral());
