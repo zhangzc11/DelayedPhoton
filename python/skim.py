@@ -1,7 +1,6 @@
 from ROOT import *
 import os, sys
-
-sys.path.insert(0, '../')
+#sys.path.insert(0, '../')
 from config import *
 
 gROOT.SetBatch(True)

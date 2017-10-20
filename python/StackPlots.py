@@ -1,8 +1,6 @@
 from ROOT import *
 import os, sys
 from Aux import *
-
-sys.path.insert(0, '../')
 from config import *
 
 
@@ -159,7 +157,8 @@ for plot in splots:
 	histGJets_CR = TH1F(plot[1]+"_histGJets_CR","",plot[3],plot[4],plot[5])	
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
 	if useFraction:
-		histGJets_CR.Scale(histData.Integral() * fractionGJets /histGJets_CR.Integral())
+		#histGJets_CR.Scale(histData.Integral()*fractionGJets/histGJets_CR.Integral())
+		histGJets_CR.Scale(histData.Integral()*0.647/histGJets_CR.Integral())
 	else:
 		histGJets_CR.Scale(histGJets.Integral()/histGJets_CR.Integral())
 	histGJets_CR.SetFillColor(kAzure + 7)
@@ -170,7 +169,8 @@ for plot in splots:
 	histQCD_CR = TH1F(plot[1]+"_histQCD_CR","",plot[3],plot[4],plot[5])	
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose + " && !( " + cut +")")
 	if useFraction:
-		histQCD_CR.Scale(histData.Integral() * fractionQCD /histQCD_CR.Integral())
+		#histQCD_CR.Scale(histData.Integral()*fractionQCD/histQCD_CR.Integral())
+		histQCD_CR.Scale(histData.Integral()*0.353/histQCD_CR.Integral())
 	else:
 		histQCD_CR.Scale(histQCD.Integral()/histQCD_CR.Integral())
 	histQCD_CR.SetFillColor(kOrange - 9)

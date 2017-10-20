@@ -1,8 +1,6 @@
 from ROOT import *
 import os, sys
 from Aux import *
-
-sys.path.insert(0, '../')
 from config import *
 
 
@@ -100,6 +98,7 @@ for shape in shapes:
         histData.SetLineColor( kBlack )
         histData.SetLineWidth( 2 )
 	histData.GetXaxis().SetTitle(shape[2])
+	histData.GetYaxis().SetTitle("Events")
 	histData.Write()	
 	
 	
@@ -110,8 +109,8 @@ for shape in shapes:
 		normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
 		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape)
-		if histThis.Integral()>0:
-			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
+		#if histThis.Integral()>100:
+		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -120,6 +119,7 @@ for shape in shapes:
 	#histQCD.Scale((1.0*histData.Integral())/histQCD.Integral())
         histQCD.SetLineWidth( 2 )
 	histQCD.Write()
+	print "#QCD - all: xsec * lumi * cut " + str(histQCD.Integral())
 	
 	#GJets
 	histGJets = TH1F(shape[1]+"_histGJets","",shape[3],shape[4],shape[5])	
@@ -128,8 +128,8 @@ for shape in shapes:
 		normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
 		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape)
-		if histThis.Integral()>0:
-			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
+		#if histThis.Integral()>100:
+		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -138,6 +138,7 @@ for shape in shapes:
 	#histGJets.Scale((1.0*histData.Integral())/histGJets.Integral())
         histGJets.SetLineWidth( 2 )
 	histGJets.Write()
+	print "#GJets - all: xsec * lumi * cut " + str(histGJets.Integral())
 
         myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
         myC.SetHighLightColor(2)
@@ -154,10 +155,26 @@ for shape in shapes:
 	myC.SetLogy()
 	
 	histData.Draw("E")
-	histData.GetYaxis().SetRangeUser(1.0, 200.0*max(histData.GetMaximum(),histGJets.GetMaximum(), histQCD.GetMaximum()))
+	histData.GetYaxis().SetRangeUser(0.1, 200.0*max(histData.GetMaximum(),histGJets.GetMaximum(), histQCD.GetMaximum()))
 	histGJets.Draw("same")
 	histQCD.Draw("same")
-		
+	
+	leg = TLegend(0.18, 0.7, 0.93, 0.89)
+        leg.SetNColumns(3)
+        leg.SetBorderSize(0)
+        leg.SetTextSize(0.03)
+        leg.SetLineColor(1)
+        leg.SetLineStyle(1)
+        leg.SetLineWidth(1)
+        leg.SetFillColor(0)
+        leg.SetFillStyle(1001)
+        leg.AddEntry(histData, "data","lep")
+        leg.AddEntry(histGJets, "#gamma+jets","l")
+        leg.AddEntry(histQCD, "QCD","l")
+
+	leg.Draw()	
+	drawCMS2(myC, 13, lumi)
+
 	myC.SaveAs(outputDir+"/shapes_"+shape[1]+".pdf")
         myC.SaveAs(outputDir+"/shapes_"+shape[1]+".png")
         myC.SaveAs(outputDir+"/shapes_"+shape[1]+".C")

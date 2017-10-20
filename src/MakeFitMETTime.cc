@@ -109,8 +109,8 @@ RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTi
 	}
 	
 	// Define PDFs from Background shapes
-	RooHistPdf * rpGJets = new RooHistPdf("rpGJets", "rpGJets", RooArgSet(fitVar), *rhGJets, 2);
-	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(fitVar), *rhQCD, 2);
+	RooHistPdf * rpGJets = new RooHistPdf("rpGJets", "rpGJets", RooArgSet(fitVar), *rhGJets);
+	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(fitVar), *rhQCD);
 
 	// Add all PDFs to form fit model
 	RooAbsPdf * fitModel = new RooAddPdf("fitModel", "fitModel", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));
@@ -391,8 +391,8 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	
 	myC->SetLogy(0);
 	myC->SetLogz(1);
-	myC->SetTheta(36.87326);
-   	myC->SetPhi(56.65061);
+	myC->SetTheta(69.64934);
+   	myC->SetPhi(-51.375);
 
 	TH2F * ph2 = new TH2F("fit2D","; #gamma cluster time (ns); #slash{E}_{T} (GeV); PDF",50,-5,5,50,0,500);
 	fitModel->fillHistogram(ph2, RooArgList(pho1ClusterTime, MET));
@@ -421,16 +421,22 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	
 };
 
-RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  TH2F * h2Sig, float fracGJets, float fracGJetsErr, float fracQCD, float fracQCDErr, TString modelName, TString modelTitle, bool useToy)
+RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  TH2F * h2Sig, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy)
 {
 	RooWorkspace* ws = new RooWorkspace( "ws", "" );
 	// define variables
 	RooRealVar pho1ClusterTime("pho1ClusterTime","#gamma cluster time ",-15.0,15.0,"ns");
 	RooRealVar MET("MET","#slash{E}_{T} ",0,1000,"GeV");
 
-	RooRealVar nGJets ("nGJets", "nGJets", fracGJets, fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr);
-	RooRealVar nQCD ("nQCD", "nQCD", fracQCD, fracQCD-3.0*fracQCDErr, fracQCD+3.0*fracQCDErr);
-	RooRealVar nSig ("nSig", "nSig", 1.0, 0.0, 1000.0);
+	double npoints = 1.0*h2Data->Integral();
+
+	//RooRealVar nGJets ("nGJets", "nGJets", fracGJets, fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr);
+	RooRealVar nGJets ("nGJets", "nGJets", fracGJets);
+	//RooRealVar nQCD ("nQCD", "nQCD", fracQCD, fracQCD-3.0*fracQCDErr, fracQCD+3.0*fracQCDErr);
+	RooRealVar nQCD ("nQCD", "nQCD", fracQCD);
+
+	RooRealVar nSig ("nSig", "nSig", 0.0, 0.0, 0.1*npoints);
+	RooRealVar nBkg ("nBkg", "nBkg", npoints, 0.0, 1.5*npoints);
 	//RooRealVar nGJets ("nGJets", "nGJets", 0.5,0.001,10000.0);
 	//RooRealVar nQCD ("nQCD", "nQCD", 0.5,0.001,10000.0);
 
@@ -462,7 +468,6 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	//create toy data
 	//TRandom3* r3 = new TRandom3(0);
 	//double npoints = r3->PoissonD(h2Data->Integral());	
-	double npoints = 1.0*h2Data->Integral();
 	//RooDataHist* data_toy = fitModelBkg->generateBinned(RooArgSet(pho1ClusterTime, MET), npoints, RooFit::ExpectedData());
 	RooDataHist* data_toy = fitModelBkg_temp->generateBinned(RooArgSet(pho1ClusterTime, MET), npoints);
 	
@@ -479,11 +484,14 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 		float weight_rhGJets = rhGJets->weight();
 		float weight_rhQCD = rhQCD->weight();
 		float weight_rhSig = rhSig->weight();
-		if((weight_rhGJets + weight_rhQCD + weight_rhSig < 1e-5) && ((useToy ? weight_data_toy : weight_data) > 0))
+		if((weight_rhSig < 1e-5) && ((useToy ? weight_data_toy : weight_data) > 0))
+		{
+			rhSig->set(1e-3);
+		}
+		if((weight_rhGJets + weight_rhQCD < 1e-5) && ((useToy ? weight_data_toy : weight_data) > 0))
 		{
 			rhGJets->set(1e-3);
 			rhQCD->set(1e-3);
-			rhSig->set(1e-3);
 		}
 	}
 	
@@ -492,8 +500,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(pho1ClusterTime, MET), *rhQCD, 0);
 	RooHistPdf * rpSig = new RooHistPdf("rpSig", "rpSig", RooArgSet(pho1ClusterTime, MET), *rhSig, 0);
 	
-	RooAbsPdf * fitModelBkgSig = new RooAddPdf("fitModelBkgSig", "fitModelBkgSig", RooArgSet(*rpGJets, *rpQCD, *rpSig), RooArgSet(nGJets, nQCD, nSig));	
 	RooAbsPdf * fitModelBkg = new RooAddPdf("fitModelBkg", "fitModelBkg", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));	
+	RooAbsPdf * fitModelBkgSig = new RooAddPdf("fitModelBkgSig", "fitModelBkgSig", RooArgSet(*fitModelBkg, *rpSig), RooArgSet(nBkg, nSig));	
+	//RooAbsPdf * fitModelBkg = new RooAddPdf("fitModelBkg", "fitModelBkg", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));	
 	//fit
 	RooAbsReal* nll = fitModelBkgSig->createNLL(*data, RooFit::NumCPU(8)) ;
 	RooFitResult * fres;
@@ -501,7 +510,8 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	else fres = fitModelBkgSig->fitTo( *data, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
         
 	nGJets.Print();
-        nQCD.Print();
+	nQCD.Print();
+	nBkg.Print();
         nSig.Print();
 
 	//draw some plot-s
@@ -522,8 +532,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
         RooPlot * frame_pho1ClusterTime = pho1ClusterTime.frame(-15.0, 15.0, 100);
         if(useToy) data_toy->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_data") );
         else data->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_data") );
-        fitModelBkgSig->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_GJets"), RooFit::Components("rpGJets"), RooFit::LineColor(kAzure + 7) );
-        fitModelBkgSig->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_QCD"), RooFit::Components("rpQCD"), RooFit::LineColor(kOrange - 9) );
+        fitModelBkgSig->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_Bkg"), RooFit::Components("fitModelBkg"), RooFit::LineColor(kBlue) );
         fitModelBkgSig->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_Sig"), RooFit::Components("rpSig"), RooFit::LineColor(kGreen) );
         fitModelBkgSig->plotOn( frame_pho1ClusterTime, RooFit::Name("pho1ClusterTime_all"), RooFit::Components("fitModelBkgSig"), RooFit::LineColor(kRed) );
         frame_pho1ClusterTime->SetName("pho1ClusterTime_frame");
@@ -533,7 +542,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	frame_pho1ClusterTime->Draw();
 
 	TLegend * leg_pho1ClusterTime = new TLegend(0.18, 0.7, 0.93, 0.89);
-	leg_pho1ClusterTime->SetNColumns(3);
+	leg_pho1ClusterTime->SetNColumns(2);
         leg_pho1ClusterTime->SetBorderSize(0);
         leg_pho1ClusterTime->SetTextSize(0.03);
         leg_pho1ClusterTime->SetLineColor(1);
@@ -542,8 +551,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
         leg_pho1ClusterTime->SetFillColor(0);
         leg_pho1ClusterTime->SetFillStyle(1001);
 	leg_pho1ClusterTime->AddEntry("pho1ClusterTime_data","data","lep");
-	leg_pho1ClusterTime->AddEntry("pho1ClusterTime_GJets","#gamma + jets","l");
-	leg_pho1ClusterTime->AddEntry("pho1ClusterTime_QCD","QCD","l");
+	leg_pho1ClusterTime->AddEntry("pho1ClusterTime_Bkg","#gamma + jets/QCD bkg","l");
 	leg_pho1ClusterTime->AddEntry("pho1ClusterTime_Sig",modelTitle,"l");
 	leg_pho1ClusterTime->AddEntry("pho1ClusterTime_all","combined fit","l");
 	leg_pho1ClusterTime->Draw();
@@ -556,8 +564,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
         if(useToy) data_toy->plotOn( frame_MET, RooFit::Name("MET_data") );
         else data->plotOn( frame_MET, RooFit::Name("MET_data") );
-        fitModelBkgSig->plotOn( frame_MET, RooFit::Name("MET_GJets"), RooFit::Components("rpGJets"), RooFit::LineColor(kAzure + 7) );
-        fitModelBkgSig->plotOn( frame_MET, RooFit::Name("MET_QCD"), RooFit::Components("rpQCD"), RooFit::LineColor(kOrange - 9) );
+        fitModelBkgSig->plotOn( frame_MET, RooFit::Name("MET_Bkg"), RooFit::Components("fitModelBkg"), RooFit::LineColor(kBlue) );
         fitModelBkgSig->plotOn( frame_MET, RooFit::Name("MET_Sig"), RooFit::Components("rpSig"), RooFit::LineColor(kGreen) );
         fitModelBkgSig->plotOn( frame_MET, RooFit::Name("MET_all"), RooFit::Components("fitModelBkgSig"), RooFit::LineColor(kRed) );
         frame_MET->SetName("MET_frame");
@@ -568,7 +575,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	frame_MET->Draw();
 
 	TLegend * leg_MET = new TLegend(0.18, 0.7, 0.93, 0.89);
-	leg_MET->SetNColumns(3);
+	leg_MET->SetNColumns(2);
         leg_MET->SetBorderSize(0);
         leg_MET->SetTextSize(0.03);
         leg_MET->SetLineColor(1);
@@ -577,8 +584,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
         leg_MET->SetFillColor(0);
         leg_MET->SetFillStyle(1001);
 	leg_MET->AddEntry("MET_data","data","lep");
-	leg_MET->AddEntry("MET_GJets","#gamma + jets","l");
-	leg_MET->AddEntry("MET_QCD","QCD","l");
+	leg_MET->AddEntry("MET_Bkg","#gamma + jets/QCD bkg","l");
 	leg_MET->AddEntry("MET_Sig",modelTitle,"l");
 	leg_MET->AddEntry("MET_all","combined fit","l");
 	leg_MET->Draw();
@@ -588,26 +594,26 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
         myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.png");
         myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.C");
 	
-        RooPlot * frame_nGJets_LL = nGJets.frame(fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr, 100);
-	RooAbsReal* pll_nGJets = nll->createProfile(nGJets) ;
-	nll->plotOn(frame_nGJets_LL, RooFit::ShiftToZero()) ;
-	pll_nGJets->plotOn(frame_nGJets_LL, RooFit::LineColor(kRed)) ;
-	frame_nGJets_LL->SetName("nGJets_frame_Likelihood");
- 
-        RooPlot * frame_nQCD_LL = nQCD.frame(fracQCD-3.0*fracQCDErr, fracQCD+3.0*fracQCDErr, 100);
-	RooAbsReal* pll_nQCD = nll->createProfile(nQCD) ;
-	nll->plotOn(frame_nQCD_LL, RooFit::ShiftToZero()) ;
-	pll_nQCD->plotOn(frame_nQCD_LL, RooFit::LineColor(kRed)) ;
-	frame_nQCD_LL->SetName("nQCD_frame_Likelihood");
 
+        RooPlot * frame_nBkg_LL = nBkg.frame(0.0, 1.5*npoints, 100);
+	RooAbsReal* pll_nBkg = nll->createProfile(nBkg) ;
+	nll->plotOn(frame_nBkg_LL, RooFit::ShiftToZero()) ;
+	pll_nBkg->plotOn(frame_nBkg_LL, RooFit::LineColor(kRed)) ;
+	frame_nBkg_LL->SetName("nBkg_frame_Likelihood");
+
+        RooPlot * frame_nSig_LL = nSig.frame(0.0, 0.1*npoints, 100);
+	RooAbsReal* pll_nSig = nll->createProfile(nSig) ;
+	nll->plotOn(frame_nSig_LL, RooFit::ShiftToZero()) ;
+	pll_nSig->plotOn(frame_nSig_LL, RooFit::LineColor(kRed)) ;
+	frame_nSig_LL->SetName("nSig_frame_Likelihood");
 
 	
 	myC->SetLogy(0);
 	myC->SetLogz(1);
-	
-	myC->SetTheta(36.87326);
-   	myC->SetPhi(56.65061);
-	
+	myC->SetTheta(69.64934);
+   	myC->SetPhi(-51.375);
+
+
 	TH2F * ph2 = new TH2F("fit2D","; #gamma cluster time (ns); #slash{E}_{T} (GeV); PDF",100,-15,15,100,0,1000);
 	fitModelBkgSig->fillHistogram(ph2, RooArgList(pho1ClusterTime, MET));
 	ph2->GetXaxis()->SetTitleOffset(2.0);
@@ -655,14 +661,25 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.C");
 
 	h2Data->GetXaxis()->SetTitleOffset(2.0);
-	h2Data->GetXaxis()->SetRangeUser(-5,5);
+	h2Data->GetXaxis()->SetRangeUser(-10,15);
 	h2Data->GetXaxis()->CenterTitle(kTRUE);
 	h2Data->GetYaxis()->SetTitleOffset(2.0);
-	h2Data->GetYaxis()->SetRangeUser(0,500);
+	h2Data->GetYaxis()->SetRangeUser(0.1,600);
 	h2Data->GetYaxis()->CenterTitle(kTRUE);
 	h2Data->GetZaxis()->SetTitleOffset(1.8);
 	h2Data->GetZaxis()->SetRangeUser(0, 1e3);
 	h2Data->Draw("LEGO2");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D_LEGO2.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D_LEGO2.png");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D_LEGO2.C");
+	h2Data->GetYaxis()->SetTitleOffset(1.8);
+	h2Data->GetXaxis()->SetTitleOffset(1.5);
+	h2Data->Draw("COLZ");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D_COLZ.pdf");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D_COLZ.png");
+	myC->SaveAs("fit_results/"+modelName+"_data_2D_COLZ.C");
+	//h2Data->SetMarkerStyle(7);
+	h2Data->Draw("");
 	myC->SaveAs("fit_results/"+modelName+"_data_2D.pdf");
 	myC->SaveAs("fit_results/"+modelName+"_data_2D.png");
 	myC->SaveAs("fit_results/"+modelName+"_data_2D.C");
@@ -673,8 +690,8 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
         ws->import(*fitModelBkgSig);
         ws->import(*frame_pho1ClusterTime);
         ws->import(*frame_MET);
-        ws->import(*frame_nGJets_LL);
-        ws->import(*frame_nQCD_LL);
+        ws->import(*frame_nBkg_LL);
+        ws->import(*frame_nSig_LL);
         ws->import(*fres);
         return ws;
 	

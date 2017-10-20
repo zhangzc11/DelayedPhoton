@@ -260,12 +260,14 @@ cout<<"BbinsY = "<<h2GJets->GetNbinsY()<<endl;
 RooWorkspace * w_DataBkgSig;
 TString _sigModelName (sigModelName.c_str());
 TString _sigModelTitle (sigModelTitle.c_str());
-w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err, _sigModelName, _sigModelTitle, true);
+
+float frac_GJets = nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
+float frac_QCD = nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
+
+w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, true);
 w_DataBkgSig->Write("w_DataBkgSig");
-float nGJets_2DFit_DataBkgSig = w_DataBkgSig->var("nGJets")->getValV();
-float nGJets_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nGJets")->getError();
-float nQCD_2DFit_DataBkgSig = w_DataBkgSig->var("nQCD")->getValV();
-float nQCD_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nQCD")->getError();
+float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("nBkg")->getValV();
+float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nBkg")->getError();
 float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("nSig")->getValV();
 float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nSig")->getError();
 
@@ -287,15 +289,14 @@ cout<<"N_obs in data = "<<N_obs_total<<endl;
 cout<<"GJets yield = "<<nGJets_2DFit_DataBkg<<" +/- "<<nGJets_2DFit_DataBkg_Err<<"  (fraction: "<<nGJets_2DFit_DataBkg/N_obs_total<<" )"<<endl;
 cout<<"QCD yield = "<<nQCD_2DFit_DataBkg<<" +/- "<<nQCD_2DFit_DataBkg_Err<<"  (fraction: "<<nQCD_2DFit_DataBkg/N_obs_total<<" )"<<endl;
 
-printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nGJets_2DFit_DataBkgSig, nGJets_2DFit_DataBkgSig_Err, nQCD_2DFit_DataBkgSig, nQCD_2DFit_DataBkgSig_Err);
+printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nGJets_2DFit_DataBkg, nGJets_2DFit_DataBkg_Err, nQCD_2DFit_DataBkg, nQCD_2DFit_DataBkg_Err);
 
 cout<<"result of 2D fit with bkg + sig: " <<endl;
 cout<<"N_obs in data = "<<N_obs_total<<endl;
-cout<<"GJets yield = "<<nGJets_2DFit_DataBkgSig<<" +/- "<<nGJets_2DFit_DataBkgSig_Err<<"  (fraction: "<<nGJets_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
-cout<<"QCD yield = "<<nQCD_2DFit_DataBkgSig<<" +/- "<<nQCD_2DFit_DataBkgSig_Err<<"  (fraction: "<<nQCD_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
+cout<<"Bkg yield = "<<nBkg_2DFit_DataBkgSig<<" +/- "<<nBkg_2DFit_DataBkgSig_Err<<"  (fraction: "<<nBkg_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
 cout<<"Sig yield = "<<nSig_2DFit_DataBkgSig<<" +/- "<<nSig_2DFit_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
 
-printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nGJets_2DFit_DataBkgSig, nGJets_2DFit_DataBkgSig_Err, nQCD_2DFit_DataBkgSig, nQCD_2DFit_DataBkgSig_Err, nSig_2DFit_DataBkgSig, nSig_2DFit_DataBkgSig_Err);
+printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_DataBkgSig, nBkg_2DFit_DataBkgSig_Err, nSig_2DFit_DataBkgSig, nSig_2DFit_DataBkgSig_Err);
 
 return 0;
 }
