@@ -36,7 +36,7 @@ print "GJets tree: "
 print fileNameGJetsSkim
 print "QCD tree: "
 print fileNameQCDSkim
-
+'''
 for i in range(0,len(fileNameDataSkim)):
 	print "Data file "+str(i)+"  ... "
 	fileThis = TFile(fileNameDataSkim[i], "READ")
@@ -72,6 +72,7 @@ for i in range(0,len(fileNameGJetsSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
+'''
 for i in range(0,len(fileNameQCDSkim)):
 	print "QCD file "+str(i)+"  ... "
 	fileThis = TFile(fileNameQCDSkim[i], "READ")
@@ -80,6 +81,6 @@ for i in range(0,len(fileNameQCDSkim)):
 	outputFile = TFile(fileNameQCDSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
-	outputTree = inputTree.CopyTree(cut_skim)
+	outputTree = inputTree.CopyTree(cut_skim_QCD)
 	outputTree.Write()
 	NEvents_out.Write()

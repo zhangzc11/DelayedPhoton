@@ -63,6 +63,7 @@ tree_data = (TTree*)file_data->Get(treeName.c_str());
 file_signal = new TFile(inputFileName_signal.c_str(), "READ");
 tree_signal = (TTree*)file_signal->Get(treeName.c_str());
 
+TFile *file_shape = new TFile("data/shapes.root","READ");
 
 TFile *f_Out = new TFile(("fit_results/fit_ws_"+sigModelName+".root").c_str(),"recreate");
 
@@ -73,16 +74,11 @@ int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
 TH1F *h1_SigmaIetaIeta_Data = new TH1F("h1_SigmaIetaIeta_Data","h1_SigmaIetaIeta_Data", 100, 0.005, 0.025);
 tree_data->Draw("pho1SigmaIetaIeta>>h1_SigmaIetaIeta_Data", cut.c_str());
 
-TH1F *h1_SigmaIetaIeta_GJets = new TH1F("h1_SigmaIetaIeta_GJets","h1_SigmaIetaIeta_GJets", 100, 0.005, 0.025);
-tree_data->Draw("pho1SigmaIetaIeta>>h1_SigmaIetaIeta_GJets", cut_GJets.c_str());
-
-TH1F *h1_SigmaIetaIeta_QCD = new TH1F("h1_SigmaIetaIeta_QCD","h1_SigmaIetaIeta_QCD", 100, 0.005, 0.025);
-tree_data->Draw("pho1SigmaIetaIeta>>h1_SigmaIetaIeta_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+TH1F *h1_SigmaIetaIeta_GJets = (TH1F*)file_shape->Get("phoSigmaIetaIeta_histGJets"); 
+TH1F *h1_SigmaIetaIeta_QCD = (TH1F*)file_shape->Get("phoSigmaIetaIeta_histQCD"); 
 
 h1_SigmaIetaIeta_GJets->Scale((1.0*h1_SigmaIetaIeta_Data->Integral())/h1_SigmaIetaIeta_GJets->Integral());
 h1_SigmaIetaIeta_QCD->Scale((1.0*h1_SigmaIetaIeta_Data->Integral())/h1_SigmaIetaIeta_QCD->Integral());
-
-
 
 RooWorkspace * w_frac_SigmaIetaIeta;
 w_frac_SigmaIetaIeta = FitDataBkgFraction(h1_SigmaIetaIeta_Data, "pho1SigmaIetaIeta", "#sigma_{i#etai#eta}", "", 0.005, 0.025, h1_SigmaIetaIeta_GJets, h1_SigmaIetaIeta_QCD);
@@ -98,18 +94,16 @@ h1_SigmaIetaIeta_GJets->Write();
 h1_SigmaIetaIeta_QCD->Write();
 
 cout<<"result of fit with SigmaIetaIeta: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_SigmaIetaIeta<<" +/- "<<nGJets_value_SigmaIetaIeta_err<<" / "<<N_obs_total<<" = "<<nGJets_value_SigmaIetaIeta/N_obs_total<<" +/- "<<nGJets_value_SigmaIetaIeta_err/N_obs_total<<endl;
-cout<<"fraction of Gjets = "<<nQCD_value_SigmaIetaIeta<<" +/- "<<nQCD_value_SigmaIetaIeta_err<<" / "<<N_obs_total<<" = "<<nQCD_value_SigmaIetaIeta/N_obs_total<<" +/- "<<nQCD_value_SigmaIetaIeta_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_SigmaIetaIeta<<" +/- "<<nGJets_value_SigmaIetaIeta_err<<" / "<<N_obs_total<<" = "<<nGJets_value_SigmaIetaIeta/N_obs_total<<" +/- "<<nGJets_value_SigmaIetaIeta_err/N_obs_total<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" +/- "<<nQCD_value_SigmaIetaIeta_err<<" / "<<N_obs_total<<" = "<<nQCD_value_SigmaIetaIeta/N_obs_total<<" +/- "<<nQCD_value_SigmaIetaIeta_err/N_obs_total<<endl;
+
 
 //sigmaEOverE
 TH1F *h1_sigmaEOverE_Data = new TH1F("h1_sigmaEOverE_Data","h1_sigmaEOverE_Data", 100, 0., 0.5);
 tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_Data", cut.c_str());
 
-TH1F *h1_sigmaEOverE_GJets = new TH1F("h1_sigmaEOverE_GJets","h1_sigmaEOverE_GJets", 100, 0., 0.5);
-tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_GJets", cut_GJets.c_str());
-
-TH1F *h1_sigmaEOverE_QCD = new TH1F("h1_sigmaEOverE_QCD","h1_sigmaEOverE_QCD", 100, 0., 0.5);
-tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+TH1F *h1_sigmaEOverE_GJets = (TH1F*)file_shape->Get("phosigmaEOverE_histGJets"); 
+TH1F *h1_sigmaEOverE_QCD = (TH1F*)file_shape->Get("phosigmaEOverE_histQCD"); 
 
 h1_sigmaEOverE_GJets->Scale((1.0*h1_sigmaEOverE_Data->Integral())/h1_sigmaEOverE_GJets->Integral());
 h1_sigmaEOverE_QCD->Scale((1.0*h1_sigmaEOverE_Data->Integral())/h1_sigmaEOverE_QCD->Integral());
@@ -128,18 +122,15 @@ h1_sigmaEOverE_GJets->Write();
 h1_sigmaEOverE_QCD->Write();
 
 cout<<"result of fit with sigmaEOverE: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_sigmaEOverE<<" +/- "<<nGJets_value_sigmaEOverE_err<<" / "<<N_obs_total<<" = "<<nGJets_value_sigmaEOverE/N_obs_total<<" +/- "<<nGJets_value_sigmaEOverE_err/N_obs_total<<endl;
-cout<<"fraction of Gjets = "<<nQCD_value_sigmaEOverE<<" +/- "<<nQCD_value_sigmaEOverE_err<<" / "<<N_obs_total<<" = "<<nQCD_value_sigmaEOverE/N_obs_total<<" +/- "<<nQCD_value_sigmaEOverE_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_sigmaEOverE<<" +/- "<<nGJets_value_sigmaEOverE_err<<" / "<<N_obs_total<<" = "<<nGJets_value_sigmaEOverE/N_obs_total<<" +/- "<<nGJets_value_sigmaEOverE_err/N_obs_total<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_sigmaEOverE<<" +/- "<<nQCD_value_sigmaEOverE_err<<" / "<<N_obs_total<<" = "<<nQCD_value_sigmaEOverE/N_obs_total<<" +/- "<<nQCD_value_sigmaEOverE_err/N_obs_total<<endl;
 
 //Smajor
 TH1F *h1_Smajor_Data = new TH1F("h1_Smajor_Data","h1_Smajor_Data", 100, 0., 1.0);
 tree_data->Draw("pho1Smajor>>h1_Smajor_Data", cut.c_str());
 
-TH1F *h1_Smajor_GJets = new TH1F("h1_Smajor_GJets","h1_Smajor_GJets", 100, 0., 1.0);
-tree_data->Draw("pho1Smajor>>h1_Smajor_GJets", cut_GJets.c_str());
-
-TH1F *h1_Smajor_QCD = new TH1F("h1_Smajor_QCD","h1_Smajor_QCD", 100, 0., 1.0);
-tree_data->Draw("pho1Smajor>>h1_Smajor_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+TH1F *h1_Smajor_GJets = (TH1F*)file_shape->Get("Smajor_histGJets"); 
+TH1F *h1_Smajor_QCD = (TH1F*)file_shape->Get("Smajor_histQCD"); 
 
 h1_Smajor_GJets->Scale((1.0*h1_Smajor_Data->Integral())/h1_Smajor_GJets->Integral());
 h1_Smajor_QCD->Scale((1.0*h1_Smajor_Data->Integral())/h1_Smajor_QCD->Integral());
@@ -158,18 +149,21 @@ h1_Smajor_GJets->Write();
 h1_Smajor_QCD->Write();
 
 cout<<"result of fit with Smajor: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_Smajor<<" +/- "<<nGJets_value_Smajor_err<<" / "<<N_obs_total<<" = "<<nGJets_value_Smajor/N_obs_total<<" +/- "<<nGJets_value_Smajor_err/N_obs_total<<endl;
-cout<<"fraction of Gjets = "<<nQCD_value_Smajor<<" +/- "<<nQCD_value_Smajor_err<<" / "<<N_obs_total<<" = "<<nQCD_value_Smajor/N_obs_total<<" +/- "<<nQCD_value_Smajor_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_Smajor<<" +/- "<<nGJets_value_Smajor_err<<" / "<<N_obs_total<<" = "<<nGJets_value_Smajor/N_obs_total<<" +/- "<<nGJets_value_Smajor_err/N_obs_total<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_Smajor<<" +/- "<<nQCD_value_Smajor_err<<" / "<<N_obs_total<<" = "<<nQCD_value_Smajor/N_obs_total<<" +/- "<<nQCD_value_Smajor_err/N_obs_total<<endl;
 
 //nJets
 TH1F *h1_nJets_Data = new TH1F("h1_nJets_Data","h1_nJets_Data", 15,-0.5,14.5);
 tree_data->Draw("n_Jets>>h1_nJets_Data", cut.c_str());
 
-TH1F *h1_nJets_GJets = new TH1F("h1_nJets_GJets","h1_nJets_GJets", 15,-0.5,14.5);
-tree_data->Draw("n_Jets>>h1_nJets_GJets", cut_GJets.c_str());
+TH1F *h1_nJets_GJets = (TH1F*)file_shape->Get("nJets_histGJets"); 
+TH1F *h1_nJets_QCD = (TH1F*)file_shape->Get("nJets_histQCD"); 
 
-TH1F *h1_nJets_QCD = new TH1F("h1_nJets_QCD","h1_nJets_QCD", 15,-0.5,14.5);
-tree_data->Draw("n_Jets>>h1_nJets_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+//TH1F *h1_nJets_GJets = new TH1F("h1_nJets_GJets","h1_nJets_GJets", 15,-0.5,14.5);
+//tree_data->Draw("n_Jets>>h1_nJets_GJets", cut_GJets.c_str());
+
+//TH1F *h1_nJets_QCD = new TH1F("h1_nJets_QCD","h1_nJets_QCD", 15,-0.5,14.5);
+//tree_data->Draw("n_Jets>>h1_nJets_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
 
 h1_nJets_GJets->Scale((1.0*h1_nJets_Data->Integral())/h1_nJets_GJets->Integral());
 h1_nJets_QCD->Scale((1.0*h1_nJets_Data->Integral())/h1_nJets_QCD->Integral());
@@ -188,18 +182,15 @@ h1_nJets_GJets->Write();
 h1_nJets_QCD->Write();
 
 cout<<"result of fit with nJets: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_nJets<<" +/- "<<nGJets_value_nJets_err<<" / "<<N_obs_total<<" = "<<nGJets_value_nJets/N_obs_total<<" +/- "<<nGJets_value_nJets_err/N_obs_total<<endl;
-cout<<"fraction of Gjets = "<<nQCD_value_nJets<<" +/- "<<nQCD_value_nJets_err<<" / "<<N_obs_total<<" = "<<nQCD_value_nJets/N_obs_total<<" +/- "<<nQCD_value_nJets_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_nJets<<" +/- "<<nGJets_value_nJets_err<<" / "<<N_obs_total<<" = "<<nGJets_value_nJets/N_obs_total<<" +/- "<<nGJets_value_nJets_err/N_obs_total<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_nJets<<" +/- "<<nQCD_value_nJets_err<<" / "<<N_obs_total<<" = "<<nQCD_value_nJets/N_obs_total<<" +/- "<<nQCD_value_nJets_err/N_obs_total<<endl;
 
 //Pt
 TH1F *h1_Pt_Data = new TH1F("h1_Pt_Data","h1_Pt_Data", 100, 50., 1500);
 tree_data->Draw("pho1Pt>>h1_Pt_Data", cut.c_str());
 
-TH1F *h1_Pt_GJets = new TH1F("h1_Pt_GJets","h1_Pt_GJets", 100, 50., 1500);
-tree_data->Draw("pho1Pt>>h1_Pt_GJets", cut_GJets.c_str());
-
-TH1F *h1_Pt_QCD = new TH1F("h1_Pt_QCD","h1_Pt_QCD", 100, 50., 1500);
-tree_data->Draw("pho1Pt>>h1_Pt_QCD", (cut_loose + " && ! (" + cut + ")").c_str());
+TH1F *h1_Pt_GJets = (TH1F*)file_shape->Get("phoPt_histGJets"); 
+TH1F *h1_Pt_QCD = (TH1F*)file_shape->Get("phoPt_histQCD"); 
 
 h1_Pt_GJets->Scale((1.0*h1_Pt_Data->Integral())/h1_Pt_GJets->Integral());
 h1_Pt_QCD->Scale((1.0*h1_Pt_Data->Integral())/h1_Pt_QCD->Integral());
@@ -218,8 +209,8 @@ h1_Pt_GJets->Write();
 h1_Pt_QCD->Write();
 
 cout<<"result of fit with Pt: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_Pt<<" +/- "<<nGJets_value_Pt_err<<" / "<<N_obs_total<<" = "<<nGJets_value_Pt/N_obs_total<<" +/- "<<nGJets_value_Pt_err/N_obs_total<<endl;
-cout<<"fraction of Gjets = "<<nQCD_value_Pt<<" +/- "<<nQCD_value_Pt_err<<" / "<<N_obs_total<<" = "<<nQCD_value_Pt/N_obs_total<<" +/- "<<nQCD_value_Pt_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_Pt<<" +/- "<<nGJets_value_Pt_err<<" / "<<N_obs_total<<" = "<<nGJets_value_Pt/N_obs_total<<" +/- "<<nGJets_value_Pt_err/N_obs_total<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_Pt<<" +/- "<<nQCD_value_Pt_err<<" / "<<N_obs_total<<" = "<<nQCD_value_Pt/N_obs_total<<" +/- "<<nQCD_value_Pt_err/N_obs_total<<endl;
 
 
 /*
@@ -240,7 +231,7 @@ fit_SigmaIetaIeta->GetResult(0, nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIe
 fit_SigmaIetaIeta->GetResult(1, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
 
 cout<<"result of fit with SigmaIetaIeta: " <<endl;
-cout<<"fraction of Gjets = "<<nGJets_value_SigmaIetaIeta<<" / "<<nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta<<" = "<<nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta)<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_SigmaIetaIeta<<" / "<<nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta<<" = "<<nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta)<<endl;
 cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" / "<<nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta<<" = "<<nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta)<<endl;
 */
 
@@ -269,7 +260,7 @@ cout<<"BbinsY = "<<h2GJets->GetNbinsY()<<endl;
 RooWorkspace * w_DataBkgSig;
 TString _sigModelName (sigModelName.c_str());
 TString _sigModelTitle (sigModelTitle.c_str());
-w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err, _sigModelName, _sigModelTitle, true);
+w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err, _sigModelName, _sigModelTitle, true);
 w_DataBkgSig->Write("w_DataBkgSig");
 float nGJets_2DFit_DataBkgSig = w_DataBkgSig->var("nGJets")->getValV();
 float nGJets_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nGJets")->getError();
@@ -282,8 +273,8 @@ float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nSig")->getError();
 //////////background only fit///////////////
 
 RooWorkspace * w_DataBkg;
-//w_DataBkg = Fit2DMETTimeDataBkg( tree_data->CopyTree( cut.c_str() ), tree_data->CopyTree( cut_GJets.c_str() ), tree_data->CopyTree( (cut_loose + " && ! (" + cut + ")").c_str() ), nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err);
-w_DataBkg = Fit2DMETTimeDataBkg( h2Data, h2GJets, h2QCD, nGJets_value_sigmaEOverE, nGJets_value_sigmaEOverE_err, nQCD_value_sigmaEOverE, nQCD_value_sigmaEOverE_err);
+//w_DataBkg = Fit2DMETTimeDataBkg( tree_data->CopyTree( cut.c_str() ), tree_data->CopyTree( cut_GJets.c_str() ), tree_data->CopyTree( (cut_loose + " && ! (" + cut + ")").c_str() ), nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
+w_DataBkg = Fit2DMETTimeDataBkg( h2Data, h2GJets, h2QCD, nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
 w_DataBkg->Write("w_DataBkg");
 float nGJets_2DFit_DataBkg = w_DataBkg->var("nGJets")->getValV();
 float nGJets_2DFit_DataBkg_Err = w_DataBkg->var("nGJets")->getError();
