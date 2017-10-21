@@ -2,9 +2,9 @@ imax 1
 jmax 1
 kmax *
 ---------------
-shapes background bin1 fit_ws_w_DataBkgSig.root M1000GeV_500mm:fitModelBkg
-shapes signal bin1 fit_ws_w_DataBkgSig.root M1000GeV_500mm:rpSig
-shapes data_obs bin1 fit_ws_w_DataBkgSig.root M1000GeV_500mm:data_toy
+shapes background bin1 fit_ws_M1000GeV_500mm.root w_DataBkgSig:fitModelBkg
+shapes signal bin1 fit_ws_M1000GeV_500mm.root w_DataBkgSig:rpSig
+shapes data_obs bin1 fit_ws_M1000GeV_500mm.root w_DataBkgSig:data_toy
 ---------------
 bin bin1
 observation -1
