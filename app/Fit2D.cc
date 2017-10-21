@@ -318,10 +318,10 @@ float frac_QCD = nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value
 
 w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, true);
 w_DataBkgSig->Write("w_DataBkgSig");
-float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("nBkg")->getValV();
-float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nBkg")->getError();
-float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("nSig")->getValV();
-float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("nSig")->getError();
+float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("fitModelBkg_norm")->getValV();
+float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("fitModelBkg_norm")->getError();
+float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("rpSig_norm")->getValV();
+float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("rpSig_norm")->getError();
 
 
 //////////background only fit///////////////

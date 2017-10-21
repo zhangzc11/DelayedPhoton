@@ -52,9 +52,9 @@ NEventsSig = hNEventsSig.GetBinContent(1)
 print "Sig: " + str(NEventsSig)
 
 treeGJets = {}
-#NEventsGJets = []
+NEventsGJets = []
 treeQCD = {}
-#NEventsQCD = []
+NEventsQCD = []
 
 for i in range(0,len(fileNameGJets)):
 	treeGJets[i] = TChain("DelayedPhoton")
@@ -62,7 +62,7 @@ for i in range(0,len(fileNameGJets)):
 	SetOwnership( treeGJets[i], True)
 	fileThis = TFile(fileNameGJets[i])
 	hNEventsGJets = fileThis.Get("NEvents")
-	#NEventsGJets.append(hNEventsGJets.GetBinContent(1))
+	NEventsGJets.append(hNEventsGJets.GetBinContent(1))
 	print "GJets - " + str(i) + str(hNEventsGJets.GetBinContent(1))
 
 for i in range(0,len(fileNameQCD)):
@@ -71,7 +71,7 @@ for i in range(0,len(fileNameQCD)):
 	SetOwnership( treeQCD[i], True)
 	fileThis = TFile(fileNameQCD[i])
 	hNEventsQCD = fileThis.Get("NEvents")
-	#NEventsQCD.append(hNEventsQCD.GetBinContent(1))
+	NEventsQCD.append(hNEventsQCD.GetBinContent(1))
 	print "QCD - " + str(i) + str(hNEventsQCD.GetBinContent(1))
 
 
