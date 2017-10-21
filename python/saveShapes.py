@@ -52,9 +52,9 @@ NEventsSig = hNEventsSig.GetBinContent(1)
 print "Sig: " + str(NEventsSig)
 
 treeGJets = {}
-NEventsGJets = []
+#NEventsGJets = []
 treeQCD = {}
-NEventsQCD = []
+#NEventsQCD = []
 
 for i in range(0,len(fileNameGJets)):
 	treeGJets[i] = TChain("DelayedPhoton")
@@ -62,7 +62,7 @@ for i in range(0,len(fileNameGJets)):
 	SetOwnership( treeGJets[i], True)
 	fileThis = TFile(fileNameGJets[i])
 	hNEventsGJets = fileThis.Get("NEvents")
-	NEventsGJets.append(hNEventsGJets.GetBinContent(1))
+	#NEventsGJets.append(hNEventsGJets.GetBinContent(1))
 	print "GJets - " + str(i) + str(hNEventsGJets.GetBinContent(1))
 
 for i in range(0,len(fileNameQCD)):
@@ -71,28 +71,37 @@ for i in range(0,len(fileNameQCD)):
 	SetOwnership( treeQCD[i], True)
 	fileThis = TFile(fileNameQCD[i])
 	hNEventsQCD = fileThis.Get("NEvents")
-	NEventsQCD.append(hNEventsQCD.GetBinContent(1))
+	#NEventsQCD.append(hNEventsQCD.GetBinContent(1))
 	print "QCD - " + str(i) + str(hNEventsQCD.GetBinContent(1))
 
 
 print "\n cut_QCD_shape = " + cut_QCD_shape
+print "\n cut_QCD_shape_iso = " + cut_QCD_shape_iso
 print "\n cut_GJets_shape = " + cut_GJets_shape
+print "\n cut_GJets_shape_iso = " + cut_GJets_shape_iso
 
 weightedcut_QCD_shape = "(weight) * " + cut_QCD_shape 
+weightedcut_QCD_shape_iso = "(weight) * " + cut_QCD_shape_iso 
 weightedcut_GJets_shape = "(weight) * " + cut_GJets_shape 
+weightedcut_GJets_shape_iso = "(weight) * " + cut_GJets_shape_iso 
 
 fileOut = TFile("../data/shapes.root","RECREATE")
 fileOut.cd()
 
 for shape in shapes:
 	print "\n shapeting stack shapes for " + shape[1]
-
-
+	
 	#data
-        print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut))
+	if shape[0]=="pho1sumChargedHadronPt":
+        	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_iso))
+	else:
+        	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut))
+		
         histData = TH1F(shape[1]+"_histData","",shape[3],shape[4],shape[5])
-        treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut)
-        treeData.Draw(shape[0]+">>"+shape[1]+"_histDataOOT",cut+" && !pho1isStandardPhoton")
+	if shape[0]=="pho1sumChargedHadronPt":
+        	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_iso)
+	else:
+        	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut)
         histData.SetMarkerStyle( 20 )
         histData.SetMarkerColor( kBlack )
         histData.SetLineColor( kBlack )
@@ -105,10 +114,16 @@ for shape in shapes:
 	#QCD
 	histQCD = TH1F(shape[1]+"_histQCD","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeQCD)):
-		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape))
-		normQCD = NEventsQCD[i] * 1.0  
+		if shape[0]=="pho1sumChargedHadronPt":
+			print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_iso))
+		else:
+			print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape))
+		#normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
-		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape)
+		if shape[0]=="pho1sumChargedHadronPt":
+			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_iso)
+		else:
+			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape)
 		#if histThis.Integral()>100:
 		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
@@ -124,10 +139,16 @@ for shape in shapes:
 	#GJets
 	histGJets = TH1F(shape[1]+"_histGJets","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeGJets)):
-		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape))
-		normGJets = NEventsGJets[i] * 1.0  
+		if shape[0]=="pho1sumChargedHadronPt":
+			print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_iso))
+		else:
+			print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape))
+		#normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
-		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape)
+		if shape[0]=="pho1sumChargedHadronPt":
+			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_iso)
+		else:
+			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape)
 		#if histThis.Integral()>100:
 		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)

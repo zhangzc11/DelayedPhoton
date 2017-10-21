@@ -32,6 +32,7 @@ std::string sigModelTitle = argv[4]; //"#tilde{g}#rightarrow#tilde{#chi}_{1}^{0}
 std::string treeName = "DelayedPhoton";
 
 std::string cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2"; 
+std::string cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36";
 std::string cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2";
 std::string cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (jet2Pt/pho1Pt > 0.2) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
 
@@ -68,8 +69,53 @@ TFile *file_shape = new TFile("data/shapes.root","READ");
 TFile *f_Out = new TFile(("fit_results/fit_ws_"+sigModelName+".root").c_str(),"recreate");
 
 int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
+float N_total_GJets_QCD_fit = 0.0;
 
-/**********fit SigmaIetaIeta to get relative yield of GJets and QCD backgrounds *****/
+/**********fit to get relative yield of GJets and QCD backgrounds *****/
+//sumChargedHadronPt
+TH1F *h1_sumChargedHadronPt_Data = new TH1F("h1_sumChargedHadronPt_Data","h1_sumChargedHadronPt_Data", 100, -0.1, 1.30);
+tree_data->Draw("pho1sumChargedHadronPt>>h1_sumChargedHadronPt_Data", cut_iso.c_str());
+
+TH1F *h1_sumChargedHadronPt_GJets = (TH1F*)file_shape->Get("phosumChargedHadronPt_histGJets"); 
+TH1F *h1_sumChargedHadronPt_QCD = (TH1F*)file_shape->Get("phosumChargedHadronPt_histQCD"); 
+
+float tightFraction_Data = (1.0*h1_sumChargedHadronPt_Data->Integral(1,15))/(h1_sumChargedHadronPt_Data->Integral()*1.0);
+float tightFraction_GJets = (1.0*h1_sumChargedHadronPt_GJets->Integral(1,15))/(h1_sumChargedHadronPt_GJets->Integral()*1.0);
+float tightFraction_QCD = (1.0*h1_sumChargedHadronPt_QCD->Integral(1,15))/(h1_sumChargedHadronPt_QCD->Integral()*1.0);
+
+h1_sumChargedHadronPt_GJets->Scale((1.0*h1_sumChargedHadronPt_Data->Integral())/h1_sumChargedHadronPt_GJets->Integral());
+h1_sumChargedHadronPt_QCD->Scale((1.0*h1_sumChargedHadronPt_Data->Integral())/h1_sumChargedHadronPt_QCD->Integral());
+
+RooWorkspace * w_frac_sumChargedHadronPt;
+w_frac_sumChargedHadronPt = FitDataBkgFraction(h1_sumChargedHadronPt_Data, "pho1sumChargedHadronPt", "charged isolation", "GeV", -0.1, 1.30, h1_sumChargedHadronPt_GJets, h1_sumChargedHadronPt_QCD);
+w_frac_sumChargedHadronPt->Write("w_frac_sumChargedHadronPt");
+
+float nGJets_value_sumChargedHadronPt = w_frac_sumChargedHadronPt->var("nGJets")->getValV();
+float nGJets_value_sumChargedHadronPt_err = w_frac_sumChargedHadronPt->var("nGJets")->getError();
+float nQCD_value_sumChargedHadronPt = w_frac_sumChargedHadronPt->var("nQCD")->getValV();
+float nQCD_value_sumChargedHadronPt_err = w_frac_sumChargedHadronPt->var("nQCD")->getError();
+h1_sumChargedHadronPt_GJets->Scale(nGJets_value_sumChargedHadronPt);
+h1_sumChargedHadronPt_QCD->Scale(nQCD_value_sumChargedHadronPt);
+h1_sumChargedHadronPt_GJets->Write();
+h1_sumChargedHadronPt_QCD->Write();
+
+N_total_GJets_QCD_fit = nGJets_value_sumChargedHadronPt + nQCD_value_sumChargedHadronPt;
+
+cout<<"result of fit with sumChargedHadronPt: " <<endl;
+
+cout<<"fraction of GJets (full region) = "<<nGJets_value_sumChargedHadronPt<<" +/- "<<nGJets_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD (full region) = "<<nQCD_value_sumChargedHadronPt<<" +/- "<<nQCD_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
+
+
+nGJets_value_sumChargedHadronPt = nGJets_value_sumChargedHadronPt*tightFraction_GJets;
+nGJets_value_sumChargedHadronPt_err = nGJets_value_sumChargedHadronPt_err*tightFraction_GJets;
+nQCD_value_sumChargedHadronPt = nQCD_value_sumChargedHadronPt*tightFraction_QCD;
+nQCD_value_sumChargedHadronPt_err = nQCD_value_sumChargedHadronPt_err*tightFraction_QCD;
+N_total_GJets_QCD_fit = nGJets_value_sumChargedHadronPt + nQCD_value_sumChargedHadronPt;
+
+cout<<"fraction of GJets (full region) = "<<nGJets_value_sumChargedHadronPt<<" +/- "<<nGJets_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD (full region) = "<<nQCD_value_sumChargedHadronPt<<" +/- "<<nQCD_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
+
 //SigmaIetaIeta
 TH1F *h1_SigmaIetaIeta_Data = new TH1F("h1_SigmaIetaIeta_Data","h1_SigmaIetaIeta_Data", 100, 0.005, 0.025);
 tree_data->Draw("pho1SigmaIetaIeta>>h1_SigmaIetaIeta_Data", cut.c_str());
@@ -93,9 +139,11 @@ h1_SigmaIetaIeta_QCD->Scale(nQCD_value_SigmaIetaIeta);
 h1_SigmaIetaIeta_GJets->Write();
 h1_SigmaIetaIeta_QCD->Write();
 
+N_total_GJets_QCD_fit = nGJets_value_SigmaIetaIeta + nQCD_value_SigmaIetaIeta;
+
 cout<<"result of fit with SigmaIetaIeta: " <<endl;
-cout<<"fraction of GJets = "<<nGJets_value_SigmaIetaIeta<<" +/- "<<nGJets_value_SigmaIetaIeta_err<<" / "<<N_obs_total<<" = "<<nGJets_value_SigmaIetaIeta/N_obs_total<<" +/- "<<nGJets_value_SigmaIetaIeta_err/N_obs_total<<endl;
-cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" +/- "<<nQCD_value_SigmaIetaIeta_err<<" / "<<N_obs_total<<" = "<<nQCD_value_SigmaIetaIeta/N_obs_total<<" +/- "<<nQCD_value_SigmaIetaIeta_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_SigmaIetaIeta<<" +/- "<<nGJets_value_SigmaIetaIeta_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_SigmaIetaIeta/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_SigmaIetaIeta_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" +/- "<<nQCD_value_SigmaIetaIeta_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_SigmaIetaIeta/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_SigmaIetaIeta_err/N_total_GJets_QCD_fit<<endl;
 
 
 //sigmaEOverE
@@ -121,9 +169,10 @@ h1_sigmaEOverE_QCD->Scale(nQCD_value_sigmaEOverE);
 h1_sigmaEOverE_GJets->Write();
 h1_sigmaEOverE_QCD->Write();
 
+N_total_GJets_QCD_fit = nGJets_value_sigmaEOverE + nQCD_value_sigmaEOverE;
 cout<<"result of fit with sigmaEOverE: " <<endl;
-cout<<"fraction of GJets = "<<nGJets_value_sigmaEOverE<<" +/- "<<nGJets_value_sigmaEOverE_err<<" / "<<N_obs_total<<" = "<<nGJets_value_sigmaEOverE/N_obs_total<<" +/- "<<nGJets_value_sigmaEOverE_err/N_obs_total<<endl;
-cout<<"fraction of QCD = "<<nQCD_value_sigmaEOverE<<" +/- "<<nQCD_value_sigmaEOverE_err<<" / "<<N_obs_total<<" = "<<nQCD_value_sigmaEOverE/N_obs_total<<" +/- "<<nQCD_value_sigmaEOverE_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_sigmaEOverE<<" +/- "<<nGJets_value_sigmaEOverE_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_sigmaEOverE/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_sigmaEOverE_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_sigmaEOverE<<" +/- "<<nQCD_value_sigmaEOverE_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_sigmaEOverE/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_sigmaEOverE_err/N_total_GJets_QCD_fit<<endl;
 
 //Smajor
 TH1F *h1_Smajor_Data = new TH1F("h1_Smajor_Data","h1_Smajor_Data", 100, 0., 1.0);
@@ -148,9 +197,10 @@ h1_Smajor_QCD->Scale(nQCD_value_Smajor);
 h1_Smajor_GJets->Write();
 h1_Smajor_QCD->Write();
 
+N_total_GJets_QCD_fit = nGJets_value_Smajor + nQCD_value_Smajor;
 cout<<"result of fit with Smajor: " <<endl;
-cout<<"fraction of GJets = "<<nGJets_value_Smajor<<" +/- "<<nGJets_value_Smajor_err<<" / "<<N_obs_total<<" = "<<nGJets_value_Smajor/N_obs_total<<" +/- "<<nGJets_value_Smajor_err/N_obs_total<<endl;
-cout<<"fraction of QCD = "<<nQCD_value_Smajor<<" +/- "<<nQCD_value_Smajor_err<<" / "<<N_obs_total<<" = "<<nQCD_value_Smajor/N_obs_total<<" +/- "<<nQCD_value_Smajor_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_Smajor<<" +/- "<<nGJets_value_Smajor_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_Smajor/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_Smajor_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_Smajor<<" +/- "<<nQCD_value_Smajor_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_Smajor/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_Smajor_err/N_total_GJets_QCD_fit<<endl;
 
 //nJets
 TH1F *h1_nJets_Data = new TH1F("h1_nJets_Data","h1_nJets_Data", 15,-0.5,14.5);
@@ -181,9 +231,10 @@ h1_nJets_QCD->Scale(nQCD_value_nJets);
 h1_nJets_GJets->Write();
 h1_nJets_QCD->Write();
 
+N_total_GJets_QCD_fit = nGJets_value_nJets + nQCD_value_nJets;
 cout<<"result of fit with nJets: " <<endl;
-cout<<"fraction of GJets = "<<nGJets_value_nJets<<" +/- "<<nGJets_value_nJets_err<<" / "<<N_obs_total<<" = "<<nGJets_value_nJets/N_obs_total<<" +/- "<<nGJets_value_nJets_err/N_obs_total<<endl;
-cout<<"fraction of QCD = "<<nQCD_value_nJets<<" +/- "<<nQCD_value_nJets_err<<" / "<<N_obs_total<<" = "<<nQCD_value_nJets/N_obs_total<<" +/- "<<nQCD_value_nJets_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_nJets<<" +/- "<<nGJets_value_nJets_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_nJets/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_nJets_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_nJets<<" +/- "<<nQCD_value_nJets_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_nJets/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_nJets_err/N_total_GJets_QCD_fit<<endl;
 
 //Pt
 TH1F *h1_Pt_Data = new TH1F("h1_Pt_Data","h1_Pt_Data", 100, 50., 1500);
@@ -208,9 +259,10 @@ h1_Pt_QCD->Scale(nQCD_value_Pt);
 h1_Pt_GJets->Write();
 h1_Pt_QCD->Write();
 
+N_total_GJets_QCD_fit = nGJets_value_Pt + nQCD_value_Pt;
 cout<<"result of fit with Pt: " <<endl;
-cout<<"fraction of GJets = "<<nGJets_value_Pt<<" +/- "<<nGJets_value_Pt_err<<" / "<<N_obs_total<<" = "<<nGJets_value_Pt/N_obs_total<<" +/- "<<nGJets_value_Pt_err/N_obs_total<<endl;
-cout<<"fraction of QCD = "<<nQCD_value_Pt<<" +/- "<<nQCD_value_Pt_err<<" / "<<N_obs_total<<" = "<<nQCD_value_Pt/N_obs_total<<" +/- "<<nQCD_value_Pt_err/N_obs_total<<endl;
+cout<<"fraction of GJets = "<<nGJets_value_Pt<<" +/- "<<nGJets_value_Pt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_Pt/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_Pt_err/N_total_GJets_QCD_fit<<endl;
+cout<<"fraction of QCD = "<<nQCD_value_Pt<<" +/- "<<nQCD_value_Pt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_Pt/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_Pt_err/N_total_GJets_QCD_fit<<endl;
 
 
 /*

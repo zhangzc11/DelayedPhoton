@@ -122,12 +122,52 @@ RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTi
 	nQCD.Print();
 
 	RooPlot * frame = fitVar.frame(varLow, varHigh, 100);
-	data->plotOn( frame );
-	fitModel->plotOn( frame, RooFit::Components("rpGJets"), RooFit::LineColor(kViolet + 10) );
-	fitModel->plotOn( frame, RooFit::Components("rpQCD"), RooFit::LineColor(kOrange + 9) );
-	fitModel->plotOn( frame, RooFit::Components("fitModel"), RooFit::LineColor(kGreen) );
+	data->plotOn( frame, RooFit::Name("plot_data"));
+	fitModel->plotOn( frame, RooFit::Components("rpGJets"), RooFit::LineColor(kViolet + 10), RooFit::Name("plot_GJets") );
+	fitModel->plotOn( frame, RooFit::Components("rpQCD"), RooFit::LineColor(kOrange + 9), RooFit::Name("plot_QCD") );
+	fitModel->plotOn( frame, RooFit::Components("fitModel"), RooFit::LineColor(kGreen) , RooFit::Name("plot_all"));
 
 	frame->SetName(varName+"_frame");
+
+
+	//save the plot	
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+	myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+
+	myC->SetLogy(1);
+
+	frame->SetMaximum(150.0*frame->GetMaximum());
+	frame->SetMinimum(0.1);
+	frame->Draw();
+	TLegend * leg = new TLegend(0.18, 0.7, 0.93, 0.89);
+	leg->SetNColumns(2);
+        leg->SetBorderSize(0);
+        leg->SetTextSize(0.03);
+        leg->SetLineColor(1);
+        leg->SetLineStyle(1);
+        leg->SetLineWidth(1);
+        leg->SetFillColor(0);
+        leg->SetFillStyle(1001);
+	leg->AddEntry("plot_data","data","lep");
+	leg->AddEntry("plot_GJets","#gamma + jets","l");
+	leg->AddEntry("plot_QCD","QCD","l");
+	leg->AddEntry("plot_all","combined fit","l");
+	leg->Draw();
+
+     	myC->SetTitle("");
+        myC->SaveAs("fit_results/bkg_yield_fit_"+varName+".pdf");
+        myC->SaveAs("fit_results/bkg_yield_fit_"+varName+".png");
+        myC->SaveAs("fit_results/bkg_yield_fit_"+varName+".C");
+
 	
 	ws->import(*data);
 	ws->import(*fitModel);
