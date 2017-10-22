@@ -11,7 +11,7 @@ CPPFLAGS += -g -std=c++11
 
 TARGET1 = Fit2D 
 
-SRC1 = app/Fit2D.cc src/MakeFitMETTime.cc 
+SRC1 = app/Fit2D.cc src/MakeFitMETTime.cc src/Aux.cc
 
 OBJ1 = $(SRC1:.cc=.o)
 

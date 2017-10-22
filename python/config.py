@@ -54,7 +54,7 @@ cut_loose = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEle
 cut_GJets = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (jet2Pt/pho1Pt > 0.2) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)'
 cut_skim = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets >= 2 && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 cut_skim_QCD = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
-outputDir = '/afs/cern.ch/user/z/zhicaiz/www/sharebox/DelayedPhoton/16Oct2017/data_driven_bkg_test_fracSigmaIetaIeta/'
+outputDir = '/afs/cern.ch/user/z/zhicaiz/www/sharebox/DelayedPhoton/22Oct2017/'
 
 ############define the plot you want to make##########
 ##for stack plots
@@ -112,6 +112,13 @@ shapes.append(["pho1Smajor", "Smajor", "S_{major}", 100,0,1])
 shapes.append(["pho1Sminor", "Sminor", "S_{minor}", 100,0,0.5])
 shapes.append(["pho1Pt", "phoPt", "p_{T}^{#gamma} [GeV]", 100,50,1500])
 shapes.append(["n_Jets", "nJets", "number of jets", 15,-0.5,14.5])
+
+
+#####################limit plot settings####################################
+limits_vs_lifetime = []
+limits_vs_lifetime.append(["M1000GeV_CTau500mm", 500.0, 2.8])
+limits_vs_lifetime.append(["M1000GeV_CTau500mm", 5000.0, 2.5])
+mass_limits_vs_lifetime = 1000
 
 #############################input files to skim script#####################
 
