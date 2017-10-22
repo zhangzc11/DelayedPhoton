@@ -15,6 +15,16 @@
 
 using namespace std;
 
+Int_t Nbins_MET = 15;
+Int_t Nbins_time = 20;
+Int_t Nbins_total = Nbins_MET*Nbins_time;
+Double_t xbins_MET[16] = {0.0, 10.0, 20.0, 40.0, 60.0, 80, 100.0, 125.0, 150.0, 175.0, 200.0, 250.0, 300.0, 400.0, 500.0, 1000.0};
+Double_t xbins_time[21] = {-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15};
+
+float lumi = 31.39;
+float NEvents_sig = 1.0;
+bool _useToy = true;
+
 int main( int argc, char* argv[])
 {
 srand(time(NULL));
@@ -28,7 +38,8 @@ std::string inputFileName_data = argv[1];
 std::string inputFileName_signal = argv[2];
 std::string sigModelName = argv[3]; //"M1000GeV_500mm";
 std::string sigModelTitle = argv[4]; //"#tilde{g}#rightarrow#tilde{#chi}_{1}^{0}#rightarrow#gamma#tilde{G} (500mm)";
-
+std::string xsec_str = argv[5];
+float xsec = strtof(xsec_str.c_str(),0);
 std::string treeName = "DelayedPhoton";
 
 std::string cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2"; 
@@ -63,6 +74,9 @@ tree_data = (TTree*)file_data->Get(treeName.c_str());
 
 file_signal = new TFile(inputFileName_signal.c_str(), "READ");
 tree_signal = (TTree*)file_signal->Get(treeName.c_str());
+
+TH1F *h1_NEvents_sig = (TH1F*) file_signal->Get("NEvents");
+NEvents_sig = h1_NEvents_sig->GetBinContent(1);
 
 TFile *file_shape = new TFile("data/shapes.root","READ");
 
@@ -299,7 +313,7 @@ TH2F * h2Sig = new TH2F("h2Sig","; #gamma cluster time (ns); #slash{E}_{T} (GeV)
 tree_data->Draw("MET:pho1ClusterTime>>h2Data", cut.c_str());
 tree_data->Draw("MET:pho1ClusterTime>>h2GJets", cut_GJets.c_str());
 tree_data->Draw("MET:pho1ClusterTime>>h2QCD", (cut_loose + " && ! (" + cut + ")").c_str());
-tree_signal->Draw("MET:pho1ClusterTime>>h2Sig", cut.c_str());
+tree_signal->Draw("MET:pho1ClusterTime>>h2Sig", ("weight * ( "+cut+" )").c_str());
 
 h2GJets->Scale((1.0*h2Data->Integral())/(1.0*h2GJets->Integral()));
 h2QCD->Scale((1.0*h2Data->Integral())/(1.0*h2QCD->Integral()));
@@ -316,12 +330,12 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float frac_GJets = nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
 float frac_QCD = nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
 
-w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, true);
+w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
 w_DataBkgSig->Write("w_DataBkgSig");
-float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("fitModelBkg_norm")->getValV();
-float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("fitModelBkg_norm")->getError();
-float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("rpSig_norm")->getValV();
-float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("rpSig_norm")->getError();
+float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("fitModelBkg_yield")->getValV();
+float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("fitModelBkg_yield")->getError();
+float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("rpSig_yield")->getValV();
+float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("rpSig_yield")->getError();
 
 
 //////////background only fit///////////////
@@ -349,6 +363,86 @@ cout<<"Bkg yield = "<<nBkg_2DFit_DataBkgSig<<" +/- "<<nBkg_2DFit_DataBkgSig_Err<
 cout<<"Sig yield = "<<nSig_2DFit_DataBkgSig<<" +/- "<<nSig_2DFit_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
 
 printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_DataBkgSig, nBkg_2DFit_DataBkgSig_Err, nSig_2DFit_DataBkgSig, nSig_2DFit_DataBkgSig_Err);
+
+////////////make datacard - change to 1D fit/////////
+//1. customize binning
+
+TH2F * h2newbinData = new TH2F("h2newbinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
+TH2F * h2newbinBkg = new TH2F("h2newbinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
+TH2F * h2newbinGJets = new TH2F("h2newbinGJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
+TH2F * h2newbinQCD = new TH2F("h2newbinQCD","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
+TH2F * h2newbinSig = new TH2F("h2newbinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
+
+tree_data->Draw("MET:pho1ClusterTime>>h2newbinData", cut.c_str());
+tree_data->Draw("MET:pho1ClusterTime>>h2newbinGJets", cut_GJets.c_str());
+tree_data->Draw("MET:pho1ClusterTime>>h2newbinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
+tree_signal->Draw("MET:pho1ClusterTime>>h2newbinSig", ("weight * ( "+cut+" )").c_str());
+/*
+h2newbinGJets->Scale((1.0*nBkg_2DFit_DataBkgSig*frac_GJets)/(1.0*h2newbinGJets->Integral()));
+h2newbinQCD->Scale((1.0*nBkg_2DFit_DataBkgSig*frac_QCD)/(1.0*h2newbinQCD->Integral()));
+h2newbinBkg->Add(h2newbinGJets);
+h2newbinBkg->Add(h2newbinQCD);
+h2newbinSig->Scale((1.0*lumi*xsec)/(1.0*NEvents_sig));
+*/
+
+float N_sig_expected = 1.0*lumi*xsec*h2newbinSig->Integral()/(1.0*NEvents_sig);
+
+h2newbinGJets->Scale((1.0*h2newbinData->Integral())/(1.0*h2newbinGJets->Integral()));
+h2newbinQCD->Scale((1.0*h2newbinData->Integral())/(1.0*h2newbinQCD->Integral()));
+h2newbinSig->Scale((1.0*h2newbinData->Integral())/(1.0*h2newbinSig->Integral()));
+
+
+//2. convert into 1D histogram
+TH1F * h1combineData = new TH1F("h1combineData","h1combineData", Nbins_total , 0, Nbins_total);
+TH1F * h1combineBkg = new TH1F("h1combineBkg","h1combineBkg", Nbins_total , 0, Nbins_total);
+TH1F * h1combineGJets = new TH1F("h1combineGJets","h1combineGJets", Nbins_total , 0, Nbins_total);
+TH1F * h1combineQCD = new TH1F("h1combineQCD","h1combineQCD", Nbins_total , 0, Nbins_total);
+TH1F * h1combineSig = new TH1F("h1combineSig","h1combineSig", Nbins_total , 0, Nbins_total);
+
+for(int i=1;i<=Nbins_MET;i++)
+{
+	for(int j=1;j<=Nbins_time;j++)
+	{
+		int thisBin = (i-1)*Nbins_time+j;
+		h1combineData->SetBinContent(thisBin, h2newbinData->GetBinContent(j,i));	
+		h1combineGJets->SetBinContent(thisBin, h2newbinGJets->GetBinContent(j,i));	
+		h1combineQCD->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i));	
+		h1combineSig->SetBinContent(thisBin, h2newbinSig->GetBinContent(j,i));	
+	}
+}
+
+cout<<"convert 2D to 1D (integral 2D/1D): "<<h2newbinData->Integral()<<" / "<<h1combineData->Integral()<<endl;
+
+//3. fit, and also generate toy data
+RooWorkspace * ws_combine;
+
+ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
+ws_combine->SetName("ws_combine");
+ws_combine->Write("ws_combine");
+float nBkg_2DFit_combine_DataBkgSig = ws_combine->var("fitModelBkg_yield")->getValV();
+float nBkg_2DFit_combine_DataBkgSig_Err = ws_combine->var("fitModelBkg_yield")->getError();
+float nSig_2DFit_combine_DataBkgSig = ws_combine->var("rpSig_yield")->getValV();
+float nSig_2DFit_combine_DataBkgSig_Err = ws_combine->var("rpSig_yield")->getError();
+
+cout<<"result of 1D combined fit with bkg + sig: " <<endl;
+cout<<"N_obs in data = "<<N_obs_total<<endl;
+cout<<"Bkg yield = "<<nBkg_2DFit_combine_DataBkgSig<<" +/- "<<nBkg_2DFit_combine_DataBkgSig_Err<<"  (fraction: "<<nBkg_2DFit_combine_DataBkgSig/N_obs_total<<" )"<<endl;
+cout<<"Sig yield = "<<nSig_2DFit_combine_DataBkgSig<<" +/- "<<nSig_2DFit_combine_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_combine_DataBkgSig/N_obs_total<<" )"<<endl;
+
+printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_combine_DataBkgSig, nBkg_2DFit_combine_DataBkgSig_Err, nSig_2DFit_combine_DataBkgSig, nSig_2DFit_combine_DataBkgSig_Err);
+
+
+MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected);
+
+h1combineGJets->Scale((1.0*nBkg_2DFit_DataBkgSig*frac_GJets)/(1.0*h1combineGJets->Integral()));
+h1combineQCD->Scale((1.0*nBkg_2DFit_DataBkgSig*frac_QCD)/(1.0*h1combineQCD->Integral()));
+h1combineBkg->Add(h1combineGJets);
+h1combineBkg->Add(h1combineQCD);
+h1combineSig->Scale((N_sig_expected)/(1.0*h1combineSig->Integral()));
+
+h1combineData->Write();
+h1combineBkg->Write();
+h1combineSig->Write();
 
 return 0;
 }
