@@ -2,16 +2,16 @@ imax 1
 jmax 1
 kmax *
 ---------------
-shapes background bin1 fit_ws_M1000GeV_500mm.root ws_combine:fitModelBkg
-shapes signal bin1 fit_ws_M1000GeV_500mm.root ws_combine:rpSig
-shapes data_obs bin1 fit_ws_M1000GeV_500mm.root ws_combine:data_toy
+shapes background bin1 fit_combineWS_M1000GeV_CTau500mm.root ws_combine:fitModelBkg
+shapes signal bin1 fit_combineWS_M1000GeV_CTau500mm.root ws_combine:rpSig
+shapes data_obs bin1 fit_combineWS_M1000GeV_CTau500mm.root ws_combine:data_toy
 ---------------
 bin bin1
-observation 8760.00
+observation 8654.00
 ------------------------------
 bin             bin1       bin1
 process         signal     background
 process         0          1
-rate             14.36          8760.01
+rate              1.50          8654.01
 --------------------------------
 lumi     lnN    1.057       1.057
