@@ -166,9 +166,9 @@ RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTi
 	leg->Draw();
 
      	myC->SetTitle("");
-        myC->SaveAs("fit_results/bkg_yield_fit_"+varName+".pdf");
-        myC->SaveAs("fit_results/bkg_yield_fit_"+varName+".png");
-        myC->SaveAs("fit_results/bkg_yield_fit_"+varName+".C");
+        myC->SaveAs("fit_results/plots/bkg_yield_fit_"+varName+".pdf");
+        myC->SaveAs("fit_results/plots/bkg_yield_fit_"+varName+".png");
+        myC->SaveAs("fit_results/plots/bkg_yield_fit_"+varName+".C");
 
 	
 	ws->import(*data);
@@ -339,7 +339,7 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	nGJets.Print();
         nQCD.Print();
 
-	//draw some fit_results
+	//draw some fit_results/plots
 	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
 	myC->SetHighLightColor(2);
         myC->SetFillColor(0);
@@ -381,9 +381,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	leg_pho1ClusterTime->Draw();
 
 	myC->SetTitle("");
-	myC->SaveAs("fit_results/fit_bkgonly_pho1ClusterTime.pdf");
-	myC->SaveAs("fit_results/fit_bkgonly_pho1ClusterTime.png");
-	myC->SaveAs("fit_results/fit_bkgonly_pho1ClusterTime.C");
+	myC->SaveAs("fit_results/plots/fit_bkgonly_pho1ClusterTime.pdf");
+	myC->SaveAs("fit_results/plots/fit_bkgonly_pho1ClusterTime.png");
+	myC->SaveAs("fit_results/plots/fit_bkgonly_pho1ClusterTime.C");
 	
 	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
         data->plotOn( frame_MET, RooFit::Name("MET_data") );
@@ -413,9 +413,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	leg_MET->Draw();
 
      	myC->SetTitle("");
-        myC->SaveAs("fit_results/fit_bkgonly_MET.pdf");
-        myC->SaveAs("fit_results/fit_bkgonly_MET.png");
-        myC->SaveAs("fit_results/fit_bkgonly_MET.C");
+        myC->SaveAs("fit_results/plots/fit_bkgonly_MET.pdf");
+        myC->SaveAs("fit_results/plots/fit_bkgonly_MET.png");
+        myC->SaveAs("fit_results/plots/fit_bkgonly_MET.C");
 	
         RooPlot * frame_nGJets_LL = nGJets.frame(fracGJets-3.0*fracGJetsErr, fracGJets+3.0*fracGJetsErr, 100);
 	RooAbsReal* pll_nGJets = nll->createProfile(nGJets) ;
@@ -445,9 +445,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD, 
 	ph2->GetZaxis()->SetTitleOffset(1.8);
 	ph2->GetZaxis()->SetRangeUser(1e-8, 0.1);
 	ph2->Draw("SURF1");
-	myC->SaveAs("fit_results/fit_bkgonly_2D_pdf.pdf");
-	myC->SaveAs("fit_results/fit_bkgonly_2D_pdf.png");
-	myC->SaveAs("fit_results/fit_bkgonly_2D_pdf.C");
+	myC->SaveAs("fit_results/plots/fit_bkgonly_2D_pdf.pdf");
+	myC->SaveAs("fit_results/plots/fit_bkgonly_2D_pdf.png");
+	myC->SaveAs("fit_results/plots/fit_bkgonly_2D_pdf.C");
 	
 	ws->import(*data);
         ws->import(*rhGJets);
@@ -605,9 +605,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	leg_pho1ClusterTime->Draw();
 
 	myC->SetTitle("");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_pho1ClusterTime.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_pho1ClusterTime.png");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_pho1ClusterTime.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_pho1ClusterTime.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_pho1ClusterTime.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_pho1ClusterTime.C");
 	
 	RooPlot * frame_MET = MET.frame(0, 1000.0, 100);
         if(useToy) data_toy->plotOn( frame_MET, RooFit::Name("MET_data") );
@@ -638,9 +638,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	leg_MET->Draw();
 
      	myC->SetTitle("");
-        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.pdf");
-        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.png");
-        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_MET.C");
+        myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_MET.pdf");
+        myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_MET.png");
+        myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_MET.C");
 	
 
         RooPlot * frame_nBkg_LL = nBkg.frame(0.0, 1.5*npoints, 100);
@@ -673,9 +673,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	ph2->GetZaxis()->SetTitleOffset(1.8);
 	ph2->GetZaxis()->SetRangeUser(1e-8, 0.1);
 	ph2->Draw("SURF1");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_2D_pdf.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_2D_pdf.png");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_2D_pdf.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_2D_pdf.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_2D_pdf.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_2D_pdf.C");
 	
 	TH2F * ph2_bkg = new TH2F("fit2D_bkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); PDF",100,-15,15,100,0,1000);
 	fitModelBkg->fillHistogram(ph2_bkg, RooArgList(pho1ClusterTime, MET));
@@ -688,9 +688,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	ph2_bkg->GetZaxis()->SetTitleOffset(1.8);
 	ph2_bkg->GetZaxis()->SetRangeUser(1e-8, 0.1);
 	ph2_bkg->Draw("SURF1");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgonly_2D_pdf.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgonly_2D_pdf.png");
-	myC->SaveAs("fit_results/"+modelName+"_fit_bkgonly_2D_pdf.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgonly_2D_pdf.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgonly_2D_pdf.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgonly_2D_pdf.C");
 
 		
 	TH2F * h2Data_toy = new TH2F("h2Data_toy","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events",100,-15,15,100,0,1000);
@@ -704,9 +704,9 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	h2Data_toy->GetZaxis()->SetTitleOffset(1.8);
 	h2Data_toy->GetZaxis()->SetRangeUser(0, 1e3);
 	h2Data_toy->Draw("LEGO2");
-	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.png");
-	myC->SaveAs("fit_results/"+modelName+"_data_toy_2D.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_toy_2D.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_toy_2D.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_toy_2D.C");
 
 	h2Data->GetXaxis()->SetTitleOffset(2.0);
 	h2Data->GetXaxis()->SetRangeUser(-10,15);
@@ -717,20 +717,20 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 	h2Data->GetZaxis()->SetTitleOffset(1.8);
 	h2Data->GetZaxis()->SetRangeUser(0, 1e3);
 	h2Data->Draw("LEGO2");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D_LEGO2.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D_LEGO2.png");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D_LEGO2.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D_LEGO2.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D_LEGO2.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D_LEGO2.C");
 	h2Data->GetYaxis()->SetTitleOffset(1.8);
 	h2Data->GetXaxis()->SetTitleOffset(1.5);
 	h2Data->Draw("COLZ");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D_COLZ.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D_COLZ.png");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D_COLZ.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D_COLZ.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D_COLZ.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D_COLZ.C");
 	//h2Data->SetMarkerStyle(7);
 	h2Data->Draw("");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D.pdf");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D.png");
-	myC->SaveAs("fit_results/"+modelName+"_data_2D.C");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D.pdf");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D.png");
+	myC->SaveAs("fit_results/plots/"+modelName+"_data_2D.C");
 
 	
 	ws->import(*data);
@@ -894,9 +894,9 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 	leg_bin->Draw();
 
      	myC->SetTitle("");
-        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_bin.pdf");
-        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_bin.png");
-        myC->SaveAs("fit_results/"+modelName+"_fit_bkgsig_bin.C");
+        myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_bin.pdf");
+        myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_bin.png");
+        myC->SaveAs("fit_results/plots/"+modelName+"_fit_bkgsig_bin.C");
 
         RooPlot * frame_nBkg_LL = nBkg.frame(0.0, 1.5*npoints, 100);
 	RooAbsReal* pll_nBkg = nll->createProfile(nBkg) ;
@@ -943,14 +943,14 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg,
 	std::string _modelName ((const char*) modelName);
 	std::string _wsName ((const char*)ws->GetName());
 	
-	FILE * m_outfile = fopen(("fit_results/DelayedPhotonCard_"+_modelName+".txt").c_str(), "w");
+	FILE * m_outfile = fopen(("fit_results/datacards/DelayedPhotonCard_"+_modelName+".txt").c_str(), "w");
 	fprintf(m_outfile, "imax 1\n");
 	fprintf(m_outfile, "jmax 1\n");
 	fprintf(m_outfile, "kmax *\n");
 	fprintf(m_outfile, "---------------\n");
-	fprintf(m_outfile, "shapes background bin1 fit_ws_%s.root %s:fitModelBkg\n", _modelName.c_str(), _wsName.c_str());
-	fprintf(m_outfile, "shapes signal bin1 fit_ws_%s.root %s:rpSig\n", _modelName.c_str(), _wsName.c_str());
-	fprintf(m_outfile, "shapes data_obs bin1 fit_ws_%s.root %s:data_toy\n", _modelName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes background bin1 fit_combineWS_%s.root %s:fitModelBkg\n", _modelName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes signal bin1 fit_combineWS_%s.root %s:rpSig\n", _modelName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes data_obs bin1 fit_combineWS_%s.root %s:data_toy\n", _modelName.c_str(), _wsName.c_str());
 
 	fprintf(m_outfile, "---------------\n");
 	fprintf(m_outfile, "bin bin1\n");
@@ -963,4 +963,124 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg,
 	fprintf(m_outfile, "--------------------------------\n");
 	fprintf(m_outfile, "lumi     lnN    1.057       1.057\n");
 	
+};
+
+void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float SoverB, int ntoys, TString modelName)
+{
+	TString sSoverB = Form("%7.5f", SoverB);
+	std::string _SoverB ((const char*) sSoverB);
+	std::string _modelName ((const char*) modelName);		
+	TFile *f_Out_bias = new TFile(("fit_results/bias/bias_"+_modelName+"_"+_SoverB+".root").c_str(),"recreate");
+	
+	RooRandom::randomGenerator()->SetSeed( 0 );
+	
+	double _bias, _biasNorm;
+  	double _Ns_fit, _Ns_sigma, _Ns, _Nbkg_fit, _Nbkg_sigma, _Nbkg;
+  	int _status, _covStatus;
+	TTree* outTree = new TTree("biasTree", "tree containing bias tests");
+	outTree->Branch("bias", &_bias, "bias/D");
+	outTree->Branch("biasNorm", &_biasNorm, "biasNorm/D");
+	outTree->Branch("Ns_fit", &_Ns_fit, "Ns_fit/D");
+	outTree->Branch("Ns_sigma", &_Ns_sigma, "Ns_sigma/D");
+	outTree->Branch("Ns", &_Ns, "Ns/D");
+	outTree->Branch("Nbkg_fit", &_Nbkg_fit, "Nbkg_fit/D");
+	outTree->Branch("Nbkg_sigma", &_Nbkg_sigma, "Nbkg_sigma/D");
+	outTree->Branch("Nbkg", &_Nbkg, "Nbkg/D");
+	outTree->Branch("status", &_status, "status/I");
+	outTree->Branch("covStatus", &_covStatus, "covStatus/I");
+
+	RooRealVar bin("bin","2D bin",0,h1Data->GetSize()-2,"");
+	RooDataHist* data = new RooDataHist("data", "data", RooArgSet(bin), h1Data);	
+	RooDataHist* rhBkg = new RooDataHist("rhBkg", "rhBkg", RooArgSet(bin), h1Bkg);	
+	RooDataHist* rhSig = new RooDataHist("rhSig", "rhSig", RooArgSet(bin), h1Sig);	
+
+	for(int ind_toy = 0; ind_toy<ntoys; ind_toy++)
+	{
+		TRandom3* r3 = new TRandom3(0);
+		double nBkg_true = r3->PoissonD(h1Data->Integral());	
+		double nSig_true = r3->PoissonD(SoverB*h1Data->Integral());	
+
+		double npoints = nBkg_true + nSig_true;
+
+		RooRealVar nSig ("rpSig_yield", "rpSig_yield", nSig_true, 0.0, 1.5*npoints);
+		nSig.setConstant(kFALSE);
+		RooRealVar nBkg ("fitModelBkg_yield", "fitModelBkg_yield", nBkg_true, 0.0, 1.5*npoints);
+		nBkg.setConstant(kFALSE);
+
+		//RooDataHist
+		RooDataHist* rhBkg_temp = new RooDataHist("rhBkg_temp", "rhBkg_temp", RooArgSet(bin), h1Bkg);	
+		RooDataHist* rhSig_temp = new RooDataHist("rhSig_temp", "rhSig_temp", RooArgSet(bin), h1Sig);	
+
+		//fill iempty background Histgrams bins with tiny value to allow fluctuation in generated toy data
+		for(int i=0;i<data->numEntries() ; i++)
+		{
+			rhBkg_temp->get(i);
+			rhSig_temp->get(i);
+			float weight_rhBkg = rhBkg_temp->weight();
+			float weight_rhSig = rhSig_temp->weight();
+			if(weight_rhBkg< 1e-5) rhBkg_temp->set(1e-3);
+			if(weight_rhSig< 1e-5) rhSig_temp->set(1e-3);
+		}
+
+		//RooHistPdf -> RooHistPdf
+		RooHistPdf * rpBkg_temp = new RooHistPdf("rpBkg_temp", "rpBkg_temp", RooArgSet(bin), *rhBkg_temp, 0);
+		RooHistPdf * rpSig_temp = new RooHistPdf("rpSig_temp", "rpSig_temp", RooArgSet(bin), *rhSig_temp, 0);
+
+		RooAbsPdf * fitModelBkgSig_temp = new RooAddPdf("fitModelBkgSig_temp", "fitModelBkgSig_temp", RooArgSet(*rpBkg_temp, *rpSig_temp), RooArgSet(nBkg, nSig));	
+		//create toy data
+		RooDataHist* data_toy = fitModelBkgSig_temp->generateBinned(RooArgSet(bin), npoints);
+		data_toy->SetName("data_toy");
+		
+		//to avoid zero likelihood, fill empty template bins with tiny values
+		for(int i=0;i<data->numEntries() ; i++)
+		{
+			data->get(i);
+			data_toy->get(i);
+			rhBkg->get(i);
+			rhSig->get(i);
+			float weight_data = data->weight();
+			float weight_data_toy = data_toy->weight();
+			float weight_rhBkg = rhBkg->weight();
+			float weight_rhSig = rhSig->weight();
+			if((weight_rhSig < 1e-5) && (weight_data_toy > 0))
+			{
+				rhSig->set(1e-3);
+			}
+			if((weight_rhBkg < 1e-5) && (weight_data_toy > 0))
+			{
+				rhBkg->set(1e-3);
+			}
+		
+		}
+		
+		//new pdf after fill empty bins
+		RooHistPdf * rpSig = new RooHistPdf("rpSig", "rpSig", RooArgSet(bin), *rhSig, 0);
+		RooHistPdf * rpBkg = new RooHistPdf("rpBkg", "rpBkg", RooArgSet(bin), *rhBkg, 0);
+		
+		RooAbsPdf * fitModelBkgSig = new RooAddPdf("fitModelBkgSig", "fitModelBkgSig", RooArgSet(*rpBkg, *rpSig), RooArgSet(nBkg, nSig));	
+		//fit
+		RooAbsReal* nll = fitModelBkgSig->createNLL(*data, RooFit::NumCPU(8)) ;
+		RooFitResult * fres;
+		fres = fitModelBkgSig->fitTo( *data_toy, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+		
+		//nBkg.Print();
+		//nSig.Print();
+
+		_status = fres->status();
+		_covStatus = fres->covQual();
+		_Ns = nSig_true;		
+		_Ns_fit = nSig.getVal();
+		_Ns_sigma = nSig.getError();
+		_Nbkg = nBkg_true;	
+		_Nbkg_fit = nBkg.getVal();	
+		_Nbkg_sigma = nBkg.getError();
+		_bias = _Ns - _Ns_fit;
+		if(abs(_Ns_sigma) >0.0) _biasNorm = _bias/_Ns_sigma;
+		else  _biasNorm = -999.0;
+      		std::cout << "toy iteration:" << ind_toy << std::endl;
+      		outTree->Fill();
+      		delete nll;	
+	}
+
+	outTree->Write();
 };

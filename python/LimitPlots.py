@@ -61,7 +61,7 @@ yValue_limit_lifetime_exp2sigma = []
 
 for limit_lifetime in limits_vs_lifetime:
 	print "grid: "+limit_lifetime[0]
-	file_limit = TFile("../fit_results/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
+	file_limit = TFile("../fit_results/datacards/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
 	limits = []
 	limitTree = file_limit.Get("limit")
 	for entry in limitTree:

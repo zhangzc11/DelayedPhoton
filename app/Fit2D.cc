@@ -1,5 +1,6 @@
 //C++ INCLUDES
 #include <iostream>
+#include <sys/stat.h>
 //ROOT INCLUDES
 #include <TFile.h>
 #include <TTree.h>
@@ -37,10 +38,21 @@ gStyle->SetPalette(1);
 
 std::string inputFileName_data = argv[1];
 std::string inputFileName_signal = argv[2];
-std::string sigModelName = argv[3]; //"M1000GeV_500mm";
-std::string sigModelTitle = argv[4]; //"#tilde{g}#rightarrow#tilde{#chi}_{1}^{0}#rightarrow#gamma#tilde{G} (500mm)";
-//std::string xsec_str = argv[5];
-//float xsec = strtof(xsec_str.c_str(),0);
+std::string sigModelName = argv[3]; 
+std::string sigModelTitle = argv[4]; 
+std::string fitMode = argv[5]; //options: "datacard", "bias"
+std::string _SoverB = "";
+std::string _nToys = "";
+
+if(fitMode == "bias") _SoverB = argv[6]; 
+if(fitMode == "bias") _nToys = argv[7]; 
+
+float SoverB = 0.0;
+int nToys = 1000;
+
+TString _sigModelName (sigModelName.c_str());
+TString _sigModelTitle (sigModelTitle.c_str());
+
 float xsec = getXsecBR(sigModelName);
 std::string treeName = "DelayedPhoton";
 
@@ -63,7 +75,55 @@ if(inputFileName_signal == "")
 	std::cerr << "[ERROR]: please provide an input file for signal" << std::endl;
 	return -1;
 }
+
+if(sigModelName == "")
+{
+	std::cerr << "[ERROR]: please provide the name of the signal model" << std::endl;
+	return -1;
+}
+
+if(sigModelTitle == "")
+{
+	std::cerr << "[ERROR]: please provide the title of the signal model" << std::endl;
+	return -1;
+}
+
+if(fitMode == "")
+{
+	std::cerr << "[ERROR]: please provide the fit mode (datacard or bias)" << std::endl;
+	return -1;
+}
+
+std::cout<<"using input file for data: "<<inputFileName_data<<std::endl;
 std::cout<<"using input file for signal: "<<inputFileName_signal<<std::endl;
+std::cout<<"signal model: "<<sigModelName<<std::endl;
+std::cout<<"signal title: "<<sigModelTitle<<std::endl;
+std::cout<<"fit mode: "<<fitMode<<std::endl;
+
+if(fitMode == "bias")
+{
+	if(_SoverB == "")
+	{
+		cout<<" bias test: SoverB not specified, setting to default: 0"<<endl;
+	}
+	else
+	{
+		SoverB = strtof(_SoverB.c_str(), 0);
+		cout<<"bias test: SoverB ="<<SoverB<<endl;
+	}
+
+	if(_nToys == "")
+	{
+		cout<<" bias test: nToys not specified, setting to default: 1000"<<endl;
+	}
+	else
+	{
+		nToys = stoi(_nToys.c_str(), 0);
+		cout<<"bias test: nToys ="<<nToys<<endl;
+	}
+
+}
+
 std::cout<<"signal xsec*BR = "<<xsec<<endl;
 
 TFile *file_data;
@@ -83,7 +143,10 @@ NEvents_sig = h1_NEvents_sig->GetBinContent(1);
 
 TFile *file_shape = new TFile("data/shapes.root","READ");
 
-TFile *f_Out = new TFile(("fit_results/fit_ws_"+sigModelName+".root").c_str(),"recreate");
+mkdir("fit_results", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/plots", S_IRWXU | S_IRWXG | S_IRWXO);
+
+TFile *f_Out = new TFile(("fit_results/plots/fit_ws_"+sigModelName+".root").c_str(),"recreate");
 
 int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
 float N_total_GJets_QCD_fit = 0.0;
@@ -307,6 +370,9 @@ cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" / "<<nGJets_value_SigmaI
 
 /*********2D fit of time and MET to obtain signal and background yield***********/
 
+float frac_GJets = nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
+float frac_QCD = nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
+
 
 TH2F * h2Data = new TH2F("h2Data","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", 100, -15, 15, 100, 0, 1000);
 TH2F * h2GJets = new TH2F("h2GJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", 100, -15, 15, 100, 0, 1000);
@@ -325,50 +391,7 @@ h2Sig->Scale((1.0*h2Data->Integral())/(1.0*h2Sig->Integral()));
 cout<<"BbinsX = "<<h2GJets->GetNbinsX()<<endl;
 cout<<"BbinsY = "<<h2GJets->GetNbinsY()<<endl;
 
-//////////bkg+sig fit////////////////
-RooWorkspace * w_DataBkgSig;
-TString _sigModelName (sigModelName.c_str());
-TString _sigModelTitle (sigModelTitle.c_str());
-
-float frac_GJets = nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
-float frac_QCD = nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
-
-w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
-w_DataBkgSig->Write("w_DataBkgSig");
-float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("fitModelBkg_yield")->getValV();
-float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("fitModelBkg_yield")->getError();
-float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("rpSig_yield")->getValV();
-float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("rpSig_yield")->getError();
-
-
-//////////background only fit///////////////
-
-RooWorkspace * w_DataBkg;
-//w_DataBkg = Fit2DMETTimeDataBkg( tree_data->CopyTree( cut.c_str() ), tree_data->CopyTree( cut_GJets.c_str() ), tree_data->CopyTree( (cut_loose + " && ! (" + cut + ")").c_str() ), nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
-w_DataBkg = Fit2DMETTimeDataBkg( h2Data, h2GJets, h2QCD, nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
-w_DataBkg->Write("w_DataBkg");
-float nGJets_2DFit_DataBkg = w_DataBkg->var("nGJets")->getValV();
-float nGJets_2DFit_DataBkg_Err = w_DataBkg->var("nGJets")->getError();
-float nQCD_2DFit_DataBkg = w_DataBkg->var("nQCD")->getValV();
-float nQCD_2DFit_DataBkg_Err = w_DataBkg->var("nQCD")->getError();
-
-//print out result
-cout<<"result of 2D fit with background only: " <<endl;
-cout<<"N_obs in data = "<<N_obs_total<<endl;
-cout<<"GJets yield = "<<nGJets_2DFit_DataBkg<<" +/- "<<nGJets_2DFit_DataBkg_Err<<"  (fraction: "<<nGJets_2DFit_DataBkg/N_obs_total<<" )"<<endl;
-cout<<"QCD yield = "<<nQCD_2DFit_DataBkg<<" +/- "<<nQCD_2DFit_DataBkg_Err<<"  (fraction: "<<nQCD_2DFit_DataBkg/N_obs_total<<" )"<<endl;
-
-printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nGJets_2DFit_DataBkg, nGJets_2DFit_DataBkg_Err, nQCD_2DFit_DataBkg, nQCD_2DFit_DataBkg_Err);
-
-cout<<"result of 2D fit with bkg + sig: " <<endl;
-cout<<"N_obs in data = "<<N_obs_total<<endl;
-cout<<"Bkg yield = "<<nBkg_2DFit_DataBkgSig<<" +/- "<<nBkg_2DFit_DataBkgSig_Err<<"  (fraction: "<<nBkg_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
-cout<<"Sig yield = "<<nSig_2DFit_DataBkgSig<<" +/- "<<nSig_2DFit_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
-
-printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_DataBkgSig, nBkg_2DFit_DataBkgSig_Err, nSig_2DFit_DataBkgSig, nSig_2DFit_DataBkgSig_Err);
-
-////////////make datacard - change to 1D fit/////////
-//1. customize binning
+//2D to 1D conversion, with customize binning
 
 TH2F * h2newbinData = new TH2F("h2newbinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
 TH2F * h2newbinBkg = new TH2F("h2newbinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
@@ -390,12 +413,10 @@ h2newbinSig->Scale((1.0*lumi*xsec)/(1.0*NEvents_sig));
 
 float N_sig_expected = 1.0*lumi*xsec*h2newbinSig->Integral()/(1.0*NEvents_sig);
 
-h2newbinGJets->Scale((1.0*h2newbinData->Integral())/(1.0*h2newbinGJets->Integral()));
-h2newbinQCD->Scale((1.0*h2newbinData->Integral())/(1.0*h2newbinQCD->Integral()));
-h2newbinSig->Scale((1.0*h2newbinData->Integral())/(1.0*h2newbinSig->Integral()));
+h2newbinGJets->Scale((1.0*h2newbinData->Integral()*frac_GJets)/(1.0*h2newbinGJets->Integral()));
+h2newbinQCD->Scale((1.0*h2newbinData->Integral()*frac_QCD)/(1.0*h2newbinQCD->Integral()));
+h2newbinSig->Scale((1.0*N_sig_expected)/(1.0*h2newbinSig->Integral()));
 
-
-//2. convert into 1D histogram
 TH1F * h1combineData = new TH1F("h1combineData","h1combineData", Nbins_total , 0, Nbins_total);
 TH1F * h1combineBkg = new TH1F("h1combineBkg","h1combineBkg", Nbins_total , 0, Nbins_total);
 TH1F * h1combineGJets = new TH1F("h1combineGJets","h1combineGJets", Nbins_total , 0, Nbins_total);
@@ -410,42 +431,88 @@ for(int i=1;i<=Nbins_MET;i++)
 		h1combineData->SetBinContent(thisBin, h2newbinData->GetBinContent(j,i));	
 		h1combineGJets->SetBinContent(thisBin, h2newbinGJets->GetBinContent(j,i));	
 		h1combineQCD->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i));	
+		h1combineBkg->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i) + h2newbinGJets->GetBinContent(j,i));
 		h1combineSig->SetBinContent(thisBin, h2newbinSig->GetBinContent(j,i));	
 	}
 }
 
 cout<<"convert 2D to 1D (integral 2D/1D): "<<h2newbinData->Integral()<<" / "<<h1combineData->Integral()<<endl;
 
-//3. fit, and also generate toy data
-RooWorkspace * ws_combine;
 
-ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
-ws_combine->SetName("ws_combine");
-ws_combine->Write("ws_combine");
-float nBkg_2DFit_combine_DataBkgSig = ws_combine->var("fitModelBkg_yield")->getValV();
-float nBkg_2DFit_combine_DataBkgSig_Err = ws_combine->var("fitModelBkg_yield")->getError();
-float nSig_2DFit_combine_DataBkgSig = ws_combine->var("rpSig_yield")->getValV();
-float nSig_2DFit_combine_DataBkgSig_Err = ws_combine->var("rpSig_yield")->getError();
-
-cout<<"result of 1D combined fit with bkg + sig: " <<endl;
-cout<<"N_obs in data = "<<N_obs_total<<endl;
-cout<<"Bkg yield = "<<nBkg_2DFit_combine_DataBkgSig<<" +/- "<<nBkg_2DFit_combine_DataBkgSig_Err<<"  (fraction: "<<nBkg_2DFit_combine_DataBkgSig/N_obs_total<<" )"<<endl;
-cout<<"Sig yield = "<<nSig_2DFit_combine_DataBkgSig<<" +/- "<<nSig_2DFit_combine_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_combine_DataBkgSig/N_obs_total<<" )"<<endl;
-
-printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_combine_DataBkgSig, nBkg_2DFit_combine_DataBkgSig_Err, nSig_2DFit_combine_DataBkgSig, nSig_2DFit_combine_DataBkgSig_Err);
+if(fitMode == "datacard")
+{
+	mkdir("fit_results/datacards", S_IRWXU | S_IRWXG | S_IRWXO);
+	TFile *f_Out_combineWS = new TFile(("fit_results/datacards/fit_combineWS_"+sigModelName+".root").c_str(),"recreate");
+	//////////bkg+sig fit////////////////
+	RooWorkspace * w_DataBkgSig;
+	w_DataBkgSig = Fit2DMETTimeDataBkgSig( h2Data, h2GJets, h2QCD, h2Sig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
+	w_DataBkgSig->Write("w_DataBkgSig");
+	float nBkg_2DFit_DataBkgSig = w_DataBkgSig->var("fitModelBkg_yield")->getValV();
+	float nBkg_2DFit_DataBkgSig_Err = w_DataBkgSig->var("fitModelBkg_yield")->getError();
+	float nSig_2DFit_DataBkgSig = w_DataBkgSig->var("rpSig_yield")->getValV();
+	float nSig_2DFit_DataBkgSig_Err = w_DataBkgSig->var("rpSig_yield")->getError();
 
 
-MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected);
+	//////////background only fit///////////////
 
-h1combineGJets->Scale((1.0*nBkg_2DFit_DataBkgSig*frac_GJets)/(1.0*h1combineGJets->Integral()));
-h1combineQCD->Scale((1.0*nBkg_2DFit_DataBkgSig*frac_QCD)/(1.0*h1combineQCD->Integral()));
-h1combineBkg->Add(h1combineGJets);
-h1combineBkg->Add(h1combineQCD);
-h1combineSig->Scale((N_sig_expected)/(1.0*h1combineSig->Integral()));
+	RooWorkspace * w_DataBkg;
+	//w_DataBkg = Fit2DMETTimeDataBkg( tree_data->CopyTree( cut.c_str() ), tree_data->CopyTree( cut_GJets.c_str() ), tree_data->CopyTree( (cut_loose + " && ! (" + cut + ")").c_str() ), nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
+	w_DataBkg = Fit2DMETTimeDataBkg( h2Data, h2GJets, h2QCD, nGJets_value_SigmaIetaIeta, nGJets_value_SigmaIetaIeta_err, nQCD_value_SigmaIetaIeta, nQCD_value_SigmaIetaIeta_err);
+	w_DataBkg->Write("w_DataBkg");
+	float nGJets_2DFit_DataBkg = w_DataBkg->var("nGJets")->getValV();
+	float nGJets_2DFit_DataBkg_Err = w_DataBkg->var("nGJets")->getError();
+	float nQCD_2DFit_DataBkg = w_DataBkg->var("nQCD")->getValV();
+	float nQCD_2DFit_DataBkg_Err = w_DataBkg->var("nQCD")->getError();
 
-h1combineData->Write();
-h1combineBkg->Write();
-h1combineSig->Write();
+	//print out result
+	cout<<"result of 2D fit with background only: " <<endl;
+	cout<<"N_obs in data = "<<N_obs_total<<endl;
+	cout<<"GJets yield = "<<nGJets_2DFit_DataBkg<<" +/- "<<nGJets_2DFit_DataBkg_Err<<"  (fraction: "<<nGJets_2DFit_DataBkg/N_obs_total<<" )"<<endl;
+	cout<<"QCD yield = "<<nQCD_2DFit_DataBkg<<" +/- "<<nQCD_2DFit_DataBkg_Err<<"  (fraction: "<<nQCD_2DFit_DataBkg/N_obs_total<<" )"<<endl;
 
+	printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nGJets_2DFit_DataBkg, nGJets_2DFit_DataBkg_Err, nQCD_2DFit_DataBkg, nQCD_2DFit_DataBkg_Err);
+
+	cout<<"result of 2D fit with bkg + sig: " <<endl;
+	cout<<"N_obs in data = "<<N_obs_total<<endl;
+	cout<<"Bkg yield = "<<nBkg_2DFit_DataBkgSig<<" +/- "<<nBkg_2DFit_DataBkgSig_Err<<"  (fraction: "<<nBkg_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
+	cout<<"Sig yield = "<<nSig_2DFit_DataBkgSig<<" +/- "<<nSig_2DFit_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_DataBkgSig/N_obs_total<<" )"<<endl;
+
+	printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_DataBkgSig, nBkg_2DFit_DataBkgSig_Err, nSig_2DFit_DataBkgSig, nSig_2DFit_DataBkgSig_Err);
+
+	////////////make datacard - change to 1D fit/////////
+	//3. fit, and also generate toy data
+	RooWorkspace * ws_combine;
+
+	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
+	ws_combine->SetName("ws_combine");
+	ws_combine->Write("ws_combine");
+	float nBkg_2DFit_combine_DataBkgSig = ws_combine->var("fitModelBkg_yield")->getValV();
+	float nBkg_2DFit_combine_DataBkgSig_Err = ws_combine->var("fitModelBkg_yield")->getError();
+	float nSig_2DFit_combine_DataBkgSig = ws_combine->var("rpSig_yield")->getValV();
+	float nSig_2DFit_combine_DataBkgSig_Err = ws_combine->var("rpSig_yield")->getError();
+
+	cout<<"result of 1D combined fit with bkg + sig: " <<endl;
+	cout<<"N_obs in data = "<<N_obs_total<<endl;
+	cout<<"Bkg yield = "<<nBkg_2DFit_combine_DataBkgSig<<" +/- "<<nBkg_2DFit_combine_DataBkgSig_Err<<"  (fraction: "<<nBkg_2DFit_combine_DataBkgSig/N_obs_total<<" )"<<endl;
+	cout<<"Sig yield = "<<nSig_2DFit_combine_DataBkgSig<<" +/- "<<nSig_2DFit_combine_DataBkgSig_Err<<"  (fraction: "<<nSig_2DFit_combine_DataBkgSig/N_obs_total<<" )"<<endl;
+
+	printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_combine_DataBkgSig, nBkg_2DFit_combine_DataBkgSig_Err, nSig_2DFit_combine_DataBkgSig, nSig_2DFit_combine_DataBkgSig_Err);
+
+	MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected);
+
+	h1combineData->Write();
+	h1combineBkg->Write();
+	h1combineSig->Write();
+
+}
+
+//do the bias test
+if(fitMode == "bias")
+{
+	mkdir("fit_results/bias", S_IRWXU | S_IRWXG | S_IRWXO);
+
+	Fit1DMETTimeBiasTest( h1combineData, h1combineBkg, h1combineSig, SoverB, nToys, _sigModelName);	
+		
+}
 return 0;
 }
