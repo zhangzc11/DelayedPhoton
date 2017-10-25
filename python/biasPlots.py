@@ -50,7 +50,7 @@ for fbias in biasFiles:
 	
 	histBias = TH1F("hbias","hbias",100,-15,10)
 	
-	tree_bias.Draw("-1.0*biasNorm>>hbias")
+	tree_bias.Draw("-1.0*biasNorm>>hbias","status==0 && covStatus==3")
 
 		
 	myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
@@ -66,6 +66,7 @@ for fbias in biasFiles:
 	myC.SetFrameBorderMode(0)
 
 	histBias.SetTitle("")
+	histBias.SetLineWidth(2)
         histBias.Draw()
         histBias.GetXaxis().SetTitleSize( axisTitleSize )
         histBias.GetXaxis().SetTitleOffset( axisTitleOffset )
