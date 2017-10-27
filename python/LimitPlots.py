@@ -207,3 +207,9 @@ myC.SaveAs(outputDir+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".png")
 myC.SaveAs(outputDir+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".C")
 
 
+##################exclusion region of lifetime and Lambda/mass #######################
+
+
+
+
+

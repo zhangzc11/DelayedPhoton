@@ -31,7 +31,7 @@
 #include "Aux.hh"
 //Axis
 const float axisTitleSize = 0.06;
-const float axisTitleOffset = .8;
+const float axisTitleOffset = 0.9;
 
 const float axisTitleSizeRatioX   = 0.18;
 const float axisLabelSizeRatioX   = 0.12;
@@ -73,3 +73,98 @@ float getXsecBR(std::string sigModelName)
 	return fxsecBR;
 }
 ;
+
+void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix)
+{
+	
+	
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+        myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+	myC->SetLogy(1);	
+	
+	h1Data->SetLineWidth(2);
+	h1Data->SetLineColor(kBlack);
+	h1Data->SetMarkerStyle(8);
+	h1Data->GetYaxis()->SetTitleSize(axisTitleSize);
+	h1Data->GetXaxis()->SetTitleSize(axisTitleSize);
+	h1Data->GetYaxis()->SetTitleOffset(axisTitleOffset);
+	h1Data->GetXaxis()->SetTitleOffset(axisTitleOffset);
+
+	h1Data->Draw("E");
+	//h1Data->GetYaxis()->SetRangeUser(1e-3, 1000.0*std::max(h1Data->GetMaximum(), h1Bkg->GetMaximum(), h1Sig->GetMaximum()));
+	h1Data->GetYaxis()->SetRangeUser(1e-3, 1000.0*h1Data->GetMaximum());
+	
+	h1Bkg->SetLineColor(kBlue);
+	h1Bkg->SetLineWidth(2);
+	h1Sig->SetLineColor(kGreen);
+	h1Sig->SetLineWidth(2);
+	h1all->SetLineColor(kRed);
+	h1all->SetLineWidth(2);
+
+	h1Bkg->Draw("samehisto");
+	h1Sig->Draw("samehisto");
+	h1all->Draw("samehisto");
+	
+	TLegend * leg = new TLegend(0.18, 0.7, 0.93, 0.89);
+        leg->SetNColumns(2);
+        leg->SetBorderSize(0);
+        leg->SetTextSize(0.03);
+        leg->SetLineColor(1);
+        leg->SetLineStyle(1);
+        leg->SetLineWidth(1);
+        leg->SetFillColor(0);
+        leg->SetFillStyle(1001);
+        leg->AddEntry(h1Data,"data","lep");
+        leg->AddEntry(h1Bkg,"#gamma + jets/QCD bkg","l");
+        leg->AddEntry(h1Sig, sigModelTitle.c_str(),"l");
+        leg->AddEntry(h1all,"combined fit","l");
+        leg->Draw();
+
+	DrawCMS(myC, 13, lumi);
+        myC->SetTitle("");
+        myC->SaveAs(("fit_results/plots/"+sigModelName+"_fit_bkgsig_"+suffix+".pdf").c_str());
+        myC->SaveAs(("fit_results/plots/"+sigModelName+"_fit_bkgsig_"+suffix+".png").c_str());
+        myC->SaveAs(("fit_results/plots/"+sigModelName+"_fit_bkgsig_"+suffix+".C").c_str());
+	
+}
+;
+
+
+void DrawCMS(TCanvas *myC, int energy, float lumi)
+{
+	myC->cd();
+	TLatex *tlatex =  new TLatex();
+	
+	tlatex->SetNDC();
+        tlatex->SetTextAngle(0);
+        tlatex->SetTextColor(kBlack);
+        tlatex->SetTextFont(63);
+        tlatex->SetTextAlign(11);
+        tlatex->SetTextSize(25);
+        tlatex->DrawLatex(0.16, 0.95, "CMS");
+        tlatex->SetTextFont(53);
+        tlatex->DrawLatex(0.23, 0.95, "Preliminary");
+        tlatex->SetTextFont(43);
+        tlatex->SetTextSize(23);
+
+	TString lumiString = Form("%.2f pb^{-1} (%d TeV)", lumi, energy);
+
+	if (lumi > 1000.0)
+	{
+		lumiString = Form("%.2f fb^{-1} (%d TeV)", lumi/1000.0, energy);
+	}
+        
+	std::string Lumi ((const char*) lumiString);
+	tlatex->SetTextAlign(31);
+        tlatex->DrawLatex(0.9, 0.95, Lumi.c_str());
+        tlatex->SetTextAlign(11);
+};
