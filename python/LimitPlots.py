@@ -529,7 +529,6 @@ for ind_temp in range(0, N_lifetime):
 		mass_obs_exclusion_region_final.append(0.0)
 		lifetime_obs_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[i])
 
-
 #now do interpolaton in lifetime direction to find the mass in which r = 1.0 (boundary of the exclusion region)
 
 '''	
@@ -622,6 +621,18 @@ for i in range(0, N_lifetime-1):
 			N_obs_exclusion_region_final = 1 + N_obs_exclusion_region_final
 			lifetime_obs_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[i])
 
+'''
+N_exp_exclusion_region_final = 1 + N_exp_exclusion_region_final
+lambda_exp_exclusion_region_final.append(lambda_exp_exclusion_region_final[0])
+mass_exp_exclusion_region_final.append(mass_exp_exclusion_region_final[0])
+lifetime_exp_exclusion_region_final.append(lifetime_exp_exclusion_region_final[N_exp_exclusion_region_final - 2])
+
+N_obs_exclusion_region_final = 1 + N_obs_exclusion_region_final
+lambda_obs_exclusion_region_final.append(lambda_obs_exclusion_region_final[0])
+mass_obs_exclusion_region_final.append(mass_obs_exclusion_region_final[0])
+lifetime_obs_exclusion_region_final.append(lifetime_obs_exclusion_region_final[N_obs_exclusion_region_final - 2])
+
+'''
 for ind_temp in range(0, N_lambda):
 	j = N_lambda - ind_temp - 1
 	if r_exp_2d_grid[N_lifetime-1][j] < 1.0:
@@ -691,8 +702,8 @@ graph_exclusion_exp.SetLineWidth(2)
 graph_exclusion_exp.SetLineStyle(kDashed)
 
 #graph_exclusion_obs.SetFillColor(kAzure + 7)
-graph_exclusion_obs.SetFillColor(kOrange - 9)
-graph_exclusion_exp.Draw()
+graph_exclusion_obs.SetFillColorAlpha(kOrange - 9, 0.65)
+graph_exclusion_exp.Draw("AL")
 graph_exclusion_obs.Draw("Fsame")
 
 #####ATLAS 8TeV
