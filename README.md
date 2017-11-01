@@ -77,7 +77,7 @@ cd python
 python LimitPlots.py
 ```
 -----------------------------
-7(optional). bias test
+7. (optional) bias test
 -----------------------------
 ```
 ./Fit2D \
