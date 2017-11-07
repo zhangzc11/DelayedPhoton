@@ -1,6 +1,7 @@
 //C++ INCLUDES
 #include <iostream>
 #include <sys/stat.h>
+#include <vector>
 //ROOT INCLUDES
 #include <TFile.h>
 #include <TTree.h>
@@ -372,11 +373,76 @@ cout<<"fraction of GJets = "<<nGJets_value_SigmaIetaIeta<<" / "<<nGJets_value_Si
 cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" / "<<nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta<<" = "<<nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta)<<endl;
 */
 
-
-/*********2D fit of time and MET to obtain signal and background yield***********/
-
 float frac_GJets = nGJets_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
 float frac_QCD = nQCD_value_SigmaIetaIeta/(nGJets_value_SigmaIetaIeta+nQCD_value_SigmaIetaIeta);
+
+
+
+/***************************Binning optimization*********************************/
+
+float time_Low = -15.0;
+float time_High = 15.0;
+int time_N_fine = 300;
+
+float met_Low = 0.0;
+float met_High = 1000.0;
+int met_N_fine = 200;
+
+std::vector <int> timeBin;
+std::vector <int> metBin;
+
+timeBin.push_back(0);
+timeBin.push_back(time_N_fine);
+
+metBin.push_back(0);
+metBin.push_back(met_N_fine);
+
+if(fitMode == "binning")
+{
+	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH2F *h2finebinBkg = new TH2F("h2finebinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH2F *h2finebinGJets = new TH2F("h2finebinGJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH2F *h2finebinQCD = new TH2F("h2finebinQCD","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH2F *h2finebinSig = new TH2F("h2finebinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+
+	tree_data->Draw("MET:pho1ClusterTime>>h2finebinData", cut.c_str());
+	tree_data->Draw("MET:pho1ClusterTime>>h2finebinGJets", cut_GJets.c_str());
+	tree_data->Draw("MET:pho1ClusterTime>>h2finebinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
+	tree_signal->Draw("MET:pho1ClusterTime>>h2finebinSig", ("weight * ( "+cut+" )").c_str());
+
+	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
+	h2finebinGJets->Scale((1.0*h2finebinData->Integral()*frac_GJets)/(1.0*h2finebinGJets->Integral()));
+	h2finebinQCD->Scale((1.0*h2finebinData->Integral()*frac_QCD)/(1.0*h2finebinQCD->Integral()));
+	h2finebinSig->Scale((1.0*N_sig_expected)/(1.0*h2finebinSig->Integral()));
+
+	for(int i=1; i<=time_N_fine;i++)
+	{
+		for(int j=1;j<=met_N_fine;j++)
+		{
+			h2finebinBkg->SetBinContent(i,j, h2finebinGJets->GetBinContent(i,j) + h2finebinQCD->GetBinContent(i,j));	
+		}
+	}
+
+	OptimizeBinning(timeBin, metBin, h2finebinBkg, h2finebinSig);
+	
+	cout<<"optimized met and time bin:-----------"<<endl;
+	cout<<"time: ";
+	for(int i=0;i<timeBin.size();i++)
+	{
+		cout<<time_Low + (time_High - time_Low) * (1.0*timeBin[i])/(1.0*time_N_fine)<<"  ,  ";
+	}
+	cout<<endl;
+	
+	cout<<"met: ";
+	for(int i=0;i<metBin.size();i++)
+	{
+		cout<<met_Low + (met_High - met_Low) * (1.0*metBin[i])/(1.0*met_N_fine)<<"  ,  ";
+	}
+	cout<<endl;
+
+}
+
+/*********2D fit of time and MET to obtain signal and background yield***********/
 
 //2D to 1D conversion, with customize binning
 
@@ -459,7 +525,7 @@ for(int i=1; i<=Nbins_total; i++)
 	float nbkg = h1combineBkg->GetBinContent(i);
 	float nsig = h1combineSig->GetBinContent(i);
 	if(nbkg < 1e-3 ) h1combineBkg->SetBinContent(i, 1e-3);
-	if(nsig < 1e-3 ) h1combineBkg->SetBinContent(i, 1e-3);
+	if(nsig < 1e-3 ) h1combineSig->SetBinContent(i, 1e-3);
 }
 
 cout<<"convert 2D to 1D (integral 2D/1D): "<<h2newbinData->Integral()<<" / "<<h1combineData->Integral()<<endl;

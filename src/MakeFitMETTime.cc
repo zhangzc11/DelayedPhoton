@@ -953,10 +953,11 @@ void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float Sov
 	RooDataHist* data = new RooDataHist("data", "data", RooArgSet(bin), h1Data);	
 	RooDataHist* rhBkg = new RooDataHist("rhBkg", "rhBkg", RooArgSet(bin), h1Bkg);	
 	RooDataHist* rhSig = new RooDataHist("rhSig", "rhSig", RooArgSet(bin), h1Sig);	
+	
+	TRandom3* r3 = new TRandom3(0);
 
 	for(int ind_toy = 0; ind_toy<ntoys; ind_toy++)
 	{
-		TRandom3* r3 = new TRandom3(0);
 		double nBkg_true = r3->PoissonD(h1Data->Integral());	
 		double nSig_true = r3->PoissonD(SoverB*h1Data->Integral());	
 
@@ -978,7 +979,7 @@ void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float Sov
 		data_toy->SetName("data_toy");
 		
 		//fit
-		RooAbsReal* nll = fitModelBkgSig->createNLL(*data, RooFit::NumCPU(8)) ;
+		RooAbsReal* nll = fitModelBkgSig->createNLL(*data_toy, RooFit::NumCPU(8)) ;
 		RooFitResult * fres;
 		fres = fitModelBkgSig->fitTo( *data_toy, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
 		
@@ -1003,3 +1004,236 @@ void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float Sov
 
 	outTree->Write();
 };
+
+
+double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
+{
+
+	RooMsgService::instance().setSilentMode(true);
+
+	RooRandom::randomGenerator()->SetSeed( 0 );
+	
+	RooRealVar bin("bin","2D bin",0,h1Bkg->GetSize()-2,"");
+	RooDataHist* rhBkg = new RooDataHist("rhBkg", "rhBkg", RooArgSet(bin), h1Bkg);	
+	RooDataHist* rhSig = new RooDataHist("rhSig", "rhSig", RooArgSet(bin), h1Sig);	
+		
+	TRandom3* r3 = new TRandom3(0);
+
+	double sumQnot = 0.0;
+	double maxQnot = -9999.0;
+	double minQnot = 9999.0;
+	int nGoodToy = 0 ;
+
+  	double _Ns_fit, _Nbkg_fit;
+
+	for(int ind_toy = 0; (ind_toy< 10*ntoys) && (nGoodToy < ntoys); ind_toy++)
+	{
+		double nBkg_true = r3->PoissonD(h1Bkg->Integral());	
+		double nSig_true = r3->PoissonD(h1Sig->Integral());	
+		//double nSig_true = h1Sig->Integral();
+
+		double npoints = nBkg_true + nSig_true;
+
+		RooRealVar nSig ("rpSig_yield", "rpSig_yield", nSig_true, 0.0, 1.5*npoints);
+		nSig.setConstant(kFALSE);
+		RooRealVar nBkg ("fitModelBkg_yield", "fitModelBkg_yield", nBkg_true, 0.0, 1.5*npoints);
+		nBkg.setConstant(kFALSE);
+
+		//RooHistPdf -> RooHistPdf
+		RooHistPdf * rpSig = new RooHistPdf("rpSig", "rpSig", RooArgSet(bin), *rhSig, 0);
+		RooHistPdf * rpBkg = new RooHistPdf("rpBkg", "rpBkg", RooArgSet(bin), *rhBkg, 0);
+		
+		RooAbsPdf * fitModelBkgSig = new RooAddPdf("fitModelBkgSig", "fitModelBkgSig", RooArgSet(*rpBkg, *rpSig), RooArgSet(nBkg, nSig));	
+
+		//create toy data
+		RooDataHist* data_toy = fitModelBkgSig->generateBinned(RooArgSet(bin), npoints);
+		data_toy->SetName("data_toy");
+		
+		//fit
+		RooAbsReal* nll = fitModelBkgSig->createNLL(*data_toy, RooFit::NumCPU(8)) ;
+		RooFitResult * fres;
+		fres = fitModelBkgSig->fitTo( *data_toy, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+
+		if(fres->status() == 0)
+		{		
+			_Ns_fit = nSig.getVal();
+			_Nbkg_fit = nBkg.getVal();	
+			if( _Nbkg_fit > 0.0 && _Ns_fit < 3.0*nSig_true)
+			{
+				double qnot2 =  2.0*( (_Ns_fit + _Nbkg_fit) * std::log (1.0 + _Ns_fit/_Nbkg_fit) - _Ns_fit);
+				double qnot =  0.0;
+				if(qnot2 < 0.0) continue;
+				//if(qnot2<1e-8) qnot = 1e-4*sqrt(1e8 * qnot);
+				else qnot = sqrt(qnot2);
+				cout<<"DEBUG calculate significance: Ns (Ns_true) = "<<_Ns_fit<<" ( "<<nSig_true<<" )  Nb (Nb_true) = "<<_Nbkg_fit<<" ( "<<nBkg_true<<" ) qnot = "<<qnot<<" qnot2 = "<<qnot2<<endl;
+				nGoodToy ++;
+				sumQnot += qnot;		
+				if(qnot > maxQnot) maxQnot = qnot;
+				if(qnot < minQnot) minQnot = qnot;
+			}
+		}
+		
+      		delete nll;	
+	}
+
+	if(nGoodToy > 2) return (sumQnot - maxQnot - minQnot)/(nGoodToy-2);
+	else return 0.0;
+
+};
+
+void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig)
+{
+	bool debug_thisFunc = true;
+	//initial status: 1 bin in time, and 1 bin in MET
+	int nTotal_time = h2Bkg->GetNbinsX();
+	int nTotal_met = h2Bkg->GetNbinsX();
+
+	cout<<" binning optimization... "<<endl;	
+	cout<<"time bins # "<<nTotal_time<<endl;
+	cout<<"met bins # "<<nTotal_met<<endl;
+
+	double maxSignificance = -9999.0;
+	bool isConverged_time = false;
+	bool isConverged_met = false;
+	
+	while( (!isConverged_time) || (!isConverged_met))
+	{
+		//start spliting in time dimension
+		int new_idx_time = -99;
+		int new_idx_met = -99;
+		
+		if(!isConverged_time)
+		{
+			for(int idx=1;idx<nTotal_time;idx++)
+			{
+				if(std::find(timeBin.begin(), timeBin.end(), idx) != timeBin.end()) continue; // add a new split
+				std::vector <int> temp_bin_time;
+				for(int idx_temp : timeBin) 
+				{
+					temp_bin_time.push_back(idx_temp);
+				}
+				temp_bin_time.push_back(idx);
+				std::sort(temp_bin_time.begin(), temp_bin_time.end());
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: tring to add split at idx = "<<idx<<endl;
+				for(int inx_temp : temp_bin_time)
+				{
+					cout<<inx_temp<<" , ";
+				}
+				cout<<endl;
+				
+				//construct 1D histogram of time and met
+				TH1F *h1Bkg = new TH1F ("h1Bkg","h1Bkg", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
+				TH1F *h1Sig = new TH1F ("h1Sig","h1Sig", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
+				for(int iT=1;iT<= temp_bin_time.size()-1; iT++)
+				{
+					for(int iM=1;iM<= metBin.size()-1; iM++)
+					{
+						int thisBin = (iT-1)*(metBin.size()-1) + iM;
+						float NBkg = h2Bkg->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
+						float NSig = h2Sig->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
+						h1Bkg->SetBinContent(thisBin, NBkg);
+						h1Sig->SetBinContent(thisBin, NSig);
+						//cout<<"iT = "<<iT<<"  iM = "<<iM<<" thiBin = "<<thisBin<<"  NBkg = "<<NBkg<<"   NSig = "<<NSig<<endl;
+					}	
+				}
+				
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: validation of 2D conversion (Bkg): "<<h2Bkg->Integral()<<" -> "<<h1Bkg->Integral()<<endl;
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: validation of 2D conversion (Sig): "<<h2Sig->Integral()<<" -> "<<h1Sig->Integral()<<endl;
+	
+				for(int i=1;i<= (temp_bin_time.size()-1)*(metBin.size()-1); i++)
+				{
+					if(h1Bkg->GetBinContent(i) < 1e-3 ) h1Bkg->SetBinContent(i, 1e-3);
+					if(h1Sig->GetBinContent(i) < 1e-3 ) h1Sig->SetBinContent(i, 1e-3);
+				}
+	
+				double qnot = Fit1DMETTimeSignificance(h1Bkg, h1Sig, 10);
+			
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
+				if(qnot > maxSignificance)	
+				{
+					maxSignificance = qnot;
+					new_idx_time = idx; 
+				}
+	
+				delete 	h1Bkg;
+				delete 	h1Sig;
+			}
+			if(new_idx_time > 0)
+			{
+				if(debug_thisFunc) cout<<"best split point added : "<<new_idx_time<<"  maxSignificance = "<<maxSignificance<<endl;
+				timeBin.push_back(new_idx_time);
+				std::sort(timeBin.begin(), timeBin.end());	
+			}
+			else isConverged_time = true;	
+		}
+
+
+		if(!isConverged_met)
+		{
+			for(int idx=1;idx<nTotal_met;idx++)
+			{
+				if(std::find(metBin.begin(), metBin.end(), idx) != metBin.end()) continue; // add a new split
+				std::vector <int> temp_bin_met;
+				for(int idx_temp : metBin) 
+				{
+					temp_bin_met.push_back(idx_temp);
+				}
+				temp_bin_met.push_back(idx);
+				std::sort(temp_bin_met.begin(), temp_bin_met.end());
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: tring to add split at idx = "<<idx<<endl;
+				for(int inx_temp : temp_bin_met)
+				{
+					cout<<inx_temp<<" , ";
+				}
+				cout<<endl;
+				
+				//construct 1D histogram of met and time
+				TH1F *h1Bkg = new TH1F ("h1Bkg","h1Bkg", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
+				TH1F *h1Sig = new TH1F ("h1Sig","h1Sig", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
+				for(int iT=1;iT<= timeBin.size()-1; iT++)
+				{
+					for(int iM=1;iM<= temp_bin_met.size()-1; iM++)
+					{
+						int thisBin = (iT-1)*(temp_bin_met.size()-1) + iM;
+						float NBkg = h2Bkg->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
+						float NSig = h2Sig->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
+						h1Bkg->SetBinContent(thisBin, NBkg);
+						h1Sig->SetBinContent(thisBin, NSig);
+						//cout<<"iT = "<<iT<<"  iM = "<<iM<<" thiBin = "<<thisBin<<"  NBkg = "<<NBkg<<"   NSig = "<<NSig<<endl;
+					}	
+				}
+				
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: validation of 2D conversion (Bkg): "<<h2Bkg->Integral()<<" -> "<<h1Bkg->Integral()<<endl;
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: validation of 2D conversion (Sig): "<<h2Sig->Integral()<<" -> "<<h1Sig->Integral()<<endl;
+	
+				for(int i=1;i<= (temp_bin_met.size()-1)*(timeBin.size()-1); i++)
+				{
+					if(h1Bkg->GetBinContent(i) < 1e-3 ) h1Bkg->SetBinContent(i, 1e-3);
+					if(h1Sig->GetBinContent(i) < 1e-3 ) h1Sig->SetBinContent(i, 1e-3);
+				}
+	
+				double qnot = Fit1DMETTimeSignificance(h1Bkg, h1Sig, 10);
+			
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
+				if(qnot > maxSignificance)	
+				{
+					maxSignificance = qnot;
+					new_idx_met = idx; 
+				}
+	
+				delete 	h1Bkg;
+				delete 	h1Sig;
+			}
+			if(new_idx_met > 0)
+			{
+				if(debug_thisFunc) cout<<"best split point added met : "<<new_idx_met<<"  maxSignificance = "<<maxSignificance<<endl;
+				metBin.push_back(new_idx_met);
+				std::sort(metBin.begin(), metBin.end());	
+			}
+			else isConverged_met = true;	
+		}
+
+	}
+
+};
+
