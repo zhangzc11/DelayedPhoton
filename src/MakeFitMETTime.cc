@@ -25,6 +25,7 @@
 #include <TROOT.h>
 #include <Math/GaussIntegrator.h>
 #include <Math/IntegratorOptions.h>
+#include <Math/DistFunc.h>
 #include <TFractionFitter.h>
 #include <TRandom3.h>
 //ROOFIT INCLUDES
@@ -1168,7 +1169,7 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 	bool debug_thisFunc = true;
 	//initial status: 1 bin in time, and 1 bin in MET
 	int nTotal_time = h2Bkg->GetNbinsX();
-	int nTotal_met = h2Bkg->GetNbinsX();
+	int nTotal_met = h2Bkg->GetNbinsY();
 
 	cout<<" binning optimization... "<<endl;	
 	cout<<"time bins # "<<nTotal_time<<endl;
@@ -1250,7 +1251,15 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 			TH1F * h1_qnot_time = new TH1F(_s_hist_name.c_str(), _s_hist_name.c_str(), time_N_fine, time_Low, time_High);
 			for(int idx=1;idx<nTotal_time;idx++)
 			{
-				if(std::find(timeBin.begin(), timeBin.end(), idx) != timeBin.end()) continue; // add a new split
+				//if(std::find(timeBin.begin(), timeBin.end(), idx) != timeBin.end()) continue; // add a new split
+				
+				int dist_min = 9999;
+				for(int i=0;i<timeBin.size();i++)
+				{
+					if(abs(timeBin[i] - idx) < dist_min) dist_min = abs(timeBin[i] - idx);
+				}
+				if(dist_min < 5) continue; // not too narrow binning
+
 				std::vector <int> temp_bin_time;
 				for(int idx_temp : timeBin) 
 				{
@@ -1298,7 +1307,7 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				double qnot = CalculateMETTimeSignificance(h1Bkg, h1Sig);
 			
 				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
-				if(qnot > 1.01*maxSignificance)	
+				if(qnot > 1.000*maxSignificance)	
 				{
 					maxSignificance = qnot;
 					new_idx_time = idx; 
@@ -1316,7 +1325,8 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
         		h1_qnot_time->GetXaxis()->SetTitle("new split on #gamma cluster time [ns]");
         		h1_qnot_time->GetYaxis()->SetTitle("q_{0}");
         		h1_qnot_time->GetYaxis()->SetTitleSize(axisTitleSize);
-        		h1_qnot_time->GetYaxis()->SetRangeUser(0.1, 1.2*h1_qnot_time->GetMaximum());
+        		h1_qnot_time->GetYaxis()->SetRangeUser(0.15, 1.2*h1_qnot_time->GetMaximum());
+        		h1_qnot_time->GetXaxis()->SetRangeUser(0.2+time_Low, time_High-0.2);
         		h1_qnot_time->GetXaxis()->SetTitleSize(axisTitleSize);
         		h1_qnot_time->GetYaxis()->SetTitleOffset(axisTitleOffset);
         		h1_qnot_time->GetXaxis()->SetTitleOffset(axisTitleOffset);
@@ -1328,17 +1338,19 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 	
 				TH1F *h1_temp = new TH1F(_s_ih_name.c_str(), _s_ih_name.c_str(), time_N_fine, time_Low, time_High);
 				h1_temp->SetBinContent(timeBin[ih], 1.2*h1_qnot_time->GetMaximum());
-				h1_temp->SetLineWidth(2);
+				h1_temp->SetLineWidth(3);
 				h1_temp->SetLineColor(kRed);
 				h1_temp->Draw("same");
 			}
-			myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".pdf").c_str());
-			myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".png").c_str());
-			myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".C").c_str());
 
-	
 			if(new_idx_time > 0)
 			{
+	
+				myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".pdf").c_str());
+				myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".png").c_str());
+				myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".C").c_str());
+
+	
 				if(debug_thisFunc) cout<<"best split point added : "<<new_idx_time<<"  maxSignificance = "<<maxSignificance<<endl;
 				timeBin.push_back(new_idx_time);
 				std::sort(timeBin.begin(), timeBin.end());	
@@ -1358,7 +1370,16 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 
 			for(int idx=1;idx<nTotal_met;idx++)
 			{
-				if(std::find(metBin.begin(), metBin.end(), idx) != metBin.end()) continue; // add a new split
+				//if(std::find(metBin.begin(), metBin.end(), idx) != metBin.end()) continue; // add a new split
+				
+				int dist_min = 9999;
+				for(int i=0;i<metBin.size();i++)
+				{
+					if(abs(metBin[i] - idx) < dist_min) dist_min = abs(metBin[i] - idx);
+				}
+				if(dist_min < 5) continue; // not too narrow binning
+
+
 				std::vector <int> temp_bin_met;
 				for(int idx_temp : metBin) 
 				{
@@ -1406,7 +1427,7 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				double qnot = CalculateMETTimeSignificance(h1Bkg, h1Sig);
 			
 				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
-				if(qnot > 1.01*maxSignificance)	
+				if(qnot > 1.000*maxSignificance)	
 				{
 					maxSignificance = qnot;
 					new_idx_met = idx; 
@@ -1417,21 +1438,15 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				delete 	h1Bkg;
 				delete 	h1Sig;
 			}
-			if(new_idx_met > 0)
-			{
-				if(debug_thisFunc) cout<<"best split point added met : "<<new_idx_met<<"  maxSignificance = "<<maxSignificance<<endl;
-				metBin.push_back(new_idx_met);
-				std::sort(metBin.begin(), metBin.end());	
-			}
-			else isConverged_met = true;	
-
+			
 			h1_qnot_met->SetLineWidth(2);
                         h1_qnot_met->SetLineColor(kBlack);
                         h1_qnot_met->SetTitle("");
                         h1_qnot_met->GetXaxis()->SetTitle("new split on #slash{E}_{T} [GeV]");
                         h1_qnot_met->GetYaxis()->SetTitle("q_{0}");
                         h1_qnot_met->GetYaxis()->SetTitleSize(axisTitleSize);
-        		h1_qnot_met->GetYaxis()->SetRangeUser(0.1, 1.2*h1_qnot_met->GetMaximum());
+        		h1_qnot_met->GetYaxis()->SetRangeUser(0.15, 1.2*h1_qnot_met->GetMaximum());
+        		h1_qnot_met->GetXaxis()->SetRangeUser(10.0+met_Low, met_High-10.0);
                         h1_qnot_met->GetXaxis()->SetTitleSize(axisTitleSize);
                         h1_qnot_met->GetYaxis()->SetTitleOffset(axisTitleOffset);
                         h1_qnot_met->GetXaxis()->SetTitleOffset(axisTitleOffset);
@@ -1444,17 +1459,33 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 	
 				TH1F *h1_temp = new TH1F(_s_ih_name.c_str(), _s_ih_name.c_str(), met_N_fine, met_Low, met_High);
 				h1_temp->SetBinContent(metBin[ih], 1.2*h1_qnot_met->GetMaximum());
-				h1_temp->SetLineWidth(2);
+				h1_temp->SetLineWidth(3);
 				h1_temp->SetLineColor(kRed);
 				h1_temp->Draw("same");
 			}
 
-                        myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".pdf").c_str());
-                        myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".png").c_str());
-                        myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".C").c_str());
+			if(new_idx_met > 0)
+			{
+
+       	                 	myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".pdf").c_str());
+                        	myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".png").c_str());
+                        	myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".C").c_str());
+
+				if(debug_thisFunc) cout<<"best split point added met : "<<new_idx_met<<"  maxSignificance = "<<maxSignificance<<endl;
+				metBin.push_back(new_idx_met);
+				std::sort(metBin.begin(), metBin.end());	
+			}
+			else isConverged_met = true;	
+
 		}
 		
 		if(isConverged_time && isConverged_met) isConverged_all = true;
+		else if(metBin.size()>10 || timeBin.size()>10)  
+		{
+			if(metBin.size()>10) isConverged_met = true;
+			if(timeBin.size()>10) isConverged_time = true;
+			isConverged_all = (isConverged_met && isConverged_time);
+		}
 		else
 		{
 			isConverged_time = false;
