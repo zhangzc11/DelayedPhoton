@@ -666,7 +666,7 @@ if(fitMode == "bias")
 {
 	mkdir("fit_results/bias", S_IRWXU | S_IRWXG | S_IRWXO);
 
-	Fit1DMETTimeBiasTest( h1combineData, h1combineBkg, h1combineSig, SoverB, nToys, _sigModelName);	
+	Fit1DMETTimeBiasTest( h1combineData, h1combineBkg, h1combineSig, SoverB, nToys, _sigModelName, lumi);	
 		
 }
 return 0;

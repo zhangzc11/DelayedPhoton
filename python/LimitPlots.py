@@ -430,7 +430,10 @@ f1_mass = TF1("f1_mass","expo(0)", 0.0, grid_mass_exclusion_region_2D[N_lambda-1
 f1_lambda = TF1("f1_lambda","expo(0)", 0.0, grid_lambda_exclusion_region_2D[N_lambda-1])
 
 
-#first, interpolation along lifetime direction (for a fixed lambda value)
+
+
+
+#interpolation along lifetime direction (for a fixed lambda value)
 for j in range(0, N_lambda):
 	N_interp = 0
 	lifetime_interp = []
@@ -452,9 +455,13 @@ for j in range(0, N_lambda):
 				r_obs_interp = graph_obs_interp.Eval(grid_lifetime_exclusion_region_2D[i])
 				if N_interp > 2 and UseExpoInterp:
 					graph_exp_interp.Fit(f1_lifetime)
-					r_exp_interp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
+					r_exp_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
+					if r_exp_interp_temp < 10000.0:
+						r_exp_interp = r_exp_interp_temp
 					graph_obs_interp.Fit(f1_lifetime)
-					r_obs_interp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
+					r_obs_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
+					if r_obs_interp_temp < 10000.0:
+						r_obs_interp = r_obs_interp_temp
 						
 				if r_exp_interp > 0.0:
 					r_exp_2d_grid[i][j] = r_exp_interp
@@ -468,8 +475,7 @@ print r_obs_2d_grid
 
 
 
-
-#then, interpolation along lambda direction (for a fixed lifetime value)
+#interpolation along lambda direction (for a fixed lifetime value)
 for i in range(0, N_lifetime):
 	N_interp = 0
 	lambda_interp = []
@@ -492,9 +498,13 @@ for i in range(0, N_lifetime):
 				r_obs_interp = graph_obs_interp.Eval(grid_lambda_exclusion_region_2D[j])
 				if N_interp > 2 and UseExpoInterp:
 					graph_exp_interp.Fit(f1_lambda)
-					r_exp_interp = f1_lambda.Eval(grid_lambda_exclusion_region_2D[j])
+					r_exp_interp_temp = f1_lambda.Eval(grid_lambda_exclusion_region_2D[j])
+					if r_exp_interp_temp < 10000.0:
+						r_exp_interp = r_exp_interp_temp
 					graph_obs_interp.Fit(f1_lambda)
-					r_obs_interp = f1_lambda.Eval(grid_lambda_exclusion_region_2D[j])
+					r_obs_interp_temp = f1_lambda.Eval(grid_lambda_exclusion_region_2D[j])
+					if r_obs_interp_temp < 10000.0:
+						r_obs_interp = r_obs_interp_temp
 	
 				if r_exp_interp > 0.0:
 					r_exp_2d_grid[i][j] = r_exp_interp
@@ -505,6 +515,9 @@ print "value of the 2D r grid (exp) provided after linear interpolation in lambd
 print r_exp_2d_grid
 print "value of the 2D r grid (obs) provided after linear interpolation in lambda direction: "
 print r_obs_2d_grid
+
+
+
 
 N_exp_exclusion_region_final = 0
 lambda_exp_exclusion_region_final = []

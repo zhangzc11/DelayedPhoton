@@ -117,38 +117,52 @@ shapes.append(["n_Jets", "nJets", "number of jets", 15,-0.5,14.5])
 limits_vs_lifetime = []
 limits_vs_lifetime.append(["L250TeV_Ctau10cm",   250.0, 357.5, 10.0,   0.0015])
 limits_vs_lifetime.append(["L250TeV_Ctau200cm",  250.0, 357.5, 200.0,  0.0015])
+limits_vs_lifetime.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0015])
 mass_limits_vs_lifetime = 357.5
 
 limits_vs_mass = []
-limits_vs_mass.append(["L100TeV_Ctau10cm",   100.0, 139.4, 10.0,   1.1])
-limits_vs_mass.append(["L150TeV_Ctau10cm",   150.0, 212.1, 10.0,   0.083])
-limits_vs_mass.append(["L250TeV_Ctau10cm",   250.0, 357.5, 10.0,   0.0015])
-limits_vs_mass.append(["L400TeV_Ctau10cm",   400.0, 576.4, 10.0,   9.78e-6])
-lifetime_limits_vs_mass = 10.0
+limits_vs_mass.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.083])
+limits_vs_mass.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0098])
+limits_vs_mass.append(["L250TeV_Ctau200cm",   250.0, 357.5, 200.0,   0.0015])
+limits_vs_mass.append(["L350TeV_Ctau200cm",   350.0, 503.4, 200.0,   5.05e-5])
+lifetime_limits_vs_mass = 200.0
 
 '''
 limits_vs_mass = []
-limits_vs_mass.append(["L100TeV_Ctau10cm",   100.0, 139.4, 10.0,   1.0])
-limits_vs_mass.append(["L150TeV_Ctau10cm",   150.0, 212.1, 10.0,   1.0])
-limits_vs_mass.append(["L250TeV_Ctau10cm",   250.0, 357.5, 10.0,   1.0])
-limits_vs_mass.append(["L400TeV_Ctau10cm",   400.0, 576.4, 10.0,   1.0])
+limits_vs_mass.append(["L100TeV_Ctau10cm",   100.0, 139.4, 10.0,   1.1000])
+limits_vs_mass.append(["L150TeV_Ctau10cm",   150.0, 212.1, 10.0,   0.0830])
+limits_vs_mass.append(["L250TeV_Ctau10cm",   250.0, 357.5, 10.0,   0.0015])
+limits_vs_mass.append(["L300TeV_Ctau10cm",   300.0, 430.4, 10.0,   2.67e-4])
+limits_vs_mass.append(["L400TeV_Ctau10cm",   400.0, 576.4, 10.0,   9.78e-6])
 lifetime_limits_vs_mass = 10.0
 '''
 
-'''
-limits_vs_mass.append(["L150TeV_Ctau200cm",  150.0, 212.1, 200.0,  0.083])
-limits_vs_mass.append(["L250TeV_Ctau200cm",  250.0, 357.5, 200.0,  0.0015])
-lifetime_limits_vs_mass = 200.0
-'''
-
 exclusion_region_2D = []
-exclusion_region_2D.append(["L100TeV_Ctau1000cm", 100.0, 139.4, 1000.0, 1.1])
 exclusion_region_2D.append(["L100TeV_Ctau10cm",   100.0, 139.4, 10.0,   1.1])
+exclusion_region_2D.append(["L100TeV_Ctau1000cm", 100.0, 139.4, 1000.0, 1.1])
+exclusion_region_2D.append(["L100TeV_Ctau1200cm", 100.0, 139.4, 1200.0, 1.1])
+exclusion_region_2D.append(["L100TeV_Ctau4000cm", 100.0, 139.4, 4000.0, 1.1])
 exclusion_region_2D.append(["L150TeV_Ctau10cm",   150.0, 212.1, 10.0,   0.083])
 exclusion_region_2D.append(["L150TeV_Ctau200cm",  150.0, 212.1, 200.0,  0.083])
+exclusion_region_2D.append(["L150TeV_Ctau800cm",  150.0, 212.1, 800.0,  0.083])
+exclusion_region_2D.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.083])
+exclusion_region_2D.append(["L150TeV_Ctau4000cm",  150.0, 212.1, 4000.0,  0.083])
+exclusion_region_2D.append(["L200TeV_Ctau0p01cm",   200.0, 284.8, 0.01,   0.0098])
+exclusion_region_2D.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0098])
+exclusion_region_2D.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0098])
+exclusion_region_2D.append(["L200TeV_Ctau800cm",   200.0, 284.8, 800.0,   0.0098])
+exclusion_region_2D.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0098])
 exclusion_region_2D.append(["L250TeV_Ctau10cm",   250.0, 357.5, 10.0,   0.0015])
 exclusion_region_2D.append(["L250TeV_Ctau200cm",  250.0, 357.5, 200.0,  0.0015])
+exclusion_region_2D.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0015])
+exclusion_region_2D.append(["L300TeV_Ctau0p01cm",  300.0, 430.4, 0.01,  2.67e-4])
+exclusion_region_2D.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  2.67e-4])
+exclusion_region_2D.append(["L300TeV_Ctau10cm",  300.0, 430.4, 10.0,  2.67e-4])
 exclusion_region_2D.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  2.67e-4])
+exclusion_region_2D.append(["L350TeV_Ctau0p1cm",  350.0, 503.4, 0.1,  5.05e-5])
+exclusion_region_2D.append(["L350TeV_Ctau200cm",  350.0, 503.4, 200.0,  5.05e-5])
+exclusion_region_2D.append(["L400TeV_Ctau0p01cm",   400.0, 576.4, 0.01,   9.78e-6])
+exclusion_region_2D.append(["L400TeV_Ctau0p1cm",   400.0, 576.4, 0.1,   9.78e-6])
 exclusion_region_2D.append(["L400TeV_Ctau10cm",   400.0, 576.4, 10.0,   9.78e-6])
 exclusion_region_2D.append(["L400TeV_Ctau800cm",  400.0, 576.4, 800.0,  9.78e-6])
 
