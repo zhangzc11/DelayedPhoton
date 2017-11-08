@@ -46,8 +46,8 @@ python saveShapes.py
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
-"L100TeV_CTau1000cm" \
-"signal (L100-CTau1000)" \
+"L100TeV_Ctau1000cm" \
+"signal (L100-Ctau1000)" \
 datacard > log.log
 ```
 make sure that you put the signal cross sections in data/XsecBR.dat file
@@ -66,7 +66,7 @@ python StackPlots.py
 -----------------------------
 ```
 cd fit_results/datacards/
-combine DelayedPhotonCard_L100TeV_CTau1000cm.txt -M Asymptotic -n L100TeV_CTau1000cm
+combine DelayedPhotonCard_L100TeV_Ctau1000cm.txt -M Asymptotic -n L100TeV_Ctau1000cm
 ```
 
 -----------------------------
@@ -83,8 +83,8 @@ python LimitPlots.py
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
-"L100TeV_CTau1000cm" \
-"signal (L100-CTau1000)" \
+"L100TeV_Ctau1000cm" \
+"signal (L100-Ctau1000)" \
 bias \
 0.000 \
 10000 > log_bias.log
