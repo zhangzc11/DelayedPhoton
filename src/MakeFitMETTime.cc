@@ -1006,7 +1006,7 @@ void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float Sov
 };
 
 
-double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
+double Fit1DMETTimeSignificance(TH1F *h1Data, TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
 {
 
 	RooMsgService::instance().setSilentMode(true);
@@ -1014,6 +1014,7 @@ double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
 	RooRandom::randomGenerator()->SetSeed( 0 );
 	
 	RooRealVar bin("bin","2D bin",0,h1Bkg->GetSize()-2,"");
+	RooDataHist* rhData = new RooDataHist("rhData", "rhData", RooArgSet(bin), h1Data);	
 	RooDataHist* rhBkg = new RooDataHist("rhBkg", "rhBkg", RooArgSet(bin), h1Bkg);	
 	RooDataHist* rhSig = new RooDataHist("rhSig", "rhSig", RooArgSet(bin), h1Sig);	
 		
@@ -1022,19 +1023,20 @@ double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
 	double sumQnot = 0.0;
 	double maxQnot = -9999.0;
 	double minQnot = 9999.0;
-	int nGoodToy = 0 ;
+	int nGoodTry = 0 ;
+	int nTrys = 5;
 
   	double _Ns_fit, _Nbkg_fit;
 
-	for(int ind_toy = 0; (ind_toy< 10*ntoys) && (nGoodToy < ntoys); ind_toy++)
+	for(int ind_Try = 0; (ind_Try< 10*nTrys) && (nGoodTry < nTrys); ind_Try++)
 	{
-		double nBkg_true = r3->PoissonD(h1Bkg->Integral());	
-		double nSig_true = r3->PoissonD(h1Sig->Integral());	
-		//double nSig_true = h1Sig->Integral();
+		double nBkg_true = h1Bkg->Integral();//r3->PoissonD(h1Bkg->Integral());	
+		//double nSig_true = r3->PoissonD(h1Sig->Integral());	
+		double nSig_true = h1Sig->Integral();
 
 		double npoints = nBkg_true + nSig_true;
 
-		RooRealVar nSig ("rpSig_yield", "rpSig_yield", nSig_true, 0.0, 1.5*npoints);
+		RooRealVar nSig ("rpSig_yield", "rpSig_yield", nSig_true, 0.0, 3.0*nSig_true);
 		nSig.setConstant(kFALSE);
 		RooRealVar nBkg ("fitModelBkg_yield", "fitModelBkg_yield", nBkg_true, 0.0, 1.5*npoints);
 		nBkg.setConstant(kFALSE);
@@ -1046,13 +1048,13 @@ double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
 		RooAbsPdf * fitModelBkgSig = new RooAddPdf("fitModelBkgSig", "fitModelBkgSig", RooArgSet(*rpBkg, *rpSig), RooArgSet(nBkg, nSig));	
 
 		//create toy data
-		RooDataHist* data_toy = fitModelBkgSig->generateBinned(RooArgSet(bin), npoints);
-		data_toy->SetName("data_toy");
+		//RooDataHist* data_toy = fitModelBkgSig->generateBinned(RooArgSet(bin), npoints);
+		//data_toy->SetName("data_toy");
 		
 		//fit
-		RooAbsReal* nll = fitModelBkgSig->createNLL(*data_toy, RooFit::NumCPU(8)) ;
+		RooAbsReal* nll = fitModelBkgSig->createNLL(*rhData, RooFit::NumCPU(8)) ;
 		RooFitResult * fres;
-		fres = fitModelBkgSig->fitTo( *data_toy, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+		fres = fitModelBkgSig->fitTo( *rhData, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
 
 		if(fres->status() == 0)
 		{		
@@ -1066,7 +1068,7 @@ double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
 				//if(qnot2<1e-8) qnot = 1e-4*sqrt(1e8 * qnot);
 				else qnot = sqrt(qnot2);
 				cout<<"DEBUG calculate significance: Ns (Ns_true) = "<<_Ns_fit<<" ( "<<nSig_true<<" )  Nb (Nb_true) = "<<_Nbkg_fit<<" ( "<<nBkg_true<<" ) qnot = "<<qnot<<" qnot2 = "<<qnot2<<endl;
-				nGoodToy ++;
+				nGoodTry ++;
 				sumQnot += qnot;		
 				if(qnot > maxQnot) maxQnot = qnot;
 				if(qnot < minQnot) minQnot = qnot;
@@ -1076,13 +1078,17 @@ double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys)
       		delete nll;	
 	}
 
-	if(nGoodToy > 2) return (sumQnot - maxQnot - minQnot)/(nGoodToy-2);
+	if(nGoodTry > 2) return (sumQnot - maxQnot - minQnot)/(nGoodTry-2);
 	else return 0.0;
 
 };
 
-void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig)
+void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName)
 {
+
+	std::string _modelName ((const char*) modelName);
+        //TFile *f_Out_binning = new TFile(("fit_results/binning/binning_"+_modelName+".root").c_str(),"recreate");
+
 	bool debug_thisFunc = true;
 	//initial status: 1 bin in time, and 1 bin in MET
 	int nTotal_time = h2Bkg->GetNbinsX();
@@ -1095,8 +1101,66 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 	double maxSignificance = -9999.0;
 	bool isConverged_time = false;
 	bool isConverged_met = false;
+	bool isConverged_all = false;
 	
-	while( (!isConverged_time) || (!isConverged_met))
+	/*************generate toy data**************/
+	TH2F * h2Data = new TH2F("h2Data","h2Data", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH1F * h1ConvertData = new TH1F("h1ConvertData","h1ConvertData", time_N_fine*met_N_fine, 0, time_N_fine*met_N_fine);
+	TH1 * h1ConvertData_toy = new TH1F("h1ConvertData_toy","h1ConvertData_toy", time_N_fine*met_N_fine, 0, time_N_fine*met_N_fine);
+	//2D to 1D convert
+	for(int i=1;i<=time_N_fine;i++)
+	{
+		for(int j=1;j<=met_N_fine;j++)
+		{
+			int thisBin = (i-1)*met_N_fine + j;
+			h1ConvertData->SetBinContent(thisBin, h2Bkg->GetBinContent(i,j) + h2Sig->GetBinContent(i,j));
+		}
+	}		
+	if(debug_thisFunc) cout<<"binning optimization: 2D data to 1D data conversion : "<<h2Bkg->Integral()+h2Sig->Integral()<<" -> "<<h1ConvertData->Integral()<<endl;
+	//toy generation
+	RooRealVar bin("bin","2D bin",0,h1ConvertData->GetSize()-2,"");
+	RooDataHist* rhData = new RooDataHist("rhData", "rhData", RooArgSet(bin), h1ConvertData);	
+	RooHistPdf * rpData = new RooHistPdf("rpData", "rpData", RooArgSet(bin), *rhData, 0);
+		
+	//create toy data
+	TRandom3* r3 = new TRandom3(0);
+	double nData_toy = r3->PoissonD(h1ConvertData->Integral());	
+	
+	RooDataHist* data_toy = rpData->generateBinned(RooArgSet(bin), nData_toy);
+	data_toy->SetName("data_toy");
+
+	h1ConvertData_toy = data_toy->createHistogram("bin", time_N_fine*met_N_fine);	
+	
+	if(debug_thisFunc) cout<<"binning optimization: 1D data vs toy data : "<<h1ConvertData->Integral()<<"  ->  "<<h1ConvertData_toy->Integral()<<endl;
+
+	//1D to 2D convert
+	for(int i=1;i<=time_N_fine;i++)
+	{
+		for(int j=1;j<=met_N_fine;j++)
+		{
+			int thisBin = (i-1)*met_N_fine + j;
+			h2Data->SetBinContent(i, j, h1ConvertData_toy->GetBinContent(thisBin));
+		}
+	}		
+	/*************end of toy data****************/
+	
+	//while( (!isConverged_time) || (!isConverged_met))
+	
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+	myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+	myC->SetTitle("");
+
+	int iteration = 0;
+	while( !isConverged_all )
 	{
 		//start spliting in time dimension
 		int new_idx_time = -99;
@@ -1104,6 +1168,10 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 		
 		if(!isConverged_time)
 		{
+			TString s_hist_name = Form("_h1_qnot_time_iter_%d", iteration);
+        		std::string _s_hist_name2 ((const char*) s_hist_name);
+			std::string _s_hist_name = _modelName+_s_hist_name2;
+			TH1F * h1_qnot_time = new TH1F(_s_hist_name.c_str(), _s_hist_name.c_str(), time_N_fine, time_Low, time_High);
 			for(int idx=1;idx<nTotal_time;idx++)
 			{
 				if(std::find(timeBin.begin(), timeBin.end(), idx) != timeBin.end()) continue; // add a new split
@@ -1122,6 +1190,7 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				cout<<endl;
 				
 				//construct 1D histogram of time and met
+				TH1F *h1Data = new TH1F ("h1Data","h1Data", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
 				TH1F *h1Bkg = new TH1F ("h1Bkg","h1Bkg", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
 				TH1F *h1Sig = new TH1F ("h1Sig","h1Sig", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
 				for(int iT=1;iT<= temp_bin_time.size()-1; iT++)
@@ -1129,8 +1198,10 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 					for(int iM=1;iM<= metBin.size()-1; iM++)
 					{
 						int thisBin = (iT-1)*(metBin.size()-1) + iM;
+						float NData = h2Data->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
 						float NBkg = h2Bkg->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
 						float NSig = h2Sig->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
+						h1Data->SetBinContent(thisBin, NData);
 						h1Bkg->SetBinContent(thisBin, NBkg);
 						h1Sig->SetBinContent(thisBin, NSig);
 						//cout<<"iT = "<<iT<<"  iM = "<<iM<<" thiBin = "<<thisBin<<"  NBkg = "<<NBkg<<"   NSig = "<<NSig<<endl;
@@ -1144,9 +1215,10 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				{
 					if(h1Bkg->GetBinContent(i) < 1e-3 ) h1Bkg->SetBinContent(i, 1e-3);
 					if(h1Sig->GetBinContent(i) < 1e-3 ) h1Sig->SetBinContent(i, 1e-3);
+					//h1Data->SetBinContent(i, h1Bkg->GetBinContent(i) + h1Sig->GetBinContent(i));
 				}
 	
-				double qnot = Fit1DMETTimeSignificance(h1Bkg, h1Sig, 10);
+				double qnot = Fit1DMETTimeSignificance(h1Data, h1Bkg, h1Sig, 10);
 			
 				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
 				if(qnot > maxSignificance)	
@@ -1154,10 +1226,28 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 					maxSignificance = qnot;
 					new_idx_time = idx; 
 				}
-	
+				h1_qnot_time->SetBinContent(idx, qnot);	
+
+				delete 	h1Data;
 				delete 	h1Bkg;
 				delete 	h1Sig;
 			}
+
+			h1_qnot_time->SetLineWidth(2);
+        		h1_qnot_time->SetLineColor(kBlack);
+                        h1_qnot_time->SetTitle("");
+        		h1_qnot_time->GetXaxis()->SetTitle("#gamma cluster time [ns]");
+        		h1_qnot_time->GetYaxis()->SetTitle("q_{0}");
+        		h1_qnot_time->GetYaxis()->SetTitleSize(axisTitleSize);
+        		h1_qnot_time->GetXaxis()->SetTitleSize(axisTitleSize);
+        		h1_qnot_time->GetYaxis()->SetTitleOffset(axisTitleOffset);
+        		h1_qnot_time->GetXaxis()->SetTitleOffset(axisTitleOffset);
+			h1_qnot_time->Draw();
+			myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".pdf").c_str());
+			myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".png").c_str());
+			myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".C").c_str());
+
+	
 			if(new_idx_time > 0)
 			{
 				if(debug_thisFunc) cout<<"best split point added : "<<new_idx_time<<"  maxSignificance = "<<maxSignificance<<endl;
@@ -1165,11 +1255,18 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				std::sort(timeBin.begin(), timeBin.end());	
 			}
 			else isConverged_time = true;	
+			
 		}
 
 
 		if(!isConverged_met)
 		{
+			TString s_hist_name = Form("_h1_qnot_met_iter_%d", iteration);
+        		std::string _s_hist_name2 ((const char*) s_hist_name);
+			std::string _s_hist_name = _modelName + _s_hist_name2;
+			
+			TH1F * h1_qnot_met = new TH1F(_s_hist_name.c_str(), _s_hist_name.c_str(), met_N_fine, met_Low, met_High);
+
 			for(int idx=1;idx<nTotal_met;idx++)
 			{
 				if(std::find(metBin.begin(), metBin.end(), idx) != metBin.end()) continue; // add a new split
@@ -1188,6 +1285,7 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				cout<<endl;
 				
 				//construct 1D histogram of met and time
+				TH1F *h1Data = new TH1F ("h1Data","h1Data", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
 				TH1F *h1Bkg = new TH1F ("h1Bkg","h1Bkg", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
 				TH1F *h1Sig = new TH1F ("h1Sig","h1Sig", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
 				for(int iT=1;iT<= timeBin.size()-1; iT++)
@@ -1195,8 +1293,10 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 					for(int iM=1;iM<= temp_bin_met.size()-1; iM++)
 					{
 						int thisBin = (iT-1)*(temp_bin_met.size()-1) + iM;
+						float NData = h2Data->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
 						float NBkg = h2Bkg->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
 						float NSig = h2Sig->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
+						h1Data->SetBinContent(thisBin, NData);
 						h1Bkg->SetBinContent(thisBin, NBkg);
 						h1Sig->SetBinContent(thisBin, NSig);
 						//cout<<"iT = "<<iT<<"  iM = "<<iM<<" thiBin = "<<thisBin<<"  NBkg = "<<NBkg<<"   NSig = "<<NSig<<endl;
@@ -1210,9 +1310,10 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				{
 					if(h1Bkg->GetBinContent(i) < 1e-3 ) h1Bkg->SetBinContent(i, 1e-3);
 					if(h1Sig->GetBinContent(i) < 1e-3 ) h1Sig->SetBinContent(i, 1e-3);
+					//h1Data->SetBinContent(i, h1Bkg->GetBinContent(i) + h1Sig->GetBinContent(i));
 				}
 	
-				double qnot = Fit1DMETTimeSignificance(h1Bkg, h1Sig, 10);
+				double qnot = Fit1DMETTimeSignificance(h1Data, h1Bkg, h1Sig, 10);
 			
 				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
 				if(qnot > maxSignificance)	
@@ -1220,7 +1321,9 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 					maxSignificance = qnot;
 					new_idx_met = idx; 
 				}
+				h1_qnot_met->SetBinContent(idx, qnot);
 	
+				delete 	h1Data;
 				delete 	h1Bkg;
 				delete 	h1Sig;
 			}
@@ -1231,8 +1334,31 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 				std::sort(metBin.begin(), metBin.end());	
 			}
 			else isConverged_met = true;	
-		}
 
+			h1_qnot_met->SetLineWidth(2);
+                        h1_qnot_met->SetLineColor(kBlack);
+                        h1_qnot_met->SetTitle("");
+                        h1_qnot_met->GetXaxis()->SetTitle("#slash{E}_{T} [GeV]");
+                        h1_qnot_met->GetYaxis()->SetTitle("q_{0}");
+                        h1_qnot_met->GetYaxis()->SetTitleSize(axisTitleSize);
+                        h1_qnot_met->GetXaxis()->SetTitleSize(axisTitleSize);
+                        h1_qnot_met->GetYaxis()->SetTitleOffset(axisTitleOffset);
+                        h1_qnot_met->GetXaxis()->SetTitleOffset(axisTitleOffset);
+                        h1_qnot_met->Draw();
+                        myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".pdf").c_str());
+                        myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".png").c_str());
+                        myC->SaveAs(("fit_results/binning/binning_"+_s_hist_name+".C").c_str());
+		}
+		
+		if(isConverged_time && isConverged_met) isConverged_all = true;
+		else
+		{
+			isConverged_time = false;
+			isConverged_met = false;
+			isConverged_all = false;
+		}
+	
+		iteration ++;
 	}
 
 };

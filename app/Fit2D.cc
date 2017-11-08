@@ -399,6 +399,8 @@ metBin.push_back(met_N_fine);
 
 if(fitMode == "binning")
 {
+	mkdir("fit_results/binning", S_IRWXU | S_IRWXG | S_IRWXO);
+
 	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
 	TH2F *h2finebinBkg = new TH2F("h2finebinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
 	TH2F *h2finebinGJets = new TH2F("h2finebinGJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
@@ -423,7 +425,7 @@ if(fitMode == "binning")
 		}
 	}
 
-	OptimizeBinning(timeBin, metBin, h2finebinBkg, h2finebinSig);
+	OptimizeBinning(timeBin, metBin, h2finebinBkg, h2finebinSig, time_Low, time_High, time_N_fine, met_Low, met_High, met_N_fine, _sigModelName);
 	
 	cout<<"optimized met and time bin:-----------"<<endl;
 	cout<<"time: ";
@@ -433,12 +435,27 @@ if(fitMode == "binning")
 	}
 	cout<<endl;
 	
+	cout<<"time bin: ";
+	for(int i=0;i<timeBin.size();i++)
+	{
+		cout<<timeBin[i]<<"  ,  ";
+	}
+	cout<<endl;
+	
 	cout<<"met: ";
 	for(int i=0;i<metBin.size();i++)
 	{
 		cout<<met_Low + (met_High - met_Low) * (1.0*metBin[i])/(1.0*met_N_fine)<<"  ,  ";
 	}
 	cout<<endl;
+
+	cout<<"met bin: ";
+	for(int i=0;i<metBin.size();i++)
+	{
+		cout<<metBin[i]<<"   ,   ";
+	}
+	cout<<endl;
+
 
 }
 

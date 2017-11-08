@@ -30,11 +30,11 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 
 void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float SoverB, int ntoys, TString modelName); 
 
-double Fit1DMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig, int ntoys); 
+double Fit1DMETTimeSignificance(TH1F *h1Data, TH1F * h1Bkg,  TH1F * h1Sig, int ntoys); 
 
 void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg, float N_sig);
 
-void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig);
+void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName);
 
 #endif
 

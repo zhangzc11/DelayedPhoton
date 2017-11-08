@@ -1,21 +1,29 @@
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GluinoToNeutralinoToGratinoPhoton_M1000_CTau5000mm.root \
-"M1000GeV_CTau5000mm" \
-"signal (M1000-CTau5000)" \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
+"L100TeV_Ctau1000cm" \
+"signal (L100-Ctau1000)" \
 datacard \
-> log_M1000GeV_CTau5000mm.log
+> log_L100TeV_Ctau1000cm_datacard.log
+
+
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GluinoToNeutralinoToGratinoPhoton_M1000_CTau500mm.root \
-"M1000GeV_CTau500mm" \
-"signal (M1000-CTau500)" \
-datacard \
-> log_M1000GeV_CTau500mm.log
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
+"L100TeV_Ctau1000cm" \
+"signal (L100-Ctau1000)" \
+bias \
+0.000 \
+10000 \
+> log_L100TeV_Ctau1000cm_bias.log
+
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GMSB_L180_CTau2190mm.root \
-"M256GeV_CTau2190mm" \
-"signal (M256-CTau2190)" \
-datacard \
-> log_M256GeV_CTau2190mm.log
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
+"L100TeV_Ctau1000cm" \
+"signal (L100-Ctau1000)" \
+binning \
+> log_L100TeV_Ctau1000cm_binning.log
+
+
+

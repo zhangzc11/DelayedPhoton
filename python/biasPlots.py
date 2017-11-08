@@ -32,13 +32,13 @@ bottomMargin = 0.12
 ##############load delayed photon input tree#############
 
 biasFiles = [
-		'bias_M1000GeV_CTau500mm_0.00000',
-		'bias_M1000GeV_CTau500mm_0.00010',
-		'bias_M1000GeV_CTau500mm_0.00100',
-		'bias_M1000GeV_CTau500mm_0.01000',
-		'bias_M1000GeV_CTau500mm_0.02000',
-		'bias_M1000GeV_CTau500mm_0.10000',
-		'bias_M1000GeV_CTau500mm_0.50000'
+		'bias_M1000GeV_Ctau500mm_0.00000',
+		'bias_M1000GeV_Ctau500mm_0.00010',
+		'bias_M1000GeV_Ctau500mm_0.00100',
+		'bias_M1000GeV_Ctau500mm_0.01000',
+		'bias_M1000GeV_Ctau500mm_0.02000',
+		'bias_M1000GeV_Ctau500mm_0.10000',
+		'bias_M1000GeV_Ctau500mm_0.50000'
 	 	]
 
 
