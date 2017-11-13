@@ -36,7 +36,6 @@ print fileNameGJetsSkim
 print "QCD tree: "
 print fileNameQCDSkim
 
-
 '''
 for i in range(0,len(fileNameDataSkim)):
 	print "Data file "+str(i)+"  ... "

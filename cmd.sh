@@ -1,5 +1,5 @@
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p336ifb.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
 "L100TeV_Ctau1000cm" \
 "signal (L100-Ctau1000)" \
@@ -8,7 +8,7 @@ datacard \
 
 
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p336ifb.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
 "L100TeV_Ctau1000cm" \
 "signal (L100-Ctau1000)" \
@@ -18,7 +18,7 @@ bias \
 > log_L100TeV_Ctau1000cm_bias.log
 
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p336ifb.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
 "L100TeV_Ctau1000cm" \
 "signal (L100-Ctau1000)" \

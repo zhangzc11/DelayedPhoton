@@ -1251,6 +1251,8 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 			TH1F * h1_qnot_time = new TH1F(_s_hist_name.c_str(), _s_hist_name.c_str(), time_N_fine, time_Low, time_High);
 			for(int idx=1;idx<nTotal_time;idx++)
 			{
+				double this_time = time_Low + (time_High - time_Low) * (1.0*idx)/(1.0*time_N_fine);
+				if(this_time < -5.0) continue;//no further binning below -5 ns
 				//if(std::find(timeBin.begin(), timeBin.end(), idx) != timeBin.end()) continue; // add a new split
 				
 				int dist_min = 9999;
@@ -1371,7 +1373,9 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 			for(int idx=1;idx<nTotal_met;idx++)
 			{
 				//if(std::find(metBin.begin(), metBin.end(), idx) != metBin.end()) continue; // add a new split
-				
+				double this_met = met_Low + (met_High - met_Low) * (1.0*idx)/(1.0*met_N_fine);
+				if(this_met < 50.0) continue;//no further binning below MET 50
+			
 				int dist_min = 9999;
 				for(int i=0;i<metBin.size();i++)
 				{

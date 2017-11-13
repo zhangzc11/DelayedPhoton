@@ -1,9 +1,12 @@
-from ROOT import *
-import os, sys
-from Aux import *
-from config import *
-import numpy as np
-import array
+#!/usr/bin/env
+from ROOT import TFile, TH1F, TLegend, TCanvas, TPad, gROOT, gStyle, TChain, TColor
+import ROOT
+import os #, sys
+from Aux import drawCMS
+from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut, splots, lumi, outputDir, xsecGJets, xsecQCD
+from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, cut_GJets_shape, cut_QCD_shape
+#import numpy as np
+#import array
 
 gROOT.SetBatch(True)
 
@@ -11,8 +14,9 @@ gStyle.SetOptStat(0)
 gStyle.SetOptFit(111)
 
 os.system("mkdir -p "+outputDir)
-os.system("cp ../config.py "+outputDir)
-os.system("cp StackPlots.py "+outputDir)
+os.system("mkdir -p "+outputDir+"/contamination")
+os.system("cp config.py "+outputDir)
+os.system("cp containmination.py "+outputDir)
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 axisTitleSize = 0.06
@@ -62,7 +66,7 @@ NEventsQCD = [0 for i in range(len(fileNameQCD))]
 for i in range(0,len(fileNameGJets)):
 	treeGJets[i] = TChain("DelayedPhoton")
 	treeGJets[i].AddFile(fileNameGJets[i])
-	SetOwnership( treeGJets[i], True)
+	ROOT.SetOwnership( treeGJets[i], True)
 	fileThis = TFile(fileNameGJets[i])
 	hNEventsGJets_ = fileThis.Get("NEvents")
 	#NEventsGJets_.append(hNEventsGJets_.GetBinContent(1))
@@ -72,7 +76,7 @@ for i in range(0,len(fileNameGJets)):
 for i in range(0,len(fileNameQCD)):
 	treeQCD[i] = TChain("DelayedPhoton")
 	treeQCD[i].AddFile(fileNameQCD[i])
-	SetOwnership( treeQCD[i], True)
+	ROOT.SetOwnership( treeQCD[i], True)
 	fileThis = TFile(fileNameQCD[i])
 	hNEventsQCD_ = fileThis.Get("NEvents")
 	#NEventsQCD_.append(hNEventsQCD_.GetBinContent(1))
@@ -85,9 +89,18 @@ print NEventsQCD
 
 print "\n cut = " + cut
 
-weightedcut = "(weight) * " + cut 
-weightedcut_GJets = "(weight) * " + cut_GJets 
-weightedcut_QCD = "(weight) * " + cut_loose + " && !( " + cut +")"
+weightedcut = "(weight*pileupWeight) * " + cut 
+weightedcut_GJets_pure = "(weight*pileupWeight) * " + cut_GJets_shape 
+#weightedcut_GJets_inGJets = "(weight*pileupWeight) * " + cut_GJets_shape + "&& " +cut_GJets 
+weightedcut_GJets_inGJets = "(weight*pileupWeight) * " + cut_GJets 
+#weightedcut_QCD_inGJets = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")" + "&& " +cut_GJets_shape 
+weightedcut_QCD_inGJets = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")"
+weightedcut_QCD_pure = "(weight*pileupWeight) * " + cut_QCD_shape 
+#weightedcut_GJets_inQCD = "(weight*pileupWeight) * " + cut_QCD_shape + "&& " +cut_GJets 
+weightedcut_GJets_inQCD = "(weight*pileupWeight) * " + cut_GJets 
+#weightedcut_QCD_inQCD = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")" + "&& " + cut_QCD_shape
+weightedcut_QCD_inQCD = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")"
+
 
 #fileOut = TFile("../data/shapes.root","RECREATE")
 #fileOut.cd()
@@ -106,24 +119,23 @@ for plot in splots:
 	histQCD_inQCD = TH1F(plot[1]+"_histQCD_inQCD","",plot[3],plot[4],plot[5])	
 	histGJets_inQCD = TH1F(plot[1]+"_histGJets_inQCD","",plot[3],plot[4],plot[5])	
 	for i in range(0, len(treeQCD)):
-		print "#QCD - "+str(i)+" - before/after QCD/GJets cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut)) + " / "+str(treeQCD[i].GetEntries(weightedcut_GJets))
+		print "#QCD - "+str(i)+" - before/after QCD/GJets cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_pure)) + " / "+str(treeQCD[i].GetEntries(weightedcut_GJets_pure))
 		normQCD = NEventsQCD_[i] 
 		histThis_QCD = TH1F(plot[1]+"_histQCD_inQCD"+str(i),"",plot[3],plot[4],plot[5])	
 		histThis_GJets = TH1F(plot[1]+"_histGJets_inQCD"+str(i),"",plot[3],plot[4],plot[5])	
-		treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD_inQCD"+str(i),weightedcut)
-		treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histGJets_inQCD"+str(i),weightedcut_GJets)
+		treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD_inQCD"+str(i),weightedcut_QCD_inQCD )
+		treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histGJets_inQCD"+str(i),weightedcut_GJets_inQCD)
 
 		if histThis_GJets.Integral()>0:
 			histThis_GJets.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		if histThis_QCD.Integral()>0:
 			histThis_QCD.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
-
 		histQCD_inQCD.Add(histThis_QCD)
 		histGJets_inQCD.Add(histThis_GJets)
 		print "#QCD in QCD - "+str(i)+" xsec * lumi * cut " + str(histThis_QCD.Integral())
 		print "#GJets in QCD - "+str(i)+" xsec * lumi * cut " + str(histThis_GJets.Integral())
-	histQCD_inQCD.SetLineColor(kOrange - 9)
-	histGJets_inQCD.SetLineColor(kAzure + 7)
+	histQCD_inQCD.SetLineColor(800 - 9)
+	histGJets_inQCD.SetLineColor(860 + 7)
 	histQCD_inQCD.SetLineWidth(2)
 	histGJets_inQCD.SetLineWidth(2)
 
@@ -131,12 +143,12 @@ for plot in splots:
 	histGJets_inGJets = TH1F(plot[1]+"_histGJets_inGJets","",plot[3],plot[4],plot[5])	
 	histQCD_inGJets = TH1F(plot[1]+"_histQCD_inGJets","",plot[3],plot[4],plot[5])	
 	for i in range(0, len(treeGJets)):
-		print "#GJets - "+str(i)+" - before/after GJets/QCD cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut)) + " / "+str(treeGJets[i].GetEntries(weightedcut_QCD))
+		print "#GJets - "+str(i)+" - before/after GJets/QCD cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_pure)) + " / "+str(treeGJets[i].GetEntries(weightedcut_QCD_pure))
 		normGJets = NEventsGJets_[i] 
 		histThis_GJets = TH1F(plot[1]+"_histGJets_inGJets"+str(i),"",plot[3],plot[4],plot[5])	
 		histThis_QCD = TH1F(plot[1]+"_histQCD_inGJets"+str(i),"",plot[3],plot[4],plot[5])	
-		treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets_inGJets"+str(i),weightedcut)
-		treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histQCD_inGJets"+str(i),weightedcut_QCD)
+		treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets_inGJets"+str(i),weightedcut_GJets_inGJets)
+		treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histQCD_inGJets"+str(i),weightedcut_QCD_inGJets)
 		if histThis_QCD.Integral()>0:
 			histThis_QCD.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		if histThis_GJets.Integral()>0:
@@ -145,8 +157,8 @@ for plot in splots:
 		histQCD_inGJets.Add(histThis_QCD)
 		print "#GJets in GJets - "+str(i)+" xsec * lumi * cut " + str(histThis_GJets.Integral())
 		print "#QCD in GJets - "+str(i)+" xsec * lumi * cut " + str(histThis_QCD.Integral())
-	histQCD_inGJets.SetLineColor(kOrange - 9)
-	histGJets_inGJets.SetLineColor(kAzure + 7)
+	histQCD_inGJets.SetLineColor(800 - 9)
+	histGJets_inGJets.SetLineColor(860 + 7)
 	histQCD_inGJets.SetLineWidth(2)
 	histGJets_inGJets.SetLineWidth(2)
 
@@ -239,8 +251,8 @@ for plot in splots:
 	ratio_inGJets.GetYaxis().SetTitleSize( axisTitleSizeRatioY )
 	ratio_inGJets.GetYaxis().SetLabelSize( axisLabelSizeRatioY )
 	ratio_inGJets.GetYaxis().SetTitleOffset( axisTitleOffsetRatioY )
-	ratio_inGJets.SetMarkerColor( kBlue )
-	ratio_inGJets.SetLineColor( kBlue )
+	ratio_inGJets.SetMarkerColor( 4 )
+	ratio_inGJets.SetLineColor( 4 )
 	ratio_inGJets.GetYaxis().SetRangeUser( 0.0, 1.0 )
 	ratio_inGJets.SetTitle("")
 	ratio_inGJets.GetYaxis().SetTitle("QCD / GJets")
@@ -297,8 +309,8 @@ for plot in splots:
 	ratio_inQCD.GetYaxis().SetTitleSize( axisTitleSizeRatioY )
 	ratio_inQCD.GetYaxis().SetLabelSize( axisLabelSizeRatioY )
 	ratio_inQCD.GetYaxis().SetTitleOffset( axisTitleOffsetRatioY )
-	ratio_inQCD.SetMarkerColor( kBlue )
-	ratio_inQCD.SetLineColor( kBlue )
+	ratio_inQCD.SetMarkerColor( 4 )
+	ratio_inQCD.SetLineColor( 4 )
 	ratio_inQCD.GetYaxis().SetRangeUser( 0.0, 1.0 )
 	ratio_inQCD.SetTitle("")
 	ratio_inQCD.GetYaxis().SetTitle("GJets / QCD")
@@ -314,7 +326,7 @@ for plot in splots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+"/"+plot[1]+"_contaimination_inQCD.pdf")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_contaimination_inQCD.png")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_contaimination_inQCD.C")
+	myC.SaveAs(outputDir+"/contamination/"+plot[1]+"_contaimination_inQCD.pdf")
+	myC.SaveAs(outputDir+"/contamination/"+plot[1]+"_contaimination_inQCD.png")
+	myC.SaveAs(outputDir+"/contamination/"+plot[1]+"_contaimination_inQCD.C")
 

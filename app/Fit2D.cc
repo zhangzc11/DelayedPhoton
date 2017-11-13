@@ -24,7 +24,7 @@ Int_t Nbins_total = Nbins_MET*Nbins_time;
 Double_t xbins_MET[16] = {0.0, 10.0, 20.0, 40.0, 60.0, 80, 100.0, 125.0, 150.0, 175.0, 200.0, 250.0, 300.0, 400.0, 500.0, 1000.0};
 Double_t xbins_time[21] = {-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15};
 
-float lumi = 31389.2; //pb^-1
+float lumi = 31336.5; //pb^-1
 float NEvents_sig = 1.0;
 bool _useToy = true;
 
@@ -59,11 +59,11 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float xsec = getXsecBR(sigModelName); //pb
 std::string treeName = "DelayedPhoton";
 
-std::string cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2"; 
-std::string cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2"; 
+std::string cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2"; 
+std::string cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2"; 
 std::string cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36";
 std::string cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2";
-std::string cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (jet2Pt/pho1Pt > 0.2) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+std::string cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (jet2Pt/pho1Pt > 0.2) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
 
 
 if(inputFileName_data == "")
@@ -410,7 +410,7 @@ if(fitMode == "binning")
 	tree_data->Draw("MET:pho1ClusterTime>>h2finebinData", cut.c_str());
 	tree_data->Draw("MET:pho1ClusterTime>>h2finebinGJets", cut_GJets.c_str());
 	tree_data->Draw("MET:pho1ClusterTime>>h2finebinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
-	tree_signal->Draw("MET:pho1ClusterTime>>h2finebinSig", ("weight * ( "+cut+" )").c_str());
+	tree_signal->Draw("MET:pho1ClusterTime>>h2finebinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
 
 	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
 	h2finebinGJets->Scale((1.0*h2finebinData->Integral()*frac_GJets)/(1.0*h2finebinGJets->Integral()));
@@ -489,15 +489,15 @@ TH1F * h1newbinQCD_MET = new TH1F("h1newbinQCD_MET","; #slash{E}_{T} (GeV); Even
 tree_data->Draw("MET:pho1ClusterTime>>h2newbinData", cut.c_str());
 tree_data->Draw("MET:pho1ClusterTime>>h2newbinGJets", cut_GJets.c_str());
 tree_data->Draw("MET:pho1ClusterTime>>h2newbinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
-tree_signal->Draw("MET:pho1ClusterTime>>h2newbinSig", ("weight * ( "+cut+" )").c_str());
+tree_signal->Draw("MET:pho1ClusterTime>>h2newbinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
 
 tree_data->Draw("pho1ClusterTime>>h1newbinData_time", cut.c_str());
-tree_signal->Draw("pho1ClusterTime>>h1newbinSig_time", ("weight * ( "+cut+" )").c_str());
+tree_signal->Draw("pho1ClusterTime>>h1newbinSig_time", ("weight*pileupWeight * ( "+cut+" )").c_str());
 tree_data->Draw("pho1ClusterTime>>h1newbinGJets_time", cut_GJets.c_str());
 tree_data->Draw("pho1ClusterTime>>h1newbinQCD_time", (cut_loose + " && ! (" + cut + ")").c_str());
 
 tree_data->Draw("MET>>h1newbinData_MET", cut.c_str());
-tree_signal->Draw("MET>>h1newbinSig_MET", ("weight * ( "+cut+" )").c_str());
+tree_signal->Draw("MET>>h1newbinSig_MET", ("weight*pileupWeight * ( "+cut+" )").c_str());
 tree_data->Draw("MET>>h1newbinGJets_MET", cut_GJets.c_str());
 tree_data->Draw("MET>>h1newbinQCD_MET", (cut_loose + " && ! (" + cut + ")").c_str());
 

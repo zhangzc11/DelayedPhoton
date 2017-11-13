@@ -1,7 +1,8 @@
 from ROOT import *
 import os, sys
 from Aux import *
-from config import *
+from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 import numpy as np
 import array
 
@@ -10,9 +11,10 @@ gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(111)
 
-os.system("mkdir -p "+outputDir)
-os.system("cp ../config.py "+outputDir)
-os.system("cp StackPlots.py "+outputDir)
+os.system("mkdir -p "+outputDir+"/stack")
+os.system("mkdir -p "+outputDir+"/stack")
+os.system("cp config.py "+outputDir+"/stack")
+os.system("cp StackPlots.py "+outputDir+"/stack")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 axisTitleSize = 0.06
@@ -85,13 +87,13 @@ print NEventsQCD
 
 print "\n cut = " + cut
 
-weightedcut = "(weight) * " + cut 
+weightedcut = "(weight*pileupWeight) * " + cut 
 
 #fileOut = TFile("../data/shapes.root","RECREATE")
 #fileOut.cd()
 
-NEventsGJets_ = NEventsGJets[:]
-NEventsQCD_ = NEventsQCD[:]
+#NEventsGJets_ = NEventsGJets[:]
+#NEventsQCD_ = NEventsQCD[:]
 for plot in splots:
 	#print NEventsGJets
 	#print NEventsQCD
@@ -148,7 +150,6 @@ for plot in splots:
 
 	#sig
 	print "#signal before/after cut: " + str(treeSig.GetEntries()) + " => " + str(treeSig.GetEntries(cut))
-	normSig = NEventsSig * 1.0  #treeSig.GetEntries("weight") / effSelSig
 	histSig = TH1F(plot[1]+"_histSig","",plot[3],plot[4],plot[5])	
 	'''
 	if plot[0]=="pho1ClusterTime":
@@ -158,9 +159,9 @@ for plot in splots:
 	'''
 	treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut)
 	if plot[6]:
-		histSig.Scale(lumi*xsecSig/normSig)
+		histSig.Scale(lumi*xsecSig/NEventsSig)
 	else:
-		histSig.Scale(lumi*xsecSig/normSig)
+		histSig.Scale(lumi*xsecSig/NEventsSig)
 	histSig.SetLineWidth( 2 )
 	histSig.SetLineColor( kRed )
 	print "#signal xsec * lumi * cut  " + str(histSig.Integral()) 
@@ -175,7 +176,7 @@ for plot in splots:
 	'''
 	for i in range(0, len(treeQCD)):
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut))
-		normQCD = NEventsQCD_[i] 
+		normQCD = NEventsQCD[i] 
 		histThis = TH1F(plot[1]+"_histQCD"+str(i),"",plot[3],plot[4],plot[5])	
 		'''
 		if plot[0]=="pho1ClusterTime":
@@ -201,12 +202,12 @@ for plot in splots:
 	if plot[0]=="MET":
 		histGJets = TH1F(plot[1]+"_histGJets","",len(xbins_MET)-1, np.array(xbins_MET))
 	'''
-	print NEventsGJets_	
-	print NEventsQCD_
+	print NEventsGJets
+	print NEventsQCD
 
 	for i in range(0, len(treeGJets)):
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut))
-		normGJets = NEventsGJets_[i] 
+		normGJets = NEventsGJets[i] 
 		histThis = TH1F(plot[1]+"_histGJets"+str(i),"",plot[3],plot[4],plot[5])	
 		'''
 		if plot[0]=="pho1ClusterTime":
@@ -235,7 +236,7 @@ for plot in splots:
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
 	if useFraction:
 		#histGJets_CR.Scale(histData.Integral()*fractionGJets/histGJets_CR.Integral())
-		histGJets_CR.Scale(histData.Integral()*0.647/histGJets_CR.Integral())
+		histGJets_CR.Scale(histData.Integral()*0.3025/histGJets_CR.Integral())
 	else:
 		histGJets_CR.Scale(histGJets.Integral()/histGJets_CR.Integral())
 	histGJets_CR.SetFillColor(kAzure + 7)
@@ -254,7 +255,7 @@ for plot in splots:
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose + " && !( " + cut +")")
 	if useFraction:
 		#histQCD_CR.Scale(histData.Integral()*fractionQCD/histQCD_CR.Integral())
-		histQCD_CR.Scale(histData.Integral()*0.353/histQCD_CR.Integral())
+		histQCD_CR.Scale(histData.Integral()*0.6975/histQCD_CR.Integral())
 	else:
 		histQCD_CR.Scale(histQCD.Integral()/histQCD_CR.Integral())
 	histQCD_CR.SetFillColor(kOrange - 9)
@@ -395,9 +396,9 @@ for plot in splots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+"/"+plot[1]+".pdf")
-	myC.SaveAs(outputDir+"/"+plot[1]+".png")
-	myC.SaveAs(outputDir+"/"+plot[1]+".C")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+".pdf")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+".png")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+".C")
 
 
 	#control plots with data driven QCD and GJets	
@@ -479,9 +480,9 @@ for plot in splots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+"/"+plot[1]+"_dataDriven.pdf")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_dataDriven.png")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_dataDriven.C")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven.pdf")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven.png")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven.C")
 
 	#closure test, GJets
 	leg_GJets_CR = TLegend(0.18, 0.7, 0.93, 0.89)
@@ -557,9 +558,9 @@ for plot in splots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+"/"+plot[1]+"_GJets_test.pdf")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_GJets_test.png")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_GJets_test.C")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_GJets_test.pdf")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_GJets_test.png")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_GJets_test.C")
 
 	#closure test, GJets
 	leg_QCD_CR = TLegend(0.18, 0.7, 0.93, 0.89)
@@ -636,8 +637,8 @@ for plot in splots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+"/"+plot[1]+"_QCD_test.pdf")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_QCD_test.png")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_QCD_test.C")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_QCD_test.pdf")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_QCD_test.png")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_QCD_test.C")
 
 

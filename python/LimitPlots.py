@@ -26,11 +26,13 @@ np.set_printoptions(suppress=True)
 np.set_printoptions(linewidth=200)
 
 os.system("mkdir -p "+outputDir)
-os.system("cp config.py "+outputDir)
-os.system("cp StackPlots.py "+outputDir)
+os.system("mkdir -p "+outputDir+"/limits")
+os.system("cp config.py "+outputDir+"/limits")
+os.system("cp LimitPlots.py "+outputDir+"/limits")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
-UseExpoInterp = True
+UseExpoInterp_time = False
+UseExpoInterp_lambda = True
 ManualSmooth = True
 
 axisTitleSize = 0.05
@@ -178,7 +180,7 @@ graph_lifetime_exp1sigma_limit.SetFillColor(kGreen)
 graph_lifetime_exp2sigma_limit.SetFillColor(kYellow)
 
 graph_lifetime_exp_limit.GetXaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_lifetime_exp_limit.GetXaxis().SetLimits(1.0,1200.0)
+graph_lifetime_exp_limit.GetXaxis().SetLimits(0.001,10000.0)
 graph_lifetime_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
 graph_lifetime_exp_limit.GetYaxis().SetRangeUser(1e-6,1e4)
 graph_lifetime_exp_limit.SetTitle("")
@@ -216,9 +218,9 @@ leg_limit_vs_time.AddEntry(graph_lifetime_exp1sigma_limit, "#pm 1 #sigma Expecte
 leg_limit_vs_time.AddEntry(graph_lifetime_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 leg_limit_vs_time.Draw()
 
-myC.SaveAs(outputDir+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".pdf")
-myC.SaveAs(outputDir+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".png")
-myC.SaveAs(outputDir+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".C")
+myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".pdf")
+myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".png")
+myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".C")
 
 ##################limit vs mass #######################3
 
@@ -378,9 +380,9 @@ leg_limit_vs_mass.AddEntry(graph_mass_exp1sigma_limit, "#pm 1 #sigma Expected", 
 leg_limit_vs_mass.AddEntry(graph_mass_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 leg_limit_vs_mass.Draw()
 
-myC.SaveAs(outputDir+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".pdf")
-myC.SaveAs(outputDir+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".png")
-myC.SaveAs(outputDir+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".C")
+myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".pdf")
+myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".png")
+myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".C")
 
 
 ##################exclusion region of lifetime and Lambda/mass #######################
@@ -415,8 +417,9 @@ for limit_2D in exclusion_region_2D:
 			ind_lifetime = i
 	#print "ind_lambda = "+str(ind_lambda)	
 	#print "ind_lifetime = "+str(ind_lifetime)	
-	r_exp_2d_grid[ind_lifetime][ind_lambda] = limits[2]
-	r_obs_2d_grid[ind_lifetime][ind_lambda] = limits[5]
+	if len(limits) == 6:
+		r_exp_2d_grid[ind_lifetime][ind_lambda] = limits[2]
+		r_obs_2d_grid[ind_lifetime][ind_lambda] = limits[5]
 
 print "value of the 2D r grid (exp) provided from samples: "
 print r_exp_2d_grid
@@ -431,8 +434,6 @@ f1_lambda = TF1("f1_lambda","expo(0)", 0.0, grid_lambda_exclusion_region_2D[N_la
 
 
 
-
-
 #interpolation along lifetime direction (for a fixed lambda value)
 for j in range(0, N_lambda):
 	N_interp = 0
@@ -441,7 +442,7 @@ for j in range(0, N_lambda):
 	r_obs_interp = []
 
 	for i in range(0, N_lifetime):
-		if r_exp_2d_grid[i][j] > 0.0:
+		if r_exp_2d_grid[i][j] > 0.00001:
 			N_interp = 1 + N_interp
 			lifetime_interp.append(grid_lifetime_exclusion_region_2D[i])
 			r_exp_interp.append(r_exp_2d_grid[i][j])
@@ -453,7 +454,7 @@ for j in range(0, N_lambda):
 			if r_exp_2d_grid[i][j] == 0.0:
 				r_exp_interp = graph_exp_interp.Eval(grid_lifetime_exclusion_region_2D[i])
 				r_obs_interp = graph_obs_interp.Eval(grid_lifetime_exclusion_region_2D[i])
-				if N_interp > 2 and UseExpoInterp:
+				if N_interp > 2 and UseExpoInterp_time:
 					graph_exp_interp.Fit(f1_lifetime)
 					r_exp_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
 					if r_exp_interp_temp < 10000.0:
@@ -465,14 +466,17 @@ for j in range(0, N_lambda):
 						
 				if r_exp_interp > 0.0:
 					r_exp_2d_grid[i][j] = r_exp_interp
+				else:
+					r_exp_2d_grid[i][j] = 1e-4
 				if r_obs_interp > 0.0:
 					r_obs_2d_grid[i][j] = r_obs_interp
+				else:
+					r_obs_2d_grid[i][j] = 1e-4
 
 print "value of the 2D r grid (exp) provided after linear interpolation in lifetime direction: "
 print r_exp_2d_grid
 print "value of the 2D r grid (obs) provided after linear interpolation in lifetime direction: "
 print r_obs_2d_grid
-
 
 
 #interpolation along lambda direction (for a fixed lifetime value)
@@ -483,7 +487,7 @@ for i in range(0, N_lifetime):
 	r_obs_interp = []
 
 	for j in range(0, N_lambda):
-		if r_exp_2d_grid[i][j] > 0.0:
+		if r_exp_2d_grid[i][j] > 0.00001:
 			N_interp = 1 + N_interp
 			lambda_interp.append(grid_lambda_exclusion_region_2D[j])
 			r_exp_interp.append(r_exp_2d_grid[i][j])
@@ -496,7 +500,7 @@ for i in range(0, N_lifetime):
 				
 				r_exp_interp = graph_exp_interp.Eval(grid_lambda_exclusion_region_2D[j])
 				r_obs_interp = graph_obs_interp.Eval(grid_lambda_exclusion_region_2D[j])
-				if N_interp > 2 and UseExpoInterp:
+				if N_interp > 2 and UseExpoInterp_lambda:
 					graph_exp_interp.Fit(f1_lambda)
 					r_exp_interp_temp = f1_lambda.Eval(grid_lambda_exclusion_region_2D[j])
 					if r_exp_interp_temp < 10000.0:
@@ -508,8 +512,12 @@ for i in range(0, N_lifetime):
 	
 				if r_exp_interp > 0.0:
 					r_exp_2d_grid[i][j] = r_exp_interp
+				else:
+					r_exp_2d_grid[i][j] = 1e-4
 				if r_obs_interp > 0.0:
 					r_obs_2d_grid[i][j] = r_obs_interp
+				else:
+					r_obs_2d_grid[i][j] = 1e-4
 
 print "value of the 2D r grid (exp) provided after linear interpolation in lambda direction: "
 print r_exp_2d_grid
@@ -529,18 +537,18 @@ lambda_obs_exclusion_region_final = []
 mass_obs_exclusion_region_final = []
 lifetime_obs_exclusion_region_final = []
 
-for ind_temp in range(0, N_lifetime):
-	i = N_lifetime - ind_temp - 1
-	if r_exp_2d_grid[i][0] < 1.0:
-		N_exp_exclusion_region_final = 1 + N_exp_exclusion_region_final
-		lambda_exp_exclusion_region_final.append(0.0)
-		mass_exp_exclusion_region_final.append(0.0)
-		lifetime_exp_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[i])
-	if r_obs_2d_grid[i][0] < 1.0:
-		N_obs_exclusion_region_final = 1 + N_obs_exclusion_region_final
-		lambda_obs_exclusion_region_final.append(0.0)
-		mass_obs_exclusion_region_final.append(0.0)
-		lifetime_obs_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[i])
+
+N_exp_exclusion_region_final = 1
+N_obs_exclusion_region_final = 1
+
+lambda_exp_exclusion_region_final.append(grid_lambda_exclusion_region_2D[0])
+lifetime_exp_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[0])
+mass_exp_exclusion_region_final.append(grid_mass_exclusion_region_2D[0])
+
+lambda_obs_exclusion_region_final.append(grid_lambda_exclusion_region_2D[0])
+lifetime_obs_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[0])
+mass_obs_exclusion_region_final.append(grid_mass_exclusion_region_2D[0])
+
 
 #now do interpolaton in lifetime direction to find the mass in which r = 1.0 (boundary of the exclusion region)
 
@@ -595,12 +603,29 @@ for i in range(0, N_lifetime-1):
 		graph_exp_interp_mass2 = TGraph(N_interp, np.array(mass_interp), np.array(r_exp_interp))
 		this_lambda_exp = graph_exp_interp_lambda.Eval(1.0)
 		this_mass_exp = graph_exp_interp_mass.Eval(1.0)
+		
+		print "final point: time = "+str(grid_lifetime_exclusion_region_2D[i])
+		print "mass interp linear exp = "+str(this_mass_exp)
 
-		if N_interp > 2 and UseExpoInterp:
-			graph_exp_interp_lambda2.Fit(f1_lambda)
-			this_lambda_exp = f1_lambda.GetX(1.0, 0.0, grid_lambda_exclusion_region_2D[N_lambda-1])
-			graph_exp_interp_mass2.Fit(f1_mass)
-			this_mass_exp = f1_mass.GetX(1.0, 0.0, grid_mass_exclusion_region_2D[N_lambda-1])
+		if N_interp > 2 and UseExpoInterp_lambda:
+			lambda_Up = grid_lambda_exclusion_region_2D[N_lambda-1] 
+			mass_Up = grid_mass_exclusion_region_2D[N_lambda-1]
+			'''
+			for j in range(1, N_lambda):
+				if r_exp_2d_grid[i][j] > r_exp_2d_grid[i][j-1]:
+					lambda_Up = grid_lambda_exclusion_region_2D[j]
+					mass_Up = grid_mass_exclusion_region_2D[j]
+			'''
+			
+			graph_exp_interp_lambda2.Fit(f1_lambda, "", "", 10.0, lambda_Up)
+			chi2_lambda = f1_lambda.GetChisquare()
+			if chi2_lambda < 500.0:
+				this_lambda_exp = f1_lambda.GetX(1.0, 0.0, lambda_Up)
+			graph_exp_interp_mass2.Fit(f1_mass, "", "", 10.0, mass_Up)
+			chi2_mass = f1_mass.GetChisquare()
+			if chi2_mass < 500.0:
+				this_mass_exp = f1_mass.GetX(1.0, 0.0, mass_Up)
+			print "mass interp expo exp = "+str(this_mass_exp)
 
 		if ManualSmooth and N_exp_exclusion_region_final > 0 and this_lambda_exp < lambda_exp_exclusion_region_final[N_exp_exclusion_region_final - 1]:
 			this_lambda_exp = lambda_exp_exclusion_region_final[N_exp_exclusion_region_final - 1]
@@ -618,15 +643,31 @@ for i in range(0, N_lifetime-1):
 		this_lambda_obs = graph_obs_interp_lambda.Eval(1.0)
 		this_mass_obs = graph_obs_interp_mass.Eval(1.0)
 
-		if N_interp > 2 and UseExpoInterp:
-			graph_obs_interp_lambda2.Fit(f1_lambda)
-			this_lambda_obs = f1_lambda.GetX(1.0, 0.0, grid_lambda_exclusion_region_2D[N_lambda-1])
-			graph_obs_interp_mass2.Fit(f1_mass)
-			this_mass_obs = f1_mass.GetX(1.0, 0.0, grid_mass_exclusion_region_2D[N_lambda-1])
+		print "mass interp linear obs = "+str(this_mass_obs)
+		if N_interp > 2 and UseExpoInterp_lambda:
+			lambda_Up = grid_lambda_exclusion_region_2D[N_lambda-1] 
+			mass_Up = grid_mass_exclusion_region_2D[N_lambda-1]
+			'''
+			for j in range(1, N_lambda):
+				if r_obs_2d_grid[i][j] > r_obs_2d_grid[i][j-1]:
+					lambda_Up = grid_lambda_exclusion_region_2D[j]
+					mass_Up = grid_mass_exclusion_region_2D[j]
+			'''
+			
+			graph_obs_interp_lambda2.Fit(f1_lambda, "", "", 10.0, lambda_Up)
+			chi2_lambda = f1_lambda.GetChisquare()
+			if chi2_lambda < 500.0:
+				this_lambda_obs = f1_lambda.GetX(1.0, 0.0, lambda_Up)
+			graph_obs_interp_mass2.Fit(f1_mass, "", "", 10.0, mass_Up)
+			chi2_mass = f1_mass.GetChisquare()
+			if chi2_mass < 500.0:
+				this_mass_obs = f1_mass.GetX(1.0, 0.0, mass_Up)
+			print "mass interp expo obs = "+str(this_mass_obs)
 
 		if ManualSmooth and N_obs_exclusion_region_final > 0 and this_lambda_obs < lambda_obs_exclusion_region_final[N_obs_exclusion_region_final - 1]:
 			this_lambda_obs = lambda_obs_exclusion_region_final[N_obs_exclusion_region_final - 1]
 			this_mass_obs = mass_obs_exclusion_region_final[N_obs_exclusion_region_final - 1]
+			print "mass interp obs smooth = "+str(this_mass_obs)
 		if this_lambda_obs > 0.0:
 
 			lambda_obs_exclusion_region_final.append(this_lambda_obs)
@@ -634,30 +675,18 @@ for i in range(0, N_lifetime-1):
 			N_obs_exclusion_region_final = 1 + N_obs_exclusion_region_final
 			lifetime_obs_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[i])
 
-'''
+
 N_exp_exclusion_region_final = 1 + N_exp_exclusion_region_final
-lambda_exp_exclusion_region_final.append(lambda_exp_exclusion_region_final[0])
-mass_exp_exclusion_region_final.append(mass_exp_exclusion_region_final[0])
-lifetime_exp_exclusion_region_final.append(lifetime_exp_exclusion_region_final[N_exp_exclusion_region_final - 2])
+lambda_exp_exclusion_region_final.append(grid_lambda_exclusion_region_2D[0])
+lifetime_exp_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[N_lifetime-1])
+mass_exp_exclusion_region_final.append(grid_mass_exclusion_region_2D[0])
 
 N_obs_exclusion_region_final = 1 + N_obs_exclusion_region_final
-lambda_obs_exclusion_region_final.append(lambda_obs_exclusion_region_final[0])
-mass_obs_exclusion_region_final.append(mass_obs_exclusion_region_final[0])
-lifetime_obs_exclusion_region_final.append(lifetime_obs_exclusion_region_final[N_obs_exclusion_region_final - 2])
+lambda_obs_exclusion_region_final.append(grid_lambda_exclusion_region_2D[0])
+lifetime_obs_exclusion_region_final.append(grid_lifetime_exclusion_region_2D[N_lifetime-1])
+mass_obs_exclusion_region_final.append(grid_mass_exclusion_region_2D[0])
 
-'''
-for ind_temp in range(0, N_lambda):
-	j = N_lambda - ind_temp - 1
-	if r_exp_2d_grid[N_lifetime-1][j] < 1.0:
-		N_exp_exclusion_region_final = 1 + N_exp_exclusion_region_final
-		lambda_exp_exclusion_region_final.append(grid_lambda_exclusion_region_2D[j])
-		mass_exp_exclusion_region_final.append(grid_mass_exclusion_region_2D[j])
-		lifetime_exp_exclusion_region_final.append(0.0)
-	if r_obs_2d_grid[N_lifetime-1][j] < 1.0:
-		N_obs_exclusion_region_final = 1 + N_obs_exclusion_region_final
-		lambda_obs_exclusion_region_final.append(grid_lambda_exclusion_region_2D[j])
-		mass_obs_exclusion_region_final.append(grid_mass_exclusion_region_2D[j])
-		lifetime_obs_exclusion_region_final.append(0.0)
+
 
 print "final exclusion region boundary (exp):"
 print "N = "+str(N_exp_exclusion_region_final)
@@ -716,8 +745,8 @@ graph_exclusion_exp.SetLineStyle(kDashed)
 
 #graph_exclusion_obs.SetFillColor(kAzure + 7)
 graph_exclusion_obs.SetFillColorAlpha(kOrange - 9, 0.65)
-graph_exclusion_exp.Draw("AL")
-graph_exclusion_obs.Draw("Fsame")
+graph_exclusion_exp.Draw("AL*")
+graph_exclusion_obs.Draw("F*same")
 
 #####ATLAS 8TeV
 lambda_atlas_8TeV_2g = np.array([82.5 , 102.5,   140,   160,   180,   200,   220, 260,  300, 302.58, 300, 260, 220, 200 ])
@@ -753,7 +782,7 @@ graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 
 ####legend
-leg_2d_exclusion = TLegend(0.42,0.55,0.92,0.89)
+leg_2d_exclusion = TLegend(0.45,0.6,0.92,0.89)
 leg_2d_exclusion.SetBorderSize(0)
 leg_2d_exclusion.SetTextSize(0.03)
 leg_2d_exclusion.SetLineColor(1)
@@ -773,9 +802,9 @@ leg_2d_exclusion.Draw()
 
 
 drawCMS2(myC2D, 13, lumi)
-myC2D.SaveAs(outputDir+"/limit_exclusion_region_2D.pdf")
-myC2D.SaveAs(outputDir+"/limit_exclusion_region_2D.png")
-myC2D.SaveAs(outputDir+"/limit_exclusion_region_2D.C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D.pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D.png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D.C")
 
 
 

@@ -1,7 +1,9 @@
 from ROOT import *
 import os, sys
 from Aux import *
-from config import *
+from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_1G, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
+from config import cut_QCD_shape_iso, cut_QCD_shape, cut_GJets_shape_iso, cut_GJets_shape, shapes, cut_iso
 
 
 gROOT.SetBatch(True)
@@ -10,6 +12,10 @@ gStyle.SetOptStat(0)
 gStyle.SetOptFit(111)
 
 os.system("mkdir -p ../data")
+os.system("mkdir -p "+outputDir)
+os.system("mkdir -p "+outputDir+"/shapes")
+os.system("cp config.py "+outputDir)
+os.system("cp saveShapes.py "+outputDir)
 #os.system("mkdir -p ../data")
 #################shape settings###########################
 axisTitleSize = 0.06
@@ -196,7 +202,7 @@ for shape in shapes:
 	leg.Draw()	
 	drawCMS2(myC, 13, lumi)
 
-	myC.SaveAs(outputDir+"/shapes_"+shape[1]+".pdf")
-        myC.SaveAs(outputDir+"/shapes_"+shape[1]+".png")
-        myC.SaveAs(outputDir+"/shapes_"+shape[1]+".C")
+	myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+".pdf")
+        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+".png")
+        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+".C")
 	
