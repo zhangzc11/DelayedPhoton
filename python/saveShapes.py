@@ -1,7 +1,7 @@
 from ROOT import *
 import os, sys
 from Aux import *
-from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_1G, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
 from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 from config import cut_QCD_shape_iso, cut_QCD_shape, cut_GJets_shape_iso, cut_GJets_shape, shapes, cut_iso
 

@@ -40,7 +40,10 @@ inputFiles = [
 
 os.system("mkdir -p "+outputDir+"/isolation/")
 
-cut = "(weight*pileupWeight)* (pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3&& (HLTDecision[81] == 1) )"
+#cut = "(weight*pileupWeight)* (pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3&& (HLTDecision[81] == 1) )"
+cut = "(weight*pileupWeight)* (pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3&& (HLTDecision[81] == 1) ) "
+cut_inTime = "(weight*pileupWeight)* (pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3&& (HLTDecision[81] == 1)  && pho1isStandardPhoton && pho1isDelayedPhoton) "
+cut_OOT = "(weight*pileupWeight)* (pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3&& (HLTDecision[81] == 1)  && (!pho1isStandardPhoton) && pho1isDelayedPhoton) "
 
 
 plots = [
@@ -49,7 +52,7 @@ plots = [
 		["pho1sumNeutralHadronEt","PF Iso - neutral hadron (GeV)"],
 		["pho1ecalPFClusterIso","PF Cluster Iso - ECAL (GeV)"],
 		["pho1hcalPFClusterIso","PF Cluster Iso - HCAL (GeV)"],
-		["pho1trkSumPtHollowConeDR03","PF Cluster Iso - tracker (GeV)"]
+		["pho1trkSumPtHollowConeDR03","tracker iso (GeV)"]
 	]
 
 for finput in inputFiles:
@@ -118,8 +121,8 @@ for finput in inputFiles:
 		pad1.cd()
 		histiso_inTime = TH1F("hist"+plot[0]+"_inTime","; "+plot[1]+"; Events", 100, -1.0, 50.0)
 		histiso_OOT = TH1F("hist"+plot[0]+"_OOT","; "+plot[1]+"; Events", 100, -1.0, 50.0)
-		tree_in.Draw(plot[0]+">>hist"+plot[0]+"_inTime","pho1isStandardPhoton", cut)
-		tree_in.Draw(plot[0]+">>hist"+plot[0]+"_OOT","!pho1isStandardPhoton", cut)
+		tree_in.Draw(plot[0]+">>hist"+plot[0]+"_inTime",cut_inTime)
+		tree_in.Draw(plot[0]+">>hist"+plot[0]+"_OOT",cut_OOT)
 
 		if histiso_inTime.Integral() > 0.0:
 			histiso_inTime.Scale(1.0/histiso_inTime.Integral())
@@ -129,7 +132,7 @@ for finput in inputFiles:
 		histiso_inTime.SetTitle("")
 		histiso_inTime.SetLineWidth(2)
 		histiso_inTime.SetLineColor(kBlue)
-		histiso_inTime.Draw("")
+		histiso_inTime.Draw("hist")
 		histiso_inTime.GetXaxis().SetTitleSize( axisTitleSize )
 		histiso_inTime.GetXaxis().SetTitleOffset( axisTitleOffset )
 		histiso_inTime.GetYaxis().SetTitleSize( axisTitleSize )
@@ -138,7 +141,7 @@ for finput in inputFiles:
 
 		histiso_OOT.SetLineWidth(2)
 		histiso_OOT.SetLineColor(kRed)
-		histiso_OOT.Draw("same")
+		histiso_OOT.Draw("histsame")
 
 		leg = TLegend(0.65, 0.7, 0.82, 0.85)
 		leg.SetBorderSize(0)

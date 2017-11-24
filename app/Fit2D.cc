@@ -19,10 +19,20 @@
 using namespace std;
 
 Int_t Nbins_MET = 15;
+Int_t Nbins_MET_lowT = 6;
+Int_t Nbins_MET_highT = 5;
 Int_t Nbins_time = 20;
+Int_t Nbins_time_lowT = 5;
+Int_t Nbins_time_highT = 7;
 Int_t Nbins_total = Nbins_MET*Nbins_time;
 Double_t xbins_MET[16] = {0.0, 10.0, 20.0, 40.0, 60.0, 80, 100.0, 125.0, 150.0, 175.0, 200.0, 250.0, 300.0, 400.0, 500.0, 1000.0};
+Double_t xbins_MET_lowT[7] = {0.0, 70, 130, 225.0, 295.0, 320.0, 1000.0};
+Double_t xbins_MET_highT[6] = {0.0, 55.0, 85.0, 185.0, 500.0, 1000.0};
 Double_t xbins_time[21] = {-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15};
+Double_t xbins_time_lowT[6] = {-15.0, -0.7, 0.3, 0.8, 1.4, 15.0};
+Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 2.1, 10.0, 15.0};
+
+bool useLowTBinning = false;
 
 float lumi = 31336.5; //pb^-1
 float NEvents_sig = 1.0;
@@ -52,6 +62,21 @@ if(fitMode == "bias" && argc >= 8) _nToys = argv[7];
 
 float SoverB = 0.0;
 int nToys = 1000;
+
+if (sigModelName.find("0p") != std::string::npos || sigModelName.find("10cm") != std::string::npos) useLowTBinning = true;
+
+if(useLowTBinning)
+{
+	Nbins_MET = Nbins_MET_lowT;
+	Nbins_time = Nbins_time_lowT;
+	Nbins_total = Nbins_MET_lowT*Nbins_time_lowT;
+}
+else
+{
+	Nbins_MET = Nbins_MET_highT;
+	Nbins_time = Nbins_time_highT;
+	Nbins_total = Nbins_MET_highT*Nbins_time_highT;
+}
 
 TString _sigModelName (sigModelName.c_str());
 TString _sigModelTitle (sigModelTitle.c_str());
@@ -463,28 +488,28 @@ if(fitMode == "binning")
 
 //2D to 1D conversion, with customize binning
 
-TH2F * h2newbinData = new TH2F("h2newbinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
-TH2F * h2newbinBkg = new TH2F("h2newbinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
-TH2F * h2newbinGJets = new TH2F("h2newbinGJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
-TH2F * h2newbinQCD = new TH2F("h2newbinQCD","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
-TH2F * h2newbinSig = new TH2F("h2newbinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, xbins_time, Nbins_MET, xbins_MET);
+TH2F * h2newbinData = new TH2F("h2newbinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinBkg = new TH2F("h2newbinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinGJets = new TH2F("h2newbinGJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinQCD = new TH2F("h2newbinQCD","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinSig = new TH2F("h2newbinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 
-TH1F * h1newbinData_time = new TH1F("h1newbinData_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
-TH1F * h1newbinData_toy_time = new TH1F("h1newbinData_toy_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
-TH1F * h1newbinBkg_time = new TH1F("h1newbinBkg_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
-TH1F * h1newbinSig_time = new TH1F("h1newbinSig_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
-TH1F * h1newbinAll_time = new TH1F("h1newbinAll_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
-TH1F * h1newbinGJets_time = new TH1F("h1newbinGJets_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
-TH1F * h1newbinQCD_time = new TH1F("h1newbinQCD_time","; #gamma cluster time (ns); Events", Nbins_time, xbins_time);
+TH1F * h1newbinData_time = new TH1F("h1newbinData_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
+TH1F * h1newbinData_toy_time = new TH1F("h1newbinData_toy_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
+TH1F * h1newbinBkg_time = new TH1F("h1newbinBkg_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
+TH1F * h1newbinSig_time = new TH1F("h1newbinSig_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
+TH1F * h1newbinAll_time = new TH1F("h1newbinAll_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
+TH1F * h1newbinGJets_time = new TH1F("h1newbinGJets_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
+TH1F * h1newbinQCD_time = new TH1F("h1newbinQCD_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
 
 
-TH1F * h1newbinData_MET = new TH1F("h1newbinData_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
-TH1F * h1newbinData_toy_MET = new TH1F("h1newbinData_toy_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
-TH1F * h1newbinBkg_MET = new TH1F("h1newbinBkg_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
-TH1F * h1newbinSig_MET = new TH1F("h1newbinSig_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
-TH1F * h1newbinAll_MET = new TH1F("h1newbinAll_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
-TH1F * h1newbinGJets_MET = new TH1F("h1newbinGJets_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
-TH1F * h1newbinQCD_MET = new TH1F("h1newbinQCD_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, xbins_MET);
+TH1F * h1newbinData_MET = new TH1F("h1newbinData_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH1F * h1newbinData_toy_MET = new TH1F("h1newbinData_toy_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH1F * h1newbinBkg_MET = new TH1F("h1newbinBkg_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH1F * h1newbinSig_MET = new TH1F("h1newbinSig_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH1F * h1newbinAll_MET = new TH1F("h1newbinAll_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH1F * h1newbinGJets_MET = new TH1F("h1newbinGJets_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH1F * h1newbinQCD_MET = new TH1F("h1newbinQCD_MET","; #slash{E}_{T} (GeV); Events", Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 
 tree_data->Draw("MET:pho1ClusterTime>>h2newbinData", cut.c_str());
 tree_data->Draw("MET:pho1ClusterTime>>h2newbinGJets", cut_GJets.c_str());

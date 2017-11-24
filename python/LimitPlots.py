@@ -182,7 +182,7 @@ graph_lifetime_exp2sigma_limit.SetFillColor(kYellow)
 graph_lifetime_exp_limit.GetXaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
 graph_lifetime_exp_limit.GetXaxis().SetLimits(0.001,10000.0)
 graph_lifetime_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
-graph_lifetime_exp_limit.GetYaxis().SetRangeUser(1e-6,1e4)
+graph_lifetime_exp_limit.GetYaxis().SetRangeUser(1e-4,1.0)
 graph_lifetime_exp_limit.SetTitle("")
 
 graph_lifetime_exp_limit.Draw("LA")
@@ -619,11 +619,11 @@ for i in range(0, N_lifetime-1):
 			
 			graph_exp_interp_lambda2.Fit(f1_lambda, "", "", 10.0, lambda_Up)
 			chi2_lambda = f1_lambda.GetChisquare()
-			if chi2_lambda < 500.0:
+			if chi2_lambda < 100.0:
 				this_lambda_exp = f1_lambda.GetX(1.0, 0.0, lambda_Up)
 			graph_exp_interp_mass2.Fit(f1_mass, "", "", 10.0, mass_Up)
 			chi2_mass = f1_mass.GetChisquare()
-			if chi2_mass < 500.0:
+			if chi2_mass < 100.0:
 				this_mass_exp = f1_mass.GetX(1.0, 0.0, mass_Up)
 			print "mass interp expo exp = "+str(this_mass_exp)
 
@@ -656,11 +656,11 @@ for i in range(0, N_lifetime-1):
 			
 			graph_obs_interp_lambda2.Fit(f1_lambda, "", "", 10.0, lambda_Up)
 			chi2_lambda = f1_lambda.GetChisquare()
-			if chi2_lambda < 500.0:
+			if chi2_lambda < 100.0:
 				this_lambda_obs = f1_lambda.GetX(1.0, 0.0, lambda_Up)
 			graph_obs_interp_mass2.Fit(f1_mass, "", "", 10.0, mass_Up)
 			chi2_mass = f1_mass.GetChisquare()
-			if chi2_mass < 500.0:
+			if chi2_mass < 100.0:
 				this_mass_obs = f1_mass.GetX(1.0, 0.0, mass_Up)
 			print "mass interp expo obs = "+str(this_mass_obs)
 

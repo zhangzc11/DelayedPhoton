@@ -60,7 +60,6 @@ for i in range(0,len(fileNameSigSkim)):
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
-
 '''
 for i in range(0,len(fileNameGJetsSkim)):
 	print "GJets file "+str(i)+"  ... "
