@@ -27,7 +27,10 @@ if __name__ == "__main__":
 			env_script_f.write("export SCRAM_ARCH=slc6_amd64_gcc530 \n")
 			env_script_f.write("ulimit -c 0 \n")
 			env_script_f.write("eval `scram runtime -sh` \n")
-			env_script_f.write("./Fit2D "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" binning \n')
+			env_script_f.write('echo "running on category 3J ======= " \n')
+			env_script_f.write("./Fit2D "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" 3J binning \n')
+			env_script_f.write('echo "running on category 2J ======= " \n')
+			env_script_f.write("./Fit2D "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" 2J binning \n')
 			
 			changePermission = subprocess.Popen(['chmod 777 ' + env_script_n], stdout=subprocess.PIPE, shell=True)
 			debugout = changePermission.communicate()

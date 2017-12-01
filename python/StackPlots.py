@@ -236,7 +236,7 @@ for plot in splots:
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
 	if useFraction:
 		#histGJets_CR.Scale(histData.Integral()*fractionGJets/histGJets_CR.Integral())
-		histGJets_CR.Scale(histData.Integral()*0.3025/histGJets_CR.Integral())
+		histGJets_CR.Scale(histData.Integral()*0.5498/histGJets_CR.Integral())
 	else:
 		histGJets_CR.Scale(histGJets.Integral()/histGJets_CR.Integral())
 	histGJets_CR.SetFillColor(kAzure + 7)
@@ -255,7 +255,7 @@ for plot in splots:
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose + " && !( " + cut +")")
 	if useFraction:
 		#histQCD_CR.Scale(histData.Integral()*fractionQCD/histQCD_CR.Integral())
-		histQCD_CR.Scale(histData.Integral()*0.6975/histQCD_CR.Integral())
+		histQCD_CR.Scale(histData.Integral()*0.4502/histQCD_CR.Integral())
 	else:
 		histQCD_CR.Scale(histQCD.Integral()/histQCD_CR.Integral())
 	histQCD_CR.SetFillColor(kOrange - 9)

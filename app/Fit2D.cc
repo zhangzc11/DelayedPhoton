@@ -53,17 +53,18 @@ std::string inputFileName_data = argv[1];
 std::string inputFileName_signal = argv[2];
 std::string sigModelName = argv[3]; 
 std::string sigModelTitle = argv[4]; 
-std::string fitMode = argv[5]; //options: "datacard", "bias"
+std::string category = argv[5];
+std::string fitMode = argv[6]; //options: "datacard", "bias"
 std::string _SoverB = "";
 std::string _nToys = "";
 
-if(fitMode == "bias" && argc >= 7) _SoverB = argv[6]; 
-if(fitMode == "bias" && argc >= 8) _nToys = argv[7]; 
+if(fitMode == "bias" && argc >= 8) _SoverB = argv[7]; 
+if(fitMode == "bias" && argc >= 9) _nToys = argv[8]; 
 
 float SoverB = 0.0;
 int nToys = 1000;
 
-if (sigModelName.find("0p") != std::string::npos || sigModelName.find("10cm") != std::string::npos) useLowTBinning = true;
+if (sigModelName.find("0p") != std::string::npos || sigModelName.find("5cm") != std::string::npos || sigModelName.find("10cm") != std::string::npos || sigModelName.find("50cm") != std::string::npos) useLowTBinning = true;
 
 if(useLowTBinning)
 {
@@ -84,13 +85,53 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float xsec = getXsecBR(sigModelName); //pb
 std::string treeName = "DelayedPhoton";
 
-std::string cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-std::string cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-std::string cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36 && pho2passIsoLoose && pho2passEleVeto";
-std::string cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto";
-std::string cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (jet2Pt/pho1Pt > 0.2) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18) && pho2passIsoLoose && pho2passEleVeto";
+std::string cut, cut_noHLT, cut_iso, cut_loose, cut_GJets;
 
 
+if(category == "2J")
+{
+cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
+cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
+cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36 && pho2passIsoLoose && pho2passEleVeto";
+cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto";
+cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18) && pho2passIsoLoose && pho2passEleVeto";
+}
+
+else if(category == "3J")
+{
+cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
+cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
+cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36 && pho2passIsoLoose && pho2passEleVeto";
+cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto";
+cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18) && pho2passIsoLoose && pho2passEleVeto";
+}
+
+else
+{
+	std::cerr << "[ERROR]: please provide a valid category: 2J or 3J" << std::endl;
+	return -1;
+}
+
+TString outPlotsDir;
+if(category == "2J") outPlotsDir = "plots_2J";
+if(category == "3J") outPlotsDir = "plots_3J";
+std::string _outPlotsDir (((const char*) outPlotsDir));
+
+TString outBinningDir;
+if(category == "2J") outBinningDir == "binning_2J";
+if(category == "3J") outBinningDir == "binning_3J";
+std::string _outBinningDir ((const char*) outBinningDir);
+
+TString outDataCardsDir;
+if(category == "2J") outDataCardsDir = "datacards_2J";
+if(category == "3J") outDataCardsDir = "datacards_3J";
+std::string _outDataCardsDir ((const char*) outDataCardsDir);	
+
+TString outBiasDir;
+if(category == "2J") outBiasDir = "bias_2J";
+if(category == "3J") outBiasDir = "bias_3J";
+std::string _outBiasDir ((const char*) outBiasDir);
+	
 if(inputFileName_data == "")
 {
 	std::cerr << "[ERROR]: please provide an input file for data" << std::endl;
@@ -169,12 +210,13 @@ tree_signal = (TTree*)file_signal->Get(treeName.c_str());
 TH1F *h1_NEvents_sig = (TH1F*) file_signal->Get("NEvents");
 NEvents_sig = h1_NEvents_sig->GetBinContent(1);
 
-TFile *file_shape = new TFile("data/shapes.root","READ");
+TFile *file_shape = new TFile((category=="2J") ? "data/shapes_2J.root" : "data/shapes_3J.root","READ");
 
 mkdir("fit_results", S_IRWXU | S_IRWXG | S_IRWXO);
-mkdir("fit_results/plots", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/plots_2J", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/plots_3J", S_IRWXU | S_IRWXG | S_IRWXO);
 
-TFile *f_Out = new TFile(("fit_results/plots/fit_ws_"+sigModelName+".root").c_str(),"recreate");
+TFile *f_Out = new TFile(("fit_results/"+_outPlotsDir+"/fit_ws_"+sigModelName+".root").c_str(),"recreate");
 
 int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
 float N_total_GJets_QCD_fit = 0.0;
@@ -191,7 +233,7 @@ h1_SigmaIetaIeta_GJets->Scale((1.0*h1_SigmaIetaIeta_Data->Integral())/h1_SigmaIe
 h1_SigmaIetaIeta_QCD->Scale((1.0*h1_SigmaIetaIeta_Data->Integral())/h1_SigmaIetaIeta_QCD->Integral());
 
 RooWorkspace * w_frac_SigmaIetaIeta;
-w_frac_SigmaIetaIeta = FitDataBkgFraction(h1_SigmaIetaIeta_Data, "pho1SigmaIetaIeta", "#sigma_{i#etai#eta}", "", 0.005, 0.025, h1_SigmaIetaIeta_GJets, h1_SigmaIetaIeta_QCD);
+w_frac_SigmaIetaIeta = FitDataBkgFraction(h1_SigmaIetaIeta_Data, "pho1SigmaIetaIeta", "#sigma_{i#etai#eta}", "", 0.005, 0.025, h1_SigmaIetaIeta_GJets, h1_SigmaIetaIeta_QCD, outPlotsDir);
 w_frac_SigmaIetaIeta->Write("w_frac_SigmaIetaIeta");
 
 float nGJets_value_SigmaIetaIeta = w_frac_SigmaIetaIeta->var("nGJets")->getValV();
@@ -424,7 +466,8 @@ metBin.push_back(met_N_fine);
 
 if(fitMode == "binning")
 {
-	mkdir("fit_results/binning", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/binning_2J", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/binning_3J", S_IRWXU | S_IRWXG | S_IRWXO);
 
 	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
 	TH2F *h2finebinBkg = new TH2F("h2finebinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
@@ -450,7 +493,7 @@ if(fitMode == "binning")
 		}
 	}
 
-	OptimizeBinning(timeBin, metBin, h2finebinBkg, h2finebinSig, time_Low, time_High, time_N_fine, met_Low, met_High, met_N_fine, _sigModelName);
+	OptimizeBinning(timeBin, metBin, h2finebinBkg, h2finebinSig, time_Low, time_High, time_N_fine, met_Low, met_High, met_N_fine, _sigModelName, outBinningDir);
 	
 	cout<<"optimized met and time bin:-----------"<<endl;
 	cout<<"time: ";
@@ -592,8 +635,10 @@ for(int i=1;i<=Nbins_time;i++)
 
 if(fitMode == "datacard")
 {
-	mkdir("fit_results/datacards", S_IRWXU | S_IRWXG | S_IRWXO);
-	TFile *f_Out_combineWS = new TFile(("fit_results/datacards/fit_combineWS_"+sigModelName+".root").c_str(),"recreate");
+	mkdir("fit_results/datacards_2J", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/datacards_3J", S_IRWXU | S_IRWXG | S_IRWXO);
+
+	TFile *f_Out_combineWS = new TFile(("fit_results/"+_outDataCardsDir+"/fit_combineWS_"+sigModelName+".root").c_str(),"recreate");
 
 	////////////make datacard - 2D->1D fit/////////
 	RooWorkspace * ws_combine;
@@ -604,7 +649,7 @@ if(fitMode == "datacard")
 	cout<<"QCD: int = "<<h1combineQCD->Integral()<<endl;
 	cout<<"Sig: int = "<<h1combineSig->Integral()<<endl;
 	
-	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy);
+	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy, outPlotsDir);
 
 	ws_combine->SetName("ws_combine");
 	ws_combine->Write("ws_combine");
@@ -621,7 +666,7 @@ if(fitMode == "datacard")
 
 	printf("%s & %d & %6.2f \\pm %6.2f & %6.2f \\pm %6.2f \\\\ \n", sigModelName.c_str(), N_obs_total, nBkg_2DFit_combine_DataBkgSig, nBkg_2DFit_combine_DataBkgSig_Err, nSig_2DFit_combine_DataBkgSig, nSig_2DFit_combine_DataBkgSig_Err);
 
-	MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected);
+	MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected, outDataCardsDir);
 	
 	//save the histograms
 	h1combineData_toy = ws_combine->data("data_toy")->createHistogram("bin", Nbins_total);
@@ -689,9 +734,11 @@ if(fitMode == "datacard")
 //do the bias test
 if(fitMode == "bias")
 {
-	mkdir("fit_results/bias", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/bias_2J", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/bias_3J", S_IRWXU | S_IRWXG | S_IRWXO);
+	
 
-	Fit1DMETTimeBiasTest( h1combineData, h1combineBkg, h1combineSig, SoverB, nToys, _sigModelName, lumi);	
+	Fit1DMETTimeBiasTest( h1combineData, h1combineBkg, h1combineSig, SoverB, nToys, _sigModelName, lumi, outBiasDir);	
 		
 }
 return 0;

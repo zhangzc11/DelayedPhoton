@@ -6,10 +6,12 @@ import array
 
 from config import lumi
 from config import outputDir
-from config import limits_vs_lifetime
-from config import mass_limits_vs_lifetime
-from config import limits_vs_mass
-from config import lifetime_limits_vs_mass
+#from config import limits_vs_lifetime
+#from config import mass_limits_vs_lifetime
+#from config import limits_vs_mass
+#from config import lifetime_limits_vs_mass
+from config import list_limits_vs_lifetime
+from config import list_limits_vs_mass
 
 from config import exclusion_region_2D
 from config import grid_mass_exclusion_region_2D
@@ -51,338 +53,343 @@ bottomMargin = 0.12
 
 ##################limit vs lifetime #######################3
 
-print "plotting xsec*BR limit for mass point "+str(mass_limits_vs_lifetime)
-
-limit_lifetime_exp2p5 = []
-limit_lifetime_exp16p0 = []
-limit_lifetime_exp50p0 = []
-limit_lifetime_exp84p0 = []
-limit_lifetime_exp97p5 = []
-limit_lifetime_obs = []
-limit_lifetime_lifetime = []
-
-xValue_limit_lifetime_Th = []
-xValue_limit_lifetime_exp = []
-xValue_limit_lifetime_obs = []
-xValue_limit_lifetime_exp1sigma = []
-xValue_limit_lifetime_exp2sigma = []
-
-yValue_limit_lifetime_Th = []
-yValue_limit_lifetime_exp = []
-yValue_limit_lifetime_obs = []
-yValue_limit_lifetime_exp1sigma = []
-yValue_limit_lifetime_exp2sigma = []
 
 
+for list_this in list_limits_vs_lifetime:
+	limits_vs_lifetime = list_this[1]
+	mass_limits_vs_lifetime = list_this[0]	
 
-for limit_lifetime in limits_vs_lifetime:
-	print "grid: "+limit_lifetime[0]
-	file_limit = TFile("../fit_results/datacards/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
-	limits = []
-	limitTree = file_limit.Get("limit")
-	for entry in limitTree:
-		limits.append(entry.limit)
-	print limits
-	yValue_limit_lifetime_Th.append(limit_lifetime[4])
-	limit_lifetime_exp2p5.append(limits[0]*limit_lifetime[4])	
-	limit_lifetime_exp16p0.append(limits[1]*limit_lifetime[4])	
-	limit_lifetime_exp50p0.append(limits[2]*limit_lifetime[4])	
-	limit_lifetime_exp84p0.append(limits[3]*limit_lifetime[4])	
-	limit_lifetime_exp97p5.append(limits[4]*limit_lifetime[4])	
-	limit_lifetime_obs.append(limits[5]*limit_lifetime[4])	
-	limit_lifetime_lifetime.append(limit_lifetime[3])
+	print "plotting xsec*BR limit for mass point "+str(mass_limits_vs_lifetime)
+	limit_lifetime_exp2p5 = []
+	limit_lifetime_exp16p0 = []
+	limit_lifetime_exp50p0 = []
+	limit_lifetime_exp84p0 = []
+	limit_lifetime_exp97p5 = []
+	limit_lifetime_obs = []
+	limit_lifetime_lifetime = []
 
-NPoints_lifetime = len(limit_lifetime_lifetime)
+	xValue_limit_lifetime_Th = []
+	xValue_limit_lifetime_exp = []
+	xValue_limit_lifetime_obs = []
+	xValue_limit_lifetime_exp1sigma = []
+	xValue_limit_lifetime_exp2sigma = []
 
-print str(NPoints_lifetime)+" lifetime samples provided..."
-print limit_lifetime_lifetime
+	yValue_limit_lifetime_Th = []
+	yValue_limit_lifetime_exp = []
+	yValue_limit_lifetime_obs = []
+	yValue_limit_lifetime_exp1sigma = []
+	yValue_limit_lifetime_exp2sigma = []
 
-for i in range(0, NPoints_lifetime):
-	xValue_limit_lifetime_obs.append(limit_lifetime_lifetime[i])
-	xValue_limit_lifetime_Th.append(limit_lifetime_lifetime[i])
-	xValue_limit_lifetime_exp.append(limit_lifetime_lifetime[i])
-	xValue_limit_lifetime_exp1sigma.append(limit_lifetime_lifetime[i])
-	xValue_limit_lifetime_exp2sigma.append(limit_lifetime_lifetime[i])
-	
-	yValue_limit_lifetime_obs.append(limit_lifetime_obs[i])
-	yValue_limit_lifetime_exp.append(limit_lifetime_exp50p0[i])
-	yValue_limit_lifetime_exp1sigma.append(limit_lifetime_exp16p0[i])
-	yValue_limit_lifetime_exp2sigma.append(limit_lifetime_exp2p5[i])
-	
+	for limit_lifetime in limits_vs_lifetime:
+		print "grid: "+limit_lifetime[0]
+		file_limit = TFile("../fit_results/datacards/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
+		limits = []
+		limitTree = file_limit.Get("limit")
+		for entry in limitTree:
+			limits.append(entry.limit)
+		print limits
+		yValue_limit_lifetime_Th.append(limit_lifetime[4])
+		limit_lifetime_exp2p5.append(limits[0]*limit_lifetime[4])	
+		limit_lifetime_exp16p0.append(limits[1]*limit_lifetime[4])	
+		limit_lifetime_exp50p0.append(limits[2]*limit_lifetime[4])	
+		limit_lifetime_exp84p0.append(limits[3]*limit_lifetime[4])	
+		limit_lifetime_exp97p5.append(limits[4]*limit_lifetime[4])	
+		limit_lifetime_obs.append(limits[5]*limit_lifetime[4])	
+		limit_lifetime_lifetime.append(limit_lifetime[3])
 
-for i in range(0, NPoints_lifetime):
-	xValue_limit_lifetime_exp1sigma.append(limit_lifetime_lifetime[NPoints_lifetime-i-1])
-	xValue_limit_lifetime_exp2sigma.append(limit_lifetime_lifetime[NPoints_lifetime-i-1])
-	
-	yValue_limit_lifetime_exp1sigma.append(limit_lifetime_exp84p0[NPoints_lifetime-i-1])
-	yValue_limit_lifetime_exp2sigma.append(limit_lifetime_exp97p5[NPoints_lifetime-i-1])
+	NPoints_lifetime = len(limit_lifetime_lifetime)
 
+	print str(NPoints_lifetime)+" lifetime samples provided..."
+	print limit_lifetime_lifetime
 
-print "observed limit"
-print xValue_limit_lifetime_obs
-print yValue_limit_lifetime_obs
+	for i in range(0, NPoints_lifetime):
+		xValue_limit_lifetime_obs.append(limit_lifetime_lifetime[i])
+		xValue_limit_lifetime_Th.append(limit_lifetime_lifetime[i])
+		xValue_limit_lifetime_exp.append(limit_lifetime_lifetime[i])
+		xValue_limit_lifetime_exp1sigma.append(limit_lifetime_lifetime[i])
+		xValue_limit_lifetime_exp2sigma.append(limit_lifetime_lifetime[i])
+		
+		yValue_limit_lifetime_obs.append(limit_lifetime_obs[i])
+		yValue_limit_lifetime_exp.append(limit_lifetime_exp50p0[i])
+		yValue_limit_lifetime_exp1sigma.append(limit_lifetime_exp16p0[i])
+		yValue_limit_lifetime_exp2sigma.append(limit_lifetime_exp2p5[i])
+		
 
-print "theoretical xsec*BR:"
-print xValue_limit_lifetime_Th
-print yValue_limit_lifetime_Th
-
-print "expected mean limit:"
-print xValue_limit_lifetime_exp
-print yValue_limit_lifetime_exp
-
-
-print "expected 1sigma limit:"
-print xValue_limit_lifetime_exp1sigma
-print yValue_limit_lifetime_exp1sigma
-
-print "expected 2sigma limit:"
-print xValue_limit_lifetime_exp2sigma
-print yValue_limit_lifetime_exp2sigma
-
-myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
-myC.SetHighLightColor(2)
-myC.SetFillColor(0)
-myC.SetBorderMode(0)
-myC.SetBorderSize(2)
-myC.SetLeftMargin( leftMargin )
-myC.SetRightMargin( rightMargin )
-myC.SetTopMargin( topMargin )
-myC.SetBottomMargin( bottomMargin )
-myC.SetFrameBorderMode(0)
-myC.SetFrameBorderMode(0)
-myC.SetLogy(1)
-myC.SetLogx(1)
+	for i in range(0, NPoints_lifetime):
+		xValue_limit_lifetime_exp1sigma.append(limit_lifetime_lifetime[NPoints_lifetime-i-1])
+		xValue_limit_lifetime_exp2sigma.append(limit_lifetime_lifetime[NPoints_lifetime-i-1])
+		
+		yValue_limit_lifetime_exp1sigma.append(limit_lifetime_exp84p0[NPoints_lifetime-i-1])
+		yValue_limit_lifetime_exp2sigma.append(limit_lifetime_exp97p5[NPoints_lifetime-i-1])
 
 
-graph_lifetime_obs_limit = TGraph(NPoints_lifetime, np.array(xValue_limit_lifetime_obs), np.array(yValue_limit_lifetime_obs))
-graph_lifetime_Th_limit = TGraph(NPoints_lifetime, np.array(xValue_limit_lifetime_Th), np.array(yValue_limit_lifetime_Th))
-graph_lifetime_exp_limit = TGraph(NPoints_lifetime, np.array(xValue_limit_lifetime_exp), np.array(yValue_limit_lifetime_exp))
-graph_lifetime_exp1sigma_limit = TGraph(2*NPoints_lifetime, np.array(xValue_limit_lifetime_exp1sigma), np.array(yValue_limit_lifetime_exp1sigma))
-graph_lifetime_exp2sigma_limit = TGraph(2*NPoints_lifetime, np.array(xValue_limit_lifetime_exp2sigma), np.array(yValue_limit_lifetime_exp2sigma))
+	print "observed limit"
+	print xValue_limit_lifetime_obs
+	print yValue_limit_lifetime_obs
 
-graph_lifetime_obs_limit.SetMarkerStyle(22)
-graph_lifetime_obs_limit.SetMarkerSize(1.5)
-graph_lifetime_obs_limit.SetLineColor(kBlack)
-graph_lifetime_obs_limit.SetLineWidth(2)
+	print "theoretical xsec*BR:"
+	print xValue_limit_lifetime_Th
+	print yValue_limit_lifetime_Th
 
-graph_lifetime_Th_limit.SetMarkerStyle(22)
-graph_lifetime_Th_limit.SetMarkerSize(1.5)
-graph_lifetime_Th_limit.SetLineColor(kRed)
-graph_lifetime_Th_limit.SetLineWidth(2)
+	print "expected mean limit:"
+	print xValue_limit_lifetime_exp
+	print yValue_limit_lifetime_exp
 
-graph_lifetime_exp_limit.SetMarkerStyle(19)
-graph_lifetime_exp_limit.SetMarkerSize(1.5)
-graph_lifetime_exp_limit.SetLineColor(kBlack)
-graph_lifetime_exp_limit.SetLineWidth(2)
-graph_lifetime_exp_limit.SetLineStyle(kDashed)
 
-graph_lifetime_exp1sigma_limit.SetFillColor(kGreen)
-graph_lifetime_exp2sigma_limit.SetFillColor(kYellow)
+	print "expected 1sigma limit:"
+	print xValue_limit_lifetime_exp1sigma
+	print yValue_limit_lifetime_exp1sigma
 
-graph_lifetime_exp_limit.GetXaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_lifetime_exp_limit.GetXaxis().SetLimits(0.001,100000.0)
-graph_lifetime_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
-graph_lifetime_exp_limit.GetYaxis().SetRangeUser(1e-4,100.0)
-graph_lifetime_exp_limit.SetTitle("")
+	print "expected 2sigma limit:"
+	print xValue_limit_lifetime_exp2sigma
+	print yValue_limit_lifetime_exp2sigma
 
-graph_lifetime_exp_limit.Draw("LA")
+	myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
+	myC.SetHighLightColor(2)
+	myC.SetFillColor(0)
+	myC.SetBorderMode(0)
+	myC.SetBorderSize(2)
+	myC.SetLeftMargin( leftMargin )
+	myC.SetRightMargin( rightMargin )
+	myC.SetTopMargin( topMargin )
+	myC.SetBottomMargin( bottomMargin )
+	myC.SetFrameBorderMode(0)
+	myC.SetFrameBorderMode(0)
+	myC.SetLogy(1)
+	myC.SetLogx(1)
 
-graph_lifetime_exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
-graph_lifetime_exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
-graph_lifetime_exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
-graph_lifetime_exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
 
-graph_lifetime_exp2sigma_limit.Draw("Fsame")
-graph_lifetime_exp1sigma_limit.Draw("Fsame")
-graph_lifetime_obs_limit.Draw("Lsame")
-graph_lifetime_exp_limit.Draw("Lsame")
-graph_lifetime_Th_limit.Draw("Lsame")
+	graph_lifetime_obs_limit = TGraph(NPoints_lifetime, np.array(xValue_limit_lifetime_obs), np.array(yValue_limit_lifetime_obs))
+	graph_lifetime_Th_limit = TGraph(NPoints_lifetime, np.array(xValue_limit_lifetime_Th), np.array(yValue_limit_lifetime_Th))
+	graph_lifetime_exp_limit = TGraph(NPoints_lifetime, np.array(xValue_limit_lifetime_exp), np.array(yValue_limit_lifetime_exp))
+	graph_lifetime_exp1sigma_limit = TGraph(2*NPoints_lifetime, np.array(xValue_limit_lifetime_exp1sigma), np.array(yValue_limit_lifetime_exp1sigma))
+	graph_lifetime_exp2sigma_limit = TGraph(2*NPoints_lifetime, np.array(xValue_limit_lifetime_exp2sigma), np.array(yValue_limit_lifetime_exp2sigma))
 
-drawCMS2(myC, 13, lumi)
+	graph_lifetime_obs_limit.SetMarkerStyle(22)
+	graph_lifetime_obs_limit.SetMarkerSize(1.5)
+	graph_lifetime_obs_limit.SetLineColor(kBlack)
+	graph_lifetime_obs_limit.SetLineWidth(2)
 
-leg_limit_vs_time = TLegend(0.32,0.62,0.9,0.89)
+	graph_lifetime_Th_limit.SetMarkerStyle(22)
+	graph_lifetime_Th_limit.SetMarkerSize(1.5)
+	graph_lifetime_Th_limit.SetLineColor(kRed)
+	graph_lifetime_Th_limit.SetLineWidth(2)
 
-leg_limit_vs_time.SetHeader("M_{#tilde{#chi}^{0}_{1}} = "+str(mass_limits_vs_lifetime)+" GeV/c^{2},  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
-leg_limit_vs_time.SetBorderSize(0)
-leg_limit_vs_time.SetTextSize(0.03)
-leg_limit_vs_time.SetLineColor(1)
-leg_limit_vs_time.SetLineStyle(1)
-leg_limit_vs_time.SetLineWidth(1)
-leg_limit_vs_time.SetFillColor(0)
-leg_limit_vs_time.SetFillStyle(1001)
+	graph_lifetime_exp_limit.SetMarkerStyle(19)
+	graph_lifetime_exp_limit.SetMarkerSize(1.5)
+	graph_lifetime_exp_limit.SetLineColor(kBlack)
+	graph_lifetime_exp_limit.SetLineWidth(2)
+	graph_lifetime_exp_limit.SetLineStyle(kDashed)
 
-leg_limit_vs_time.AddEntry(graph_lifetime_Th_limit, "Theoretical cross-section", "L")
-leg_limit_vs_time.AddEntry(graph_lifetime_obs_limit, "Observed  95% CL upper limit", "L")
-leg_limit_vs_time.AddEntry(graph_lifetime_exp_limit, "Expected  95% CL upper limit", "L")
-leg_limit_vs_time.AddEntry(graph_lifetime_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
-leg_limit_vs_time.AddEntry(graph_lifetime_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
-leg_limit_vs_time.Draw()
+	graph_lifetime_exp1sigma_limit.SetFillColor(kGreen)
+	graph_lifetime_exp2sigma_limit.SetFillColor(kYellow)
 
-myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".pdf")
-myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".png")
-myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".C")
+	graph_lifetime_exp_limit.GetXaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
+	graph_lifetime_exp_limit.GetXaxis().SetLimits(0.001,100000.0)
+	graph_lifetime_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
+	graph_lifetime_exp_limit.GetYaxis().SetRangeUser(1e-4,100.0)
+	graph_lifetime_exp_limit.SetTitle("")
+
+	graph_lifetime_exp_limit.Draw("LA")
+
+	graph_lifetime_exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
+	graph_lifetime_exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
+	graph_lifetime_exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
+	graph_lifetime_exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
+
+	graph_lifetime_exp2sigma_limit.Draw("Fsame")
+	graph_lifetime_exp1sigma_limit.Draw("Fsame")
+	graph_lifetime_obs_limit.Draw("Lsame")
+	graph_lifetime_exp_limit.Draw("Lsame")
+	graph_lifetime_Th_limit.Draw("Lsame")
+
+	drawCMS2(myC, 13, lumi)
+
+	leg_limit_vs_time = TLegend(0.32,0.62,0.9,0.89)
+
+	leg_limit_vs_time.SetHeader("M_{#tilde{#chi}^{0}_{1}} = "+str(mass_limits_vs_lifetime)+" GeV/c^{2},  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
+	leg_limit_vs_time.SetBorderSize(0)
+	leg_limit_vs_time.SetTextSize(0.03)
+	leg_limit_vs_time.SetLineColor(1)
+	leg_limit_vs_time.SetLineStyle(1)
+	leg_limit_vs_time.SetLineWidth(1)
+	leg_limit_vs_time.SetFillColor(0)
+	leg_limit_vs_time.SetFillStyle(1001)
+
+	leg_limit_vs_time.AddEntry(graph_lifetime_Th_limit, "Theoretical cross-section", "L")
+	leg_limit_vs_time.AddEntry(graph_lifetime_obs_limit, "Observed  95% CL upper limit", "L")
+	leg_limit_vs_time.AddEntry(graph_lifetime_exp_limit, "Expected  95% CL upper limit", "L")
+	leg_limit_vs_time.AddEntry(graph_lifetime_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
+	leg_limit_vs_time.AddEntry(graph_lifetime_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
+	leg_limit_vs_time.Draw()
+
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".C")
 
 ##################limit vs mass #######################3
 
-print "plotting xsec*BR limit for mass point "+str(lifetime_limits_vs_mass)
-
-limit_mass_exp2p5 = []
-limit_mass_exp16p0 = []
-limit_mass_exp50p0 = []
-limit_mass_exp84p0 = []
-limit_mass_exp97p5 = []
-limit_mass_obs = []
-limit_mass_mass = []
-
-xValue_limit_mass_Th = []
-xValue_limit_mass_exp = []
-xValue_limit_mass_obs = []
-xValue_limit_mass_exp1sigma = []
-xValue_limit_mass_exp2sigma = []
-
-yValue_limit_mass_Th = []
-yValue_limit_mass_exp = []
-yValue_limit_mass_obs = []
-yValue_limit_mass_exp1sigma = []
-yValue_limit_mass_exp2sigma = []
-
-
-
-for limit_mass in limits_vs_mass:
-	print "grid: "+limit_mass[0]
-	file_limit = TFile("../fit_results/datacards/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
-	limits = []
-	limitTree = file_limit.Get("limit")
-	for entry in limitTree:
-		limits.append(entry.limit)
-	print limits
-	yValue_limit_mass_Th.append(limit_mass[4])
-	limit_mass_exp2p5.append(limits[0]*limit_mass[4])	
-	limit_mass_exp16p0.append(limits[1]*limit_mass[4])	
-	limit_mass_exp50p0.append(limits[2]*limit_mass[4])	
-	limit_mass_exp84p0.append(limits[3]*limit_mass[4])	
-	limit_mass_exp97p5.append(limits[4]*limit_mass[4])	
-	limit_mass_obs.append(limits[5]*limit_mass[4])	
-	limit_mass_mass.append(limit_mass[2])
-
-NPoints_mass = len(limit_mass_mass)
-
-print str(NPoints_mass)+" mass samples provided..."
-print limit_mass_mass
-
-for i in range(0, NPoints_mass):
-	xValue_limit_mass_obs.append(limit_mass_mass[i])
-	xValue_limit_mass_Th.append(limit_mass_mass[i])
-	xValue_limit_mass_exp.append(limit_mass_mass[i])
-	xValue_limit_mass_exp1sigma.append(limit_mass_mass[i])
-	xValue_limit_mass_exp2sigma.append(limit_mass_mass[i])
+for list_this in list_limits_vs_mass:
+	limits_vs_mass = list_this[1]
+	lifetime_limits_vs_mass = list_this[0]	
 	
-	yValue_limit_mass_obs.append(limit_mass_obs[i])
-	yValue_limit_mass_exp.append(limit_mass_exp50p0[i])
-	yValue_limit_mass_exp1sigma.append(limit_mass_exp16p0[i])
-	yValue_limit_mass_exp2sigma.append(limit_mass_exp2p5[i])
-	
+	print "plotting xsec*BR limit for mass point "+str(lifetime_limits_vs_mass)
 
-for i in range(0, NPoints_mass):
-	xValue_limit_mass_exp1sigma.append(limit_mass_mass[NPoints_mass-i-1])
-	xValue_limit_mass_exp2sigma.append(limit_mass_mass[NPoints_mass-i-1])
-	
-	yValue_limit_mass_exp1sigma.append(limit_mass_exp84p0[NPoints_mass-i-1])
-	yValue_limit_mass_exp2sigma.append(limit_mass_exp97p5[NPoints_mass-i-1])
+	limit_mass_exp2p5 = []
+	limit_mass_exp16p0 = []
+	limit_mass_exp50p0 = []
+	limit_mass_exp84p0 = []
+	limit_mass_exp97p5 = []
+	limit_mass_obs = []
+	limit_mass_mass = []
+
+	xValue_limit_mass_Th = []
+	xValue_limit_mass_exp = []
+	xValue_limit_mass_obs = []
+	xValue_limit_mass_exp1sigma = []
+	xValue_limit_mass_exp2sigma = []
+
+	yValue_limit_mass_Th = []
+	yValue_limit_mass_exp = []
+	yValue_limit_mass_obs = []
+	yValue_limit_mass_exp1sigma = []
+	yValue_limit_mass_exp2sigma = []
+
+	for limit_mass in limits_vs_mass:
+		print "grid: "+limit_mass[0]
+		file_limit = TFile("../fit_results/datacards/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
+		limits = []
+		limitTree = file_limit.Get("limit")
+		for entry in limitTree:
+			limits.append(entry.limit)
+		print limits
+		yValue_limit_mass_Th.append(limit_mass[4])
+		limit_mass_exp2p5.append(limits[0]*limit_mass[4])	
+		limit_mass_exp16p0.append(limits[1]*limit_mass[4])	
+		limit_mass_exp50p0.append(limits[2]*limit_mass[4])	
+		limit_mass_exp84p0.append(limits[3]*limit_mass[4])	
+		limit_mass_exp97p5.append(limits[4]*limit_mass[4])	
+		limit_mass_obs.append(limits[5]*limit_mass[4])	
+		limit_mass_mass.append(limit_mass[2])
+
+	NPoints_mass = len(limit_mass_mass)
+
+	print str(NPoints_mass)+" mass samples provided..."
+	print limit_mass_mass
+
+	for i in range(0, NPoints_mass):
+		xValue_limit_mass_obs.append(limit_mass_mass[i])
+		xValue_limit_mass_Th.append(limit_mass_mass[i])
+		xValue_limit_mass_exp.append(limit_mass_mass[i])
+		xValue_limit_mass_exp1sigma.append(limit_mass_mass[i])
+		xValue_limit_mass_exp2sigma.append(limit_mass_mass[i])
+		
+		yValue_limit_mass_obs.append(limit_mass_obs[i])
+		yValue_limit_mass_exp.append(limit_mass_exp50p0[i])
+		yValue_limit_mass_exp1sigma.append(limit_mass_exp16p0[i])
+		yValue_limit_mass_exp2sigma.append(limit_mass_exp2p5[i])
+		
+
+	for i in range(0, NPoints_mass):
+		xValue_limit_mass_exp1sigma.append(limit_mass_mass[NPoints_mass-i-1])
+		xValue_limit_mass_exp2sigma.append(limit_mass_mass[NPoints_mass-i-1])
+		
+		yValue_limit_mass_exp1sigma.append(limit_mass_exp84p0[NPoints_mass-i-1])
+		yValue_limit_mass_exp2sigma.append(limit_mass_exp97p5[NPoints_mass-i-1])
 
 
-print "observed limit"
-print xValue_limit_mass_obs
-print yValue_limit_mass_obs
+	print "observed limit"
+	print xValue_limit_mass_obs
+	print yValue_limit_mass_obs
 
-print "theoretical xsec*BR:"
-print xValue_limit_mass_Th
-print yValue_limit_mass_Th
+	print "theoretical xsec*BR:"
+	print xValue_limit_mass_Th
+	print yValue_limit_mass_Th
 
-print "expected mean limit:"
-print xValue_limit_mass_exp
-print yValue_limit_mass_exp
+	print "expected mean limit:"
+	print xValue_limit_mass_exp
+	print yValue_limit_mass_exp
 
 
-print "expected 1sigma limit:"
-print xValue_limit_mass_exp1sigma
-print yValue_limit_mass_exp1sigma
+	print "expected 1sigma limit:"
+	print xValue_limit_mass_exp1sigma
+	print yValue_limit_mass_exp1sigma
 
-print "expected 2sigma limit:"
-print xValue_limit_mass_exp2sigma
-print yValue_limit_mass_exp2sigma
+	print "expected 2sigma limit:"
+	print xValue_limit_mass_exp2sigma
+	print yValue_limit_mass_exp2sigma
 
-myC.SetLogy(1)
-myC.SetLogx(0)
+	myC.SetLogy(1)
+	myC.SetLogx(0)
 
-graph_mass_obs_limit = TGraph(NPoints_mass, np.array(xValue_limit_mass_obs), np.array(yValue_limit_mass_obs))
-graph_mass_Th_limit = TGraph(NPoints_mass, np.array(xValue_limit_mass_Th), np.array(yValue_limit_mass_Th))
-graph_mass_exp_limit = TGraph(NPoints_mass, np.array(xValue_limit_mass_exp), np.array(yValue_limit_mass_exp))
-graph_mass_exp1sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_limit_mass_exp1sigma), np.array(yValue_limit_mass_exp1sigma))
-graph_mass_exp2sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_limit_mass_exp2sigma), np.array(yValue_limit_mass_exp2sigma))
+	graph_mass_obs_limit = TGraph(NPoints_mass, np.array(xValue_limit_mass_obs), np.array(yValue_limit_mass_obs))
+	graph_mass_Th_limit = TGraph(NPoints_mass, np.array(xValue_limit_mass_Th), np.array(yValue_limit_mass_Th))
+	graph_mass_exp_limit = TGraph(NPoints_mass, np.array(xValue_limit_mass_exp), np.array(yValue_limit_mass_exp))
+	graph_mass_exp1sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_limit_mass_exp1sigma), np.array(yValue_limit_mass_exp1sigma))
+	graph_mass_exp2sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_limit_mass_exp2sigma), np.array(yValue_limit_mass_exp2sigma))
 
-graph_mass_obs_limit.SetMarkerStyle(22)
-graph_mass_obs_limit.SetMarkerSize(1.5)
-graph_mass_obs_limit.SetLineColor(kBlack)
-graph_mass_obs_limit.SetLineWidth(2)
+	graph_mass_obs_limit.SetMarkerStyle(22)
+	graph_mass_obs_limit.SetMarkerSize(1.5)
+	graph_mass_obs_limit.SetLineColor(kBlack)
+	graph_mass_obs_limit.SetLineWidth(2)
 
-graph_mass_Th_limit.SetMarkerStyle(22)
-graph_mass_Th_limit.SetMarkerSize(1.5)
-graph_mass_Th_limit.SetLineColor(kRed)
-graph_mass_Th_limit.SetLineWidth(2)
+	graph_mass_Th_limit.SetMarkerStyle(22)
+	graph_mass_Th_limit.SetMarkerSize(1.5)
+	graph_mass_Th_limit.SetLineColor(kRed)
+	graph_mass_Th_limit.SetLineWidth(2)
 
-graph_mass_exp_limit.SetMarkerStyle(19)
-graph_mass_exp_limit.SetMarkerSize(1.5)
-graph_mass_exp_limit.SetLineColor(kBlack)
-graph_mass_exp_limit.SetLineWidth(2)
-graph_mass_exp_limit.SetLineStyle(kDashed)
+	graph_mass_exp_limit.SetMarkerStyle(19)
+	graph_mass_exp_limit.SetMarkerSize(1.5)
+	graph_mass_exp_limit.SetLineColor(kBlack)
+	graph_mass_exp_limit.SetLineWidth(2)
+	graph_mass_exp_limit.SetLineStyle(kDashed)
 
-graph_mass_exp1sigma_limit.SetFillColor(kGreen)
-graph_mass_exp2sigma_limit.SetFillColor(kYellow)
+	graph_mass_exp1sigma_limit.SetFillColor(kGreen)
+	graph_mass_exp2sigma_limit.SetFillColor(kYellow)
 
-graph_mass_exp_limit.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_mass_exp_limit.GetXaxis().SetLimits(150.0,500.0)
-graph_mass_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
-graph_mass_exp_limit.GetYaxis().SetRangeUser(1e-6,1e4)
-#graph_mass_exp_limit.GetYaxis().SetRangeUser(0.0,10)
-graph_mass_exp_limit.SetTitle("")
+	graph_mass_exp_limit.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
+	graph_mass_exp_limit.GetXaxis().SetLimits(100.0,500.0)
+	graph_mass_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
+	graph_mass_exp_limit.GetYaxis().SetRangeUser(1e-6,1e4)
+	#graph_mass_exp_limit.GetYaxis().SetRangeUser(0.0,10)
+	graph_mass_exp_limit.SetTitle("")
 
-graph_mass_exp_limit.Draw("LA")
+	graph_mass_exp_limit.Draw("LA")
 
-graph_mass_exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
-graph_mass_exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
-graph_mass_exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
-graph_mass_exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
+	graph_mass_exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
+	graph_mass_exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
+	graph_mass_exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
+	graph_mass_exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
 
-graph_mass_exp2sigma_limit.Draw("Fsame")
-graph_mass_exp1sigma_limit.Draw("Fsame")
-graph_mass_obs_limit.Draw("Lsame")
-graph_mass_exp_limit.Draw("Lsame")
-graph_mass_Th_limit.Draw("Lsame")
+	graph_mass_exp2sigma_limit.Draw("Fsame")
+	graph_mass_exp1sigma_limit.Draw("Fsame")
+	graph_mass_obs_limit.Draw("Lsame")
+	graph_mass_exp_limit.Draw("Lsame")
+	graph_mass_Th_limit.Draw("Lsame")
 
-drawCMS2(myC, 13, lumi)
+	drawCMS2(myC, 13, lumi)
 
-leg_limit_vs_mass = TLegend(0.32,0.62,0.9,0.89)
+	leg_limit_vs_mass = TLegend(0.32,0.62,0.9,0.89)
 
-leg_limit_vs_mass.SetHeader("c#tau_{#tilde{#chi}_{1}^{0}} = "+str(lifetime_limits_vs_mass)+" cm,  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
-leg_limit_vs_mass.SetBorderSize(0)
-leg_limit_vs_mass.SetTextSize(0.03)
-leg_limit_vs_mass.SetLineColor(1)
-leg_limit_vs_mass.SetLineStyle(1)
-leg_limit_vs_mass.SetLineWidth(1)
-leg_limit_vs_mass.SetFillColor(0)
-leg_limit_vs_mass.SetFillStyle(1001)
+	leg_limit_vs_mass.SetHeader("c#tau_{#tilde{#chi}_{1}^{0}} = "+str(lifetime_limits_vs_mass)+" cm,  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
+	leg_limit_vs_mass.SetBorderSize(0)
+	leg_limit_vs_mass.SetTextSize(0.03)
+	leg_limit_vs_mass.SetLineColor(1)
+	leg_limit_vs_mass.SetLineStyle(1)
+	leg_limit_vs_mass.SetLineWidth(1)
+	leg_limit_vs_mass.SetFillColor(0)
+	leg_limit_vs_mass.SetFillStyle(1001)
 
-leg_limit_vs_mass.AddEntry(graph_mass_Th_limit, "Theoretical cross-section", "L")
-leg_limit_vs_mass.AddEntry(graph_mass_obs_limit, "Observed  95% CL upper limit", "L")
-leg_limit_vs_mass.AddEntry(graph_mass_exp_limit, "Expected  95% CL upper limit", "L")
-leg_limit_vs_mass.AddEntry(graph_mass_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
-leg_limit_vs_mass.AddEntry(graph_mass_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
-leg_limit_vs_mass.Draw()
+	leg_limit_vs_mass.AddEntry(graph_mass_Th_limit, "Theoretical cross-section", "L")
+	leg_limit_vs_mass.AddEntry(graph_mass_obs_limit, "Observed  95% CL upper limit", "L")
+	leg_limit_vs_mass.AddEntry(graph_mass_exp_limit, "Expected  95% CL upper limit", "L")
+	leg_limit_vs_mass.AddEntry(graph_mass_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
+	leg_limit_vs_mass.AddEntry(graph_mass_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
+	leg_limit_vs_mass.Draw()
 
-myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".pdf")
-myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".png")
-myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".C")
 
 
 ##################exclusion region of lifetime and Lambda/mass #######################
@@ -392,6 +399,13 @@ N_lifetime = len(grid_lifetime_exclusion_region_2D)
 #r_obs_2d_grid = [[0.0 for x in range(N_lambda)] for y in range(N_lifetime)]
 r_exp_2d_grid = np.zeros((N_lifetime, N_lambda))
 r_obs_2d_grid = np.zeros((N_lifetime, N_lambda))
+
+print "lifetime grid: "
+print grid_lifetime_exclusion_region_2D
+print "mass grid: "
+print grid_mass_exclusion_region_2D
+print "lambda grid: "
+print grid_lambda_exclusion_region_2D
 
 print "initial value of the 2D r grid (exp): "
 print r_exp_2d_grid
@@ -406,8 +420,8 @@ for limit_2D in exclusion_region_2D:
 	for entry in limitTree:
 		limits.append(entry.limit)
 	#print limits
-	ind_lambda = 0
-	ind_lifetime = 0
+	ind_lambda = -1
+	ind_lifetime = -1
 	for i in range(0, N_lambda):
 		if grid_lambda_exclusion_region_2D[i] == limit_2D[1]:
 			ind_lambda = i
@@ -417,7 +431,7 @@ for limit_2D in exclusion_region_2D:
 			ind_lifetime = i
 	#print "ind_lambda = "+str(ind_lambda)	
 	#print "ind_lifetime = "+str(ind_lifetime)	
-	if len(limits) == 6:
+	if len(limits) == 6 and ind_lambda > -1 and ind_lifetime > -1:
 		r_exp_2d_grid[ind_lifetime][ind_lambda] = limits[2]
 		r_obs_2d_grid[ind_lifetime][ind_lambda] = limits[5]
 
@@ -433,52 +447,7 @@ f1_mass = TF1("f1_mass","expo(0)", 0.0, grid_mass_exclusion_region_2D[N_lambda-1
 f1_lambda = TF1("f1_lambda","expo(0)", 0.0, grid_lambda_exclusion_region_2D[N_lambda-1])
 
 
-
-#interpolation along lifetime direction (for a fixed lambda value)
-for j in range(0, N_lambda):
-	N_interp = 0
-	lifetime_interp = []
-	r_exp_interp = []
-	r_obs_interp = []
-
-	for i in range(0, N_lifetime):
-		if r_exp_2d_grid[i][j] > 0.00001:
-			N_interp = 1 + N_interp
-			lifetime_interp.append(grid_lifetime_exclusion_region_2D[i])
-			r_exp_interp.append(r_exp_2d_grid[i][j])
-			r_obs_interp.append(r_obs_2d_grid[i][j])
-	if N_interp > 1:
-		graph_exp_interp = TGraph(N_interp, np.array(lifetime_interp), np.array(r_exp_interp))
-		graph_obs_interp = TGraph(N_interp, np.array(lifetime_interp), np.array(r_obs_interp))
-		for i in range(0, N_lifetime):
-			if r_exp_2d_grid[i][j] == 0.0:
-				r_exp_interp = graph_exp_interp.Eval(grid_lifetime_exclusion_region_2D[i])
-				r_obs_interp = graph_obs_interp.Eval(grid_lifetime_exclusion_region_2D[i])
-				if N_interp > 2 and UseExpoInterp_time:
-					graph_exp_interp.Fit(f1_lifetime)
-					r_exp_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
-					if r_exp_interp_temp < 10000.0:
-						r_exp_interp = r_exp_interp_temp
-					graph_obs_interp.Fit(f1_lifetime)
-					r_obs_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
-					if r_obs_interp_temp < 10000.0:
-						r_obs_interp = r_obs_interp_temp
-						
-				if r_exp_interp > 0.0:
-					r_exp_2d_grid[i][j] = r_exp_interp
-				else:
-					r_exp_2d_grid[i][j] = 1e-4
-				if r_obs_interp > 0.0:
-					r_obs_2d_grid[i][j] = r_obs_interp
-				else:
-					r_obs_2d_grid[i][j] = 1e-4
-
-print "value of the 2D r grid (exp) provided after linear interpolation in lifetime direction: "
-print r_exp_2d_grid
-print "value of the 2D r grid (obs) provided after linear interpolation in lifetime direction: "
-print r_obs_2d_grid
-
-
+'''
 #interpolation along lambda direction (for a fixed lifetime value)
 for i in range(0, N_lifetime):
 	N_interp = 0
@@ -519,10 +488,55 @@ for i in range(0, N_lifetime):
 				else:
 					r_obs_2d_grid[i][j] = 1e-4
 
-print "value of the 2D r grid (exp) provided after linear interpolation in lambda direction: "
+print "value of the 2D r grid (exp) provided after interpolation in lambda direction: "
 print r_exp_2d_grid
-print "value of the 2D r grid (obs) provided after linear interpolation in lambda direction: "
+print "value of the 2D r grid (obs) provided after interpolation in lambda direction: "
 print r_obs_2d_grid
+
+#interpolation along lifetime direction (for a fixed lambda value)
+for j in range(0, N_lambda):
+	N_interp = 0
+	lifetime_interp = []
+	r_exp_interp = []
+	r_obs_interp = []
+
+	for i in range(0, N_lifetime):
+		if r_exp_2d_grid[i][j] > 0.00001:
+			N_interp = 1 + N_interp
+			lifetime_interp.append(grid_lifetime_exclusion_region_2D[i])
+			r_exp_interp.append(r_exp_2d_grid[i][j])
+			r_obs_interp.append(r_obs_2d_grid[i][j])
+	if N_interp > 1:
+		graph_exp_interp = TGraph(N_interp, np.array(lifetime_interp), np.array(r_exp_interp))
+		graph_obs_interp = TGraph(N_interp, np.array(lifetime_interp), np.array(r_obs_interp))
+		for i in range(0, N_lifetime):
+			if r_exp_2d_grid[i][j] == 0.0:
+				r_exp_interp = graph_exp_interp.Eval(grid_lifetime_exclusion_region_2D[i])
+				r_obs_interp = graph_obs_interp.Eval(grid_lifetime_exclusion_region_2D[i])
+				if N_interp > 2 and UseExpoInterp_time:
+					graph_exp_interp.Fit(f1_lifetime)
+					r_exp_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
+					if r_exp_interp_temp < 10000.0:
+						r_exp_interp = r_exp_interp_temp
+					graph_obs_interp.Fit(f1_lifetime)
+					r_obs_interp_temp = f1_lifetime.Eval(grid_lifetime_exclusion_region_2D[i])
+					if r_obs_interp_temp < 10000.0:
+						r_obs_interp = r_obs_interp_temp
+						
+				if r_exp_interp > 0.0:
+					r_exp_2d_grid[i][j] = r_exp_interp
+				else:
+					r_exp_2d_grid[i][j] = 1e-4
+				if r_obs_interp > 0.0:
+					r_obs_2d_grid[i][j] = r_obs_interp
+				else:
+					r_obs_2d_grid[i][j] = 1e-4
+
+print "value of the 2D r grid (exp) provided after interpolation in lifetime direction: "
+print r_exp_2d_grid
+print "value of the 2D r grid (obs) provided after interpolation in lifetime direction: "
+print r_obs_2d_grid
+'''
 
 
 
@@ -620,11 +634,15 @@ for i in range(0, N_lifetime-1):
 			graph_exp_interp_lambda2.Fit(f1_lambda, "", "", 10.0, lambda_Up)
 			chi2_lambda = f1_lambda.GetChisquare()
 			if chi2_lambda < 50.0:
-				this_lambda_exp = f1_lambda.GetX(1.0, 0.0, lambda_Up)
+				this_lambda_exp_temp = f1_lambda.GetX(1.0, 0.0, lambda_Up)
+				if this_lambda_exp_temp > this_lambda_exp and this_lambda_exp_temp < 1.2*this_lambda_exp:
+					this_lambda_exp = this_lambda_exp_temp
 			graph_exp_interp_mass2.Fit(f1_mass, "", "", 10.0, mass_Up)
 			chi2_mass = f1_mass.GetChisquare()
 			if chi2_mass < 50.0:
-				this_mass_exp = f1_mass.GetX(1.0, 0.0, mass_Up)
+				this_mass_exp_temp = f1_mass.GetX(1.0, 0.0, mass_Up)
+				if this_mass_exp_temp > this_mass_exp and this_mass_exp_temp < 1.2* this_mass_exp:
+					this_mass_exp = this_mass_exp_temp
 			print "mass interp expo exp = "+str(this_mass_exp)
 
 		if ManualSmooth and N_exp_exclusion_region_final > 0 and this_lambda_exp < lambda_exp_exclusion_region_final[N_exp_exclusion_region_final - 1]:
@@ -657,11 +675,15 @@ for i in range(0, N_lifetime-1):
 			graph_obs_interp_lambda2.Fit(f1_lambda, "", "", 10.0, lambda_Up)
 			chi2_lambda = f1_lambda.GetChisquare()
 			if chi2_lambda < 50.0:
-				this_lambda_obs = f1_lambda.GetX(1.0, 0.0, lambda_Up)
+				this_lambda_obs_temp = f1_lambda.GetX(1.0, 0.0, lambda_Up)
+				if this_lambda_obs_temp > this_lambda_obs and this_lambda_obs_temp < 1.2* this_lambda_obs:
+					this_lambda_obs = this_lambda_obs_temp
 			graph_obs_interp_mass2.Fit(f1_mass, "", "", 10.0, mass_Up)
 			chi2_mass = f1_mass.GetChisquare()
 			if chi2_mass < 50.0:
-				this_mass_obs = f1_mass.GetX(1.0, 0.0, mass_Up)
+				this_mass_obs_temp = f1_mass.GetX(1.0, 0.0, mass_Up)
+				if this_mass_obs_temp > this_mass_obs and this_mass_obs_temp < 1.2*this_mass_obs:
+					this_mass_obs = this_mass_obs_temp
 			print "mass interp expo obs = "+str(this_mass_obs)
 
 		if ManualSmooth and N_obs_exclusion_region_final > 0 and this_lambda_obs < lambda_obs_exclusion_region_final[N_obs_exclusion_region_final - 1]:
@@ -734,7 +756,7 @@ graph_exclusion_exp.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
 graph_exclusion_exp.GetXaxis().SetLimits(100.0, 600.0)
 graph_exclusion_exp.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp.GetYaxis().SetRangeUser(2e-1,1e7)
+graph_exclusion_exp.GetYaxis().SetRangeUser(0.05,1e7)
 graph_exclusion_exp.SetTitle("")
 
 graph_exclusion_exp.SetMarkerStyle(19)

@@ -86,10 +86,10 @@ print "\n cut_QCD_shape_iso = " + cut_QCD_shape_iso
 print "\n cut_GJets_shape = " + cut_GJets_shape
 print "\n cut_GJets_shape_iso = " + cut_GJets_shape_iso
 
-weightedcut_QCD_shape = "(weight) * " + cut_QCD_shape 
-weightedcut_QCD_shape_iso = "(weight) * " + cut_QCD_shape_iso 
-weightedcut_GJets_shape = "(weight) * " + cut_GJets_shape 
-weightedcut_GJets_shape_iso = "(weight) * " + cut_GJets_shape_iso 
+weightedcut_QCD_shape = "(weight*pileupWeight) * " + cut_QCD_shape 
+weightedcut_QCD_shape_iso = "(weight*pileupWeight) * " + cut_QCD_shape_iso 
+weightedcut_GJets_shape = "(weight*pileupWeight) * " + cut_GJets_shape 
+weightedcut_GJets_shape_iso = "(weight*pileupWeight) * " + cut_GJets_shape_iso 
 
 fileOut = TFile("../data/shapes.root","RECREATE")
 fileOut.cd()
@@ -130,7 +130,7 @@ for shape in shapes:
 			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_iso)
 		else:
 			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape)
-		#if histThis.Integral()>100:
+		#if histThis.Integral()>10:
 		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
@@ -155,7 +155,7 @@ for shape in shapes:
 			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_iso)
 		else:
 			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape)
-		#if histThis.Integral()>100:
+		#if histThis.Integral()>10:
 		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
