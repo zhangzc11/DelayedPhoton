@@ -48,6 +48,7 @@ python saveShapes.py
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
 "L100TeV_Ctau1000cm" \
 "signal (L100-Ctau1000)" \
+3J \
 datacard > log.log
 ```
 make sure that you put the signal cross sections in data/XsecBR.dat file
@@ -85,6 +86,7 @@ python LimitPlots.py
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
 "L100TeV_Ctau1000cm" \
 "signal (L100-Ctau1000)" \
+3J \
 bias \
 0.000 \
 10000 > log_bias.log
