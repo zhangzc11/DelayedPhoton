@@ -11,7 +11,7 @@
 
 float getXsecBR(std::string sigModelName);
 
-void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix);
+void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix, TString outPlotsDir);
 
 void DrawCMS(TCanvas *myC, int energy, float lumi);
 
