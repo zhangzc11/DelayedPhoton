@@ -35,12 +35,14 @@ print "GJets tree: "
 print fileNameGJetsSkim
 print "QCD tree: "
 print fileNameQCDSkim
+
 '''
 for i in range(0,len(fileNameDataSkim)):
 	print "Data file "+str(i)+"  ... "
 	fileThis = TFile(fileNameDataSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
+	NEventsFile = TFile(fileNameDataSkim[i].replace("private_REMINIAOD/withcut_disc_GJets","private_REMINIAOD/skim"),"READ")
+	NEvents = NEventsFile.Get("NEvents")
 	outputFile = TFile(fileNameDataSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
@@ -48,22 +50,33 @@ for i in range(0,len(fileNameDataSkim)):
 	NEvents_out.Write()
 	outputTree.Write()
 '''
+
+
 for i in range(0,len(fileNameSigSkim)):
 	print "Sig file "+str(i)+"  ... "
 	fileThis = TFile(fileNameSigSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
+	NEventsFile = TFile(fileNameSigSkim[i].replace("private_REMINIAOD/withcut_disc_GJets","private_REMINIAOD/skim"),"READ")
+	NEvents = NEventsFile.Get("NEvents")
+
+	#NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameSigSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
 	outputTree = inputTree.CopyTree(cut_skim)
 	NEvents_out.Write()
 	outputTree.Write()
+
+
+'''
 for i in range(0,len(fileNameGJetsSkim)):
 	print "GJets file "+str(i)+"  ... "
 	fileThis = TFile(fileNameGJetsSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
+	NEventsFile = TFile(fileNameDataSkim[i].replace("private_REMINIAOD/withcut_disc_GJets","private_REMINIAOD/skim"),"READ")
+	NEvents = NEventsFile.Get("NEvents")
+
+	#NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameGJetsSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
@@ -74,10 +87,14 @@ for i in range(0,len(fileNameQCDSkim)):
 	print "QCD file "+str(i)+"  ... "
 	fileThis = TFile(fileNameQCDSkim[i], "READ")
 	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
+	NEventsFile = TFile(fileNameDataSkim[i].replace("private_REMINIAOD/withcut_disc_GJets","private_REMINIAOD/skim"),"READ")
+	NEvents = NEventsFile.Get("NEvents")
+
+	#NEvents = fileThis.Get("NEvents")
 	outputFile = TFile(fileNameQCDSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/skim"),"RECREATE")
 	outputFile.cd()	
 	NEvents_out = NEvents.Clone()
 	outputTree = inputTree.CopyTree(cut_skim_bkg)
 	outputTree.Write()
 	NEvents_out.Write()
+'''

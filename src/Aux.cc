@@ -74,7 +74,7 @@ float getXsecBR(std::string sigModelName)
 }
 ;
 
-void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix)
+void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix, TString outPlotsDir)
 {
 	
 	
@@ -131,9 +131,9 @@ void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float l
 
 	DrawCMS(myC, 13, lumi);
         myC->SetTitle("");
-        myC->SaveAs(("fit_results/plots/"+sigModelName+"_fit_bkgsig_"+suffix+".pdf").c_str());
-        myC->SaveAs(("fit_results/plots/"+sigModelName+"_fit_bkgsig_"+suffix+".png").c_str());
-        myC->SaveAs(("fit_results/plots/"+sigModelName+"_fit_bkgsig_"+suffix+".C").c_str());
+        myC->SaveAs("fit_results/"+outPlotsDir+("/"+sigModelName+"_fit_bkgsig_"+suffix+".pdf").c_str());
+        myC->SaveAs("fit_results/"+outPlotsDir+("/"+sigModelName+"_fit_bkgsig_"+suffix+".png").c_str());
+        myC->SaveAs("fit_results/"+outPlotsDir+("/"+sigModelName+"_fit_bkgsig_"+suffix+".C").c_str());
 	
 }
 ;

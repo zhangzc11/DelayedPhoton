@@ -1,9 +1,11 @@
-from ROOT import *
+from ROOT import TFile, TH1F, TLegend, TCanvas, TPad, gROOT, gStyle, TChain, TColor
+import ROOT
 import os, sys
-from Aux import *
-from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
-from config import cut_QCD_shape_iso, cut_QCD_shape, cut_GJets_shape_iso, cut_GJets_shape, shapes, cut_iso
+from Aux import drawCMS, drawCMS2
+from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config import scaleBkg
+from config import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes
+from config import cut_GJets_shape_3J, cut_QCD_shape_3J
 
 
 gROOT.SetBatch(True)
@@ -65,7 +67,7 @@ NEventsQCD = []
 for i in range(0,len(fileNameGJets)):
 	treeGJets[i] = TChain("DelayedPhoton")
 	treeGJets[i].AddFile(fileNameGJets[i])
-	SetOwnership( treeGJets[i], True)
+	ROOT.SetOwnership( treeGJets[i], True)
 	fileThis = TFile(fileNameGJets[i])
 	hNEventsGJets = fileThis.Get("NEvents")
 	NEventsGJets.append(hNEventsGJets.GetBinContent(1))
@@ -74,43 +76,44 @@ for i in range(0,len(fileNameGJets)):
 for i in range(0,len(fileNameQCD)):
 	treeQCD[i] = TChain("DelayedPhoton")
 	treeQCD[i].AddFile(fileNameQCD[i])
-	SetOwnership( treeQCD[i], True)
+	ROOT.SetOwnership( treeQCD[i], True)
 	fileThis = TFile(fileNameQCD[i])
 	hNEventsQCD = fileThis.Get("NEvents")
 	NEventsQCD.append(hNEventsQCD.GetBinContent(1))
 	print "QCD - " + str(i) + str(hNEventsQCD.GetBinContent(1))
 
 
-print "\n cut_QCD_shape = " + cut_QCD_shape
-print "\n cut_QCD_shape_iso = " + cut_QCD_shape_iso
-print "\n cut_GJets_shape = " + cut_GJets_shape
-print "\n cut_GJets_shape_iso = " + cut_GJets_shape_iso
+print "\n cut_QCD_shape_2J = " + cut_QCD_shape_2J
+print "\n cut_GJets_shape_2J = " + cut_GJets_shape_2J
 
-weightedcut_QCD_shape = "(weight*pileupWeight) * " + cut_QCD_shape 
-weightedcut_QCD_shape_iso = "(weight*pileupWeight) * " + cut_QCD_shape_iso 
-weightedcut_GJets_shape = "(weight*pileupWeight) * " + cut_GJets_shape 
-weightedcut_GJets_shape_iso = "(weight*pileupWeight) * " + cut_GJets_shape_iso 
+print "\n cut_QCD_shape_3J = " + cut_QCD_shape_3J
+print "\n cut_GJets_shape_3J = " + cut_GJets_shape_3J
 
-fileOut = TFile("../data/shapes.root","RECREATE")
-fileOut.cd()
+
+weightedcut_QCD_shape_2J = "(weight*pileupWeight) * " + cut_QCD_shape_2J 
+weightedcut_GJets_shape_2J = "(weight*pileupWeight) * " + cut_GJets_shape_2J 
+weightedcut_QCD_shape_3J = "(weight*pileupWeight) * " + cut_QCD_shape_3J 
+weightedcut_GJets_shape_3J = "(weight*pileupWeight) * " + cut_GJets_shape_3J 
+
+#print "weightedcut_QCD_shape_3J: "+weightedcut_QCD_shape_3J
+#print "weightedcut_GJets_shape_3J: "+weightedcut_GJets_shape_3J
+
+
+print "now working on 2J category: "
+fileOut_2J = TFile("../data/shapes_2J.root","RECREATE")
+fileOut_2J.cd()
 
 for shape in shapes:
 	print "\n shapeting stack shapes for " + shape[1]
 	
 	#data
-	if shape[0]=="pho1sumChargedHadronPt":
-        	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_iso))
-	else:
-        	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut))
+	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_2J))
 		
         histData = TH1F(shape[1]+"_histData","",shape[3],shape[4],shape[5])
-	if shape[0]=="pho1sumChargedHadronPt":
-        	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_iso)
-	else:
-        	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut)
+	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_2J)
         histData.SetMarkerStyle( 20 )
-        histData.SetMarkerColor( kBlack )
-        histData.SetLineColor( kBlack )
+        histData.SetMarkerColor( ROOT.kBlack )
+        histData.SetLineColor( ROOT.kBlack )
         histData.SetLineWidth( 2 )
 	histData.GetXaxis().SetTitle(shape[2])
 	histData.GetYaxis().SetTitle("Events")
@@ -120,23 +123,17 @@ for shape in shapes:
 	#QCD
 	histQCD = TH1F(shape[1]+"_histQCD","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeQCD)):
-		if shape[0]=="pho1sumChargedHadronPt":
-			print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_iso))
-		else:
-			print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape))
+		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_2J))
 		#normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
-		if shape[0]=="pho1sumChargedHadronPt":
-			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_iso)
-		else:
-			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape)
+		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_2J)
 		#if histThis.Integral()>10:
 		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
-	#histQCD.SetFillColor(kOrange - 9)
-	histQCD.SetLineColor(kOrange - 9)
+	#histQCD.SetFillColor(ROOT.kOrange - 9)
+	histQCD.SetLineColor(ROOT.kOrange - 9)
 	#histQCD.Scale((1.0*histData.Integral())/histQCD.Integral())
         histQCD.SetLineWidth( 2 )
 	histQCD.Write()
@@ -145,23 +142,17 @@ for shape in shapes:
 	#GJets
 	histGJets = TH1F(shape[1]+"_histGJets","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeGJets)):
-		if shape[0]=="pho1sumChargedHadronPt":
-			print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_iso))
-		else:
-			print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape))
+		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_2J))
 		#normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
-		if shape[0]=="pho1sumChargedHadronPt":
-			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_iso)
-		else:
-			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape)
+		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_2J)
 		#if histThis.Integral()>10:
 		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
-	#histGJets.SetFillColor(kAzure + 7)
-	histGJets.SetLineColor(kAzure + 7)
+	#histGJets.SetFillColor(ROOT.kAzure + 7)
+	histGJets.SetLineColor(ROOT.kAzure + 7)
 	#histGJets.Scale((1.0*histData.Integral())/histGJets.Integral())
         histGJets.SetLineWidth( 2 )
 	histGJets.Write()
@@ -202,7 +193,109 @@ for shape in shapes:
 	leg.Draw()	
 	drawCMS2(myC, 13, lumi)
 
-	myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+".pdf")
-        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+".png")
-        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+".C")
+	myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_2J.pdf")
+        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_2J.png")
+        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_2J.C")
+
+
+fileOut_3J = TFile("../data/shapes_3J.root","RECREATE")
+fileOut_3J.cd()
+
+
+print "now working on 3J category: "
+for shape in shapes:
+
+	print "\n shapeting stack shapes for " + shape[1]
+	
+	#data
+	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_3J))
+		
+        histData = TH1F(shape[1]+"_histData","",shape[3],shape[4],shape[5])
+	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_3J)
+        histData.SetMarkerStyle( 20 )
+        histData.SetMarkerColor( ROOT.kBlack )
+        histData.SetLineColor( ROOT.kBlack )
+        histData.SetLineWidth( 2 )
+	histData.GetXaxis().SetTitle(shape[2])
+	histData.GetYaxis().SetTitle("Events")
+	histData.Write()	
+	
+	
+	#QCD
+	histQCD = TH1F(shape[1]+"_histQCD","",shape[3],shape[4],shape[5])	
+	for i in range(0, len(treeQCD)):
+		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_3J))
+		#normQCD = NEventsQCD[i] * 1.0  
+		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
+		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_3J)
+		#if histThis.Integral()>10:
+		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
+		histQCD.Add(histThis)
+		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
+		histThis.Write()
+	#histQCD.SetFillColor(ROOT.kOrange - 9)
+	histQCD.SetLineColor(ROOT.kOrange - 9)
+	#histQCD.Scale((1.0*histData.Integral())/histQCD.Integral())
+        histQCD.SetLineWidth( 2 )
+	histQCD.Write()
+	print "#QCD - all: xsec * lumi * cut " + str(histQCD.Integral())
+	
+	#GJets
+	histGJets = TH1F(shape[1]+"_histGJets","",shape[3],shape[4],shape[5])	
+	for i in range(0, len(treeGJets)):
+		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_3J))
+		#normGJets = NEventsGJets[i] * 1.0  
+		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
+		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_3J)
+		#if histThis.Integral()>10:
+		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
+		histGJets.Add(histThis)
+		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
+		histThis.Write()
+	#histGJets.SetFillColor(ROOT.kAzure + 7)
+	histGJets.SetLineColor(ROOT.kAzure + 7)
+	#histGJets.Scale((1.0*histData.Integral())/histGJets.Integral())
+        histGJets.SetLineWidth( 2 )
+	histGJets.Write()
+	print "#GJets - all: xsec * lumi * cut " + str(histGJets.Integral())
+
+        myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
+        myC.SetHighLightColor(2)
+        myC.SetFillColor(0)
+        myC.SetBorderMode(0)
+        myC.SetBorderSize(2)
+        myC.SetLeftMargin( leftMargin )
+        myC.SetRightMargin( rightMargin )
+        myC.SetTopMargin( topMargin )
+        myC.SetBottomMargin( bottomMargin )
+        myC.SetFrameBorderMode(0)
+        myC.SetFrameBorderMode(0)
+	
+	myC.SetLogy()
+	
+	histData.Draw("E")
+	histData.GetYaxis().SetRangeUser(0.1, 200.0*max(histData.GetMaximum(),histGJets.GetMaximum(), histQCD.GetMaximum()))
+	histGJets.Draw("same")
+	histQCD.Draw("same")
+	
+	leg = TLegend(0.18, 0.7, 0.93, 0.89)
+        leg.SetNColumns(3)
+        leg.SetBorderSize(0)
+        leg.SetTextSize(0.03)
+        leg.SetLineColor(1)
+        leg.SetLineStyle(1)
+        leg.SetLineWidth(1)
+        leg.SetFillColor(0)
+        leg.SetFillStyle(1001)
+        leg.AddEntry(histData, "data","lep")
+        leg.AddEntry(histGJets, "#gamma+jets","l")
+        leg.AddEntry(histQCD, "QCD","l")
+
+	leg.Draw()	
+	drawCMS2(myC, 13, lumi)
+
+	myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_3J.pdf")
+        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_3J.png")
+        myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_3J.C")
+	
 	

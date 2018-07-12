@@ -34,7 +34,7 @@ Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 2.1, 10.0, 15.0};
 
 bool useLowTBinning = false;
 
-float lumi = 31336.5; //pb^-1
+float lumi = 31118.6; //pb^-1
 float NEvents_sig = 1.0;
 bool _useToy = true;
 
@@ -85,25 +85,22 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float xsec = getXsecBR(sigModelName); //pb
 std::string treeName = "DelayedPhoton";
 
-std::string cut, cut_noHLT, cut_iso, cut_loose, cut_GJets;
-
+std::string cut, cut_noHLT, cut_loose, cut_GJets;
 
 if(category == "2J")
 {
 cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
 cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36 && pho2passIsoLoose && pho2passEleVeto";
-cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto";
-cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18) && pho2passIsoLoose && pho2passEleVeto";
+cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2";
+cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
 }
 
 else if(category == "3J")
 {
 cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
 cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-cut_iso = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho1sumChargedHadronPt < 1.30 && pho1sumNeutralHadronEt < 0.26 && pho1sumPhotonEt < 2.36 && pho2passIsoLoose && pho2passEleVeto";
-cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto";
-cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18) && pho2passIsoLoose && pho2passEleVeto";
+cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2";
+cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
 }
 
 else
@@ -253,51 +250,6 @@ cout<<"fraction of QCD = "<<nQCD_value_SigmaIetaIeta<<" +/- "<<nQCD_value_SigmaI
 
 if(doAllBkgFracFit)
 {
-	//sumChargedHadronPt
-	TH1F *h1_sumChargedHadronPt_Data = new TH1F("h1_sumChargedHadronPt_Data","h1_sumChargedHadronPt_Data", 100, -0.1, 1.30);
-	tree_data->Draw("pho1sumChargedHadronPt>>h1_sumChargedHadronPt_Data", cut_iso.c_str());
-
-	TH1F *h1_sumChargedHadronPt_GJets = (TH1F*)file_shape->Get("phosumChargedHadronPt_histGJets"); 
-	TH1F *h1_sumChargedHadronPt_QCD = (TH1F*)file_shape->Get("phosumChargedHadronPt_histQCD"); 
-
-	float tightFraction_Data = (1.0*h1_sumChargedHadronPt_Data->Integral(1,15))/(h1_sumChargedHadronPt_Data->Integral()*1.0);
-	float tightFraction_GJets = (1.0*h1_sumChargedHadronPt_GJets->Integral(1,15))/(h1_sumChargedHadronPt_GJets->Integral()*1.0);
-	float tightFraction_QCD = (1.0*h1_sumChargedHadronPt_QCD->Integral(1,15))/(h1_sumChargedHadronPt_QCD->Integral()*1.0);
-
-	h1_sumChargedHadronPt_GJets->Scale((1.0*h1_sumChargedHadronPt_Data->Integral())/h1_sumChargedHadronPt_GJets->Integral());
-	h1_sumChargedHadronPt_QCD->Scale((1.0*h1_sumChargedHadronPt_Data->Integral())/h1_sumChargedHadronPt_QCD->Integral());
-
-	RooWorkspace * w_frac_sumChargedHadronPt;
-	w_frac_sumChargedHadronPt = FitDataBkgFraction(h1_sumChargedHadronPt_Data, "pho1sumChargedHadronPt", "charged isolation", "GeV", -0.1, 1.30, h1_sumChargedHadronPt_GJets, h1_sumChargedHadronPt_QCD);
-	w_frac_sumChargedHadronPt->Write("w_frac_sumChargedHadronPt");
-
-	float nGJets_value_sumChargedHadronPt = w_frac_sumChargedHadronPt->var("nGJets")->getValV();
-	float nGJets_value_sumChargedHadronPt_err = w_frac_sumChargedHadronPt->var("nGJets")->getError();
-	float nQCD_value_sumChargedHadronPt = w_frac_sumChargedHadronPt->var("nQCD")->getValV();
-	float nQCD_value_sumChargedHadronPt_err = w_frac_sumChargedHadronPt->var("nQCD")->getError();
-	h1_sumChargedHadronPt_GJets->Scale(nGJets_value_sumChargedHadronPt);
-	h1_sumChargedHadronPt_QCD->Scale(nQCD_value_sumChargedHadronPt);
-	h1_sumChargedHadronPt_GJets->Write();
-	h1_sumChargedHadronPt_QCD->Write();
-
-	N_total_GJets_QCD_fit = nGJets_value_sumChargedHadronPt + nQCD_value_sumChargedHadronPt;
-
-	cout<<"result of fit with sumChargedHadronPt: " <<endl;
-
-	cout<<"fraction of GJets (full region) = "<<nGJets_value_sumChargedHadronPt<<" +/- "<<nGJets_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
-	cout<<"fraction of QCD (full region) = "<<nQCD_value_sumChargedHadronPt<<" +/- "<<nQCD_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
-
-
-	nGJets_value_sumChargedHadronPt = nGJets_value_sumChargedHadronPt*tightFraction_GJets;
-	nGJets_value_sumChargedHadronPt_err = nGJets_value_sumChargedHadronPt_err*tightFraction_GJets;
-	nQCD_value_sumChargedHadronPt = nQCD_value_sumChargedHadronPt*tightFraction_QCD;
-	nQCD_value_sumChargedHadronPt_err = nQCD_value_sumChargedHadronPt_err*tightFraction_QCD;
-	N_total_GJets_QCD_fit = nGJets_value_sumChargedHadronPt + nQCD_value_sumChargedHadronPt;
-
-	cout<<"fraction of GJets (full region) = "<<nGJets_value_sumChargedHadronPt<<" +/- "<<nGJets_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nGJets_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nGJets_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
-	cout<<"fraction of QCD (full region) = "<<nQCD_value_sumChargedHadronPt<<" +/- "<<nQCD_value_sumChargedHadronPt_err<<" / "<<N_total_GJets_QCD_fit<<" = "<<nQCD_value_sumChargedHadronPt/N_total_GJets_QCD_fit<<" +/- "<<nQCD_value_sumChargedHadronPt_err/N_total_GJets_QCD_fit<<endl;
-
-
 	//sigmaEOverE
 	TH1F *h1_sigmaEOverE_Data = new TH1F("h1_sigmaEOverE_Data","h1_sigmaEOverE_Data", 100, 0., 0.5);
 	tree_data->Draw("pho1sigmaEOverE>>h1_sigmaEOverE_Data", cut.c_str());
@@ -708,13 +660,13 @@ if(fitMode == "datacard")
 
 	if(_useToy)
 	{	
-		DrawDataBkgSig(h1newbinData_toy_time, h1newbinBkg_time, h1newbinSig_time, h1newbinAll_time, lumi, sigModelTitle, sigModelName, "time");
-		DrawDataBkgSig(h1newbinData_toy_MET, h1newbinBkg_MET, h1newbinSig_MET, h1newbinAll_MET, lumi, sigModelTitle, sigModelName, "MET");
+		DrawDataBkgSig(h1newbinData_toy_time, h1newbinBkg_time, h1newbinSig_time, h1newbinAll_time, lumi, sigModelTitle, sigModelName, "time", outPlotsDir);
+		DrawDataBkgSig(h1newbinData_toy_MET, h1newbinBkg_MET, h1newbinSig_MET, h1newbinAll_MET, lumi, sigModelTitle, sigModelName, "MET", outPlotsDir);
 	}
 	else
 	{
-		DrawDataBkgSig(h1newbinData_time, h1newbinBkg_time, h1newbinSig_time, h1newbinAll_time, lumi, sigModelTitle, sigModelName, "time");
-		DrawDataBkgSig(h1newbinData_MET, h1newbinBkg_MET, h1newbinSig_MET, h1newbinAll_MET, lumi, sigModelTitle, sigModelName, "MET");
+		DrawDataBkgSig(h1newbinData_time, h1newbinBkg_time, h1newbinSig_time, h1newbinAll_time, lumi, sigModelTitle, sigModelName, "time", outPlotsDir);
+		DrawDataBkgSig(h1newbinData_MET, h1newbinBkg_MET, h1newbinSig_MET, h1newbinAll_MET, lumi, sigModelTitle, sigModelName, "MET", outPlotsDir);
 
 	}
 	
