@@ -58,12 +58,16 @@ float getXsecBR(std::string sigModelName)
 	{
 		std::string name;
 		std::string xsec;
+		std::string exsec;
 		std::string BR;
 		std::string xsecBR;
+		std::string exsecBR;
 		is>>name;
 		is>>xsec;
+		is>>exsec;
 		is>>BR;
 		is>>xsecBR;
+		is>>exsecBR;
 		if(name.compare(sigModelName)==0)
 		{
 			fxsecBR = strtof(xsecBR.c_str(), 0);

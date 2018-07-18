@@ -45,8 +45,8 @@ python saveShapes.py
 ```
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
-"L100TeV_Ctau1000cm" \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L250TeV_Ctau200cm_13TeV-pythia8.root \
+"L250TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \
 datacard > log.log
@@ -67,7 +67,7 @@ python StackPlots.py
 -----------------------------
 ```
 cd fit_results/datacards/
-combine DelayedPhotonCard_L100TeV_Ctau1000cm.txt -M Asymptotic -n L100TeV_Ctau1000cm
+combine DelayedPhotonCard_L250TeV_Ctau200cm.txt -M Asymptotic -n L250TeV_Ctau200cm
 ```
 
 -----------------------------
@@ -83,8 +83,8 @@ python LimitPlots.py
 ```
 ./Fit2D \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L100TeV_Ctau1000cm_13TeV-pythia8.root \
-"L100TeV_Ctau1000cm" \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L250TeV_Ctau200cm_13TeV-pythia8.root \
+"L250TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \
 bias \

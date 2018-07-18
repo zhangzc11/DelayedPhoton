@@ -1,0 +1,1 @@
+./getXSecFromLogs.sh /eos/cms/store/user/zhicaiz/GMSB_2016_Production/GMSB_L400TeV_Ctau800cm_13TeV-pythia8/crab_CMSSW_7_1_25_GMSB_L400TeV_Ctau800cm_GENSIM_T2Caltech_forXsec_withLog_10k/ totalxsec.txt

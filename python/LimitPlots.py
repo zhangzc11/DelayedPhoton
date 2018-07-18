@@ -35,7 +35,7 @@ os.system("cp LimitPlots.py "+outputDir+"/limits")
 #################plot settings###########################
 UseExpoInterp_time = False
 UseExpoInterp_lambda = True
-ManualSmooth = True
+ManualSmooth = False
 
 axisTitleSize = 0.05
 axisTitleOffset = 1.0
@@ -223,9 +223,9 @@ for list_this in list_limits_vs_lifetime:
 	leg_limit_vs_time.AddEntry(graph_lifetime_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_time.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(mass_limits_vs_lifetime)+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+".C")
 
 ##################limit vs mass #######################3
 
@@ -348,7 +348,7 @@ for list_this in list_limits_vs_mass:
 	graph_mass_exp2sigma_limit.SetFillColor(kYellow)
 
 	graph_mass_exp_limit.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-	graph_mass_exp_limit.GetXaxis().SetLimits(100.0,500.0)
+	graph_mass_exp_limit.GetXaxis().SetLimits(100.0,600.0)
 	graph_mass_exp_limit.GetYaxis().SetTitle("#sigma x BR [pb]")
 	graph_mass_exp_limit.GetYaxis().SetRangeUser(1e-6,1e4)
 	#graph_mass_exp_limit.GetYaxis().SetRangeUser(0.0,10)
@@ -387,9 +387,9 @@ for list_this in list_limits_vs_mass:
 	leg_limit_vs_mass.AddEntry(graph_mass_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(lifetime_limits_vs_mass)+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+".C")
 
 
 ##################exclusion region of lifetime and Lambda/mass #######################
@@ -618,7 +618,8 @@ for i in range(0, N_lifetime-1):
 		this_lambda_exp = graph_exp_interp_lambda.Eval(1.0)
 		this_mass_exp = graph_exp_interp_mass.Eval(1.0)
 		
-		print "final point: time = "+str(grid_lifetime_exclusion_region_2D[i])
+		print "==============================================================="	
+		print "trying to interpolate the mass limit for lifetime = "+str(grid_lifetime_exclusion_region_2D[i])
 		print "mass interp linear exp = "+str(this_mass_exp)
 
 		if N_interp > 2 and UseExpoInterp_lambda:
@@ -754,7 +755,7 @@ graph_exclusion_exp.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp.GetXaxis().SetLimits(100.0, 700.0)
 graph_exclusion_exp.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
 graph_exclusion_exp.GetYaxis().SetRangeUser(0.05,1e7)
 graph_exclusion_exp.SetTitle("")
