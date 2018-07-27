@@ -33,6 +33,7 @@ Double_t xbins_time_lowT[6] = {-15.0, -0.7, 0.3, 0.8, 1.4, 15.0};
 Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 2.1, 10.0, 15.0};
 
 bool useLowTBinning = false;
+bool useBDT = false;
 
 float lumi = 31118.6; //pb^-1
 float NEvents_sig = 1.0;
@@ -89,18 +90,38 @@ std::string cut, cut_noHLT, cut_loose, cut_GJets;
 
 if(category == "2J")
 {
-cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2";
-cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+	if(!useBDT)
+	{
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 ";
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2 ";
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+	}
+	else
+	{
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && n_Photons == 2";
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 1 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+	}
 }
 
 else if(category == "3J")
 {
-cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && (HLTDecision[81] == 1) && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && ((pho1sumNeutralHadronEt/pho1Pt+pho1HoverE)*pho1E) < 6.0 && n_Photons == 2 && pho2passIsoLoose && pho2passEleVeto"; 
-cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2";
-cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+	if(!useBDT)
+	{
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2";
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+	}
+	else
+	{
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && n_Photons == 2";
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2";
+		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets < 3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)";
+	}
 }
 
 else

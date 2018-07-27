@@ -4,19 +4,19 @@ from Aux import *
 import numpy as np
 import array
 
-from config import lumi
-from config import outputDir
-#from config import limits_vs_lifetime
-#from config import mass_limits_vs_lifetime
-#from config import limits_vs_mass
-#from config import lifetime_limits_vs_mass
-from config import list_limits_vs_lifetime
-from config import list_limits_vs_mass
+from config_withBDT import lumi
+from config_withBDT import outputDir
+#from config_withBDT import limits_vs_lifetime
+#from config_withBDT import mass_limits_vs_lifetime
+#from config_withBDT import limits_vs_mass
+#from config_withBDT import lifetime_limits_vs_mass
+from config_withBDT import list_limits_vs_lifetime
+from config_withBDT import list_limits_vs_mass
 
-from config import exclusion_region_2D
-from config import grid_mass_exclusion_region_2D
-from config import grid_lambda_exclusion_region_2D
-from config import grid_lifetime_exclusion_region_2D
+from config_withBDT import exclusion_region_2D
+from config_withBDT import grid_mass_exclusion_region_2D
+from config_withBDT import grid_lambda_exclusion_region_2D
+from config_withBDT import grid_lifetime_exclusion_region_2D
 
 gROOT.SetBatch(True)
 
@@ -29,12 +29,12 @@ np.set_printoptions(linewidth=200)
 
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/limits")
-os.system("cp config.py "+outputDir+"/limits")
-os.system("cp LimitPlots.py "+outputDir+"/limits")
+os.system("cp config_withBDT.py "+outputDir+"/limits")
+os.system("cp LimitPlots_withBDT.py "+outputDir+"/limits")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 UseExpoInterp_time = False
-UseExpoInterp_lambda = True
+UseExpoInterp_lambda = False
 ManualSmooth = False
 
 axisTitleSize = 0.05
@@ -83,7 +83,7 @@ for list_this in list_limits_vs_lifetime:
 
 	for limit_lifetime in limits_vs_lifetime:
 		print "grid: "+limit_lifetime[0]
-		file_limit = TFile("../fit_results/datacards_3J/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
+		file_limit = TFile("../fit_results_withBDT/datacards_3J/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
 		limits = []
 		limitTree = file_limit.Get("limit")
 		for entry in limitTree:
@@ -258,7 +258,7 @@ for list_this in list_limits_vs_mass:
 
 	for limit_mass in limits_vs_mass:
 		print "grid: "+limit_mass[0]
-		file_limit = TFile("../fit_results/datacards_3J/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
+		file_limit = TFile("../fit_results_withBDT/datacards_3J/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
 		limits = []
 		limitTree = file_limit.Get("limit")
 		for entry in limitTree:
@@ -415,7 +415,7 @@ print r_obs_2d_grid
 
 for limit_2D in exclusion_region_2D:
 	#print "grid: "+limit_2D[0]
-	file_limit = TFile("../fit_results/datacards_3J/higgsCombine"+limit_2D[0]+".Asymptotic.mH120.root")
+	file_limit = TFile("../fit_results_withBDT/datacards_3J/higgsCombine"+limit_2D[0]+".Asymptotic.mH120.root")
 	limits = []
 	limitTree = file_limit.Get("limit")
 	for entry in limitTree:
@@ -756,7 +756,7 @@ graph_exclusion_exp.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp.GetXaxis().SetLimits(100.0, 700.0)
+graph_exclusion_exp.GetXaxis().SetLimits(100.0, 800.0)
 graph_exclusion_exp.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
 graph_exclusion_exp.GetYaxis().SetRangeUser(0.095,1e7)
 graph_exclusion_exp.SetTitle("")
@@ -806,7 +806,7 @@ graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 
 ####legend
-leg_2d_exclusion = TLegend(0.45,0.6,0.92,0.89)
+leg_2d_exclusion = TLegend(0.45,0.64,0.92,0.91)
 leg_2d_exclusion.SetBorderSize(0)
 leg_2d_exclusion.SetTextSize(0.03)
 leg_2d_exclusion.SetLineColor(1)
@@ -829,8 +829,8 @@ drawCMS2(myC2D, 13, lumi)
 
 
 #Lambda axis
-f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 485.557)
-A1_lambda = TGaxis(100.0, 0.0025,700.0,0.0025,"f1",1010)
+f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 554.33)
+A1_lambda = TGaxis(100.0, 0.0025,800.0,0.0025,"f1",1010)
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)

@@ -20,8 +20,8 @@ fileNameQCD = [
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
 		]	
-fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root'
-sigLegend = "signal (L350TeV-Ctau200cm)"
+fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L250TeV_Ctau200cm_13TeV-pythia8.root'
+sigLegend = "signal (L250TeV-Ctau200cm)"
 #fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GMSB_Ctau2190mm.root'
 #sigLegend = "GMSB (2190mm)"
 
@@ -30,8 +30,8 @@ lumi = 31118.6 #pb^-1
 xsecSig = 0.15 #pb 0.0015
 xsecGJets = [20790.0, 9238.0, 2305, 274.4, 93.46] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#Gamma_jets
 xsecQCD = [1712000, 347700, 32100, 6831, 1207, 119.9, 25.24] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#QCD
-fractionGJets = 0.4773 # from fit to SigmaIetaIeta
-fractionQCD = 0.5227 # from fit fo SigmaIetaIeta
+fractionGJets = 0.33 # from fit to SigmaIetaIeta
+fractionQCD = 0.67 # from fit fo SigmaIetaIeta
 useFraction = True
 scaleBkg = 1.0
 
@@ -57,7 +57,6 @@ cut_GJets_2J = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIs
 
 
 cut = cut_3J
-cut_noDisc = cut_3J
 cut_QCD_shape = cut_QCD_shape_3J
 cut_GJets_shape = cut_GJets_shape_3J
 cut_loose = cut_loose_3J
@@ -137,56 +136,54 @@ shapes.append(["n_Jets", "nJets", "number of jets", 15,-0.5,14.5])
 list_limits_vs_lifetime = []
 
 limits_vs_lifetime1 = []
-limits_vs_lifetime1.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.233382])
-limits_vs_lifetime1.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,   0.23534])
-limits_vs_lifetime1.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.23355])
-limits_vs_lifetime1.append(["L150TeV_Ctau400cm",   150.0, 212.1, 400.0,   0.231478])
-limits_vs_lifetime1.append(["L150TeV_Ctau600cm",   150.0, 212.1, 600.0,   0.234354])
-limits_vs_lifetime1.append(["L150TeV_Ctau800cm",   150.0, 212.1, 800.0,   0.230648])
-limits_vs_lifetime1.append(["L150TeV_Ctau1000cm",  150.0, 212.1, 1000.0,  0.233782])
-limits_vs_lifetime1.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.23179])
-limits_vs_lifetime1.append(["L150TeV_Ctau4000cm",  150.0, 212.1, 4000.0,  0.232156])
-limits_vs_lifetime1.append(["L150TeV_Ctau20000cm",  150.0, 212.1, 20000.0,  0.23179])
+limits_vs_lifetime1.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.217511])
+limits_vs_lifetime1.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,   0.21779])
+limits_vs_lifetime1.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.21779])
+limits_vs_lifetime1.append(["L150TeV_Ctau400cm",   150.0, 212.1, 400.0,   0.21779])
+limits_vs_lifetime1.append(["L150TeV_Ctau600cm",   150.0, 212.1, 600.0,   0.21713])
+limits_vs_lifetime1.append(["L150TeV_Ctau800cm",   150.0, 212.1, 800.0,   0.21713])
+limits_vs_lifetime1.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.217984])
+limits_vs_lifetime1.append(["L150TeV_Ctau4000cm",  150.0, 212.1, 4000.0,  0.217984])
+limits_vs_lifetime1.append(["L150TeV_Ctau20000cm",  150.0, 212.1, 20000.0,  0.217984])
 mass_limits_vs_lifetime1 = 212.1
 list_limits_vs_lifetime.append([mass_limits_vs_lifetime1, limits_vs_lifetime1])
 
 
 limits_vs_lifetime2 = []
-limits_vs_lifetime2.append(["L200TeV_Ctau0p01cm",   200.0, 284.8, 0.01,   0.0423612])
-limits_vs_lifetime2.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0428312])
-limits_vs_lifetime2.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0428514])
-limits_vs_lifetime2.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0428876])
-limits_vs_lifetime2.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0425632])
-limits_vs_lifetime2.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0424614])
-limits_vs_lifetime2.append(["L200TeV_Ctau400cm",   200.0, 284.8, 400.0,   0.0427252])
-limits_vs_lifetime2.append(["L200TeV_Ctau600cm",   200.0, 284.8, 600.0,   0.0431458])
-limits_vs_lifetime2.append(["L200TeV_Ctau800cm",   200.0, 284.8, 800.0,   0.0423242])
-limits_vs_lifetime2.append(["L200TeV_Ctau1000cm",   200.0, 284.8, 1000.0,   0.042969])
-limits_vs_lifetime2.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0422256])
-limits_vs_lifetime2.append(["L200TeV_Ctau20000cm",   200.0, 284.8, 20000.0,   0.0422256])
+limits_vs_lifetime2.append(["L200TeV_Ctau0p01cm",   200.0, 284.8, 0.01,   0.0401172])
+limits_vs_lifetime2.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0401172])
+limits_vs_lifetime2.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0401172])
+limits_vs_lifetime2.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0400735])
+limits_vs_lifetime2.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0400735])
+limits_vs_lifetime2.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0400735])
+limits_vs_lifetime2.append(["L200TeV_Ctau400cm",   200.0, 284.8, 400.0,   0.0400735])
+limits_vs_lifetime2.append(["L200TeV_Ctau600cm",   200.0, 284.8, 600.0,   0.0400124])
+limits_vs_lifetime2.append(["L200TeV_Ctau800cm",   200.0, 284.8, 800.0,   0.0400124])
+limits_vs_lifetime2.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0403603])
+limits_vs_lifetime2.append(["L200TeV_Ctau20000cm",   200.0, 284.8, 20000.0,   0.0403603])
 mass_limits_vs_lifetime2 = 284.8
 list_limits_vs_lifetime.append([mass_limits_vs_lifetime2, limits_vs_lifetime2])
 
 
 limits_vs_lifetime3 = []
-limits_vs_lifetime3.append(["L250TeV_Ctau0p01cm",   250.0, 357.5, 0.01,   0.0117573])
-limits_vs_lifetime3.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.011709])
-limits_vs_lifetime3.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0116892])
-limits_vs_lifetime3.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0117241])
-limits_vs_lifetime3.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0116602])
-limits_vs_lifetime3.append(["L250TeV_Ctau200cm",   250.0, 357.5, 200.0,   0.0118048])
-limits_vs_lifetime3.append(["L250TeV_Ctau400cm",  250.0, 357.5, 400.0,  0.0115646])
-limits_vs_lifetime3.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0116992])
+limits_vs_lifetime3.append(["L250TeV_Ctau0p01cm",   250.0, 357.5, 0.01,   0.0109216])
+limits_vs_lifetime3.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.0109216])
+limits_vs_lifetime3.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0109216])
+limits_vs_lifetime3.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0109236])
+limits_vs_lifetime3.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0109236])
+limits_vs_lifetime3.append(["L250TeV_Ctau200cm",   250.0, 357.5, 200.0,   0.0109236])
+limits_vs_lifetime3.append(["L250TeV_Ctau400cm",  250.0, 357.5, 400.0,  0.0109236])
+limits_vs_lifetime3.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0109279])
 mass_limits_vs_lifetime3 = 357.5
 list_limits_vs_lifetime.append([mass_limits_vs_lifetime3, limits_vs_lifetime3])
 
 limits_vs_lifetime4 = []
-limits_vs_lifetime4.append(["L300TeV_Ctau0p01cm",  300.0, 430.4, 0.01,  0.00414716])
-limits_vs_lifetime4.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00418322])
-limits_vs_lifetime4.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00410951])
-limits_vs_lifetime4.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.00414544])
-limits_vs_lifetime4.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.00418529])
-limits_vs_lifetime4.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.0041645])
+limits_vs_lifetime4.append(["L300TeV_Ctau0p01cm",  300.0, 430.4, 0.01,  0.00387135])
+limits_vs_lifetime4.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00387135])
+limits_vs_lifetime4.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00387135])
+limits_vs_lifetime4.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.0038706])
+limits_vs_lifetime4.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.0038706])
+limits_vs_lifetime4.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.00388035])
 mass_limits_vs_lifetime4 = 430.4
 list_limits_vs_lifetime.append([mass_limits_vs_lifetime4, limits_vs_lifetime4])
 
@@ -194,123 +191,113 @@ list_limits_vs_lifetime.append([mass_limits_vs_lifetime4, limits_vs_lifetime4])
 list_limits_vs_mass = []
 
 limits_vs_mass1 = []
-limits_vs_mass1.append(["L100TeV_Ctau1200cm", 100.0, 139.4, 1200.0, 2.09996])
-limits_vs_mass1.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.23179])
-limits_vs_mass1.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0422256])
+limits_vs_mass1.append(["L100TeV_Ctau1200cm", 100.0, 139.4, 1200.0, 2.10999])
+limits_vs_mass1.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.217984])
+limits_vs_mass1.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0403603])
 lifetime_limits_vs_mass1 = 1200.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass1, limits_vs_mass1])
 
 
 limits_vs_mass2 = []
-limits_vs_mass2.append(["L150TeV_Ctau600cm",   150.0, 212.1, 600.0,   0.234354])
-limits_vs_mass2.append(["L200TeV_Ctau600cm",   200.0, 284.8, 600.0,   0.0431458])
-limits_vs_mass2.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0116992])
-limits_vs_mass2.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.0041645])
+limits_vs_mass2.append(["L150TeV_Ctau600cm",   150.0, 212.1, 600.0,   0.21713])
+limits_vs_mass2.append(["L200TeV_Ctau600cm",   200.0, 284.8, 600.0,   0.0400124])
+limits_vs_mass2.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0109279])
+limits_vs_mass2.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.00388035])
 lifetime_limits_vs_mass2 = 600.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass2, limits_vs_mass2])
 
 
 limits_vs_mass3 = []
-limits_vs_mass3.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.23555])
-limits_vs_mass3.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0424614])
-limits_vs_mass3.append(["L250TeV_Ctau200cm",   250.0, 357.5, 200.0,   0.0118048])
-limits_vs_mass3.append(["L350TeV_Ctau200cm",   350.0, 503.4, 200.0,   0.00174708])
+limits_vs_mass3.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.21779])
+limits_vs_mass3.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0400735])
+limits_vs_mass3.append(["L250TeV_Ctau200cm",   250.0, 357.5, 200.0,   0.0109236])
+limits_vs_mass3.append(["L350TeV_Ctau200cm",   350.0, 503.4, 200.0,   0.00160427])
 lifetime_limits_vs_mass3 = 200.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass3, limits_vs_mass3])
 
 limits_vs_mass4 = []
-limits_vs_mass4.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.233382])
-limits_vs_mass4.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0428514])
-limits_vs_mass4.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0116892])
-limits_vs_mass4.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00410951])
+limits_vs_mass4.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.217511])
+limits_vs_mass4.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0401172])
+limits_vs_mass4.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0109216])
+limits_vs_mass4.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00387135])
 lifetime_limits_vs_mass4 = 5.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass4, limits_vs_mass4])
 
 limits_vs_mass5 = []
-limits_vs_mass5.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0428876])
-limits_vs_mass5.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0117241])
-limits_vs_mass5.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.00414544])
+limits_vs_mass5.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0400735])
+limits_vs_mass5.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0109236])
+limits_vs_mass5.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.0038706])
 lifetime_limits_vs_mass5 = 50.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass5, limits_vs_mass5])
 
 limits_vs_mass6 = []
-limits_vs_mass6.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,  0.23534])
-limits_vs_mass6.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0425632])
-limits_vs_mass6.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0116602])
-limits_vs_mass6.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.00418529])
+limits_vs_mass6.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,  0.21779])
+limits_vs_mass6.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0400735])
+limits_vs_mass6.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0109236])
+limits_vs_mass6.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.0038706])
 lifetime_limits_vs_mass6 = 100.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass6, limits_vs_mass6])
 
 
 limits_vs_mass7 = []
-limits_vs_mass7.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0428312])
-limits_vs_mass7.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.011709])
-limits_vs_mass7.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00418322])
-limits_vs_mass7.append(["L350TeV_Ctau0p1cm",  300.0, 503.4, 0.1,  0.00172168])
-limits_vs_mass7.append(["L400TeV_Ctau0p1cm",  300.0, 576.4, 0.1,  0.000798117])
+limits_vs_mass7.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0401172])
+limits_vs_mass7.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.0109216])
+limits_vs_mass7.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00387135])
+limits_vs_mass7.append(["L350TeV_Ctau0p1cm",  300.0, 503.4, 0.1,  0.00161162])
+limits_vs_mass7.append(["L400TeV_Ctau0p1cm",  300.0, 576.4, 0.1,  0.00073187])
 lifetime_limits_vs_mass7 = 0.1
 list_limits_vs_mass.append([lifetime_limits_vs_mass7, limits_vs_mass7])
-
-limits_vs_mass8 = []
-limits_vs_mass8.append(["L100TeV_Ctau1000cm", 100.0, 139.4, 1000.0, 2.08663])
-limits_vs_mass8.append(["L150TeV_Ctau1000cm",  150.0, 212.1, 1000.0,  0.233782])
-limits_vs_mass8.append(["L200TeV_Ctau1000cm",   200.0, 284.8, 1000.0,   0.042969])
-lifetime_limits_vs_mass8 = 1000.0
-list_limits_vs_mass.append([lifetime_limits_vs_mass8, limits_vs_mass8])
 
 
 
 exclusion_region_2D = []
-exclusion_region_2D.append(["L100TeV_Ctau1000cm", 100.0, 139.4, 1000.0, 2.08663])
-exclusion_region_2D.append(["L100TeV_Ctau1200cm", 100.0, 139.4, 1200.0, 2.09996])
-exclusion_region_2D.append(["L100TeV_Ctau4000cm", 100.0, 139.4, 4000.0, 2.08902])
-exclusion_region_2D.append(["L100TeV_Ctau20000cm", 100.0, 139.4, 20000.0, 2.09996])
-exclusion_region_2D.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.233382])
-exclusion_region_2D.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,   0.23534])
-exclusion_region_2D.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.23355])
-exclusion_region_2D.append(["L150TeV_Ctau400cm",   150.0, 212.1, 400.0,   0.231478])
-exclusion_region_2D.append(["L150TeV_Ctau600cm",   150.0, 212.1, 600.0,   0.234354])
-exclusion_region_2D.append(["L150TeV_Ctau800cm",   150.0, 212.1, 800.0,   0.230648])
-exclusion_region_2D.append(["L150TeV_Ctau1000cm",  150.0, 212.1, 1000.0,  0.233782])
-exclusion_region_2D.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.23179])
-exclusion_region_2D.append(["L150TeV_Ctau4000cm",  150.0, 212.1, 4000.0,  0.232156])
-exclusion_region_2D.append(["L150TeV_Ctau20000cm",  150.0, 212.1, 20000.0,  0.23179])
-exclusion_region_2D.append(["L200TeV_Ctau0p01cm",   200.0, 284.8, 0.01,   0.0423612])
-exclusion_region_2D.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0428312])
-exclusion_region_2D.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0428514])
-exclusion_region_2D.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0428876])
-exclusion_region_2D.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0425632])
-exclusion_region_2D.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0424614])
-exclusion_region_2D.append(["L200TeV_Ctau400cm",   200.0, 284.8, 400.0,   0.0427252])
-exclusion_region_2D.append(["L200TeV_Ctau600cm",   200.0, 284.8, 600.0,   0.0431458])
-exclusion_region_2D.append(["L200TeV_Ctau800cm",   200.0, 284.8, 800.0,   0.0423242])
-exclusion_region_2D.append(["L200TeV_Ctau1000cm",   200.0, 284.8, 1000.0,   0.042969])
-exclusion_region_2D.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0422256])
-exclusion_region_2D.append(["L200TeV_Ctau20000cm",   200.0, 284.8, 20000.0,   0.0422256])
-exclusion_region_2D.append(["L250TeV_Ctau0p01cm",   250.0, 357.5, 0.01,   0.0117573])
-exclusion_region_2D.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.011709])
-exclusion_region_2D.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0116892])
-exclusion_region_2D.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0117241])
-exclusion_region_2D.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0116602])
-exclusion_region_2D.append(["L250TeV_Ctau200cm",  250.0, 357.5, 200.0,  0.0118048])
-exclusion_region_2D.append(["L250TeV_Ctau400cm",   250.0, 357.5, 400.0,   0.0115646])
-exclusion_region_2D.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0116992])
-exclusion_region_2D.append(["L300TeV_Ctau0p01cm",  300.0, 430.4, 0.01,  0.00414716])
-exclusion_region_2D.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00418322])
-exclusion_region_2D.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00410951])
-exclusion_region_2D.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.00414544])
-exclusion_region_2D.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.00418529])
-exclusion_region_2D.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.0041645])
-exclusion_region_2D.append(["L350TeV_Ctau0p1cm",  350.0, 503.4, 0.1,  0.00172168])
-exclusion_region_2D.append(["L350TeV_Ctau200cm",  350.0, 503.4, 200.0,  0.00174708])
-exclusion_region_2D.append(["L400TeV_Ctau0p01cm",   400.0, 576.4, 0.01,   0.00079041])
-exclusion_region_2D.append(["L400TeV_Ctau0p1cm",   400.0, 576.4, 0.1,   0.000798117])
-exclusion_region_2D.append(["L400TeV_Ctau800cm",  400.0, 576.4, 800.0,  0.000793036])
+exclusion_region_2D.append(["L100TeV_Ctau1200cm", 100.0, 139.4, 1200.0, 2.10999])
+exclusion_region_2D.append(["L100TeV_Ctau4000cm", 100.0, 139.4, 4000.0, 2.10999])
+exclusion_region_2D.append(["L100TeV_Ctau20000cm", 100.0, 139.4, 20000.0, 2.10999])
+exclusion_region_2D.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.217511])
+exclusion_region_2D.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,   0.21779])
+exclusion_region_2D.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.21779])
+exclusion_region_2D.append(["L150TeV_Ctau400cm",   150.0, 212.1, 400.0,   0.21779])
+exclusion_region_2D.append(["L150TeV_Ctau600cm",   150.0, 212.1, 600.0,   0.21713])
+exclusion_region_2D.append(["L150TeV_Ctau800cm",   150.0, 212.1, 800.0,   0.21713])
+exclusion_region_2D.append(["L150TeV_Ctau1200cm",  150.0, 212.1, 1200.0,  0.217984])
+exclusion_region_2D.append(["L150TeV_Ctau4000cm",  150.0, 212.1, 4000.0,  0.217984])
+exclusion_region_2D.append(["L150TeV_Ctau20000cm",  150.0, 212.1, 20000.0,  0.217984])
+exclusion_region_2D.append(["L200TeV_Ctau0p01cm",   200.0, 284.8, 0.01,   0.0401172])
+exclusion_region_2D.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0401172])
+exclusion_region_2D.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0401172])
+exclusion_region_2D.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0400735])
+exclusion_region_2D.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0400735])
+exclusion_region_2D.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0400735])
+exclusion_region_2D.append(["L200TeV_Ctau400cm",   200.0, 284.8, 400.0,   0.0400735])
+exclusion_region_2D.append(["L200TeV_Ctau600cm",   200.0, 284.8, 600.0,   0.0400124])
+exclusion_region_2D.append(["L200TeV_Ctau800cm",   200.0, 284.8, 800.0,   0.0400124])
+exclusion_region_2D.append(["L200TeV_Ctau1200cm",   200.0, 284.8, 1200.0,   0.0403603])
+exclusion_region_2D.append(["L200TeV_Ctau20000cm",   200.0, 284.8, 20000.0,   0.0403603])
+exclusion_region_2D.append(["L250TeV_Ctau0p01cm",   250.0, 357.5, 0.01,   0.0109216])
+exclusion_region_2D.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.0109216])
+exclusion_region_2D.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0109216])
+exclusion_region_2D.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0109236])
+exclusion_region_2D.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0109236])
+exclusion_region_2D.append(["L250TeV_Ctau200cm",  250.0, 357.5, 200.0,  0.0109236])
+exclusion_region_2D.append(["L250TeV_Ctau400cm",   250.0, 357.5, 400.0,   0.0109236])
+exclusion_region_2D.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.0109279])
+exclusion_region_2D.append(["L300TeV_Ctau0p01cm",  300.0, 430.4, 0.01,  0.00387135])
+exclusion_region_2D.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00387135])
+exclusion_region_2D.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00387135])
+exclusion_region_2D.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.0038706])
+exclusion_region_2D.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.0038706])
+exclusion_region_2D.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.00388035])
+exclusion_region_2D.append(["L350TeV_Ctau0p1cm",  350.0, 503.4, 0.1,  0.00161162])
+exclusion_region_2D.append(["L350TeV_Ctau200cm",  350.0, 503.4, 200.0,  0.00160427])
+exclusion_region_2D.append(["L400TeV_Ctau0p1cm",   400.0, 576.4, 0.1,   0.00073187])
+exclusion_region_2D.append(["L400TeV_Ctau0p01cm",   400.0, 576.4, 0.01,   0.00073187])
+exclusion_region_2D.append(["L400TeV_Ctau800cm",  400.0, 576.4, 800.0,  0.000728273])
 
-grid_mass_exclusion_region_2D = [0.0, 139.4, 212.1, 284.8, 357.5, 430.4, 503.4]#, 576.4]
-grid_lambda_exclusion_region_2D = [0.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0]#, 400.0]
+grid_mass_exclusion_region_2D = [0.0, 139.4, 212.1, 284.8, 357.5, 430.4]#, 503.4, 576.4]
+grid_lambda_exclusion_region_2D = [0.0, 100.0, 150.0, 200.0, 250.0, 300.0]#, 350.0, 400.0]
 #grid_lifetime_exclusion_region_2D = [20000.0, 4000.0, 1200.0, 1000.0, 800.0, 600.0, 400.0, 200.0, 100.0, 60.0, 50.0, 25.0, 10.0, 5.0, 1.0, 0.5, 0.1, 0.01, 0.0]
-grid_lifetime_exclusion_region_2D = [4000.0, 1200.0, 1000.0, 800.0, 600.0, 400.0, 200.0, 100.0, 50.0, 5.0, 0.1, 0.01, 0.0]
+grid_lifetime_exclusion_region_2D = [4000.0, 1200.0, 800.0, 600.0, 400.0, 200.0, 100.0, 50.0, 5.0, 0.1, 0.01, 0.0]
 
 
 #############################input files to skim script#####################

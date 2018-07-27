@@ -84,10 +84,12 @@ RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTi
 	RooRealVar fitVar ( varName, varTitle, varLow, varHigh, varUnit);	
 	//RooRealVar nGJets ("nGJets", "nGJets", 5835.0, 0.5*5835.0, 1.5*5835.0);
 	//RooRealVar nGJets ("nGJets", "nGJets", 5800.0, 0.0, tree->GetEntries());	
-	RooRealVar nGJets ("nGJets", "nGJets", 0.5, 0.0001, 10000.0);	
+	//RooRealVar nGJets ("nGJets", "nGJets", 0.5, 0.0001, 10000.0);	
+	RooRealVar nGJets ("nGJets", "nGJets", 0.5, 0.0001, 0.5*h1_Data->Integral());	
 	//RooRealVar nQCD ("nQCD", "nQCD", 3500.0, 0.5*3500, 1.5*3500.0);
 	//RooRealVar nQCD ("nQCD", "nQCD", 3500.0, 0.0, tree->GetEntries());	
-	RooRealVar nQCD ("nQCD", "nQCD", 0.5, 0.0001, 10000.0);	
+	//RooRealVar nQCD ("nQCD", "nQCD", 0.5, 0.0001, 10000.0);	
+	RooRealVar nQCD ("nQCD", "nQCD", 0.5, 0.0001, 0.5*h1_Data->Integral());	
 
 
 	// Import data

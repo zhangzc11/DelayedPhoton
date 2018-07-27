@@ -1,8 +1,8 @@
 from ROOT import *
 import os, sys
 from Aux import *
-from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 import numpy as np
 import array
 
@@ -13,8 +13,8 @@ gStyle.SetOptFit(111)
 
 os.system("mkdir -p "+outputDir+"/stack")
 os.system("mkdir -p "+outputDir+"/stack")
-os.system("cp config.py "+outputDir+"/stack")
-os.system("cp StackPlots.py "+outputDir+"/stack")
+os.system("cp config_noBDT.py "+outputDir+"/stack")
+os.system("cp StackPlots_noBDT.py "+outputDir+"/stack")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 axisTitleSize = 0.06
