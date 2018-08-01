@@ -1,7 +1,7 @@
 from ROOT import *
 import os, sys
 #sys.path.insert(0, '../')
-from config import *
+from config_noBDT import *
 
 gROOT.SetBatch(True)
 
@@ -71,6 +71,7 @@ for i in range(0,len(fileNameGJetsSkim)):
 	outputTree = inputTree.CopyTree(cut_skim_bkg)
 	NEvents_out.Write()
 	outputTree.Write()
+'''
 for i in range(0,len(fileNameQCDSkim)):
 	print "QCD file "+str(i)+"  ... "
 	fileThis = TFile(fileNameQCDSkim[i].replace("private_REMINIAOD/withcut","private_REMINIAOD/withcut_BDT_train"), "READ")
@@ -82,4 +83,3 @@ for i in range(0,len(fileNameQCDSkim)):
 	outputTree = inputTree.CopyTree(cut_skim_bkg)
 	outputTree.Write()
 	NEvents_out.Write()
-'''

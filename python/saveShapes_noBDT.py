@@ -2,10 +2,10 @@ from ROOT import TFile, TH1F, TLegend, TCanvas, TPad, gROOT, gStyle, TChain, TCo
 import ROOT
 import os, sys
 from Aux import drawCMS, drawCMS2
-from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config import scaleBkg
-from config import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes
-from config import cut_GJets_shape_3J, cut_QCD_shape_3J
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config_noBDT import scaleBkg
+from config_noBDT import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes
+from config_noBDT import cut_GJets_shape_3J, cut_QCD_shape_3J
 
 
 gROOT.SetBatch(True)
@@ -13,10 +13,10 @@ gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(111)
 
-os.system("mkdir -p ../data")
+os.system("mkdir -p ../data_noBDT")
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/shapes")
-os.system("cp config.py "+outputDir)
+os.system("cp config_noBDT.py "+outputDir)
 os.system("cp saveShapes.py "+outputDir)
 #os.system("mkdir -p ../data")
 #################shape settings###########################
@@ -100,7 +100,7 @@ weightedcut_GJets_shape_3J = "(weight*pileupWeight) * " + cut_GJets_shape_3J
 
 
 print "now working on 2J category: "
-fileOut_2J = TFile("../data/shapes_2J.root","RECREATE")
+fileOut_2J = TFile("../data_noBDT/shapes_2J.root","RECREATE")
 fileOut_2J.cd()
 
 for shape in shapes:
@@ -124,11 +124,11 @@ for shape in shapes:
 	histQCD = TH1F(shape[1]+"_histQCD","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeQCD)):
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_2J))
-		#normQCD = NEventsQCD[i] * 1.0  
+		normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
 		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_2J)
-		#if histThis.Integral()>10:
-		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
+		if histThis.Integral()>10:
+			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -143,11 +143,11 @@ for shape in shapes:
 	histGJets = TH1F(shape[1]+"_histGJets","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeGJets)):
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_2J))
-		#normGJets = NEventsGJets[i] * 1.0  
+		normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
 		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_2J)
-		#if histThis.Integral()>10:
-		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
+		if histThis.Integral()>10:
+			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -198,7 +198,7 @@ for shape in shapes:
         myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_2J.C")
 
 
-fileOut_3J = TFile("../data/shapes_3J.root","RECREATE")
+fileOut_3J = TFile("../data_noBDT/shapes_3J.root","RECREATE")
 fileOut_3J.cd()
 
 
@@ -225,11 +225,11 @@ for shape in shapes:
 	histQCD = TH1F(shape[1]+"_histQCD","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeQCD)):
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_3J))
-		#normQCD = NEventsQCD[i] * 1.0  
+		normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
 		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_3J)
-		#if histThis.Integral()>10:
-		#	histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
+		if histThis.Integral()>10:
+			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -244,11 +244,11 @@ for shape in shapes:
 	histGJets = TH1F(shape[1]+"_histGJets","",shape[3],shape[4],shape[5])	
 	for i in range(0, len(treeGJets)):
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_3J))
-		#normGJets = NEventsGJets[i] * 1.0  
+		normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
 		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_3J)
-		#if histThis.Integral()>10:
-		#	histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
+		if histThis.Integral()>10:
+			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()

@@ -8,12 +8,12 @@ import array
 gROOT.SetBatch(True)
 
 
+cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
 
-
-cut_tight_3J_2G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2'
-cut_tight_3J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1)'
-cut_tight_2J_2G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 1 && (HLTDecision[81] == 1) && n_Photons == 2'
-cut_tight_2J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 1 && (HLTDecision[81] == 1)'
+cut_tight_3J_2G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2'+cut_MET_filter
+cut_tight_3J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1)'+cut_MET_filter
+cut_tight_2J_2G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 1 && (HLTDecision[81] == 1) && n_Photons == 2'+cut_MET_filter
+cut_tight_2J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 1 && (HLTDecision[81] == 1)'+cut_MET_filter
 
 
 cut_BDT_tight = 'disc > 0.10'
