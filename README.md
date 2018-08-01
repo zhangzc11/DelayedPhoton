@@ -28,7 +28,7 @@ Run the analysis step by step
 -----------------------------
 ```
 cd python
-python skim.py
+python skim_noBDT.py
 ```
 
 -----------------------------
@@ -36,7 +36,7 @@ python skim.py
 -----------------------------
 ```
 cd python 
-python saveShapes.py
+python saveShapes_noBDT.py
 ```
 
 -----------------------------
@@ -49,17 +49,18 @@ python saveShapes.py
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \
-datacard > log.log
+datacard \
+no > log.log
 ```
-make sure that you put the signal cross sections in data/XsecBR.dat file
-and open the log.log file, search for 'result of fit with SigmaIetaIeta', remember the two fraction numbers and put them in python/config.py (fractionGJets and fractionQCD)
+make sure that you put the signal cross sections in data_noBDT/XsecBR.dat file
+and open the log.log file, search for 'result of fit with SigmaIetaIeta', remember the two fraction numbers and put them in python/config_noBDT.py (fractionGJets and fractionQCD)
 
 -----------------------------
 4. draw the control plots
 -----------------------------
 ```
 cd python
-python StackPlots.py
+python StackPlots_noBDT.py
 ```
 
 -----------------------------
@@ -75,7 +76,7 @@ combine DelayedPhotonCard_L350TeV_Ctau200cm.txt -M Asymptotic -n L350TeV_Ctau200
 -----------------------------
 ```
 cd python
-python LimitPlots.py
+python LimitPlots_noBDT.py
 ```
 -----------------------------
 7. (optional) bias test
@@ -88,6 +89,7 @@ python LimitPlots.py
 "signal (L100-Ctau1000)" \
 3J \
 bias \
+no \
 0.000 \
 10000 > log_bias.log
 ```
