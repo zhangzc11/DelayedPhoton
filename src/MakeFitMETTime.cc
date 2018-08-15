@@ -909,6 +909,7 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg,
 	std::string _outDataCardsDir ((const char*) outDataCardsDir);
 	
 	FILE * m_outfile = fopen(("fit_results/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "w");
+	cout<<"Writting fit result to datacard: "<<("fit_results/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
 	fprintf(m_outfile, "imax 1\n");
 	fprintf(m_outfile, "jmax 1\n");
 	fprintf(m_outfile, "kmax *\n");
@@ -927,7 +928,7 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg,
 	fprintf(m_outfile, "rate            %10.6f          %6.2f\n", N_sig, N_bkg);
 	fprintf(m_outfile, "--------------------------------\n");
 	//fprintf(m_outfile, "lumi     lnN    1.057      1.057\n");
-	
+	fclose(m_outfile);	
 };
 
 void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString outDataCardsDir, TString sysName, TString distType)
@@ -938,9 +939,12 @@ void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString ou
         std::string _outDataCardsDir ((const char*) outDataCardsDir);
 
         FILE * m_outfile = fopen(("fit_results/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "a");
+	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	cout<<"N_bkg: "<<N_bkg<<"   N_sig:  "<<N_sig<<endl;
 	if(N_sig > 0.001 && N_bkg > 0.001) fprintf(m_outfile, "%s   %s   %10.6f   %10.6f\n", _sysName.c_str(), _distType.c_str(), N_sig, N_bkg); // for both signal and backgrounds
 	else if(N_sig > 0.001) fprintf(m_outfile, "%s   %s   %10.6f   -\n", _sysName.c_str(), _distType.c_str(), N_sig); //for signal only
 	else if(N_bkg > 0.001) fprintf(m_outfile, "%s   %s   -      %10.6f\n", _sysName.c_str(), _distType.c_str(), N_bkg); //for background only
+	fclose(m_outfile);	
 }
 
 void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float SoverB, int ntoys, TString modelName, float lumi, TString outBiasDir)
