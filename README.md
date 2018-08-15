@@ -67,7 +67,7 @@ python StackPlots_noBDT.py
 5. run the combine limit tool
 -----------------------------
 ```
-cd fit_results/datacards/
+cd fit_results/datacards_3J_noBDT/
 combine DelayedPhotonCard_L350TeV_Ctau200cm.txt -M Asymptotic -n L350TeV_Ctau200cm
 ```
 
