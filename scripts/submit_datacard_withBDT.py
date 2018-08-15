@@ -2,7 +2,7 @@
 
 import subprocess, time, sys, os, shlex
 
-inputData = "/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_32p0742ifb.root"
+inputData = "/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_32p0955ifb.root"
 
 queue = "cmscaf1nh"
 
