@@ -106,7 +106,9 @@ for plot in splots:
 	thisStack_GJets = THStack(plot[1]+"_stack_GJets",plot[1]+"_stack_GJets")
 	thisStack_QCD = THStack(plot[1]+"_stack_QCD",plot[1]+"_stack_QCD")
 	thisStack_CR = THStack(plot[1]+"_stack_CR",plot[1]+"_stack_CR")
+	thisStack_CR_reweight = THStack(plot[1]+"_stack_CR_reweight",plot[1]+"_stack_CR_reweight")
 	thisStack_GJets_CR = THStack(plot[1]+"_stack_GJets_CR",plot[1]+"_stack_GJets_CR")
+	thisStack_GJets_CR_reweight = THStack(plot[1]+"_stack_GJets_CR_reweight",plot[1]+"_stack_GJets_CR_reweight")
 	thisStack_QCD_CR = THStack(plot[1]+"_stack_QCD_CR",plot[1]+"_stack_QCD_CR")
 	#data
 	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut))
@@ -147,6 +149,7 @@ for plot in splots:
 		histMC = TH1F(plot[1]+"_histMC","",len(xbins_MET)-1, np.array(xbins_MET))
 	'''
 	histMC_CR = TH1F(plot[1]+"_histMC_CR","",plot[3],plot[4],plot[5])
+	histMC_CR_reweight = TH1F(plot[1]+"_histMC_CR_reweight","",plot[3],plot[4],plot[5])
 	'''
 	if plot[0]=="pho1ClusterTime":
 		histMC_CR = TH1F(plot[1]+"_histMC_CR","",len(xbins_time)-1, np.array(xbins_time))
@@ -258,6 +261,23 @@ for plot in splots:
 	histGJets_CR.SetLineColor(kAzure + 7)
 		
 	
+	#GJets, data-driven, after sumET reweight
+	histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",plot[3],plot[4],plot[5])	
+	'''
+	if plot[0]=="pho1ClusterTime":
+		histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",len(xbins_time)-1, np.array(xbins_time))
+	if plot[0]=="MET":
+		histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",len(xbins_MET)-1, np.array(xbins_MET))
+	'''
+	treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets+")")
+	if useFraction:
+		#histGJets_CR_reweight.Scale(histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
+		histGJets_CR_reweight.Scale(histData.Integral()*0.5498/histGJets_CR_reweight.Integral())
+	else:
+		histGJets_CR_reweight.Scale(histGJets.Integral()/histGJets_CR_reweight.Integral())
+	histGJets_CR_reweight.SetFillColor(kAzure + 7)
+	histGJets_CR_reweight.SetLineColor(kAzure + 7)
+	
 	#QCD, data-driven
 	histQCD_CR = TH1F(plot[1]+"_histQCD_CR","",plot[3],plot[4],plot[5])	
 	'''
@@ -283,15 +303,20 @@ for plot in splots:
 	thisStack_QCD.Add(histQCD,"histo")
 
 	thisStack_CR.Add(histGJets_CR, "histo")
+	thisStack_CR_reweight.Add(histGJets_CR_reweight, "histo")
 	thisStack_GJets_CR.Add(histGJets_CR, "histo")
+	thisStack_GJets_CR_reweight.Add(histGJets_CR_reweight, "histo")
 	thisStack_CR.Add(histQCD_CR,"histo")
+	thisStack_CR_reweight.Add(histQCD_CR,"histo")
 	thisStack_QCD_CR.Add(histQCD_CR,"histo")
 
 
 	histMC.Add(histGJets)
 	histMC.Add(histQCD)
 
+	histMC_CR_reweight.Add(histGJets_CR_reweight)
 	histMC_CR.Add(histGJets_CR)
+	histMC_CR_reweight.Add(histQCD_CR)
 	histMC_CR.Add(histQCD_CR)
 	
 	#save histograms to file
@@ -498,6 +523,90 @@ for plot in splots:
 	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven.pdf")
 	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven.png")
 	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven.C")
+
+	#control plots with data driven QCD and GJets	
+	leg_CR_reweight = TLegend(0.18, 0.7, 0.93, 0.89)
+	leg_CR_reweight.SetNColumns(3)
+	leg_CR_reweight.SetBorderSize(0)
+	leg_CR_reweight.SetTextSize(0.03)
+	leg_CR_reweight.SetLineColor(1)
+	leg_CR_reweight.SetLineStyle(1)
+	leg_CR_reweight.SetLineWidth(1)
+	leg_CR_reweight.SetFillColor(0)
+	leg_CR_reweight.SetFillStyle(1001)
+	leg_CR_reweight.AddEntry(histData, "data","lep")
+	leg_CR_reweight.AddEntry(histDataOOT, "data - OOT photon","lep")
+	if plot[6]:
+		leg_CR_reweight.AddEntry(histSig, sigLegend)
+	else:
+		leg_CR_reweight.AddEntry(histSig, sigLegend)
+
+	leg_CR_reweight.AddEntry(histGJets_CR_reweight, "#gamma + jets (control)", "f")
+	leg_CR_reweight.AddEntry(histQCD_CR, "QCD (control)", "f")
+
+	pad1.SetLogy(plot[6])
+	pad1.Draw()
+
+	pad2.SetGridy()
+	pad2.Draw()
+		
+	pad1.cd()
+	thisStack_CR_reweight.SetTitle("")
+	thisStack_CR_reweight.Draw("hist")
+	thisStack_CR_reweight.GetXaxis().SetTitleSize( axisTitleSize )
+  	thisStack_CR_reweight.GetXaxis().SetTitleOffset( axisTitleOffset )
+  	thisStack_CR_reweight.GetYaxis().SetTitleSize( axisTitleSize )
+  	thisStack_CR_reweight.GetYaxis().SetTitleOffset( axisTitleOffset )
+	thisStack_CR_reweight.GetYaxis().SetTitle("events")
+	if plot[6]:
+		thisStack_CR_reweight.SetMaximum(200*max(histData.GetMaximum(), thisStack_CR_reweight.GetMaximum(),histSig.GetMaximum())  )
+		thisStack_CR_reweight.SetMinimum(0.1)
+	else:
+		thisStack_CR_reweight.SetMaximum(1.5*max(histData.GetMaximum(), thisStack_CR_reweight.GetMaximum(),histSig.GetMaximum())  )
+		thisStack_CR_reweight.SetMinimum(0)
+		
+	pad1.Update()
+	histSig.Draw("samehisto")
+	histData.Draw("sameE")	
+	histDataOOT.Draw("sameE")	
+	leg_CR_reweight.Draw()
+		
+	pad2.cd()
+	ratio_CR_reweight = TH1F(plot[1]+"_histRatio_CR_reweight","",plot[3],plot[4],plot[5])
+	'''
+	if plot[0]=="pho1ClusterTime":
+		ratio_CR_reweight = TH1F(plot[1]+"_histRatio_CR_reweight","",len(xbins_time)-1, np.array(xbins_time))
+	if plot[0]=="MET":
+		ratio_CR_reweight = TH1F(plot[1]+"_histRatio_CR_reweight","",len(xbins_MET)-1, np.array(xbins_MET))
+	'''
+	ratio_CR_reweight.Add(histData)
+	ratio_CR_reweight.Divide(histMC_CR_reweight)
+	ratio_CR_reweight.SetMarkerStyle( 20 )
+	ratio_CR_reweight.GetXaxis().SetTitleSize( axisTitleSizeRatioX )
+	ratio_CR_reweight.GetXaxis().SetLabelSize( axisLabelSizeRatioX )
+	ratio_CR_reweight.GetXaxis().SetTitleOffset( axisTitleOffsetRatioX )
+	ratio_CR_reweight.GetYaxis().SetTitleSize( axisTitleSizeRatioY )
+	ratio_CR_reweight.GetYaxis().SetLabelSize( axisLabelSizeRatioY )
+	ratio_CR_reweight.GetYaxis().SetTitleOffset( axisTitleOffsetRatioY )
+	ratio_CR_reweight.SetMarkerColor( kBlue )
+	ratio_CR_reweight.SetLineColor( kBlue )
+	ratio_CR_reweight.GetYaxis().SetRangeUser( 0.0, 2.5 )
+	ratio_CR_reweight.SetTitle("")
+	ratio_CR_reweight.GetYaxis().SetTitle("data / bkg")
+	ratio_CR_reweight.GetYaxis().CenterTitle( True )
+	ratio_CR_reweight.GetYaxis().SetNdivisions( 5, False )
+	ratio_CR_reweight.SetStats( 0 )
+	ratio_CR_reweight.Draw("E")
+	ratio_CR_reweight.GetXaxis().SetTitle(plot[2])
+	pad1.Update()
+	pad2.Update()
+
+	drawCMS(myC, 13, lumi)	
+
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven_reweight.pdf")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven_reweight.png")
+	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven_reweight.C")
+
 
 	#closure test, GJets
 	leg_GJets_CR = TLegend(0.18, 0.7, 0.93, 0.89)

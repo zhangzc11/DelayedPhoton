@@ -96,3 +96,10 @@ L400TeV_Ctau1000cm -nan -nan 1.0 -nan -nan
 L400TeV_Ctau1200cm -nan -nan 1.0 -nan -nan
 L400TeV_Ctau1400cm -nan -nan 1.0 -nan -nan
 L400TeV_Ctau20000cm -nan -nan 1.0 -nan -nan
+L100TeV_Ctau4000cm 2.08902 0.0139021 1.0 2.08902 0.0139021
+L150TeV_Ctau4000cm 0.232156 0.00144465 1.0 0.232156 0.00144465
+L200TeV_Ctau4000cm -nan -nan 1.0 -nan -nan
+L250TeV_Ctau4000cm -nan -nan 1.0 -nan -nan
+L300TeV_Ctau4000cm -nan -nan 1.0 -nan -nan
+L350TeV_Ctau4000cm -nan -nan 1.0 -nan -nan
+L400TeV_Ctau4000cm -nan -nan 1.0 -nan -nan

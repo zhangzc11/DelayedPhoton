@@ -3,37 +3,38 @@
 ########################################################
 
 #######################input trees######################
-fileNameData = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_32p0742ifb.root'
+fileNameData = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_32p0955ifb.root'
 fileNameGJets = [
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
 		]
 fileNameQCD = [
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
 		]	
-fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root'
+fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root'
 sigLegend = "signal (L350TeV-Ctau200cm)"
-#fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_GMSB_Ctau2190mm.root'
+#fileNameSig = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_GMSB_Ctau2190mm.root'
 #sigLegend = "GMSB (2190mm)"
 
 ################lumi and cross sections#################
-lumi = 32074.2 #pb^-1
+lumi = 32095.5 #pb^-1
 xsecSig = 0.15 #pb 0.0015
 xsecGJets = [20790.0, 9238.0, 2305, 274.4, 93.46] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#Gamma_jets
 xsecQCD = [1712000, 347700, 32100, 6831, 1207, 119.9, 25.24] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#QCD
-fractionGJets = 0.5106 # from fit to SigmaIetaIeta
-fractionQCD = 0.4894 # from fit fo SigmaIetaIeta
+fractionGJets = 0.5247 # from fit to SigmaIetaIeta
+fractionQCD = 0.4753 # from fit fo SigmaIetaIeta
 useFraction = True
 scaleBkg = 1.0
+timeShift = 0.297
 
 ###############cuts and outputs########################
 cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
@@ -77,6 +78,11 @@ xbins_time = [-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1
 
 splots = []
 #variable name in the tree, output plot file name, description/title, Nbins, lowX, upX, useLogy
+splots.append(["MET", "MET_linear", "#slash{E}_{T} [GeV]", 100,0,800, False])
+splots.append(["MET", "MET_log", "#slash{E}_{T} [GeV]", 100,0,800, True])
+splots.append(["sumMET", "sumMET_linear", "#Sigma E_{T} [GeV]", 100,0,8000, False])
+splots.append(["sumMET", "sumMET_log", "#Sigma E_{T} [GeV]", 100,0,8000, True])
+
 splots.append(["pho1SigmaIetaIeta", "phoSigmaIetaIeta_linear", "#sigma_{i#eta i#eta}", 100,0.005,0.025, False])
 splots.append(["pho1SigmaIetaIeta", "phoSigmaIetaIeta_log", "#sigma_{i#eta i#eta}", 100,0.005,0.025, True])
 
@@ -84,8 +90,6 @@ splots.append(["pho1ClusterTime", "phoTimeCluster_noSmear_linear", "#gamma clust
 splots.append(["pho1ClusterTime", "phoTimeCluster_noSmear_log", "#gamma cluster time [ns]", 100,-15,15, True])
 splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_linear", "#gamma cluster time [ns]", 100,-15,15, False])
 splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_log", "#gamma cluster time [ns]", 100,-15,15, True])
-splots.append(["MET", "MET_linear", "#slash{E}_{T} [GeV]", 100,0,800, False])
-splots.append(["MET", "MET_log", "#slash{E}_{T} [GeV]", 100,0,800, True])
 
 splots.append(["pho1Sminor/pho1Smajor", "SminorOverSmajor_linear", "S_{minor}/S_{major}", 50,0,1.1, False])
 splots.append(["pho1Sminor/pho1Smajor", "SminorOverSmajor_log", "S_{minor}/S_{major}", 50,0,1.1, True])
@@ -140,6 +144,7 @@ list_limits_vs_lifetime = []
 
 limits_vs_lifetime1 = []
 limits_vs_lifetime1.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.233382])
+limits_vs_lifetime1.append(["L150TeV_Ctau50cm",   150.0, 212.1, 50.0,   0.233429])
 limits_vs_lifetime1.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,   0.23534])
 limits_vs_lifetime1.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.23355])
 limits_vs_lifetime1.append(["L150TeV_Ctau400cm",   150.0, 212.1, 400.0,   0.231478])
@@ -229,6 +234,7 @@ lifetime_limits_vs_mass4 = 5.0
 list_limits_vs_mass.append([lifetime_limits_vs_mass4, limits_vs_mass4])
 
 limits_vs_mass5 = []
+limits_vs_mass5.append(["L150TeV_Ctau50cm",   150.0, 212.1, 50.0,   0.233429])
 limits_vs_mass5.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0428876])
 limits_vs_mass5.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0117241])
 limits_vs_mass5.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.00414544])
@@ -263,11 +269,14 @@ list_limits_vs_mass.append([lifetime_limits_vs_mass8, limits_vs_mass8])
 
 
 exclusion_region_2D = []
+exclusion_region_2D.append(["L100TeV_Ctau10cm", 100.0, 139.4, 10.0, 2.07166])
 exclusion_region_2D.append(["L100TeV_Ctau1000cm", 100.0, 139.4, 1000.0, 2.08663])
 exclusion_region_2D.append(["L100TeV_Ctau1200cm", 100.0, 139.4, 1200.0, 2.09996])
 exclusion_region_2D.append(["L100TeV_Ctau4000cm", 100.0, 139.4, 4000.0, 2.08902])
 exclusion_region_2D.append(["L100TeV_Ctau20000cm", 100.0, 139.4, 20000.0, 2.09996])
 exclusion_region_2D.append(["L150TeV_Ctau5cm",   150.0, 212.1, 5.0,   0.233382])
+exclusion_region_2D.append(["L150TeV_Ctau50cm",   150.0, 212.1, 50.0,   0.233429])
+exclusion_region_2D.append(["L150TeV_Ctau10cm",   150.0, 212.1, 10.0,   0.23281])
 exclusion_region_2D.append(["L150TeV_Ctau100cm",   150.0, 212.1, 100.0,   0.23534])
 exclusion_region_2D.append(["L150TeV_Ctau200cm",   150.0, 212.1, 200.0,   0.23355])
 exclusion_region_2D.append(["L150TeV_Ctau400cm",   150.0, 212.1, 400.0,   0.231478])
@@ -280,6 +289,7 @@ exclusion_region_2D.append(["L150TeV_Ctau20000cm",  150.0, 212.1, 20000.0,  0.23
 exclusion_region_2D.append(["L200TeV_Ctau0p01cm",   200.0, 284.8, 0.01,   0.0423612])
 exclusion_region_2D.append(["L200TeV_Ctau0p1cm",   200.0, 284.8, 0.1,   0.0428312])
 exclusion_region_2D.append(["L200TeV_Ctau5cm",   200.0, 284.8, 5.0,   0.0428514])
+exclusion_region_2D.append(["L200TeV_Ctau10cm",   200.0, 284.8, 10.0,   0.0428512])
 exclusion_region_2D.append(["L200TeV_Ctau50cm",   200.0, 284.8, 50.0,   0.0428876])
 exclusion_region_2D.append(["L200TeV_Ctau100cm",   200.0, 284.8, 100.0,   0.0425632])
 exclusion_region_2D.append(["L200TeV_Ctau200cm",   200.0, 284.8, 200.0,   0.0424614])
@@ -292,6 +302,7 @@ exclusion_region_2D.append(["L200TeV_Ctau20000cm",   200.0, 284.8, 20000.0,   0.
 exclusion_region_2D.append(["L250TeV_Ctau0p01cm",   250.0, 357.5, 0.01,   0.0117573])
 exclusion_region_2D.append(["L250TeV_Ctau0p1cm",   250.0, 357.5, 0.1,   0.011709])
 exclusion_region_2D.append(["L250TeV_Ctau5cm",   250.0, 357.5, 5.0,   0.0116892])
+exclusion_region_2D.append(["L250TeV_Ctau10cm",   250.0, 357.5, 10.0,   0.0118188])
 exclusion_region_2D.append(["L250TeV_Ctau50cm",   250.0, 357.5, 50.0,   0.0117241])
 exclusion_region_2D.append(["L250TeV_Ctau100cm",   250.0, 357.5, 100.0,   0.0116602])
 exclusion_region_2D.append(["L250TeV_Ctau200cm",  250.0, 357.5, 200.0,  0.0118048])
@@ -300,6 +311,7 @@ exclusion_region_2D.append(["L250TeV_Ctau600cm",  250.0, 357.5, 600.0,  0.011699
 exclusion_region_2D.append(["L300TeV_Ctau0p01cm",  300.0, 430.4, 0.01,  0.00414716])
 exclusion_region_2D.append(["L300TeV_Ctau0p1cm",  300.0, 430.4, 0.1,  0.00418322])
 exclusion_region_2D.append(["L300TeV_Ctau5cm",  300.0, 430.4, 5.0,  0.00410951])
+exclusion_region_2D.append(["L300TeV_Ctau10cm",  300.0, 430.4, 10.0,  0.00413536])
 exclusion_region_2D.append(["L300TeV_Ctau50cm",  300.0, 430.4, 50.0,  0.00414544])
 exclusion_region_2D.append(["L300TeV_Ctau100cm",  300.0, 430.4, 100.0,  0.00418529])
 exclusion_region_2D.append(["L300TeV_Ctau600cm",  300.0, 430.4, 600.0,  0.0041645])
@@ -309,10 +321,10 @@ exclusion_region_2D.append(["L400TeV_Ctau0p01cm",   400.0, 576.4, 0.01,   0.0007
 exclusion_region_2D.append(["L400TeV_Ctau0p1cm",   400.0, 576.4, 0.1,   0.000798117])
 exclusion_region_2D.append(["L400TeV_Ctau800cm",  400.0, 576.4, 800.0,  0.000793036])
 
-grid_mass_exclusion_region_2D = [0.0, 139.4, 212.1, 284.8, 357.5, 430.4, 503.4]#, 576.4]
-grid_lambda_exclusion_region_2D = [0.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0]#, 400.0]
+grid_mass_exclusion_region_2D = [0.0, 139.4, 212.1, 284.8, 357.5, 430.4, 503.4, 576.4]
+grid_lambda_exclusion_region_2D = [0.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0]
 #grid_lifetime_exclusion_region_2D = [20000.0, 4000.0, 1200.0, 1000.0, 800.0, 600.0, 400.0, 200.0, 100.0, 60.0, 50.0, 25.0, 10.0, 5.0, 1.0, 0.5, 0.1, 0.01, 0.0]
-grid_lifetime_exclusion_region_2D = [4000.0, 1200.0, 1000.0, 800.0, 600.0, 400.0, 200.0, 100.0, 50.0, 5.0, 0.1, 0.01, 0.0]
+grid_lifetime_exclusion_region_2D = [4000.0, 1200.0, 1000.0, 800.0, 600.0, 400.0, 200.0, 100.0, 50.0, 10.0, 5.0, 0.1, 0.01, 0.0]
 
 
 #############################input files to skim script#####################
@@ -355,6 +367,7 @@ fileNameSigSkim = [
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L100TeV_Ctau4000cm_13TeV-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L100TeV_Ctau20000cm_13TeV-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L150TeV_Ctau5cm_13TeV-pythia8.root',
+		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L150TeV_Ctau50cm_13TeV-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L150TeV_Ctau10cm_13TeV-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L150TeV_Ctau100cm_13TeV-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/withcut/GMSB_L150TeV_Ctau200cm_13TeV-pythia8.root',
