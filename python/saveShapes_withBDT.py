@@ -13,7 +13,7 @@ gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 gStyle.SetOptFit(111)
 
-os.system("mkdir -p ../data_withBDT")
+os.system("mkdir -p ../data")
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/shapes")
 os.system("cp config_withBDT.py "+outputDir)
@@ -100,7 +100,7 @@ weightedcut_GJets_shape_3J = "(weight*pileupWeight) * " + cut_GJets_shape_3J
 
 
 print "now working on 2J category: "
-fileOut_2J = TFile("../data_withBDT/shapes_2J.root","RECREATE")
+fileOut_2J = TFile("../data/shapes_2J_withBDT.root","RECREATE")
 fileOut_2J.cd()
 
 for shape in shapes:
@@ -198,7 +198,7 @@ for shape in shapes:
         myC.SaveAs(outputDir+"/shapes/shapes_"+shape[1]+"_2J.C")
 
 
-fileOut_3J = TFile("../data_withBDT/shapes_3J.root","RECREATE")
+fileOut_3J = TFile("../data/shapes_3J_withBDT.root","RECREATE")
 fileOut_3J.cd()
 
 

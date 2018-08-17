@@ -35,7 +35,6 @@ print "GJets tree: "
 print fileNameGJetsSkim
 print "QCD tree: "
 print fileNameQCDSkim
-'''
 for i in range(0,len(fileNameDataSkim)):
 	print "Data file "+str(i)+"  ... "
 	fileThis = TFile(fileNameDataSkim[i], "READ")
@@ -81,3 +80,4 @@ for i in range(0,len(fileNameQCDSkim)):
 	outputTree = inputTree.CopyTree(cut_skim_bkg)
 	outputTree.Write()
 	NEvents_out.Write()
+'''

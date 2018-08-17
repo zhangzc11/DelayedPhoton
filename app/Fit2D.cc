@@ -35,7 +35,7 @@ Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 2.1, 10.0, 15.0};
 bool useLowTBinning = false;
 bool useBDT = true;
 
-float lumi = 32095.5; //pb^-1
+float lumi = 19608.81; //pb^-1
 float NEvents_sig = 1.0;
 bool _useToy = true;
 
@@ -273,12 +273,11 @@ NEvents_sig = h1_NEvents_sig->GetBinContent(1);
 
 std::cout<<"reading shape file......"<<endl;
 std::string shape_file_name;
-if (category=="2J" && useBDT) shape_file_name = "data_withBDT/shapes_2J.root";
-if (category=="2J" && !useBDT) shape_file_name = "data_noBDT/shapes_2J.root";
-if (category=="3J" && useBDT) shape_file_name = "data_withBDT/shapes_3J.root";
-if (category=="3J" && !useBDT) shape_file_name = "data_noBDT/shapes_3J.root";
+if (category=="2J" && useBDT) shape_file_name = "data/shapes_2J_withBDT.root";
+if (category=="2J" && !useBDT) shape_file_name = "data/shapes_2J_noBDT.root";
+if (category=="3J" && useBDT) shape_file_name = "data/shapes_3J_withBDT.root";
+if (category=="3J" && !useBDT) shape_file_name = "data/shapes_3J_noBDT.root";
 
-//TFile *file_shape = new TFile((category=="2J") ? (useBDT ? "data_withBDT/shapes_2J.root" : "data_noBDT/shapes_2J.root") : (useBDT ? "data_withBDT/shapes_3J.root" : "data_noBDT/shapes_3J.root","READ"));
 TFile *file_shape = new TFile(shape_file_name.c_str());
 
 mkdir("fit_results", S_IRWXU | S_IRWXG | S_IRWXO);

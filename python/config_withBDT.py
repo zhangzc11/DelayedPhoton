@@ -3,7 +3,7 @@
 ########################################################
 
 #######################input trees######################
-fileNameData = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_32p0955ifb.root'
+fileNameData = '/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root'
 fileNameGJets = [
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/DelayedPhoton_GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
 		'/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/DelayedPhoton_GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
@@ -26,7 +26,7 @@ sigLegend = "signal (L350TeV-Ctau200cm)"
 #sigLegend = "GMSB (2190mm)"
 
 ################lumi and cross sections#################
-lumi = 32095.5 #pb^-1
+lumi = 19608.81 #pb^-1
 xsecSig = 0.15 #pb 0.0015
 xsecGJets = [20790.0, 9238.0, 2305, 274.4, 93.46] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#Gamma_jets
 xsecQCD = [1712000, 347700, 32100, 6831, 1207, 119.9, 25.24] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#QCD
@@ -71,7 +71,7 @@ cut_GJets = cut_GJets_3J
 cut_skim = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 cut_skim_bkg = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 
-outputDir = '/afs/cern.ch/user/z/zhicaiz/www/sharebox/DelayedPhoton/10July2018_withBDT/'
+outputDir = '/afs/cern.ch/user/z/zhicaiz/www/sharebox/DelayedPhoton/17Aug2018_withBDT/'
 
 ############define the plot you want to make##########
 ##for stack plots

@@ -44,7 +44,7 @@ python saveShapes_noBDT.py
 -----------------------------
 ```
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
@@ -52,7 +52,7 @@ python saveShapes_noBDT.py
 datacard \
 no > log.log
 ```
-make sure that you put the signal cross sections in data_noBDT/XsecBR.dat file
+make sure that you put the signal cross sections in data/XsecBR.dat file
 and open the log.log file, search for 'result of fit with SigmaIetaIeta', remember the two fraction numbers and put them in python/config_noBDT.py (fractionGJets and fractionQCD)
 
 -----------------------------
@@ -83,7 +83,7 @@ python LimitPlots_noBDT.py
 -----------------------------
 ```
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016BCDEFGH_GoodLumi_31p389ifb.root \
+/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
 /eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
