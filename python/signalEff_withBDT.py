@@ -140,7 +140,7 @@ print_eff_table(cut_tight_3J_1G)
 
 f2=open(tableFileName, 'a') 
 print >> f2, "------------------------------------------------"
-print >> f2, "cut_tight_2J_2G withBDT"
+print >> f2, "cut_tight_2J_2G with BDT"
 print >> f2, "------------------------------------------------"
 print_eff_table(cut_tight_2J_2G)
 

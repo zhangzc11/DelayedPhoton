@@ -83,7 +83,7 @@ for list_this in list_limits_vs_lifetime:
 
 	for limit_lifetime in limits_vs_lifetime:
 		print "grid: "+limit_lifetime[0]
-		file_limit = TFile("../fit_results_smear_reweight/datacards_3J_noBDT/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
+		file_limit = TFile("../fit_results/datacards_3J_noBDT/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
 		limits = []
 		limitTree = file_limit.Get("limit")
 		for entry in limitTree:
@@ -258,7 +258,7 @@ for list_this in list_limits_vs_mass:
 
 	for limit_mass in limits_vs_mass:
 		print "grid: "+limit_mass[0]
-		file_limit = TFile("../fit_results_smear_reweight/datacards_3J_noBDT/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
+		file_limit = TFile("../fit_results/datacards_3J_noBDT/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
 		limits = []
 		limitTree = file_limit.Get("limit")
 		for entry in limitTree:
@@ -415,7 +415,7 @@ print r_obs_2d_grid
 
 for limit_2D in exclusion_region_2D:
 	#print "grid: "+limit_2D[0]
-	file_limit = TFile("../fit_results_smear_reweight/datacards_3J_noBDT/higgsCombine"+limit_2D[0]+".Asymptotic.mH120.root")
+	file_limit = TFile("../fit_results/datacards_3J_noBDT/higgsCombine"+limit_2D[0]+".Asymptotic.mH120.root")
 	limits = []
 	limitTree = file_limit.Get("limit")
 	for entry in limitTree:

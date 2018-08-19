@@ -66,7 +66,7 @@ def smear_file(inFileName, histWeight):
 	inTree = inFile.Get("DelayedPhoton")
 	inNevents = inFile.Get("NEvents")
 
-	outFile = root.TFile(inFileName.replace('skim_smear','skim_smear_then_reweight'), 'RECREATE')
+	outFile = root.TFile(inFileName.replace('GoodLumi','GoodLumi_reweight'), 'RECREATE')
 	outTree = inTree.CloneTree(0)
 
 	s = MyStruct()
@@ -222,4 +222,4 @@ myC.SaveAs(outputDir+"/stack/sumMET_CR_and_SR_in_GJetsMC.C")
 
 
 ###now do the smear
-#smear_file(fileNameData.replace('skim_noBDT','skim_smear'), hist_weight)
+smear_file(fileNameData, hist_weight)
