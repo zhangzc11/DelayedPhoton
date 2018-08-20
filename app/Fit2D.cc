@@ -110,7 +110,7 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float xsec = getXsecBR(sigModelName); //pb
 std::string treeName = "DelayedPhoton";
 
-std::string cut, cut_noHLT, cut_loose, cut_GJets, cut_MET_filter;
+std::string cut, cut_JESUp, cut_JESDown, cut_noHLT, cut_loose, cut_GJets, cut_MET_filter;
 
 cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
@@ -119,6 +119,8 @@ if(category == "2J")
 	if(!useBDT)
 	{
 		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
 		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2 " + cut_MET_filter;
 		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
@@ -126,6 +128,8 @@ if(category == "2J")
 	else
 	{
 		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && n_Photons == 2" + cut_MET_filter;
 		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 1 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
@@ -137,6 +141,8 @@ else if(category == "3J")
 	if(!useBDT)
 	{
 		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2" + cut_MET_filter;
 		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
@@ -144,6 +150,8 @@ else if(category == "3J")
 	else
 	{
 		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && n_Photons == 2" + cut_MET_filter;
 		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets < 3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
@@ -587,8 +595,8 @@ tree_data->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinData", cut.c_str());
 tree_data->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinGJets", cut_GJets.c_str());
 tree_data->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
 tree_signal->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
-tree_signal->Draw("MET_JESUp:pho1ClusterTime_SmearToData>>h2newbinSig_JESUp", ("weight*pileupWeight * ( "+cut+" )").c_str());
-tree_signal->Draw("MET_JESDown:pho1ClusterTime_SmearToData>>h2newbinSig_JESDown", ("weight*pileupWeight * ( "+cut+" )").c_str());
+tree_signal->Draw("MET_JESUp:pho1ClusterTime_SmearToData>>h2newbinSig_JESUp", ("weight*pileupWeight * ( "+cut_JESUp+" )").c_str());
+tree_signal->Draw("MET_JESDown:pho1ClusterTime_SmearToData>>h2newbinSig_JESDown", ("weight*pileupWeight * ( "+cut_JESDown+" )").c_str());
 
 tree_data->Draw("pho1ClusterTime_SmearToData>>h1newbinData_time", cut.c_str());
 tree_signal->Draw("pho1ClusterTime_SmearToData>>h1newbinSig_time", ("weight*pileupWeight * ( "+cut+" )").c_str());
@@ -724,7 +732,7 @@ if(fitMode == "datacard")
 	//datacards
 	MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected, outDataCardsDir);
 	//********systematics*********//
-	AddSystematics_Norm(_sigModelName, 0.0, 1.026, outDataCardsDir, "lumi", "lnN");	
+	AddSystematics_Norm(_sigModelName, 0.0, 1.025, outDataCardsDir, "lumi", "lnN");	//https://hypernews.cern.ch/HyperNews/CMS/get/luminosity/688.html
 	//JES
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "JES", "shapeN2");	
 		
