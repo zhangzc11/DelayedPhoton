@@ -11,13 +11,34 @@
 #include <TH2F.h>
 #include <TFractionFitter.h>
 //ROOFIT INCLUDES
-#include <RooRealVar.h>
 #include <RooWorkspace.h>
 #include <RooDataSet.h>
+#include <RooRealVar.h>
+#include <RooExponential.h>
+#include <RooAddPdf.h>
+#include <RooGaussian.h>
+#include <RooMinimizer.h>
+#include <RooFitResult.h>
+#include <RooPlot.h>
+#include <RooExtendPdf.h>
+#include <RooStats/SPlot.h>
+#include <RooStats/ModelConfig.h>
+#include <RooGenericPdf.h>
+#include <RooFormulaVar.h>
+#include <RooBernstein.h>
+#include <RooMinuit.h>
+#include <RooNLLVar.h>
+#include <RooRandom.h>
+#include <RooDataHist.h>
+#include <RooHistPdf.h>
+#include <RooParamHistFunc.h>
+#include <RooRealSumPdf.h>
+#include <RooHistFunc.h>
+#include <RooRealVar.h>
 #include <RooAbsPdf.h>
 //LOCAL INCLUDES
 
-RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTitle, TString varUnit, float varLow, float varHigh, TH1F * h1_GJets, TH1F * h1_QCD, TString outPlotsDir = "plots_3J");
+RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTitle, TString varUnit, float lumi, float varLow, float varHigh, TH1F * h1_GJets, TH1F * h1_QCD, TString outPlotsDir = "plots_3J");
 
 TFractionFitter* FitDataBkgFractionFilter(TH1F * h1_data, TH1F * h1_GJets, TH1F * h1_QCD);
 
@@ -26,7 +47,7 @@ RooWorkspace* Fit2DMETTimeDataBkg( TTree * treeData, TTree * treeGJets, TTree * 
 RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  float fracGJets, float fracGJetsErr, float fracQCD, float fracQCDErr, TString outPlotsDir = "plots_3J"); 
 
 RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  TH2F * h2Sig, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy = true, TString outPlotsDir = "plots_3J"); 
-RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy = true, TString outPlotsDir = "plots_3J"); 
+RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float lumi, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy = true, TString outPlotsDir = "plots_3J"); 
 
 void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float SoverB, int ntoys, TString modelName, float lumi, TString outBiasDir = "bias_3J"); 
 
@@ -35,6 +56,7 @@ double CalculateMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig);
 
 void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg, float N_sig, TString outDataCardsDir = "datacards_3J");
 void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString outDataCardsDir, TString sysName, TString distType);
+void AddSystematics_shape(TString modelName, TString N_bkg, TString N_sig, TString outDataCardsDir, TString sysName, TString distType);
 
 void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName, TString ourBinningDir = "binning_3J");
 

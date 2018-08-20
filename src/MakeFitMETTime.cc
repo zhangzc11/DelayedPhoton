@@ -28,31 +28,6 @@
 #include <Math/DistFunc.h>
 #include <TFractionFitter.h>
 #include <TRandom3.h>
-//ROOFIT INCLUDES
-#include <RooWorkspace.h>
-#include <RooDataSet.h>
-#include <RooRealVar.h>
-#include <RooExponential.h>
-#include <RooAddPdf.h>
-#include <RooGaussian.h>
-#include <RooMinimizer.h>
-#include <RooFitResult.h>
-#include <RooPlot.h>
-#include <RooExtendPdf.h>
-#include <RooStats/SPlot.h>
-#include <RooStats/ModelConfig.h>
-#include <RooGenericPdf.h>
-#include <RooFormulaVar.h>
-#include <RooBernstein.h>
-#include <RooMinuit.h>
-#include <RooNLLVar.h>
-#include <RooRandom.h>
-#include <RooDataHist.h>
-#include <RooHistPdf.h>
-#include <RooParamHistFunc.h>
-#include <RooRealSumPdf.h>
-#include <RooHistFunc.h>
-//#include <RealVar.h>
 //LOCAL INCLUDES
 #include "MakeFitMETTime.hh"
 #include "Aux.hh"
@@ -76,7 +51,7 @@ const float bottomMargin = 0.12;
 
 using namespace std;
 
-RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTitle, TString varUnit, float varLow, float varHigh, TH1F * h1_GJets, TH1F * h1_QCD, TString outPlotsDir)
+RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTitle, TString varUnit, float lumi, float varLow, float varHigh, TH1F * h1_GJets, TH1F * h1_QCD, TString outPlotsDir)
 {
 	RooWorkspace* ws = new RooWorkspace( "ws", "" );
 
@@ -150,7 +125,8 @@ RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTi
         myC->SetFrameBorderMode(0);
 
 	myC->SetLogy(1);
-
+	
+	frame->SetTitle("");
 	frame->SetMaximum(150.0*frame->GetMaximum());
 	frame->SetMinimum(0.1);
 	frame->Draw();
@@ -169,6 +145,7 @@ RooWorkspace* FitDataBkgFraction( TH1F * h1_Data, TString varName, TString varTi
 	leg->AddEntry("plot_all","combined fit","l");
 	leg->Draw();
 
+	DrawCMS(myC, 13, lumi);
      	myC->SetTitle("");
         myC->SaveAs("fit_results/"+outPlotsDir+"/bkg_yield_fit_"+varName+".pdf");
         myC->SaveAs("fit_results/"+outPlotsDir+"/bkg_yield_fit_"+varName+".png");
@@ -760,7 +737,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 
 
 
-RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy, TString outPlotsDir)
+RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float lumi,float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy, TString outPlotsDir)
 {
 	RooWorkspace* ws = new RooWorkspace( "ws_combine", "ws_combine" );
 	// define variables
@@ -840,6 +817,7 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 	
 	frame_bin->SetMaximum(1000.0*frame_bin->GetMaximum());
 	frame_bin->SetMinimum(1e-3);
+	frame_bin->SetTitle("");
 	frame_bin->Draw();
 
 	TLegend * leg_bin = new TLegend(0.18, 0.7, 0.93, 0.89);
@@ -856,6 +834,8 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 	leg_bin->AddEntry("bin_Sig",modelTitle,"l");
 	leg_bin->AddEntry("bin_all","combined fit","l");
 	leg_bin->Draw();
+
+	DrawCMS(myC, 13, lumi);
 
      	myC->SetTitle("");
         myC->SaveAs("fit_results/"+outPlotsDir+"/"+modelName+"_fit_bkgsig_bin.pdf");
@@ -946,6 +926,24 @@ void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString ou
 	else if(N_bkg > 0.001) fprintf(m_outfile, "%s   %s   -      %10.6f\n", _sysName.c_str(), _distType.c_str(), N_bkg); //for background only
 	fclose(m_outfile);	
 }
+
+void AddSystematics_shape(TString modelName, TString N_bkg, TString N_sig, TString outDataCardsDir, TString sysName, TString distType)
+{
+        std::string _modelName ((const char*) modelName);
+        std::string _N_bkg ((const char*) N_bkg);
+        std::string _N_sig ((const char*) N_sig);
+        std::string _sysName ((const char*) sysName);
+        std::string _distType ((const char*) distType);
+        std::string _outDataCardsDir ((const char*) outDataCardsDir);
+
+        FILE * m_outfile = fopen(("fit_results/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "a");
+	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	cout<<"N_bkg: "<<N_bkg<<"   N_sig:  "<<N_sig<<endl;
+	fprintf(m_outfile, "%s   %s   %s   %s\n", _sysName.c_str(), _distType.c_str(), _N_sig.c_str(), _N_bkg.c_str());
+	fclose(m_outfile);	
+}
+
+
 
 void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float SoverB, int ntoys, TString modelName, float lumi, TString outBiasDir)
 {

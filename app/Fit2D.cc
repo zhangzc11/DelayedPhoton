@@ -303,7 +303,7 @@ h1_SigmaIetaIeta_GJets->Scale((1.0*h1_SigmaIetaIeta_Data->Integral())/h1_SigmaIe
 h1_SigmaIetaIeta_QCD->Scale((1.0*h1_SigmaIetaIeta_Data->Integral())/h1_SigmaIetaIeta_QCD->Integral());
 
 RooWorkspace * w_frac_SigmaIetaIeta;
-w_frac_SigmaIetaIeta = FitDataBkgFraction(h1_SigmaIetaIeta_Data, "pho1SigmaIetaIeta", "#sigma_{i#etai#eta}", "", 0.005, 0.025, h1_SigmaIetaIeta_GJets, h1_SigmaIetaIeta_QCD, outPlotsDir);
+w_frac_SigmaIetaIeta = FitDataBkgFraction(h1_SigmaIetaIeta_Data, "pho1SigmaIetaIeta", "#sigma_{i#etai#eta}", "", lumi, 0.005, 0.025, h1_SigmaIetaIeta_GJets, h1_SigmaIetaIeta_QCD, outPlotsDir);
 w_frac_SigmaIetaIeta->Write("w_frac_SigmaIetaIeta");
 
 float nGJets_value_SigmaIetaIeta = w_frac_SigmaIetaIeta->var("nGJets")->getValV();
@@ -334,7 +334,7 @@ if(doAllBkgFracFit)
 	h1_sigmaEOverE_QCD->Scale((1.0*h1_sigmaEOverE_Data->Integral())/h1_sigmaEOverE_QCD->Integral());
 
 	RooWorkspace * w_frac_sigmaEOverE;
-	w_frac_sigmaEOverE = FitDataBkgFraction(h1_sigmaEOverE_Data, "pho1sigmaEOverE", "#sigma_{E}/E", "", 0., 0.5, h1_sigmaEOverE_GJets, h1_sigmaEOverE_QCD);
+	w_frac_sigmaEOverE = FitDataBkgFraction(h1_sigmaEOverE_Data, "pho1sigmaEOverE", "#sigma_{E}/E", "", lumi, 0., 0.5, h1_sigmaEOverE_GJets, h1_sigmaEOverE_QCD);
 	w_frac_sigmaEOverE->Write("w_frac_sigmaEOverE");
 
 	float nGJets_value_sigmaEOverE = w_frac_sigmaEOverE->var("nGJets")->getValV();
@@ -362,7 +362,7 @@ if(doAllBkgFracFit)
 	h1_Smajor_QCD->Scale((1.0*h1_Smajor_Data->Integral())/h1_Smajor_QCD->Integral());
 
 	RooWorkspace * w_frac_Smajor;
-	w_frac_Smajor = FitDataBkgFraction(h1_Smajor_Data, "pho1Smajor", "S_{major}", "", 0., 1.0, h1_Smajor_GJets, h1_Smajor_QCD);
+	w_frac_Smajor = FitDataBkgFraction(h1_Smajor_Data, "pho1Smajor", "S_{major}", "", lumi, 0., 1.0, h1_Smajor_GJets, h1_Smajor_QCD);
 	w_frac_Smajor->Write("w_frac_Smajor");
 
 	float nGJets_value_Smajor = w_frac_Smajor->var("nGJets")->getValV();
@@ -396,7 +396,7 @@ if(doAllBkgFracFit)
 	h1_nJets_QCD->Scale((1.0*h1_nJets_Data->Integral())/h1_nJets_QCD->Integral());
 
 	RooWorkspace * w_frac_nJets;
-	w_frac_nJets = FitDataBkgFraction(h1_nJets_Data, "nJets", "number of jets", "", -0.5, 14.5, h1_nJets_GJets, h1_nJets_QCD);
+	w_frac_nJets = FitDataBkgFraction(h1_nJets_Data, "nJets", "number of jets", "", lumi, -0.5, 14.5, h1_nJets_GJets, h1_nJets_QCD);
 	w_frac_nJets->Write("w_frac_nJets");
 
 	float nGJets_value_nJets = w_frac_nJets->var("nGJets")->getValV();
@@ -424,7 +424,7 @@ if(doAllBkgFracFit)
 	h1_Pt_QCD->Scale((1.0*h1_Pt_Data->Integral())/h1_Pt_QCD->Integral());
 
 	RooWorkspace * w_frac_Pt;
-	w_frac_Pt = FitDataBkgFraction(h1_Pt_Data, "pho1Pt", "p_{T}^{#gamma}", "GeV", 50., 1500, h1_Pt_GJets, h1_Pt_QCD);
+	w_frac_Pt = FitDataBkgFraction(h1_Pt_Data, "pho1Pt", "p_{T}^{#gamma}", "GeV", lumi, 50., 1500, h1_Pt_GJets, h1_Pt_QCD);
 	w_frac_Pt->Write("w_frac_Pt");
 
 	float nGJets_value_Pt = w_frac_Pt->var("nGJets")->getValV();
@@ -563,6 +563,8 @@ TH2F * h2newbinBkg = new TH2F("h2newbinBkg","; #gamma cluster time (ns); #slash{
 TH2F * h2newbinGJets = new TH2F("h2newbinGJets","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 TH2F * h2newbinQCD = new TH2F("h2newbinQCD","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 TH2F * h2newbinSig = new TH2F("h2newbinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinSig_JESUp = new TH2F("h2newbinSig_JESUp","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinSig_JESDown = new TH2F("h2newbinSig_JESDown","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 
 TH1F * h1newbinData_time = new TH1F("h1newbinData_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
 TH1F * h1newbinData_toy_time = new TH1F("h1newbinData_toy_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
@@ -585,6 +587,8 @@ tree_data->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinData", cut.c_str());
 tree_data->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinGJets", cut_GJets.c_str());
 tree_data->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
 tree_signal->Draw("MET:pho1ClusterTime_SmearToData>>h2newbinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
+tree_signal->Draw("MET_JESUp:pho1ClusterTime_SmearToData>>h2newbinSig_JESUp", ("weight*pileupWeight * ( "+cut+" )").c_str());
+tree_signal->Draw("MET_JESDown:pho1ClusterTime_SmearToData>>h2newbinSig_JESDown", ("weight*pileupWeight * ( "+cut+" )").c_str());
 
 tree_data->Draw("pho1ClusterTime_SmearToData>>h1newbinData_time", cut.c_str());
 tree_signal->Draw("pho1ClusterTime_SmearToData>>h1newbinSig_time", ("weight*pileupWeight * ( "+cut+" )").c_str());
@@ -597,10 +601,14 @@ tree_data->Draw("MET>>h1newbinGJets_MET", cut_GJets.c_str());
 tree_data->Draw("MET>>h1newbinQCD_MET", (cut_loose + " && ! (" + cut + ")").c_str());
 
 float N_sig_expected = 1.0*lumi*xsec*h2newbinSig->Integral()/(1.0*NEvents_sig);
+float N_sig_expected_JESUp = 1.0*lumi*xsec*h2newbinSig_JESUp->Integral()/(1.0*NEvents_sig);
+float N_sig_expected_JESDown = 1.0*lumi*xsec*h2newbinSig_JESDown->Integral()/(1.0*NEvents_sig);
 
 h2newbinGJets->Scale((1.0*h2newbinData->Integral()*frac_GJets)/(1.0*h2newbinGJets->Integral()));
 h2newbinQCD->Scale((1.0*h2newbinData->Integral()*frac_QCD)/(1.0*h2newbinQCD->Integral()));
 h2newbinSig->Scale((1.0*N_sig_expected)/(1.0*h2newbinSig->Integral()));
+h2newbinSig_JESUp->Scale((1.0*N_sig_expected_JESUp)/(1.0*h2newbinSig_JESUp->Integral()));
+h2newbinSig_JESDown->Scale((1.0*N_sig_expected_JESDown)/(1.0*h2newbinSig_JESDown->Integral()));
 
 h1newbinGJets_time->Scale((1.0*h1newbinData_time->Integral()*frac_GJets)/(1.0*h1newbinGJets_time->Integral()));
 h1newbinQCD_time->Scale((1.0*h1newbinData_time->Integral()*frac_QCD)/(1.0*h1newbinQCD_time->Integral()));
@@ -617,6 +625,8 @@ TH1F * h1combineBkg = new TH1F("h1combineBkg","h1combineBkg", Nbins_total , 0, N
 TH1F * h1combineGJets = new TH1F("h1combineGJets","h1combineGJets", Nbins_total , 0, Nbins_total);
 TH1F * h1combineQCD = new TH1F("h1combineQCD","h1combineQCD", Nbins_total , 0, Nbins_total);
 TH1F * h1combineSig = new TH1F("h1combineSig","h1combineSig", Nbins_total , 0, Nbins_total);
+TH1F * h1combineSig_JESUp = new TH1F("h1combineSig_JESUp","h1combineSig_JESUp", Nbins_total , 0, Nbins_total);
+TH1F * h1combineSig_JESDown = new TH1F("h1combineSig_JESDown","h1combineSig_JESDown", Nbins_total , 0, Nbins_total);
 
 for(int i=1;i<=Nbins_MET;i++)
 {
@@ -628,6 +638,8 @@ for(int i=1;i<=Nbins_MET;i++)
 		h1combineQCD->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i));	
 		h1combineBkg->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i) + h2newbinGJets->GetBinContent(j,i));
 		h1combineSig->SetBinContent(thisBin, h2newbinSig->GetBinContent(j,i));	
+		h1combineSig_JESUp->SetBinContent(thisBin, h2newbinSig_JESUp->GetBinContent(j,i));	
+		h1combineSig_JESDown->SetBinContent(thisBin, h2newbinSig_JESDown->GetBinContent(j,i));	
 	}
 }
 
@@ -636,8 +648,12 @@ for(int i=1; i<=Nbins_total; i++)
 	//float ndata = h1combineData->GetBinContent(i);
 	float nbkg = h1combineBkg->GetBinContent(i);
 	float nsig = h1combineSig->GetBinContent(i);
+	float nsig_JESUp = h1combineSig_JESUp->GetBinContent(i);
+	float nsig_JESDown = h1combineSig_JESDown->GetBinContent(i);
 	if(nbkg < 1e-3 ) h1combineBkg->SetBinContent(i, 1e-3);
 	if(nsig < 1e-3 ) h1combineSig->SetBinContent(i, 1e-3);
+	if(nsig_JESUp < 1e-3 ) h1combineSig_JESUp->SetBinContent(i, 1e-3);
+	if(nsig_JESDown < 1e-3 ) h1combineSig_JESDown->SetBinContent(i, 1e-3);
 }
 
 cout<<"convert 2D to 1D (integral 2D/1D): "<<h2newbinData->Integral()<<" / "<<h1combineData->Integral()<<endl;
@@ -677,8 +693,18 @@ if(fitMode == "datacard")
 	cout<<"GJets: int = "<<h1combineGJets->Integral()<<endl;
 	cout<<"QCD: int = "<<h1combineQCD->Integral()<<endl;
 	cout<<"Sig: int = "<<h1combineSig->Integral()<<endl;
+	cout<<"Sig_JESUp: int = "<<h1combineSig_JESUp->Integral()<<endl;
+	cout<<"Sig_JESDown: int = "<<h1combineSig_JESDown->Integral()<<endl;
 	
-	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy, outPlotsDir);
+	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy, outPlotsDir);
+	//JESUp shape
+	RooDataHist* rhSig_JESUp = new RooDataHist("rhSig_JESUp", "rhSig_JESup", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESUp);
+	RooHistPdf * rpSig_JESUp = new RooHistPdf("rpSig_JESUp", "rpSig_JESUp", RooArgSet(*ws_combine->var("bin")), *rhSig_JESUp, 0);
+	ws_combine->import(*rpSig_JESUp);	
+	//JESDown shape
+	RooDataHist* rhSig_JESDown = new RooDataHist("rhSig_JESDown", "rhSig_JESup", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESDown);
+	RooHistPdf * rpSig_JESDown = new RooHistPdf("rpSig_JESDown", "rpSig_JESDown", RooArgSet(*ws_combine->var("bin")), *rhSig_JESDown, 0);
+	ws_combine->import(*rpSig_JESDown);	
 
 	ws_combine->SetName("ws_combine");
 	ws_combine->Write("ws_combine");
@@ -697,9 +723,11 @@ if(fitMode == "datacard")
 	
 	//datacards
 	MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected, outDataCardsDir);
-	//systematics
+	//********systematics*********//
 	AddSystematics_Norm(_sigModelName, 0.0, 1.026, outDataCardsDir, "lumi", "lnN");	
-	
+	//JES
+	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "JES", "shapeN2");	
+		
 	//save the histograms
 	h1combineData_toy = ws_combine->data("data_toy")->createHistogram("bin", Nbins_total);
 	
