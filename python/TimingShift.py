@@ -42,7 +42,7 @@ def properScale(hist):
 ####load data
 cut = "mass>75 && mass <105 && ele1Pt>30 && ele2Pt>30 && ele1IsEB && ele2IsEB"
 
-file_2016B = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016B.root")
+file_2016B = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016B.root")
 tree_2016B = file_2016B.Get("ZeeTiming")
 hist_2016B = TH1F("hist_2016B","hist_2016B",100,-1.5,1.5)
 tree_2016B.Draw("t1>>hist_2016B",cut)
@@ -52,7 +52,7 @@ hist_2016B.SetLineColor(kRed-5)
 properScale(hist_2016B)
 
 
-file_2016C = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016C.root")
+file_2016C = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016C.root")
 tree_2016C = file_2016C.Get("ZeeTiming")
 hist_2016C = TH1F("hist_2016C","hist_2016C",100,-1.5,1.5)
 tree_2016C.Draw("t1>>hist_2016C",cut)
@@ -61,7 +61,7 @@ hist_2016C.SetMarkerColor(kOrange-5)
 hist_2016C.SetLineColor(kOrange-5)
 properScale(hist_2016C)
 
-file_2016D = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016D.root")
+file_2016D = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016D.root")
 tree_2016D = file_2016D.Get("ZeeTiming")
 hist_2016D = TH1F("hist_2016D","hist_2016D",100,-1.5,1.5)
 tree_2016D.Draw("t1>>hist_2016D",cut)
@@ -70,7 +70,7 @@ hist_2016D.SetMarkerColor(kYellow-5)
 hist_2016D.SetLineColor(kYellow-5)
 properScale(hist_2016D)
 
-file_2016E = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016E.root")
+file_2016E = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016E.root")
 tree_2016E = file_2016E.Get("ZeeTiming")
 hist_2016E = TH1F("hist_2016E","hist_2016E",100,-1.5,1.5)
 tree_2016E.Draw("t1>>hist_2016E",cut)
@@ -80,7 +80,7 @@ hist_2016E.SetLineColor(kSpring-5)
 properScale(hist_2016E)
 
 
-file_2016F = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016F.root")
+file_2016F = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016F.root")
 tree_2016F = file_2016F.Get("ZeeTiming")
 hist_2016F = TH1F("hist_2016F","hist_2016F",100,-1.5,1.5)
 tree_2016F.Draw("t1>>hist_2016F",cut)
@@ -89,7 +89,7 @@ hist_2016F.SetMarkerColor(kGreen-5)
 hist_2016F.SetLineColor(kGreen-5)
 properScale(hist_2016F)
 
-file_2016G = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016G.root")
+file_2016G = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016G.root")
 tree_2016G = file_2016G.Get("ZeeTiming")
 hist_2016G = TH1F("hist_2016G","hist_2016G",100,-1.5,1.5)
 tree_2016G.Draw("t1>>hist_2016G",cut)
@@ -99,7 +99,7 @@ hist_2016G.SetLineColor(kPink-5)
 properScale(hist_2016G)
 
 
-file_2016H = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016H.root")
+file_2016H = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/ZeeTiming_DoubleEG_2016H.root")
 tree_2016H = file_2016H.Get("ZeeTiming")
 hist_2016H = TH1F("hist_2016H","hist_2016H",100,-1.5,1.5)
 tree_2016H.Draw("t1>>hist_2016H",cut)
@@ -110,7 +110,7 @@ properScale(hist_2016H)
 
 
 
-file_2016All = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/All2016.root")
+file_2016All = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/All2016.root")
 tree_2016All = file_2016All.Get("ZeeTiming")
 hist_2016All = TH1F("hist_2016All","hist_2016All",100,-1.5,1.5)
 tree_2016All.Draw("t1>>hist_2016All",cut)
@@ -119,7 +119,7 @@ hist_2016All.SetMarkerColor(kBlue-5)
 hist_2016All.SetLineColor(kBlue-5)
 properScale(hist_2016All)
 
-file_2016MC = TFile("/eos/cms/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/MC2016_all.root")
+file_2016MC = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/MC2016_all.root")
 tree_2016MC = file_2016MC.Get("ZeeTiming")
 hist_2016MC = TH1F("hist_2016MC","hist_2016MC",100,-1.5,1.5)
 tree_2016MC.Draw("t1>>hist_2016MC",cut)

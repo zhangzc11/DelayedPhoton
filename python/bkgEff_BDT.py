@@ -13,7 +13,7 @@ cut_BDT_loose = 'disc > 0.0586'
 cut_EGM_tight = 'pho1passIsoTight_PFClusterIso && pho1Sminor>0.15 && pho1Sminor<0.3'
 cut_EGM_loose = 'pho1passIsoLoose_PFClusterIso && pho1Sminor>0.15 && pho1Sminor<0.7'
 
-inputDir = "/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/"
+inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_withBDT/"
 
 tableFileName = "./effTable_bkg.txt"
 

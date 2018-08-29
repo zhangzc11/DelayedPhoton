@@ -19,7 +19,7 @@ cut_tight_2J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEl
 cut_BDT_tight = 'disc > 0.10'
 cut_BDT_loose = 'disc > 0.0586'
 
-inputDir = "/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_withBDT/"
+inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_withBDT/"
 
 tableFileName = "./effTable.txt"
 

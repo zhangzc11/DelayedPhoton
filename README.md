@@ -44,8 +44,8 @@ python saveShapes_noBDT.py
 -----------------------------
 ```
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \
@@ -83,8 +83,8 @@ python LimitPlots_noBDT.py
 -----------------------------
 ```
 ./Fit2D \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
-/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \

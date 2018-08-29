@@ -60,7 +60,7 @@ def smear_and_fill(oldTree, newTree, s, histWeight):
         	newTree.Fill()
 
 def smear_file(inFileName, histWeight):
-	#inFileName = "/eos/cms/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/V4p1_private_REMINIAOD/skim/DelayedPhoton_DoubleEG_2016B_ver1.root"
+	#inFileName = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim/DelayedPhoton_DoubleEG_2016B_ver1.root"
 	print "reweighting input file: "+inFileName
 	inFile = root.TFile(inFileName, "READ")
 	inTree = inFile.Get("DelayedPhoton")
