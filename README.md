@@ -1,7 +1,7 @@
 # DelayedPhoton
 Plots and limits for delayed photon analysis
 
-Analysis twiki: https://github.com/zhangzc11/Twiki/blob/master/CaltechDelayedPhoton2016.md
+Analysis twiki: https://github.com/zhangzc11/Twiki/blob/master/CaltechDelayedPhoton2016.md#table-of-contents
 
 setup
 -----------------------------
