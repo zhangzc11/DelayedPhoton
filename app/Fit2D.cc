@@ -35,7 +35,7 @@ Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 2.1, 10.0, 15.0};
 bool useLowTBinning = false;
 bool useBDT = true;
 
-float lumi = 19608.81; //pb^-1
+float lumi = 35922.0; //pb^-1
 float NEvents_sig = 1.0;
 bool _useToy = true;
 

@@ -30,7 +30,7 @@ cut_tight_2J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFCluste
 
 cut_loose_2J_1G = 'pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 1 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1)'+ cut_MET_filter
 
-inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/"
+inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
 
 tableFileName = "./effTable.txt"
 

@@ -1,7 +1,8 @@
 # DelayedPhoton
 Plots and limits for delayed photon analysis
-=============================
------------------------------
+
+Analysis twiki: https://github.com/zhangzc11/Twiki/blob/master/CaltechDelayedPhoton2016.md
+
 setup
 -----------------------------
 ```
@@ -44,8 +45,8 @@ python saveShapes_noBDT.py
 -----------------------------
 ```
 ./Fit2D \
-/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
-/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \
@@ -83,8 +84,8 @@ python LimitPlots_noBDT.py
 -----------------------------
 ```
 ./Fit2D \
-/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
-/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root \
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root \
 "L350TeV_Ctau200cm" \
 "signal (L100-Ctau1000)" \
 3J \

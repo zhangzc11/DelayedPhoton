@@ -62,11 +62,11 @@ def smear_and_fill(oldTree, newTree, s, histWeight):
 def smear_file(inFileName, histWeight):
 	#inFileName = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim/DelayedPhoton_DoubleEG_2016B_ver1.root"
 	print "reweighting input file: "+inFileName
-	inFile = root.TFile(inFileName, "READ")
+	inFile = root.TFile(inFileName.replace('GoodLumi','GoodLumi_noreweight'), "READ")
 	inTree = inFile.Get("DelayedPhoton")
 	inNevents = inFile.Get("NEvents")
 
-	outFile = root.TFile(inFileName.replace('GoodLumi','GoodLumi_reweight'), 'RECREATE')
+	outFile = root.TFile(inFileName, 'RECREATE')
 	outTree = inTree.CloneTree(0)
 
 	s = MyStruct()
@@ -222,4 +222,5 @@ myC.SaveAs(outputDir+"/stack/sumMET_CR_and_SR_in_GJetsMC.C")
 
 
 ###now do the smear
-smear_file(fileNameData, hist_weight)
+#smear_file(fileNameData, hist_weight)
+smear_file(fileNameData.replace("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT","/data/zhicaiz/data/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT"), hist_weight)

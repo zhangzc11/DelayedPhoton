@@ -77,10 +77,10 @@ def doubGausFit(hist, x_min, x_max):
 ####load data
 cut = "mass>75 && mass <105 && ele1Pt>30 && ele2Pt>30 && ele1IsEB && ele2IsEB"
 
-file_data = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/All2016.root")
+file_data = TFile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/EcalTiming/ntuples_V4p1_31Aug2018/All2016.root")
 tree_data = file_data.Get("ZeeTiming")
 
-file_MC = TFile("/mnt/hadoop/store/group/phys_susy/razor/EcalTiming/ntuples_V3p16_30Aug2017/MC2016_all.root")
+file_MC = TFile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/EcalTiming/ntuples_V4p1_31Aug2018/MC2016_all.root")
 tree_MC = file_MC.Get("ZeeTiming")
 
 myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
