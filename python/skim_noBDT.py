@@ -59,17 +59,17 @@ for i in range(0,len(fileName_all)):
 
 	outputFile.cd()
 
-	for i in range(0, len(keyList)):
-		print classList[i] + "   ===   " + keyList[i]
-		if classList[i] == "TTree":
+	for j in range(0, len(keyList)):
+		print classList[j] + "   ===   " + keyList[j]
+		if classList[j] == "TTree":
 			fileThis.cd()
-			inputTree = fileThis.Get(keyList[i])
+			inputTree = fileThis.Get(keyList[j])
 			outputFile.cd()
 			outputTree = inputTree.CopyTree(cut_skim)
 			outputTree.Write()
-		if classList[i] == "TH1F":
+		if classList[j] == "TH1F":
 			fileThis.cd()
-			histThis = fileThis.Get(keyList[i])
+			histThis = fileThis.Get(keyList[j])
 			outputFile.cd()
 			histThis_out = histThis.Clone()
 			histThis_out.Write()
