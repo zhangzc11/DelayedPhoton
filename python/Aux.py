@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from ROOT import *
+from ROOT import TLatex, TCanvas
 
 def drawCMS(myC, energy, lumi):
 
@@ -9,7 +9,7 @@ def drawCMS(myC, energy, lumi):
         baseSize = 25
         tlatex.SetNDC()
         tlatex.SetTextAngle(0)
-        tlatex.SetTextColor(kBlack)
+        tlatex.SetTextColor(1)
         tlatex.SetTextFont(63)
         tlatex.SetTextAlign(11)
         tlatex.SetTextSize(25)
@@ -35,7 +35,7 @@ def drawCMS2(myC, energy, lumi):
         baseSize = 25
         tlatex.SetNDC()
         tlatex.SetTextAngle(0)
-        tlatex.SetTextColor(kBlack)
+        tlatex.SetTextColor(1)
         tlatex.SetTextFont(63)
         tlatex.SetTextAlign(11)
         tlatex.SetTextSize(25)

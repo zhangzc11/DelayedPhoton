@@ -1,7 +1,7 @@
-from ROOT import *
+from ROOT import gStyle, gROOT, TFile, TTree, TH1, TH1F, THStack, kRed, kBlue, kBlack, kViolet, kOrange, kAzure, TChain, SetOwnership, TCanvas, TLegend, TPad
 import os, sys
 from Aux import *
-from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_loose_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
 from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 import numpy as np
 import array
@@ -89,6 +89,7 @@ print "\n cut = " + cut
 
 weightedcut = "(weight*pileupWeight) * " + cut 
 weightedcut_noDisc = "(weight*pileupWeight) * " + cut_noDisc
+weightedcut_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_noSigmaIetaIeta
 
 #fileOut = TFile("../data/shapes.root","RECREATE")
 #fileOut.cd()
@@ -130,6 +131,9 @@ for plot in splots:
 	if plot[0]=="disc":
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histData",cut_noDisc)
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histDataOOT",cut_noDisc+" && !pho1isStandardPhoton")
+	elif plot[0] == "pho1SigmaIetaIeta":
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histData",cut_noSigmaIetaIeta)
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histDataOOT",cut_noSigmaIetaIeta+" && !pho1isStandardPhoton")
 	else:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histData",cut)
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histDataOOT",cut+" && !pho1isStandardPhoton")
@@ -168,6 +172,8 @@ for plot in splots:
 	'''
 	if plot[0]=="disc":
 		treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut_noDisc)
+	elif plot[0] == "pho1SigmaIetaIeta":
+		treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut_noSigmaIetaIeta)
 	else:
 		treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut)
 	if plot[6]:
@@ -198,6 +204,8 @@ for plot in splots:
 		'''
 		if plot[0]=="disc":
 			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut_noDisc)
+		elif plot[0] == "pho1SigmaIetaIeta":
+			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut_noSigmaIetaIeta)
 		else:
 			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut)
 		if histThis.Integral()>10:
@@ -232,6 +240,8 @@ for plot in splots:
 		'''
 		if plot[0]=="disc":
 			treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut_noDisc)
+		elif plot[0] == "pho1SigmaIetaIeta":
+			treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut_noSigmaIetaIeta)
 		else:
 			treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut)
 		if histThis.Integral()>10:
@@ -251,7 +261,10 @@ for plot in splots:
 	if plot[0]=="MET":
 		histGJets_CR = TH1F(plot[1]+"_histGJets_CR","",len(xbins_MET)-1, np.array(xbins_MET))
 	'''
-	treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
+	if plot[0] == "pho1SigmaIetaIeta":
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets_noSigmaIetaIeta)
+	else:
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
 	if useFraction:
 		#histGJets_CR.Scale(histData.Integral()*fractionGJets/histGJets_CR.Integral())
 		histGJets_CR.Scale(histData.Integral()*0.5498/histGJets_CR.Integral())
@@ -269,7 +282,10 @@ for plot in splots:
 	if plot[0]=="MET":
 		histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",len(xbins_MET)-1, np.array(xbins_MET))
 	'''
-	treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets+")")
+	if plot[0] == "pho1SigmaIetaIeta":
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets_noSigmaIetaIeta+")")
+	else:
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets+")")
 	if useFraction:
 		#histGJets_CR_reweight.Scale(histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
 		histGJets_CR_reweight.Scale(histData.Integral()*0.5498/histGJets_CR_reweight.Integral())
@@ -287,7 +303,10 @@ for plot in splots:
 		histQCD_CR = TH1F(plot[1]+"_histQCD_CR","",len(xbins_MET)-1, np.array(xbins_MET))
 	'''
 
-	treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose + " && !( " + cut +")")
+	if plot[0] == "pho1SigmaIetaIeta":
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose_noSigmaIetaIeta + " && !( " + cut_noSigmaIetaIeta +")")
+	else:
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose + " && !( " + cut +")")
 	if useFraction:
 		#histQCD_CR.Scale(histData.Integral()*fractionQCD/histQCD_CR.Integral())
 		histQCD_CR.Scale(histData.Integral()*0.4502/histQCD_CR.Integral())

@@ -2,10 +2,12 @@ from ROOT import TFile, TH1F, TLegend, TCanvas, TPad, gROOT, gStyle, TChain, TCo
 import ROOT
 import os, sys
 from Aux import drawCMS, drawCMS2
-from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, cut_2J_noSigmaIetaIeta, cut_3J_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
 from config_noBDT import scaleBkg
 from config_noBDT import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes
+from config_noBDT import cut_GJets_shape_2J_noSigmaIetaIeta, cut_QCD_shape_2J_noSigmaIetaIeta
 from config_noBDT import cut_GJets_shape_3J, cut_QCD_shape_3J
+from config_noBDT import cut_GJets_shape_3J_noSigmaIetaIeta, cut_QCD_shape_3J_noSigmaIetaIeta
 
 
 gROOT.SetBatch(True)
@@ -91,9 +93,13 @@ print "\n cut_GJets_shape_3J = " + cut_GJets_shape_3J
 
 
 weightedcut_QCD_shape_2J = "(weight*pileupWeight) * " + cut_QCD_shape_2J 
+weightedcut_QCD_shape_2J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_QCD_shape_2J_noSigmaIetaIeta
 weightedcut_GJets_shape_2J = "(weight*pileupWeight) * " + cut_GJets_shape_2J 
+weightedcut_GJets_shape_2J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_GJets_shape_2J_noSigmaIetaIeta
 weightedcut_QCD_shape_3J = "(weight*pileupWeight) * " + cut_QCD_shape_3J 
+weightedcut_QCD_shape_3J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_QCD_shape_3J_noSigmaIetaIeta
 weightedcut_GJets_shape_3J = "(weight*pileupWeight) * " + cut_GJets_shape_3J 
+weightedcut_GJets_shape_3J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_GJets_shape_3J_noSigmaIetaIeta
 
 #print "weightedcut_QCD_shape_3J: "+weightedcut_QCD_shape_3J
 #print "weightedcut_GJets_shape_3J: "+weightedcut_GJets_shape_3J
@@ -107,10 +113,16 @@ for shape in shapes:
 	print "\n shapeting stack shapes for " + shape[1]
 	
 	#data
-	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_2J))
+	if shape[0] == "pho1SigmaIetaIeta":
+		print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_2J_noSigmaIetaIeta))
+	else:
+		print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_2J))
 		
         histData = TH1F(shape[1]+"_histData","",shape[3],shape[4],shape[5])
-	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_2J)
+	if shape[0] == "pho1SigmaIetaIeta":
+		treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_2J_noSigmaIetaIeta)
+	else:
+		treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_2J)
         histData.SetMarkerStyle( 20 )
         histData.SetMarkerColor( ROOT.kBlack )
         histData.SetLineColor( ROOT.kBlack )
@@ -126,7 +138,10 @@ for shape in shapes:
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_2J))
 		normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
-		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_2J)
+		if shape[0] == "pho1SigmaIetaIeta":
+			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_2J_noSigmaIetaIeta)
+		else:
+			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_2J)
 		if histThis.Integral()>10:
 			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
@@ -145,7 +160,10 @@ for shape in shapes:
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_2J))
 		normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
-		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_2J)
+		if shape[0] == "pho1SigmaIetaIeta":
+			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_2J_noSigmaIetaIeta)
+		else:
+			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_2J)
 		if histThis.Integral()>10:
 			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
@@ -208,10 +226,16 @@ for shape in shapes:
 	print "\n shapeting stack shapes for " + shape[1]
 	
 	#data
-	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_3J))
+	if shape[0] == "pho1SigmaIetaIeta":
+		print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_3J_noSigmaIetaIeta))
+	else:
+		print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut_3J))
 		
         histData = TH1F(shape[1]+"_histData","",shape[3],shape[4],shape[5])
-	treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_3J)
+	if shape[0] == "pho1SigmaIetaIeta":
+		treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_3J_noSigmaIetaIeta)
+	else:
+		treeData.Draw(shape[0]+">>"+shape[1]+"_histData",cut_3J)
         histData.SetMarkerStyle( 20 )
         histData.SetMarkerColor( ROOT.kBlack )
         histData.SetLineColor( ROOT.kBlack )
@@ -227,7 +251,10 @@ for shape in shapes:
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut_QCD_shape_3J))
 		normQCD = NEventsQCD[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histQCD"+str(i),"",shape[3],shape[4],shape[5])	
-		treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_3J)
+		if shape[0] == "pho1SigmaIetaIeta":
+			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_3J_noSigmaIetaIeta)
+		else:
+			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_3J)
 		if histThis.Integral()>10:
 			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
@@ -246,7 +273,10 @@ for shape in shapes:
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut_GJets_shape_3J))
 		normGJets = NEventsGJets[i] * 1.0  
 		histThis = TH1F(shape[1]+"_histGJets"+str(i),"",shape[3],shape[4],shape[5])	
-		treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_3J)
+		if shape[0] == "pho1SigmaIetaIeta":
+			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_3J_noSigmaIetaIeta)
+		else:
+			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_3J)
 		if histThis.Integral()>10:
 			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)

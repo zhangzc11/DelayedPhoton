@@ -77,7 +77,7 @@ def doubGausFit(hist, x_min, x_max, sig_small, sig_big):
 
 	
 ####load data
-cut = "abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 "
+cut = "abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3  && pho1SigmaIetaIeta < 0.00994"
 
 file_data = TFile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi_noreweight.root")
 tree_data = file_data.Get("DelayedPhoton")

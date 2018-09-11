@@ -110,7 +110,7 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float xsec = getXsecBR(sigModelName); //pb
 std::string treeName = "DelayedPhoton";
 
-std::string cut, cut_JESUp, cut_JESDown, cut_noHLT, cut_loose, cut_GJets, cut_MET_filter;
+std::string cut, cut_JESUp, cut_JESDown, cut_noHLT, cut_loose, cut_GJets, cut_MET_filter, cut_noSigmaIetaIeta;
 
 cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
@@ -118,15 +118,17 @@ if(category == "2J")
 {
 	if(!useBDT)
 	{
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2 " + cut_MET_filter;
-		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
+		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.01031";
+		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
 	}
 	else
 	{
+		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
@@ -140,15 +142,17 @@ else if(category == "3J")
 {
 	if(!useBDT)
 	{
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2" + cut_MET_filter;
-		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
+		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.01031";
+		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
 	}
 	else
 	{
+		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
 		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
@@ -302,7 +306,7 @@ float N_total_GJets_QCD_fit = 0.0;
 /**********fit to get relative yield of GJets and QCD backgrounds *****/
 //SigmaIetaIeta
 TH1F *h1_SigmaIetaIeta_Data = new TH1F("h1_SigmaIetaIeta_Data","h1_SigmaIetaIeta_Data", 100, 0.005, 0.025);
-tree_data->Draw("pho1SigmaIetaIeta>>h1_SigmaIetaIeta_Data", cut.c_str());
+tree_data->Draw("pho1SigmaIetaIeta>>h1_SigmaIetaIeta_Data", cut_noSigmaIetaIeta.c_str());
 
 TH1F *h1_SigmaIetaIeta_GJets = (TH1F*)file_shape->Get("phoSigmaIetaIeta_histGJets"); 
 TH1F *h1_SigmaIetaIeta_QCD = (TH1F*)file_shape->Get("phoSigmaIetaIeta_histQCD"); 
@@ -572,7 +576,9 @@ TH2F * h2newbinGJets = new TH2F("h2newbinGJets","; #gamma cluster time (ns); #sl
 TH2F * h2newbinQCD = new TH2F("h2newbinQCD","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 TH2F * h2newbinSig = new TH2F("h2newbinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 TH2F * h2newbinSig_JESUp = new TH2F("h2newbinSig_JESUp","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinSig_TimeCorrUp = new TH2F("h2newbinSig_TimeCorrUp","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 TH2F * h2newbinSig_JESDown = new TH2F("h2newbinSig_JESDown","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
+TH2F * h2newbinSig_TimeCorrDown = new TH2F("h2newbinSig_TimeCorrDown","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT, Nbins_MET, useLowTBinning ? xbins_MET_lowT : xbins_MET_highT);
 
 TH1F * h1newbinData_time = new TH1F("h1newbinData_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
 TH1F * h1newbinData_toy_time = new TH1F("h1newbinData_toy_time","; #gamma cluster time (ns); Events", Nbins_time, useLowTBinning ? xbins_time_lowT : xbins_time_highT);
@@ -596,7 +602,9 @@ tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinGJets", cut_GJets.c_
 tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
 tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
 tree_signal->Draw("t1MET_JESUp:pho1ClusterTime_SmearToData>>h2newbinSig_JESUp", ("weight*pileupWeight * ( "+cut_JESUp+" )").c_str());
+tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData+0.03)>>h2newbinSig_TimeCorrUp", ("weight*pileupWeight * ( "+cut+" )").c_str());
 tree_signal->Draw("t1MET_JESDown:pho1ClusterTime_SmearToData>>h2newbinSig_JESDown", ("weight*pileupWeight * ( "+cut_JESDown+" )").c_str());
+tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData-0.03)>>h2newbinSig_TimeCorrDown", ("weight*pileupWeight * ( "+cut+" )").c_str());
 
 tree_data->Draw("pho1ClusterTime_SmearToData>>h1newbinData_time", cut.c_str());
 tree_signal->Draw("pho1ClusterTime_SmearToData>>h1newbinSig_time", ("weight*pileupWeight * ( "+cut+" )").c_str());
@@ -610,13 +618,17 @@ tree_data->Draw("t1MET>>h1newbinQCD_MET", (cut_loose + " && ! (" + cut + ")").c_
 
 float N_sig_expected = 1.0*lumi*xsec*h2newbinSig->Integral()/(1.0*NEvents_sig);
 float N_sig_expected_JESUp = 1.0*lumi*xsec*h2newbinSig_JESUp->Integral()/(1.0*NEvents_sig);
+float N_sig_expected_TimeCorrUp = 1.0*lumi*xsec*h2newbinSig_TimeCorrUp->Integral()/(1.0*NEvents_sig);
 float N_sig_expected_JESDown = 1.0*lumi*xsec*h2newbinSig_JESDown->Integral()/(1.0*NEvents_sig);
+float N_sig_expected_TimeCorrDown = 1.0*lumi*xsec*h2newbinSig_TimeCorrDown->Integral()/(1.0*NEvents_sig);
 
 h2newbinGJets->Scale((1.0*h2newbinData->Integral()*frac_GJets)/(1.0*h2newbinGJets->Integral()));
 h2newbinQCD->Scale((1.0*h2newbinData->Integral()*frac_QCD)/(1.0*h2newbinQCD->Integral()));
 h2newbinSig->Scale((1.0*N_sig_expected)/(1.0*h2newbinSig->Integral()));
 h2newbinSig_JESUp->Scale((1.0*N_sig_expected_JESUp)/(1.0*h2newbinSig_JESUp->Integral()));
+h2newbinSig_TimeCorrUp->Scale((1.0*N_sig_expected_TimeCorrUp)/(1.0*h2newbinSig_TimeCorrUp->Integral()));
 h2newbinSig_JESDown->Scale((1.0*N_sig_expected_JESDown)/(1.0*h2newbinSig_JESDown->Integral()));
+h2newbinSig_TimeCorrDown->Scale((1.0*N_sig_expected_TimeCorrDown)/(1.0*h2newbinSig_TimeCorrDown->Integral()));
 
 h1newbinGJets_time->Scale((1.0*h1newbinData_time->Integral()*frac_GJets)/(1.0*h1newbinGJets_time->Integral()));
 h1newbinQCD_time->Scale((1.0*h1newbinData_time->Integral()*frac_QCD)/(1.0*h1newbinQCD_time->Integral()));
@@ -634,7 +646,9 @@ TH1F * h1combineGJets = new TH1F("h1combineGJets","h1combineGJets", Nbins_total 
 TH1F * h1combineQCD = new TH1F("h1combineQCD","h1combineQCD", Nbins_total , 0, Nbins_total);
 TH1F * h1combineSig = new TH1F("h1combineSig","h1combineSig", Nbins_total , 0, Nbins_total);
 TH1F * h1combineSig_JESUp = new TH1F("h1combineSig_JESUp","h1combineSig_JESUp", Nbins_total , 0, Nbins_total);
+TH1F * h1combineSig_TimeCorrUp = new TH1F("h1combineSig_TimeCorrUp","h1combineSig_TimeCorrUp", Nbins_total , 0, Nbins_total);
 TH1F * h1combineSig_JESDown = new TH1F("h1combineSig_JESDown","h1combineSig_JESDown", Nbins_total , 0, Nbins_total);
+TH1F * h1combineSig_TimeCorrDown = new TH1F("h1combineSig_TimeCorrDown","h1combineSig_TimeCorrDown", Nbins_total , 0, Nbins_total);
 
 for(int i=1;i<=Nbins_MET;i++)
 {
@@ -647,7 +661,9 @@ for(int i=1;i<=Nbins_MET;i++)
 		h1combineBkg->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i) + h2newbinGJets->GetBinContent(j,i));
 		h1combineSig->SetBinContent(thisBin, h2newbinSig->GetBinContent(j,i));	
 		h1combineSig_JESUp->SetBinContent(thisBin, h2newbinSig_JESUp->GetBinContent(j,i));	
+		h1combineSig_TimeCorrUp->SetBinContent(thisBin, h2newbinSig_TimeCorrUp->GetBinContent(j,i));	
 		h1combineSig_JESDown->SetBinContent(thisBin, h2newbinSig_JESDown->GetBinContent(j,i));	
+		h1combineSig_TimeCorrDown->SetBinContent(thisBin, h2newbinSig_TimeCorrDown->GetBinContent(j,i));	
 	}
 }
 
@@ -657,11 +673,15 @@ for(int i=1; i<=Nbins_total; i++)
 	float nbkg = h1combineBkg->GetBinContent(i);
 	float nsig = h1combineSig->GetBinContent(i);
 	float nsig_JESUp = h1combineSig_JESUp->GetBinContent(i);
+	float nsig_TimeCorrUp = h1combineSig_TimeCorrUp->GetBinContent(i);
 	float nsig_JESDown = h1combineSig_JESDown->GetBinContent(i);
+	float nsig_TimeCorrDown = h1combineSig_TimeCorrDown->GetBinContent(i);
 	if(nbkg < 1e-3 ) h1combineBkg->SetBinContent(i, 1e-3);
 	if(nsig < 1e-3 ) h1combineSig->SetBinContent(i, 1e-3);
 	if(nsig_JESUp < 1e-3 ) h1combineSig_JESUp->SetBinContent(i, 1e-3);
+	if(nsig_TimeCorrUp < 1e-3 ) h1combineSig_TimeCorrUp->SetBinContent(i, 1e-3);
 	if(nsig_JESDown < 1e-3 ) h1combineSig_JESDown->SetBinContent(i, 1e-3);
+	if(nsig_TimeCorrDown < 1e-3 ) h1combineSig_TimeCorrDown->SetBinContent(i, 1e-3);
 }
 
 cout<<"convert 2D to 1D (integral 2D/1D): "<<h2newbinData->Integral()<<" / "<<h1combineData->Integral()<<endl;
@@ -702,7 +722,9 @@ if(fitMode == "datacard")
 	cout<<"QCD: int = "<<h1combineQCD->Integral()<<endl;
 	cout<<"Sig: int = "<<h1combineSig->Integral()<<endl;
 	cout<<"Sig_JESUp: int = "<<h1combineSig_JESUp->Integral()<<endl;
+	cout<<"Sig_TimeCorrUp: int = "<<h1combineSig_TimeCorrUp->Integral()<<endl;
 	cout<<"Sig_JESDown: int = "<<h1combineSig_JESDown->Integral()<<endl;
+	cout<<"Sig_TimeCorrDown: int = "<<h1combineSig_TimeCorrDown->Integral()<<endl;
 	
 	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy, outPlotsDir);
 	//JESUp shape
@@ -713,6 +735,18 @@ if(fitMode == "datacard")
 	RooDataHist* rhSig_JESDown = new RooDataHist("rhSig_JESDown", "rhSig_JESup", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESDown);
 	RooHistPdf * rpSig_JESDown = new RooHistPdf("rpSig_JESDown", "rpSig_JESDown", RooArgSet(*ws_combine->var("bin")), *rhSig_JESDown, 0);
 	ws_combine->import(*rpSig_JESDown);	
+
+
+	//TimeCorrUp shape
+	RooDataHist* rhSig_TimeCorrUp = new RooDataHist("rhSig_TimeCorrUp", "rhSig_TimeCorrup", RooArgSet(*ws_combine->var("bin")), h1combineSig_TimeCorrUp);
+	RooHistPdf * rpSig_TimeCorrUp = new RooHistPdf("rpSig_TimeCorrUp", "rpSig_TimeCorrUp", RooArgSet(*ws_combine->var("bin")), *rhSig_TimeCorrUp, 0);
+	ws_combine->import(*rpSig_TimeCorrUp);	
+	//TimeCorrDown shape
+	RooDataHist* rhSig_TimeCorrDown = new RooDataHist("rhSig_TimeCorrDown", "rhSig_TimeCorrup", RooArgSet(*ws_combine->var("bin")), h1combineSig_TimeCorrDown);
+	RooHistPdf * rpSig_TimeCorrDown = new RooHistPdf("rpSig_TimeCorrDown", "rpSig_TimeCorrDown", RooArgSet(*ws_combine->var("bin")), *rhSig_TimeCorrDown, 0);
+	ws_combine->import(*rpSig_TimeCorrDown);	
+
+
 
 	ws_combine->SetName("ws_combine");
 	ws_combine->Write("ws_combine");
@@ -735,6 +769,7 @@ if(fitMode == "datacard")
 	AddSystematics_Norm(_sigModelName, 0.0, 1.025, outDataCardsDir, "lumi", "lnN");	//https://hypernews.cern.ch/HyperNews/CMS/get/luminosity/688.html
 	//JES
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "JES", "shapeN2");	
+	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "TimeCorr", "shapeN2");	
 		
 	//save the histograms
 	h1combineData_toy = ws_combine->data("data_toy")->createHistogram("bin", Nbins_total);

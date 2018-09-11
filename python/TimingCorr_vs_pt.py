@@ -48,6 +48,22 @@ def singGausFit(hist, x_min, x_max):
 	result = np.array([meanEff,emeanEff,sigEff,esigEff])
 	return result
 
+def singGausFit(hist):
+	x_mean = hist.GetMean()
+	x_stddev = hist.GetStdDev()
+	x_min = x_mean - 2.0*x_stddev
+	x_max = x_mean + 2.0*x_stddev
+	tf1_singGaus = TF1("tf1_singGaus","gaus(0)", x_min,x_max)
+	tf1_singGaus.SetParameters(hist.Integral(),x_mean, x_stddev)
+	hist.Fit("tf1_singGaus","","",x_min,x_max)
+	sigEff = 1000.0*np.abs(tf1_singGaus.GetParameter(2))
+	esigEff = 1000.0*tf1_singGaus.GetParError(2)
+	meanEff = 1000.0*tf1_singGaus.GetParameter(1)
+	emeanEff = 1000.0*tf1_singGaus.GetParError(1)
+	result = np.array([meanEff,emeanEff,sigEff,esigEff])
+	return result
+
+
 def doubGausFit(hist, x_min, x_max, sig_small, sig_big):
 	tf1_doubGaus = TF1("tf1_doubGaus","gaus(0)+gaus(3)", x_min,x_max)
 	#tf1_doubGaus.SetParameters(0.5*hist.Integral(),0.5*(x_min+x_max),0.2*(x_max-x_min), 0.5*hist.Integral(),0.5*(x_min+x_max),0.1*(x_max-x_min))
@@ -73,6 +89,39 @@ def doubGausFit(hist, x_min, x_max, sig_small, sig_big):
 	
 	result = np.array([meanEff,emeanEff,sigEff,esigEff])
 	return result
+
+def doubGausFit(hist):
+	x_mean = hist.GetMean()
+        x_stddev = hist.GetStdDev()
+        x_min = x_mean - 4.0*x_stddev
+        x_max = x_mean + 4.0*x_stddev
+	sig_small = 0.5*x_stddev
+	sig_big = 1.0*x_stddev
+	tf1_doubGaus = TF1("tf1_doubGaus","gaus(0)+gaus(3)", x_min,x_max)
+	#tf1_doubGaus.SetParameters(0.5*hist.Integral(),0.5*(x_min+x_max),0.2*(x_max-x_min), 0.5*hist.Integral(),0.5*(x_min+x_max),0.1*(x_max-x_min))
+	tf1_doubGaus.SetParameters(0.5*hist.Integral(),0.5*(x_min+x_max),sig_small, 0.5*hist.Integral(),0.5*(x_min+x_max),sig_big)
+	tf1_doubGaus.SetParLimits(2,0.0800,1.000)
+	tf1_doubGaus.SetParLimits(5,0.0800,1.000)
+	hist.Fit("tf1_doubGaus","B","",x_min,x_max)
+	N1 = tf1_doubGaus.GetParameter(0)
+	u1 = tf1_doubGaus.GetParameter(1)
+	eu1 = tf1_doubGaus.GetParError(1)
+	s1 = np.abs(tf1_doubGaus.GetParameter(2))
+	es1 = tf1_doubGaus.GetParError(2)
+	N2 = tf1_doubGaus.GetParameter(3)
+	u2 = tf1_doubGaus.GetParameter(4)
+	eu2 = tf1_doubGaus.GetParError(4)
+	s2 = np.abs(tf1_doubGaus.GetParameter(5))
+	es2 = tf1_doubGaus.GetParError(5)
+
+	sigEff = 1000.0*(N1*s1 + N2*s2) / (N1+N2) 
+	esigEff = 1000.0* np.sqrt(N1*N1*es1*es1 + N2*N2*es2*es2)/(N1+N2)
+	meanEff = 1000.0*(N1*u1 + N2*u2) / (N1+N2) 
+	emeanEff = 1000.0* np.sqrt(N1*N1*eu1*eu1 + N2*N2*eu2*eu2)/(N1+N2)
+	
+	result = np.array([meanEff,emeanEff,sigEff,esigEff])
+	return result
+
 
 
 	
@@ -107,18 +156,30 @@ y_pt_mean_data = np.zeros(N_pt_points)
 y_pt_mean_MC = np.zeros(N_pt_points)
 y_pt_mean_MC_corr = np.zeros(N_pt_points)
 y_pt_mean_diff = np.zeros(N_pt_points)
-y_pt_sigma_data = np.zeros(N_pt_points)
-y_pt_sigma_MC = np.zeros(N_pt_points)
-y_pt_sigma_MC_corr= np.zeros(N_pt_points)
-y_pt_sigma_diff = np.zeros(N_pt_points)
+y_pt_sigma_dt_data = np.zeros(N_pt_points)
+y_pt_sigma_dt_MC = np.zeros(N_pt_points)
+y_pt_sigma_dt_MC_corr= np.zeros(N_pt_points)
+y_pt_sigma_dt_diff = np.zeros(N_pt_points)
+
+y_pt_sigma_time_data = np.zeros(N_pt_points)
+y_pt_sigma_time_MC = np.zeros(N_pt_points)
+y_pt_sigma_time_MC_corr= np.zeros(N_pt_points)
+y_pt_sigma_time_diff = np.zeros(N_pt_points)
+
 ey_pt_mean_data = np.zeros(N_pt_points)
 ey_pt_mean_MC = np.zeros(N_pt_points)
 ey_pt_mean_MC_corr = np.zeros(N_pt_points)
 ey_pt_mean_diff = np.zeros(N_pt_points)
-ey_pt_sigma_data = np.zeros(N_pt_points)
-ey_pt_sigma_MC = np.zeros(N_pt_points)
-ey_pt_sigma_MC_corr = np.zeros(N_pt_points)
-ey_pt_sigma_diff = np.zeros(N_pt_points)
+
+ey_pt_sigma_dt_data = np.zeros(N_pt_points)
+ey_pt_sigma_dt_MC = np.zeros(N_pt_points)
+ey_pt_sigma_dt_MC_corr = np.zeros(N_pt_points)
+ey_pt_sigma_dt_diff = np.zeros(N_pt_points)
+
+ey_pt_sigma_time_data = np.zeros(N_pt_points)
+ey_pt_sigma_time_MC = np.zeros(N_pt_points)
+ey_pt_sigma_time_MC_corr = np.zeros(N_pt_points)
+ey_pt_sigma_time_diff = np.zeros(N_pt_points)
 
 
 for i in range(0, N_pt_points):
@@ -134,15 +195,17 @@ for i in range(0, N_pt_points):
 	tree_data.Draw("t1>>hist_1e_this_data_"+str(i), cut_1e_this)
 	tree_data.Draw("t1-t2>>hist_2e_this_data_"+str(i), cut_2e_this)
 	hist_1e_this_data.Draw()
-	result_1e_this_data = singGausFit(hist_1e_this_data, -0.6, 0.6) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_"+str(i)+"_time_data.png")
+	result_1e_this_data = doubGausFit(hist_1e_this_data)#, -0.6, 0.6) 
+	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_Zee_"+str(i)+"_time_data.png")
 	hist_2e_this_data.Draw()
-	result_2e_this_data = doubGausFit(hist_2e_this_data, -1.5, 1.5, 0.2, 0.4) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_"+str(i)+"_dt_data.png")
+	result_2e_this_data = doubGausFit(hist_2e_this_data)#, -1.5, 1.5, 0.2, 0.4) 
+	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_Zee_"+str(i)+"_dt_data.png")
 	y_pt_mean_data[i] = result_1e_this_data[0]
 	ey_pt_mean_data[i] = result_1e_this_data[1]
-	y_pt_sigma_data[i] = result_2e_this_data[2]
-	ey_pt_sigma_data[i] = result_2e_this_data[3]
+	y_pt_sigma_dt_data[i] = result_2e_this_data[2]
+	y_pt_sigma_time_data[i] = result_1e_this_data[2]
+	ey_pt_sigma_dt_data[i] = result_2e_this_data[3]
+	ey_pt_sigma_time_data[i] = result_1e_this_data[3]
 
 
 	hist_1e_this_MC = TH1F("hist_1e_this_MC_"+str(i),"hist_1e_this_MC_"+str(i), 60, -1.5, 1.5)
@@ -150,35 +213,41 @@ for i in range(0, N_pt_points):
 	tree_MC.Draw("t1>>hist_1e_this_MC_"+str(i),  "(weight*pileupWeight) * " + cut_1e_this)
 	tree_MC.Draw("t1-t2>>hist_2e_this_MC_"+str(i),  "(weight*pileupWeight) * " + cut_2e_this)
 	hist_1e_this_MC.Draw()
-	result_1e_this_MC = singGausFit(hist_1e_this_MC, -0.6, 0.6) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_"+str(i)+"_time_MC.png")
+	result_1e_this_MC = doubGausFit(hist_1e_this_MC)#, -0.6, 0.6) 
+	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_Zee_"+str(i)+"_time_MC.png")
 	hist_2e_this_MC.Draw()
-	result_2e_this_MC = doubGausFit(hist_2e_this_MC, -1.0, 1.0, 0.15, 0.30) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_"+str(i)+"_dt_MC.png")
+	result_2e_this_MC = doubGausFit(hist_2e_this_MC)#, -1.0, 1.0, 0.15, 0.30) 
+	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_Zee_"+str(i)+"_dt_MC.png")
 	y_pt_mean_MC[i] = result_1e_this_MC[0]
 	ey_pt_mean_MC[i] = result_1e_this_MC[1]
-	y_pt_sigma_MC[i] = result_2e_this_MC[2]
-	ey_pt_sigma_MC[i] = result_2e_this_MC[3]
+	y_pt_sigma_dt_MC[i] = result_2e_this_MC[2]
+	y_pt_sigma_time_MC[i] = result_1e_this_MC[2]
+	ey_pt_sigma_dt_MC[i] = result_2e_this_MC[3]
+	ey_pt_sigma_time_MC[i] = result_1e_this_MC[3]
 
 	y_pt_mean_diff[i] = y_pt_mean_data[i] -  y_pt_mean_MC[i]
 	ey_pt_mean_diff[i] = np.sqrt(ey_pt_mean_data[i]*ey_pt_mean_data[i] + ey_pt_mean_MC[i]*ey_pt_mean_MC[i])
-	y_pt_sigma_diff[i] = np.sqrt(y_pt_sigma_data[i]*y_pt_sigma_data[i] -  y_pt_sigma_MC[i]*y_pt_sigma_MC[i])
-	ey_pt_sigma_diff[i] = np.sqrt(4.0*y_pt_sigma_data[i]*y_pt_sigma_data[i]*ey_pt_sigma_data[i]*ey_pt_sigma_data[i]+4.0*y_pt_sigma_MC[i]*y_pt_sigma_MC[i]*ey_pt_sigma_MC[i]*ey_pt_sigma_MC[i])/(2.0*y_pt_sigma_diff[i])
+	y_pt_sigma_dt_diff[i] = np.sqrt(y_pt_sigma_dt_data[i]*y_pt_sigma_dt_data[i] -  y_pt_sigma_dt_MC[i]*y_pt_sigma_dt_MC[i])
+	y_pt_sigma_time_diff[i] = np.sqrt(y_pt_sigma_time_data[i]*y_pt_sigma_time_data[i] -  y_pt_sigma_time_MC[i]*y_pt_sigma_time_MC[i])
+	ey_pt_sigma_dt_diff[i] = np.sqrt(4.0*y_pt_sigma_dt_data[i]*y_pt_sigma_dt_data[i]*ey_pt_sigma_dt_data[i]*ey_pt_sigma_dt_data[i]+4.0*y_pt_sigma_dt_MC[i]*y_pt_sigma_dt_MC[i]*ey_pt_sigma_dt_MC[i]*ey_pt_sigma_dt_MC[i])/(2.0*y_pt_sigma_dt_diff[i])
+	ey_pt_sigma_time_diff[i] = np.sqrt(4.0*y_pt_sigma_time_data[i]*y_pt_sigma_time_data[i]*ey_pt_sigma_time_data[i]*ey_pt_sigma_time_data[i]+4.0*y_pt_sigma_time_MC[i]*y_pt_sigma_time_MC[i]*ey_pt_sigma_time_MC[i]*ey_pt_sigma_time_MC[i])/(2.0*y_pt_sigma_time_diff[i])
 
 	hist_1e_this_MC_corr = TH1F("hist_1e_this_MC_corr_"+str(i),"hist_1e_this_MC_corr_"+str(i), 60, -1.5, 1.5)
 	hist_2e_this_MC_corr = TH1F("hist_2e_this_MC_corr_"+str(i),"hist_2e_this_MC_corr_"+str(i), 60, -1.5, 1.5)
 	tree_MC.Draw("t1_SmearToData>>hist_1e_this_MC_corr_"+str(i),  "(weight*pileupWeight) * " + cut_1e_this)
 	tree_MC.Draw("t1_SmearToData-t2_SmearToData>>hist_2e_this_MC_corr_"+str(i),  "(weight*pileupWeight) * " + cut_2e_this)
 	hist_1e_this_MC_corr.Draw()
-	result_1e_this_MC_corr = singGausFit(hist_1e_this_MC_corr, -0.6, 0.6) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_"+str(i)+"_time_MC_corr.png")
+	result_1e_this_MC_corr = doubGausFit(hist_1e_this_MC_corr)#, -0.6, 0.6) 
+	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_Zee_"+str(i)+"_time_MC_corr.png")
 	hist_2e_this_MC_corr.Draw()
-	result_2e_this_MC_corr = doubGausFit(hist_2e_this_MC_corr, -1.0, 1.0, 0.15, 0.30) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_"+str(i)+"_dt_MC_corr.png")
+	result_2e_this_MC_corr = doubGausFit(hist_2e_this_MC_corr)#, -1.0, 1.0, 0.15, 0.30) 
+	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_Zee_"+str(i)+"_dt_MC_corr.png")
 	y_pt_mean_MC_corr[i] = result_1e_this_MC_corr[0]
 	ey_pt_mean_MC_corr[i] = result_1e_this_MC_corr[1]
-	y_pt_sigma_MC_corr[i] = result_2e_this_MC_corr[2]
-	ey_pt_sigma_MC_corr[i] = result_2e_this_MC_corr[3]
+	y_pt_sigma_dt_MC_corr[i] = result_2e_this_MC_corr[2]
+	y_pt_sigma_time_MC_corr[i] = result_2e_this_MC_corr[2]
+	ey_pt_sigma_dt_MC_corr[i] = result_2e_this_MC_corr[3]
+	ey_pt_sigma_time_MC_corr[i] = result_2e_this_MC_corr[3]
 
 
 
@@ -204,26 +273,48 @@ print y_pt_mean_diff
 print "ey_pt_mean_diff:"
 print ey_pt_mean_diff
 
-print "y_pt_sigma_data:"
-print y_pt_sigma_data
-print "ey_pt_sigma_data:"
-print ey_pt_sigma_data
+print "y_pt_sigma_dt_data:"
+print y_pt_sigma_dt_data
+print "ey_pt_sigma_dt_data:"
+print ey_pt_sigma_dt_data
 
-print "y_pt_sigma_MC:"
-print y_pt_sigma_MC
-print "ey_pt_sigma_MC:"
-print ey_pt_sigma_MC
+print "y_pt_sigma_dt_MC:"
+print y_pt_sigma_dt_MC
+print "ey_pt_sigma_dt_MC:"
+print ey_pt_sigma_dt_MC
 
-print "y_pt_sigma_MC_corr:"
-print y_pt_sigma_MC_corr
-print "ey_pt_sigma_MC_corr:"
-print ey_pt_sigma_MC_corr
+print "y_pt_sigma_dt_MC_corr:"
+print y_pt_sigma_dt_MC_corr
+print "ey_pt_sigma_dt_MC_corr:"
+print ey_pt_sigma_dt_MC_corr
 
 
-print "y_pt_sigma_diff:"
-print y_pt_sigma_diff
-print "ey_pt_sigma_diff:"
-print ey_pt_sigma_diff
+print "y_pt_sigma_dt_diff:"
+print y_pt_sigma_dt_diff
+print "ey_pt_sigma_dt_diff:"
+print ey_pt_sigma_dt_diff
+
+
+print "y_pt_sigma_time_data:"
+print y_pt_sigma_time_data
+print "ey_pt_sigma_time_data:"
+print ey_pt_sigma_time_data
+
+print "y_pt_sigma_time_MC:"
+print y_pt_sigma_time_MC
+print "ey_pt_sigma_time_MC:"
+print ey_pt_sigma_time_MC
+
+print "y_pt_sigma_time_MC_corr:"
+print y_pt_sigma_time_MC_corr
+print "ey_pt_sigma_time_MC_corr:"
+print ey_pt_sigma_time_MC_corr
+
+
+print "y_pt_sigma_time_diff:"
+print y_pt_sigma_time_diff
+print "ey_pt_sigma_time_diff:"
+print ey_pt_sigma_time_diff
 
 
 
@@ -282,108 +373,209 @@ leg_mean.Draw()
 
 drawCMS(myC, 13, lumi)
 
-myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_vs_pt_Data_vs_MC_2016.pdf")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_vs_pt_Data_vs_MC_2016.png")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_vs_pt_Data_vs_MC_2016.C")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_pt_Data_vs_MC_2016.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_pt_Data_vs_MC_2016.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_pt_Data_vs_MC_2016.C")
 
-gr_pt_sigma_data  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_data), np.array(ex_pt), np.array(ey_pt_sigma_data))
-gr_pt_sigma_data.Draw("AP")
-gr_pt_sigma_data.SetMarkerColor(kBlue)
-gr_pt_sigma_data.SetLineColor(kBlue)
-gr_pt_sigma_data.SetLineWidth(2)
-gr_pt_sigma_data.SetTitle("")
-gr_pt_sigma_data.GetXaxis().SetTitle("p_{T}^{e} [GeV]")
-gr_pt_sigma_data.GetYaxis().SetTitle("#sigma_{t1-t2} [ps]")
-gr_pt_sigma_data.GetXaxis().SetTitleSize( axisTitleSize )
-gr_pt_sigma_data.GetXaxis().SetTitleOffset( axisTitleOffset )
-gr_pt_sigma_data.GetYaxis().SetTitleSize( axisTitleSize )
-gr_pt_sigma_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
-gr_pt_sigma_data.GetYaxis().SetRangeUser(100,500)
+gr_pt_sigma_dt_data  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_dt_data), np.array(ex_pt), np.array(ey_pt_sigma_dt_data))
+gr_pt_sigma_dt_data.Draw("AP")
+gr_pt_sigma_dt_data.SetMarkerColor(kBlue)
+gr_pt_sigma_dt_data.SetLineColor(kBlue)
+gr_pt_sigma_dt_data.SetLineWidth(2)
+gr_pt_sigma_dt_data.SetTitle("")
+gr_pt_sigma_dt_data.GetXaxis().SetTitle("p_{T}^{e} [GeV]")
+gr_pt_sigma_dt_data.GetYaxis().SetTitle("#sigma_{t1-t2} [ps]")
+gr_pt_sigma_dt_data.GetXaxis().SetTitleSize( axisTitleSize )
+gr_pt_sigma_dt_data.GetXaxis().SetTitleOffset( axisTitleOffset )
+gr_pt_sigma_dt_data.GetYaxis().SetTitleSize( axisTitleSize )
+gr_pt_sigma_dt_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
+gr_pt_sigma_dt_data.GetYaxis().SetRangeUser(100,500)
 
 tf1_dt_vs_pt_data = TF1("tf1_dt_vs_pt_data","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
 tf1_dt_vs_pt_data.SetLineColor(kBlue)
 tf1_dt_vs_pt_data.SetParameters(200.0, 300.0*300.0)
-gr_pt_sigma_data.Fit("tf1_dt_vs_pt_data","","",59.0, 700.0)
-fit_a_data = tf1_dt_vs_pt_data.GetParameter(0)
-fit_b_data = tf1_dt_vs_pt_data.GetParameter(1)
+gr_pt_sigma_dt_data.Fit("tf1_dt_vs_pt_data","","",59.0, 700.0)
+fit_dt_a_data = tf1_dt_vs_pt_data.GetParameter(0)
+fit_dt_b_data = tf1_dt_vs_pt_data.GetParameter(1)
 
-gr_pt_sigma_MC  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_MC), np.array(ex_pt), np.array(ey_pt_sigma_MC))
-gr_pt_sigma_MC.SetMarkerColor(kRed)
-gr_pt_sigma_MC.SetLineColor(kRed)
-gr_pt_sigma_MC.SetLineWidth(2)
-gr_pt_sigma_MC.Draw("Psame")
+gr_pt_sigma_dt_MC  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_dt_MC), np.array(ex_pt), np.array(ey_pt_sigma_dt_MC))
+gr_pt_sigma_dt_MC.SetMarkerColor(kRed)
+gr_pt_sigma_dt_MC.SetLineColor(kRed)
+gr_pt_sigma_dt_MC.SetLineWidth(2)
+gr_pt_sigma_dt_MC.Draw("Psame")
 
 
-gr_pt_sigma_MC_corr  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_MC_corr), np.array(ex_pt), np.array(ey_pt_sigma_MC_corr))
-gr_pt_sigma_MC_corr.SetMarkerColor(kViolet)
-gr_pt_sigma_MC_corr.SetLineColor(kViolet)
-gr_pt_sigma_MC_corr.SetLineWidth(2)
-#gr_pt_sigma_MC_corr.Draw("Psame")
+gr_pt_sigma_dt_MC_corr  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_dt_MC_corr), np.array(ex_pt), np.array(ey_pt_sigma_dt_MC_corr))
+gr_pt_sigma_dt_MC_corr.SetMarkerColor(kViolet)
+gr_pt_sigma_dt_MC_corr.SetLineColor(kViolet)
+gr_pt_sigma_dt_MC_corr.SetLineWidth(2)
+#gr_pt_sigma_dt_MC_corr.Draw("Psame")
 
 
 tf1_dt_vs_pt_MC = TF1("tf1_dt_vs_pt_MC","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
 tf1_dt_vs_pt_MC.SetLineColor(kRed)
 tf1_dt_vs_pt_MC.SetParameters(200.0, 130.0*130.0)
-gr_pt_sigma_MC.Fit("tf1_dt_vs_pt_MC","","",59.0, 700.0)
-fit_a_MC = tf1_dt_vs_pt_MC.GetParameter(0)
-fit_b_MC = tf1_dt_vs_pt_MC.GetParameter(1)
+gr_pt_sigma_dt_MC.Fit("tf1_dt_vs_pt_MC","","",59.0, 700.0)
+fit_dt_a_MC = tf1_dt_vs_pt_MC.GetParameter(0)
+fit_dt_b_MC = tf1_dt_vs_pt_MC.GetParameter(1)
 
 
-gr_pt_sigma_diff  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_diff), np.array(ex_pt), np.array(ey_pt_sigma_diff))
-gr_pt_sigma_diff.SetMarkerColor(kBlack)
-gr_pt_sigma_diff.SetLineColor(kBlack)
-gr_pt_sigma_diff.SetLineWidth(2)
-gr_pt_sigma_diff.Draw("Psame")
+gr_pt_sigma_dt_diff  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_dt_diff), np.array(ex_pt), np.array(ey_pt_sigma_dt_diff))
+gr_pt_sigma_dt_diff.SetMarkerColor(kBlack)
+gr_pt_sigma_dt_diff.SetLineColor(kBlack)
+gr_pt_sigma_dt_diff.SetLineWidth(2)
+gr_pt_sigma_dt_diff.Draw("Psame")
 
 
-leg_sigma = TLegend(0.18,0.75,0.93,0.89)
-leg_sigma.SetNColumns(3)
-leg_sigma.SetBorderSize(0)
-leg_sigma.SetTextSize(0.03)
-leg_sigma.SetLineColor(1)
-leg_sigma.SetLineStyle(1)
-leg_sigma.SetLineWidth(1)
-leg_sigma.SetFillColor(0)
-leg_sigma.SetFillStyle(1001)
-leg_sigma.AddEntry(gr_pt_sigma_data, "data", "lep")
-leg_sigma.AddEntry(gr_pt_sigma_MC, "MC", "lep")
-leg_sigma.AddEntry(gr_pt_sigma_diff, "#Delta(data, MC)", "lep")
-#leg_sigma.AddEntry(gr_pt_sigma_MC_corr, "MC corr.", "lep")
-leg_sigma.Draw()
+leg_sigma_dt = TLegend(0.18,0.75,0.93,0.89)
+leg_sigma_dt.SetNColumns(3)
+leg_sigma_dt.SetBorderSize(0)
+leg_sigma_dt.SetTextSize(0.03)
+leg_sigma_dt.SetLineColor(1)
+leg_sigma_dt.SetLineStyle(1)
+leg_sigma_dt.SetLineWidth(1)
+leg_sigma_dt.SetFillColor(0)
+leg_sigma_dt.SetFillStyle(1001)
+leg_sigma_dt.AddEntry(gr_pt_sigma_dt_data, "data", "lep")
+leg_sigma_dt.AddEntry(gr_pt_sigma_dt_MC, "MC", "lep")
+leg_sigma_dt.AddEntry(gr_pt_sigma_dt_diff, "#Delta(data, MC)", "lep")
+#leg_sigma_dt.AddEntry(gr_pt_sigma_dt_MC_corr, "MC corr.", "lep")
+leg_sigma_dt.Draw()
 
 
-leg_fit_data = TLegend(0.42,0.615,0.93,0.715)
-leg_fit_data.SetNColumns(3)
-leg_fit_data.SetBorderSize(0)
-leg_fit_data.SetTextSize(0.035)
-leg_fit_data.SetTextColor(kBlue)
-leg_fit_data.SetLineColor(1)
-leg_fit_data.SetLineStyle(1)
-leg_fit_data.SetLineWidth(1)
-#leg_fit_data.SetFillColor(0)
-leg_fit_data.SetFillStyle(0)
-fit_ab_data = "data:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_a_data))+"}{p_{T}^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_b_data)/2.0)
-leg_fit_data.AddEntry(gr_pt_sigma_data, fit_ab_data , "")
-leg_fit_data.Draw()
+leg_fit_dt_data = TLegend(0.42,0.615,0.93,0.715)
+leg_fit_dt_data.SetNColumns(3)
+leg_fit_dt_data.SetBorderSize(0)
+leg_fit_dt_data.SetTextSize(0.035)
+leg_fit_dt_data.SetTextColor(kBlue)
+leg_fit_dt_data.SetLineColor(1)
+leg_fit_dt_data.SetLineStyle(1)
+leg_fit_dt_data.SetLineWidth(1)
+#leg_fit_dt_data.SetFillColor(0)
+leg_fit_dt_data.SetFillStyle(0)
+fit_ab_data = "data:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_dt_a_data))+"}{p_{T}^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_dt_b_data)/2.0)
+leg_fit_dt_data.AddEntry(gr_pt_sigma_dt_data, fit_ab_data , "")
+leg_fit_dt_data.Draw()
 
-leg_fit_MC = TLegend(0.42,0.315,0.93,0.415)
-leg_fit_MC.SetNColumns(3)
-leg_fit_MC.SetBorderSize(0)
-leg_fit_MC.SetTextSize(0.035)
-leg_fit_MC.SetTextColor(kRed)
-leg_fit_MC.SetLineColor(1)
-leg_fit_MC.SetLineStyle(1)
-leg_fit_MC.SetLineWidth(1)
-#leg_fit_MC.SetFillColor(0)
-leg_fit_MC.SetFillStyle(0)
-fit_ab_MC = "MC:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_a_MC))+"}{p_{T}^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_b_MC)/2.0)
-leg_fit_MC.AddEntry(gr_pt_sigma_MC, fit_ab_MC , "")
-leg_fit_MC.Draw()
+leg_fit_dt_MC = TLegend(0.42,0.315,0.93,0.415)
+leg_fit_dt_MC.SetNColumns(3)
+leg_fit_dt_MC.SetBorderSize(0)
+leg_fit_dt_MC.SetTextSize(0.035)
+leg_fit_dt_MC.SetTextColor(kRed)
+leg_fit_dt_MC.SetLineColor(1)
+leg_fit_dt_MC.SetLineStyle(1)
+leg_fit_dt_MC.SetLineWidth(1)
+#leg_fit_dt_MC.SetFillColor(0)
+leg_fit_dt_MC.SetFillStyle(0)
+fit_ab_MC = "MC:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_dt_a_MC))+"}{p_{T}^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_dt_b_MC)/2.0)
+leg_fit_dt_MC.AddEntry(gr_pt_sigma_dt_MC, fit_ab_MC , "")
+leg_fit_dt_MC.Draw()
 
 drawCMS(myC, 13, lumi)
 
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_vs_pt_Data_vs_MC_2016.pdf")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_vs_pt_Data_vs_MC_2016.png")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_vs_pt_Data_vs_MC_2016.C")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_pt_Data_vs_MC_2016.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_pt_Data_vs_MC_2016.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_pt_Data_vs_MC_2016.C")
+
+
+gr_pt_sigma_time_data  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_time_data), np.array(ex_pt), np.array(ey_pt_sigma_time_data))
+gr_pt_sigma_time_data.Draw("AP")
+gr_pt_sigma_time_data.SetMarkerColor(kBlue)
+gr_pt_sigma_time_data.SetLineColor(kBlue)
+gr_pt_sigma_time_data.SetLineWidth(2)
+gr_pt_sigma_time_data.SetTitle("")
+gr_pt_sigma_time_data.GetXaxis().SetTitle("p_{T}^{e} [GeV]")
+gr_pt_sigma_time_data.GetYaxis().SetTitle("#sigma_{t} [ps]")
+gr_pt_sigma_time_data.GetXaxis().SetTitleSize( axisTitleSize )
+gr_pt_sigma_time_data.GetXaxis().SetTitleOffset( axisTitleOffset )
+gr_pt_sigma_time_data.GetYaxis().SetTitleSize( axisTitleSize )
+gr_pt_sigma_time_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
+gr_pt_sigma_time_data.GetYaxis().SetRangeUser(100,500)
+
+tf1_time_vs_pt_data = TF1("tf1_time_vs_pt_data","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
+tf1_time_vs_pt_data.SetLineColor(kBlue)
+tf1_time_vs_pt_data.SetParameters(200.0, 300.0*300.0)
+gr_pt_sigma_time_data.Fit("tf1_time_vs_pt_data","","",59.0, 700.0)
+fit_time_a_data = tf1_time_vs_pt_data.GetParameter(0)
+fit_time_b_data = tf1_time_vs_pt_data.GetParameter(1)
+
+gr_pt_sigma_time_MC  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_time_MC), np.array(ex_pt), np.array(ey_pt_sigma_time_MC))
+gr_pt_sigma_time_MC.SetMarkerColor(kRed)
+gr_pt_sigma_time_MC.SetLineColor(kRed)
+gr_pt_sigma_time_MC.SetLineWidth(2)
+gr_pt_sigma_time_MC.Draw("Psame")
+
+
+gr_pt_sigma_time_MC_corr  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_time_MC_corr), np.array(ex_pt), np.array(ey_pt_sigma_time_MC_corr))
+gr_pt_sigma_time_MC_corr.SetMarkerColor(kViolet)
+gr_pt_sigma_time_MC_corr.SetLineColor(kViolet)
+gr_pt_sigma_time_MC_corr.SetLineWidth(2)
+#gr_pt_sigma_time_MC_corr.Draw("Psame")
+
+
+tf1_time_vs_pt_MC = TF1("tf1_time_vs_pt_MC","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
+tf1_time_vs_pt_MC.SetLineColor(kRed)
+tf1_time_vs_pt_MC.SetParameters(200.0, 130.0*130.0)
+gr_pt_sigma_time_MC.Fit("tf1_time_vs_pt_MC","","",59.0, 700.0)
+fit_time_a_MC = tf1_time_vs_pt_MC.GetParameter(0)
+fit_time_b_MC = tf1_time_vs_pt_MC.GetParameter(1)
+
+
+gr_pt_sigma_time_diff  =  TGraphErrors(N_pt_points, np.array(x_pt), np.array(y_pt_sigma_time_diff), np.array(ex_pt), np.array(ey_pt_sigma_time_diff))
+gr_pt_sigma_time_diff.SetMarkerColor(kBlack)
+gr_pt_sigma_time_diff.SetLineColor(kBlack)
+gr_pt_sigma_time_diff.SetLineWidth(2)
+gr_pt_sigma_time_diff.Draw("Psame")
+
+
+leg_sigma_time = TLegend(0.18,0.75,0.93,0.89)
+leg_sigma_time.SetNColumns(3)
+leg_sigma_time.SetBorderSize(0)
+leg_sigma_time.SetTextSize(0.03)
+leg_sigma_time.SetLineColor(1)
+leg_sigma_time.SetLineStyle(1)
+leg_sigma_time.SetLineWidth(1)
+leg_sigma_time.SetFillColor(0)
+leg_sigma_time.SetFillStyle(1001)
+leg_sigma_time.AddEntry(gr_pt_sigma_time_data, "data", "lep")
+leg_sigma_time.AddEntry(gr_pt_sigma_time_MC, "MC", "lep")
+leg_sigma_time.AddEntry(gr_pt_sigma_time_diff, "#Delta(data, MC)", "lep")
+#leg_sigma_time.AddEntry(gr_pt_sigma_time_MC_corr, "MC corr.", "lep")
+leg_sigma_time.Draw()
+
+
+leg_fit_time_data = TLegend(0.42,0.615,0.93,0.715)
+leg_fit_time_data.SetNColumns(3)
+leg_fit_time_data.SetBorderSize(0)
+leg_fit_time_data.SetTextSize(0.035)
+leg_fit_time_data.SetTextColor(kBlue)
+leg_fit_time_data.SetLineColor(1)
+leg_fit_time_data.SetLineStyle(1)
+leg_fit_time_data.SetLineWidth(1)
+#leg_fit_time_data.SetFillColor(0)
+leg_fit_time_data.SetFillStyle(0)
+fit_ab_data = "data:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_time_a_data))+"}{p_{T}^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_time_b_data)/2.0)
+leg_fit_time_data.AddEntry(gr_pt_sigma_time_data, fit_ab_data , "")
+leg_fit_time_data.Draw()
+
+leg_fit_time_MC = TLegend(0.42,0.315,0.93,0.415)
+leg_fit_time_MC.SetNColumns(3)
+leg_fit_time_MC.SetBorderSize(0)
+leg_fit_time_MC.SetTextSize(0.035)
+leg_fit_time_MC.SetTextColor(kRed)
+leg_fit_time_MC.SetLineColor(1)
+leg_fit_time_MC.SetLineStyle(1)
+leg_fit_time_MC.SetLineWidth(1)
+#leg_fit_time_MC.SetFillColor(0)
+leg_fit_time_MC.SetFillStyle(0)
+fit_ab_MC = "MC:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_time_a_MC))+"}{p_{T}^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_time_b_MC)/2.0)
+leg_fit_time_MC.AddEntry(gr_pt_sigma_time_MC, fit_ab_MC , "")
+leg_fit_time_MC.Draw()
+
+drawCMS(myC, 13, lumi)
+
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_pt_Data_vs_MC_2016.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_pt_Data_vs_MC_2016.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_pt_Data_vs_MC_2016.C")
 
 

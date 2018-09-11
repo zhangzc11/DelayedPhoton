@@ -36,53 +36,41 @@ print fileNameGJetsSkim
 print "QCD tree: "
 print fileNameQCDSkim
 
-'''
-for i in range(0,len(fileNameDataSkim)):
-	print "Data file "+str(i)+"  ... "
-	fileThis = TFile(fileNameDataSkim[i], "READ")
-	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameDataSkim[i].replace("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut","/data/zhicaiz/data/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT"),"RECREATE")
-	outputFile.cd()	
-	NEvents_out = NEvents.Clone()
-	outputTree = inputTree.CopyTree(cut_skim)
-	NEvents_out.Write()
-	outputTree.Write()
+def GetKeyNames( self, dir = "" ):
+        self.cd(dir)
+        return [key.GetName() for key in gDirectory.GetListOfKeys()]
+def GetClassNames( self, dir = "" ):
+        self.cd(dir)
+        return [key.GetClassName() for key in gDirectory.GetListOfKeys()]
 
-'''
-for i in range(0,len(fileNameGJetsSkim)):
-	print "GJets file "+str(i)+"  ... "
-	fileThis = TFile(fileNameGJetsSkim[i], "READ")
-	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameGJetsSkim[i].replace("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut","/data/zhicaiz/data/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT"),"RECREATE")
-	outputFile.cd()	
-	NEvents_out = NEvents.Clone()
-	outputTree = inputTree.CopyTree(cut_skim_bkg)
-	NEvents_out.Write()
-	outputTree.Write()
-'''
-for i in range(0,len(fileNameQCDSkim)):
-	print "QCD file "+str(i)+"  ... "
-	fileThis = TFile(fileNameQCDSkim[i], "READ")
-	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameQCDSkim[i].replace("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut","/data/zhicaiz/data/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT"),"RECREATE")
-	outputFile.cd()	
-	NEvents_out = NEvents.Clone()
-	outputTree = inputTree.CopyTree(cut_skim_bkg)
-	outputTree.Write()
-	NEvents_out.Write()
-for i in range(0,len(fileNameSigSkim)):
-	print "Sig file "+str(i)+"  ... "
-	fileThis = TFile(fileNameSigSkim[i], "READ")
-	inputTree = fileThis.Get("DelayedPhoton")
-	NEvents = fileThis.Get("NEvents")
-	outputFile = TFile(fileNameSigSkim[i].replace("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut","/data/zhicaiz/data/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT"),"RECREATE")
-	outputFile.cd()	
-	NEvents_out = NEvents.Clone()
-	outputTree = inputTree.CopyTree(cut_skim)
-	NEvents_out.Write()
-	outputTree.Write()
+TFile.GetKeyNames = GetKeyNames
+TFile.GetClassNames = GetClassNames
 
-'''
+
+fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameDataSkim
+
+for i in range(0,len(fileName_all)):
+	print "skim file "+fileName_all[i]
+
+	fileThis = TFile(fileName_all[i], "READ")
+	keyList = fileThis.GetKeyNames()
+	classList = fileThis.GetClassNames()
+	outputFile = TFile(fileName_all[i].replace("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut","/data/zhicaiz/data/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT"),"RECREATE")
+
+	outputFile.cd()
+
+	for i in range(0, len(keyList)):
+		print classList[i] + "   ===   " + keyList[i]
+		if classList[i] == "TTree":
+			fileThis.cd()
+			inputTree = fileThis.Get(keyList[i])
+			outputFile.cd()
+			outputTree = inputTree.CopyTree(cut_skim)
+			outputTree.Write()
+		if classList[i] == "TH1F":
+			fileThis.cd()
+			histThis = fileThis.Get(keyList[i])
+			outputFile.cd()
+			histThis_out = histThis.Clone()
+			histThis_out.Write()
+

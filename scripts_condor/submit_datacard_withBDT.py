@@ -2,9 +2,9 @@
 
 import subprocess, time, sys, os, shlex
 
-inputData = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_withBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root"
+inputData = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_withBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root"
 
-inputSigDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/skim_withBDT/"
+inputSigDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_withBDT/"
 
 
 if __name__ == "__main__":
