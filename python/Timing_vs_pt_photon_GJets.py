@@ -1,10 +1,10 @@
-from ROOT import *
+from ROOT import gStyle, gROOT, TFile, TTree, TH1, TH1F, THStack, kRed, kBlue, kBlack, kViolet, kOrange, kAzure, TChain, SetOwnership, TCanvas, TLegend, TPad, TF1, TGraphErrors
 import os, sys
 from Aux import *
 import numpy as np
 import array
 from config_noBDT import outputDir
-from config_noBDT import lumi
+from config_noBDT import lumi, weight_cut
 
 gROOT.SetBatch(True)
 
@@ -125,7 +125,7 @@ for i in range(0, N_pt_points):
 	cut_1g_this = cut+" && pho1Pt > "+str(pt_low_this)+" && pho1Pt < "+str(pt_high_this)
 
 	hist_1g_this_data = TH1F("hist_1g_this_data_"+str(i),"hist_1g_this_data_"+str(i), 60, -1.5, 1.5)
-	tree_data.Draw("pho1ClusterTime>>hist_1g_this_data_"+str(i), "(weight*pileupWeight) * " + cut_1g_this)
+	tree_data.Draw("pho1ClusterTime>>hist_1g_this_data_"+str(i),  weight_cut + cut_1g_this)
 	result_1g_this_data = singGausFit(hist_1g_this_data, -0.6, 0.6) 
 	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_photon_"+str(i)+"_dt_data.png")
 	y_pt_mean_data[i] = result_1g_this_data[0]
@@ -133,10 +133,8 @@ for i in range(0, N_pt_points):
 
 
 
-
-
 	hist_1g_this_GJets = TH1F("hist_1g_this_GJets_"+str(i),"hist_1g_this_GJets_"+str(i), 60, -1.5, 1.5)
-	tree_GJets.Draw("pho1ClusterTime>>hist_1g_this_GJets_"+str(i), "(weight*pileupWeight) * " + cut_1g_this)
+	tree_GJets.Draw("pho1ClusterTime>>hist_1g_this_GJets_"+str(i),  weight_cut + cut_1g_this)
 	result_1g_this_GJets = singGausFit(hist_1g_this_GJets, -0.6, 0.6) 
 	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_photon_"+str(i)+"_dt_GJets.png")
 	y_pt_mean_GJets[i] = result_1g_this_GJets[0]
@@ -148,9 +146,8 @@ for i in range(0, N_pt_points):
 
 
 
-
 	hist_1g_this_GJets_corr = TH1F("hist_1g_this_GJets_corr_"+str(i),"hist_1g_this_GJets_corr_"+str(i), 60, -1.5, 1.5)
-	tree_GJets.Draw("pho1ClusterTime_SmearToData>>hist_1g_this_GJets_corr_"+str(i), "(weight*pileupWeight) * " + cut_1g_this)
+	tree_GJets.Draw("pho1ClusterTime_SmearToData>>hist_1g_this_GJets_corr_"+str(i),  weight_cut + cut_1g_this)
 	result_1g_this_GJets_corr = singGausFit(hist_1g_this_GJets_corr, -0.6, 0.6) 
 	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_photon_"+str(i)+"_dt_GJets_corr.png")
 	y_pt_mean_GJets_corr[i] = result_1g_this_GJets_corr[0]

@@ -10,7 +10,7 @@ from config_noBDT import fileNameDataSkim
 from config_noBDT import fileNameData
 from Aux import *
 
-from config_noBDT import fileNameGJets, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config_noBDT import fileNameGJets, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, weight_cut
 from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 
 root.gROOT.ProcessLine("struct MyStruct{float weight_sumET;};")
@@ -45,6 +45,15 @@ rightMargin  = 0.05
 topMargin    = 0.07
 bottomMargin = 0.12
 
+def GetKeyNames( self, dir = "" ):
+        self.cd(dir)
+        return [key.GetName() for key in root.gDirectory.GetListOfKeys()]
+def GetClassNames( self, dir = "" ):
+        self.cd(dir)
+        return [key.GetClassName() for key in root.gDirectory.GetListOfKeys()]
+
+root.TFile.GetKeyNames = GetKeyNames
+root.TFile.GetClassNames = GetClassNames
 
 def smear_and_fill(oldTree, newTree, s, histWeight):
 	num_entries = oldTree.GetEntries()
@@ -64,7 +73,6 @@ def smear_file(inFileName, histWeight):
 	print "reweighting input file: "+inFileName
 	inFile = root.TFile(inFileName.replace('GoodLumi','GoodLumi_noreweight'), "READ")
 	inTree = inFile.Get("DelayedPhoton")
-	inNevents = inFile.Get("NEvents")
 
 	outFile = root.TFile(inFileName, 'RECREATE')
 	outTree = inTree.CloneTree(0)
@@ -77,13 +85,25 @@ def smear_file(inFileName, histWeight):
 	smear_and_fill(inTree, outTree, s, histWeight)
 	outFile.cd()
 	outTree.GetCurrentFile().Write()
-	inNevents.Write()
+
+	##copy histograms
+	keyList = inFile.GetKeyNames()
+        classList = inFile.GetClassNames()
+	for j in range(0, len(keyList)):
+                print classList[j] + "   ===   " + keyList[j]
+                if classList[j] == "TH1F":
+                        inFile.cd()
+                        histThis = fileThis.Get(keyList[j])
+                        outFile.cd()
+                        histThis_out = histThis.Clone()
+                        histThis_out.Write()
+
 	outTree.GetCurrentFile().Close()
 
 xbins_sumET = [0.0, 100.0, 200.0, 400.0, 600.0, 800, 1000.0, 1250.0, 1500.0, 1750.0, 2000.0, 2500.0, 3000.0, 5000.0, 10000.0]
 
-weightedcut_CR = "(weight*pileupWeight) * " + cut_GJets
-weightedcut_SR = "(weight*pileupWeight) * " + cut
+weightedcut_CR =  weight_cut + cut_GJets
+weightedcut_SR =  weight_cut + cut
 
 #######obtain the weight: SR/CR:
 

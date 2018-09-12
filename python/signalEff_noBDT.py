@@ -4,6 +4,7 @@ from Aux import *
 import numpy as np
 import array
 
+from config_noBDT import weight_cut
 
 gROOT.SetBatch(True)
 
@@ -38,7 +39,7 @@ def print_eff_table(cut):
 	list_ctau = ["0p01","0p1","5","10","50","100","200","400","600","800","1000","1200","4000","20000"]
 	list_Lambda  = ["100","150","200","250","300","350","400"]
 
-	weightedcut = "(weight*pileupWeight) * ("+cut+")"	
+	weightedcut =  weight_cut + cut
 
 	print weightedcut
 

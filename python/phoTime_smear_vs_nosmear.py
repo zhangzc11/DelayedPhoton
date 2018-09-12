@@ -2,7 +2,7 @@ from ROOT import *
 import os, sys
 from Aux import *
 from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend, timeShift
+from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend, timeShift, weight_cut
 import numpy as np
 import array
 
@@ -113,7 +113,7 @@ print NEventsQCD
 
 print "\n cut = " + cut
 
-weightedcut = "(weight*pileupWeight) * " + cut 
+weightedcut =  weight_cut + cut 
 
 plot_noSmear = ["pho1ClusterTime", "phoTimeCluster_noSmear_log", "#gamma cluster time [ns]", 100,-5,15, True]
 plot_Smear = ["pho1ClusterTime_SmearToData", "phoTimeCluster_Smear_log", "#gamma cluster time [ns]", 100,-5,15, True]
@@ -171,6 +171,7 @@ for i in range(0, len(treeQCD)):
 	histQCD_noSmear.Add(histThis)
 	print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 '''
+
 histQCD_noSmear.Scale(histData.Integral()/histQCD_noSmear.Integral())
 histQCD_noSmear.SetLineColor(kOrange)
 histQCD_noSmear.SetLineWidth( 2 )

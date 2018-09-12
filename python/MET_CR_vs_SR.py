@@ -10,7 +10,7 @@ from config_noBDT import fileNameDataSkim
 from config_noBDT import fileNameData
 from Aux import *
 
-from config_noBDT import fileNameGJets, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
+from config_noBDT import fileNameGJets, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, weight_cut
 from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 
 root.gROOT.SetBatch(True)
@@ -39,8 +39,8 @@ topMargin    = 0.07
 bottomMargin = 0.12
 
 
-weightedcut_CR = "(weight*pileupWeight) * " + cut_GJets
-weightedcut_SR = "(weight*pileupWeight) * " + cut
+weightedcut_CR =  weight_cut + cut_GJets
+weightedcut_SR =  weight_cut + cut
 
 #######obtain the weight: SR/CR:
 xbins_MET = [0.0, 10.0, 20.0, 40.0, 60.0, 80, 100.0, 125.0, 150.0, 175.0, 200.0, 250.0, 300.0, 400.0, 500.0, 1000.0]

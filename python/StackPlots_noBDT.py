@@ -2,7 +2,7 @@ from ROOT import gStyle, gROOT, TFile, TTree, TH1, TH1F, THStack, kRed, kBlue, k
 import os, sys
 from Aux import *
 from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_loose_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
+from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend, weight_cut
 import numpy as np
 import array
 
@@ -87,9 +87,9 @@ print NEventsQCD
 
 print "\n cut = " + cut
 
-weightedcut = "(weight*pileupWeight) * " + cut 
-weightedcut_noDisc = "(weight*pileupWeight) * " + cut_noDisc
-weightedcut_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_noSigmaIetaIeta
+weightedcut =  weight_cut + cut 
+weightedcut_noDisc =  weight_cut + cut_noDisc
+weightedcut_noSigmaIetaIeta =  weight_cut + cut_noSigmaIetaIeta
 
 #fileOut = TFile("../data/shapes.root","RECREATE")
 #fileOut.cd()

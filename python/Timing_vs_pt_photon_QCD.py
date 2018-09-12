@@ -4,7 +4,7 @@ from Aux import *
 import numpy as np
 import array
 from config_noBDT import outputDir
-from config_noBDT import lumi
+from config_noBDT import lumi, weight_cut
 
 gROOT.SetBatch(True)
 
@@ -133,7 +133,7 @@ for i in range(0, N_pt_points):
 
 
 	hist_1g_this_QCD = TH1F("hist_1g_this_QCD_"+str(i),"hist_1g_this_QCD_"+str(i), 60, -1.5, 1.5)
-	tree_QCD.Draw("pho1ClusterTime>>hist_1g_this_QCD_"+str(i), "(weight*pileupWeight) * " + cut_1g_this)
+	tree_QCD.Draw("pho1ClusterTime>>hist_1g_this_QCD_"+str(i),  weight_cut + cut_1g_this)
 	result_1g_this_QCD = singGausFit(hist_1g_this_QCD, -0.6, 0.6) 
 	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_photon_"+str(i)+"_dt_QCD.png")
 	y_pt_mean_QCD[i] = result_1g_this_QCD[0]
@@ -147,7 +147,7 @@ for i in range(0, N_pt_points):
 
 
 	hist_1g_this_QCD_corr = TH1F("hist_1g_this_QCD_corr_"+str(i),"hist_1g_this_QCD_corr_"+str(i), 60, -1.5, 1.5)
-	tree_QCD.Draw("pho1ClusterTime_SmearToData>>hist_1g_this_QCD_corr_"+str(i), "(weight*pileupWeight) * " + cut_1g_this)
+	tree_QCD.Draw("pho1ClusterTime_SmearToData>>hist_1g_this_QCD_corr_"+str(i),  weight_cut + cut_1g_this)
 	result_1g_this_QCD_corr = singGausFit(hist_1g_this_QCD_corr, -0.6, 0.6) 
 	myC.SaveAs(outputDir+"/ZeeTiming/iptFit_photon_"+str(i)+"_dt_QCD_corr.png")
 	y_pt_mean_QCD_corr[i] = result_1g_this_QCD_corr[0]

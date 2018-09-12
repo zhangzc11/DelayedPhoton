@@ -4,7 +4,7 @@ import os, sys
 from Aux import drawCMS, drawCMS2
 from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, cut_2J_noSigmaIetaIeta, cut_3J_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
 from config_noBDT import scaleBkg
-from config_noBDT import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes
+from config_noBDT import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes, weight_cut
 from config_noBDT import cut_GJets_shape_2J_noSigmaIetaIeta, cut_QCD_shape_2J_noSigmaIetaIeta
 from config_noBDT import cut_GJets_shape_3J, cut_QCD_shape_3J
 from config_noBDT import cut_GJets_shape_3J_noSigmaIetaIeta, cut_QCD_shape_3J_noSigmaIetaIeta
@@ -92,14 +92,14 @@ print "\n cut_QCD_shape_3J = " + cut_QCD_shape_3J
 print "\n cut_GJets_shape_3J = " + cut_GJets_shape_3J
 
 
-weightedcut_QCD_shape_2J = "(weight*pileupWeight) * " + cut_QCD_shape_2J 
-weightedcut_QCD_shape_2J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_QCD_shape_2J_noSigmaIetaIeta
-weightedcut_GJets_shape_2J = "(weight*pileupWeight) * " + cut_GJets_shape_2J 
-weightedcut_GJets_shape_2J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_GJets_shape_2J_noSigmaIetaIeta
-weightedcut_QCD_shape_3J = "(weight*pileupWeight) * " + cut_QCD_shape_3J 
-weightedcut_QCD_shape_3J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_QCD_shape_3J_noSigmaIetaIeta
-weightedcut_GJets_shape_3J = "(weight*pileupWeight) * " + cut_GJets_shape_3J 
-weightedcut_GJets_shape_3J_noSigmaIetaIeta = "(weight*pileupWeight) * " + cut_GJets_shape_3J_noSigmaIetaIeta
+weightedcut_QCD_shape_2J = weight_cut + cut_QCD_shape_2J 
+weightedcut_QCD_shape_2J_noSigmaIetaIeta =  weight_cut + cut_QCD_shape_2J_noSigmaIetaIeta
+weightedcut_GJets_shape_2J =  weight_cut + cut_GJets_shape_2J 
+weightedcut_GJets_shape_2J_noSigmaIetaIeta =  weight_cut + cut_GJets_shape_2J_noSigmaIetaIeta
+weightedcut_QCD_shape_3J =  weight_cut + cut_QCD_shape_3J 
+weightedcut_QCD_shape_3J_noSigmaIetaIeta =  weight_cut + cut_QCD_shape_3J_noSigmaIetaIeta
+weightedcut_GJets_shape_3J =  weight_cut + cut_GJets_shape_3J 
+weightedcut_GJets_shape_3J_noSigmaIetaIeta =  weight_cut + cut_GJets_shape_3J_noSigmaIetaIeta
 
 #print "weightedcut_QCD_shape_3J: "+weightedcut_QCD_shape_3J
 #print "weightedcut_GJets_shape_3J: "+weightedcut_GJets_shape_3J

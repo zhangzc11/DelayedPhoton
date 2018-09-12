@@ -4,7 +4,7 @@ import ROOT
 import os #, sys
 from Aux import drawCMS
 from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut, splots, lumi, outputDir, xsecGJets, xsecQCD
-from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, cut_GJets_shape, cut_QCD_shape
+from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, cut_GJets_shape, cut_QCD_shape, weight_cut
 #import numpy as np
 #import array
 
@@ -89,17 +89,17 @@ print NEventsQCD
 
 print "\n cut = " + cut
 
-weightedcut = "(weight*pileupWeight) * " + cut 
-weightedcut_GJets_pure = "(weight*pileupWeight) * " + cut_GJets_shape 
-#weightedcut_GJets_inGJets = "(weight*pileupWeight) * " + cut_GJets_shape + "&& " +cut_GJets 
-weightedcut_GJets_inGJets = "(weight*pileupWeight) * " + cut_GJets 
-#weightedcut_QCD_inGJets = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")" + "&& " +cut_GJets_shape 
-weightedcut_QCD_inGJets = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")"
-weightedcut_QCD_pure = "(weight*pileupWeight) * " + cut_QCD_shape 
-#weightedcut_GJets_inQCD = "(weight*pileupWeight) * " + cut_QCD_shape + "&& " +cut_GJets 
-weightedcut_GJets_inQCD = "(weight*pileupWeight) * " + cut_GJets 
-#weightedcut_QCD_inQCD = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")" + "&& " + cut_QCD_shape
-weightedcut_QCD_inQCD = "(weight*pileupWeight) * " + cut_loose + " && !( " + cut +")"
+weightedcut =  weight_cut + cut 
+weightedcut_GJets_pure =  weight_cut + cut_GJets_shape 
+#weightedcut_GJets_inGJets =  weight_cut + cut_GJets_shape + "&& " +cut_GJets 
+weightedcut_GJets_inGJets =  weight_cut + cut_GJets 
+#weightedcut_QCD_inGJets =  weight_cut + cut_loose + " && !( " + cut +")" + "&& " +cut_GJets_shape 
+weightedcut_QCD_inGJets =  weight_cut + cut_loose + " && !( " + cut +")"
+weightedcut_QCD_pure =  weight_cut + cut_QCD_shape 
+#weightedcut_GJets_inQCD =  weight_cut + cut_QCD_shape + "&& " +cut_GJets 
+weightedcut_GJets_inQCD =  weight_cut + cut_GJets 
+#weightedcut_QCD_inQCD =  weight_cut + cut_loose + " && !( " + cut +")" + "&& " + cut_QCD_shape
+weightedcut_QCD_inQCD =  weight_cut + cut_loose + " && !( " + cut +")"
 
 
 #fileOut = TFile("../data/shapes.root","RECREATE")
