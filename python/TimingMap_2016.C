@@ -70,19 +70,22 @@ float * doubGausFit(TH1F *hist){
 	return pointer;
 }
 
-float * singGausFit(TH1F *hist){
+//float * singGausFit(TH1F *hist){
+float singGausFit(TH1F *hist){
 	if(hist->Integral() < 100.0 && hist->Integral() > 20.0){
-		float result[4] = {float(hist->GetMean()), float(hist->GetMeanError()), float(hist->GetStdDev()), float(hist->GetStdDevError())};
-		float * pointer = new float[4];
-		for(int i=0; i<4; i++) pointer[i] = result[i];
-		return pointer;
+		//float result[4] = {float(hist->GetMean()), float(hist->GetMeanError()), float(hist->GetStdDev()), float(hist->GetStdDevError())};
+		//float * pointer = new float[4];
+		//for(int i=0; i<4; i++) pointer[i] = result[i];
+		//return pointer;
+		return float(hist->GetMean());
 	}
 	
 	if(hist->Integral() < 20.0){
-		float result[4] = {0};
-		float * pointer = new float[4];
-		for(int i=0; i<4; i++) pointer[i] = result[i];
-		return pointer;
+		//float result[4] = {0};
+		//float * pointer = new float[4];
+		//for(int i=0; i<4; i++) pointer[i] = result[i];
+		//return pointer;
+		return 0.0;
 	}
 
 	float x_mean=hist->GetMean();
@@ -99,12 +102,14 @@ float * singGausFit(TH1F *hist){
 	if(abs(meanEff)>1.0){
 		meanEff = 0.0, emeanEff = 0.0, sigEff = 0.0, esigEff = 0.0;
 	}
-	float result[4] = {meanEff,emeanEff,sigEff,esigEff};
 
-	float * pointer = new float[4];
-	for(int i=0; i<4; i++) pointer[i] = result[i];
-	delete tf1_singGaus;
-	return pointer;
+	//float result[4] = {meanEff,emeanEff,sigEff,esigEff};
+
+	//float * pointer = new float[4];
+	//for(int i=0; i<4; i++) pointer[i] = result[i];
+	//delete tf1_singGaus;
+	//return pointer;
+	return meanEff;
 }
 
        
@@ -558,9 +563,11 @@ void TimingMap_2016()
 		for(int iPhi = 0; iPhi<360; iPhi++){
 			for(int idx_neighb = 0; idx_neighb < 6; idx_neighb++){
 				if(iPhi == 11 && iEta%9==0) h1_array_time_data[iEta][iPhi][idx_neighb]->Draw();
-				float * result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
+				//float * result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
+				float result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
 				if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+".png");
-				dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus[0];
+				//dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus[0];
+				dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus;
 				//h2_time_iEta_vs_iPhi_data->SetBinContent(iEta+1, iPhi+1, result_singGaus[0]);		
 			}
 		}
