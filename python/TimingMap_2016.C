@@ -498,11 +498,11 @@ void TimingMap_2016()
 			float t1 = 0, t2 = 0;
 			int ieta1 = 0, iphi1 = 0;
 			int ieta2 = 0, iphi2 = 0;
-			for(int i=0;i<ele1Rechit_IEtaIX->size(); i++){
-				if(ele1seedIEta == ele1Rechit_IEtaIX->at(i) && ele1seedIPhi == ele1Rechit_IPhiIY->at(i)){
-					ieta1 = ele1Rechit_IEtaIX->at(i);
-                                        iphi1 = ele1Rechit_IPhiIY->at(i);
-					t1 = ele1Rechit_rawT->at(i);
+			for(int isd=0;isd<ele1Rechit_IEtaIX->size(); isd++){
+				if(ele1seedIEta == ele1Rechit_IEtaIX->at(isd) && ele1seedIPhi == ele1Rechit_IPhiIY->at(isd)){
+					ieta1 = ele1Rechit_IEtaIX->at(isd);
+                                        iphi1 = ele1Rechit_IPhiIY->at(isd);
+					t1 = ele1Rechit_rawT->at(isd);
 				}	
 			}
 
@@ -519,20 +519,18 @@ void TimingMap_2016()
 				
 				h1_array_time_data[ieta2+85][iphi2-1][4]->Fill(t2);
 				if(ieta2>0){
-				for(int ieta2_this=ieta2_TTlow; ieta2_this<ieta2_TTlow+5; ieta2_this++){
-					for(int iphi2_this=iphi2_TTlow; iphi2_this<iphi2_TTlow+5; iphi2_this++){
-						h1_array_time_data[ieta2_this+85][iphi2_this-1][5]->Fill(t2);
+					for(int ieta2_this=ieta2_TTlow; ieta2_this<ieta2_TTlow+5; ieta2_this++){
+						for(int iphi2_this=iphi2_TTlow; iphi2_this<iphi2_TTlow+5; iphi2_this++){
+							h1_array_time_data[ieta2_this+85][iphi2_this-1][5]->Fill(t2);
+						}
 					}
-				}
 				}
 				else{
-				for(int ieta2_this=-1*ieta2_TTlow-4; ieta2_this<-1*ieta2_TTlow+1; ieta2_this++){
-					for(int iphi2_this=iphi2_TTlow; iphi2_this<iphi2_TTlow+5; iphi2_this++){
-						h1_array_time_data[ieta2_this+85][iphi2_this-1][5]->Fill(t2);
+					for(int ieta2_this=-1*ieta2_TTlow-4; ieta2_this<-1*ieta2_TTlow+1; ieta2_this++){
+						for(int iphi2_this=iphi2_TTlow; iphi2_this<iphi2_TTlow+5; iphi2_this++){
+							h1_array_time_data[ieta2_this+85][iphi2_this-1][5]->Fill(t2);
+						}
 					}
-				}
-
-
 				}
 
 				int idx_neighboring = -999;
@@ -558,12 +556,12 @@ void TimingMap_2016()
 	// do the fit to get the mean time in each ieta iphi bin
 	for(int iEta = 0; iEta < 171; iEta++){
 		for(int iPhi = 0; iPhi<360; iPhi++){
-		for(int idx_neighb = 0; idx_neighb < 6; idx_neighb++){
-			if(iPhi == 11 && iEta%9==0) h1_array_time_data[iEta][iPhi][idx_neighb]->Draw();
-			float * result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
-			if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+".png");
-			dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus[0];
-			//h2_time_iEta_vs_iPhi_data->SetBinContent(iEta+1, iPhi+1, result_singGaus[0]);		
+			for(int idx_neighb = 0; idx_neighb < 6; idx_neighb++){
+				if(iPhi == 11 && iEta%9==0) h1_array_time_data[iEta][iPhi][idx_neighb]->Draw();
+				float * result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
+				if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+".png");
+				dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus[0];
+				//h2_time_iEta_vs_iPhi_data->SetBinContent(iEta+1, iPhi+1, result_singGaus[0]);		
 			}
 		}
 	}
