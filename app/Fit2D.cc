@@ -112,6 +112,8 @@ std::string treeName = "DelayedPhoton";
 
 std::string cut, cut_JESUp, cut_JESDown, cut_noHLT, cut_loose, cut_GJets, cut_MET_filter, cut_noSigmaIetaIeta;
 
+std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight*";
+
 cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
 if(category == "2J")
@@ -517,7 +519,7 @@ if(fitMode == "binning")
 	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", cut.c_str());
 	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinGJets", cut_GJets.c_str());
 	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
-	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", (weight_cut + "( "+cut+" )").c_str());
 
 	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
 	h2finebinGJets->Scale((1.0*h2finebinData->Integral()*frac_GJets)/(1.0*h2finebinGJets->Integral()));
@@ -600,19 +602,19 @@ TH1F * h1newbinQCD_MET = new TH1F("h1newbinQCD_MET","; #slash{E}_{T} (GeV); Even
 tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinData", cut.c_str());
 tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinGJets", cut_GJets.c_str());
 tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinQCD", (cut_loose + " && ! (" + cut + ")").c_str());
-tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinSig", ("weight*pileupWeight * ( "+cut+" )").c_str());
-tree_signal->Draw("t1MET_JESUp:pho1ClusterTime_SmearToData>>h2newbinSig_JESUp", ("weight*pileupWeight * ( "+cut_JESUp+" )").c_str());
-tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData+0.03)>>h2newbinSig_TimeCorrUp", ("weight*pileupWeight * ( "+cut+" )").c_str());
-tree_signal->Draw("t1MET_JESDown:pho1ClusterTime_SmearToData>>h2newbinSig_JESDown", ("weight*pileupWeight * ( "+cut_JESDown+" )").c_str());
-tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData-0.03)>>h2newbinSig_TimeCorrDown", ("weight*pileupWeight * ( "+cut+" )").c_str());
+tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2newbinSig", (weight_cut + "( "+cut+" )").c_str());
+tree_signal->Draw("t1MET_JESUp:pho1ClusterTime_SmearToData>>h2newbinSig_JESUp", (weight_cut + "( "+cut_JESUp+" )").c_str());
+tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData+0.03)>>h2newbinSig_TimeCorrUp", (weight_cut + "( "+cut+" )").c_str());
+tree_signal->Draw("t1MET_JESDown:pho1ClusterTime_SmearToData>>h2newbinSig_JESDown", (weight_cut + "( "+cut_JESDown+" )").c_str());
+tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData-0.03)>>h2newbinSig_TimeCorrDown", (weight_cut + "( "+cut+" )").c_str());
 
 tree_data->Draw("pho1ClusterTime_SmearToData>>h1newbinData_time", cut.c_str());
-tree_signal->Draw("pho1ClusterTime_SmearToData>>h1newbinSig_time", ("weight*pileupWeight * ( "+cut+" )").c_str());
+tree_signal->Draw("pho1ClusterTime_SmearToData>>h1newbinSig_time", (weight_cut + "( "+cut+" )").c_str());
 tree_data->Draw("pho1ClusterTime_SmearToData>>h1newbinGJets_time", cut_GJets.c_str());
 tree_data->Draw("pho1ClusterTime_SmearToData>>h1newbinQCD_time", (cut_loose + " && ! (" + cut + ")").c_str());
 
 tree_data->Draw("t1MET>>h1newbinData_MET", cut.c_str());
-tree_signal->Draw("t1MET>>h1newbinSig_MET", ("weight*pileupWeight * ( "+cut+" )").c_str());
+tree_signal->Draw("t1MET>>h1newbinSig_MET", (weight_cut + "( "+cut+" )").c_str());
 tree_data->Draw("t1MET>>h1newbinGJets_MET", cut_GJets.c_str());
 tree_data->Draw("t1MET>>h1newbinQCD_MET", (cut_loose + " && ! (" + cut + ")").c_str());
 
@@ -766,9 +768,13 @@ if(fitMode == "datacard")
 	//datacards
 	MakeDataCard(_sigModelName, ws_combine, h1combineData->Integral(), nBkg_2DFit_combine_DataBkgSig, N_sig_expected, outDataCardsDir);
 	//********systematics*********//
+	//lumi
 	AddSystematics_Norm(_sigModelName, 0.0, 1.025, outDataCardsDir, "lumi", "lnN");	//https://hypernews.cern.ch/HyperNews/CMS/get/luminosity/688.html
+	//photon and trigger efficiency
+	AddSystematics_Norm(_sigModelName, 0.0, 1.03, outDataCardsDir, "Trigger_Photon", "lnN");
 	//JES
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "JES", "shapeN2");	
+	//Timing correction
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "TimeCorr", "shapeN2");	
 		
 	//save the histograms
