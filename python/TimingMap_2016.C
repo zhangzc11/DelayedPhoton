@@ -1,7 +1,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-bool drawOnly = true;
+bool drawOnly = false;
 
 float axisTitleSize = 0.06;
 float axisTitleOffset = 0.8;
@@ -504,6 +504,7 @@ void TimingMap_2016()
                                         iphi1 = ele1Rechit_IPhiIY->at(i);
 					t1 = ele1Rechit_rawT->at(i);
 				}	
+			}
 
 			for(int i=0; i<ele1Rechit_rawT->size(); i++){
 				if(ele1Rechit_E->at(i)<10.0) continue;
@@ -552,7 +553,6 @@ void TimingMap_2016()
 				}
 			}
 		}
-	}
 	}
 
 	// do the fit to get the mean time in each ieta iphi bin
