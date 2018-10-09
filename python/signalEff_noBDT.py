@@ -1,4 +1,4 @@
-from ROOT import *
+from ROOT import gStyle, gROOT, TFile, TTree, TH1, TH1F, THStack, kRed, kBlue, kBlack, kViolet, kOrange, kAzure, TChain, SetOwnership, TCanvas, TLegend, TPad, TF1, TGraphErrors
 import os, sys
 from Aux import *
 import numpy as np

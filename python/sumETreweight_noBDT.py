@@ -93,7 +93,7 @@ def smear_file(inFileName, histWeight):
                 print classList[j] + "   ===   " + keyList[j]
                 if classList[j] == "TH1F":
                         inFile.cd()
-                        histThis = fileThis.Get(keyList[j])
+                        histThis = inFile.Get(keyList[j])
                         outFile.cd()
                         histThis_out = histThis.Clone()
                         histThis_out.Write()
