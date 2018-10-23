@@ -770,8 +770,10 @@ if(fitMode == "datacard")
 	//********systematics*********//
 	//lumi
 	AddSystematics_Norm(_sigModelName, 0.0, 1.025, outDataCardsDir, "lumi", "lnN");	//https://hypernews.cern.ch/HyperNews/CMS/get/luminosity/688.html
-	//photon and trigger efficiency
-	AddSystematics_Norm(_sigModelName, 0.0, 1.03, outDataCardsDir, "Trigger_Photon", "lnN");
+	//photon efficiency
+	AddSystematics_Norm(_sigModelName, 0.0, 1.01, outDataCardsDir, "Photon_", "lnN");
+	//trigger efficiency
+	AddSystematics_Norm(_sigModelName, 0.0, 1.01, outDataCardsDir, "Trigger_", "lnN");
 	//JES
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "JES", "shapeN2");	
 	//Timing correction

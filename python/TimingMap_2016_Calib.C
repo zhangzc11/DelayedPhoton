@@ -188,13 +188,13 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 		tree_data->Draw(("t1-t2>>hist_2e_this_data_"+std::to_string(i)).c_str(), cut_2e_this);
 		hist_2e_this_data->Draw();
 		float * result_2e_this_data = doubGausFit(hist_2e_this_data);
-		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+".png");		
+		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+"_Calib.png");		
 
 		TH1F * hist_2e_this_MC = new TH1F(("hist_2e_this_MC_"+std::to_string(i)).c_str(),("hist_2e_this_MC_"+std::to_string(i)).c_str(), 60, -1.5, 1.5);
 		tree_MC->Draw(("t1-t2>>hist_2e_this_MC_"+std::to_string(i)).c_str(), cut_2e_this);
 		hist_2e_this_MC->Draw();
 		float * result_2e_this_MC = doubGausFit(hist_2e_this_MC);
-		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_MC_CLK_"+label+".png");		
+		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_MC_CLK_"+label+"_Calib.png");		
 
 		y_Eeff_sigma_dt_data[i] = (result_2e_this_data[2]);
 		ey_Eeff_sigma_dt_data[i] = (result_2e_this_data[3]);
@@ -294,9 +294,9 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 
 	DrawCMS(myC, 13, 35922.0);
 
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".png");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".C");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_Calib.pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_Calib.png");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_Calib.C");
 	
 	delete myC;
 	delete gr_Eeff_sigma_dt_data;
@@ -375,8 +375,9 @@ void drawTimingMap(TH2F * h2_map, TString label, TString title="time [ns]", floa
 
 	float meanZ = 0.0;
 	TH1F * h1_forRMS = new TH1F("h1_forRMS","h1_forRMS",1000,-5.0,5.0);
+
 	for (int ix=1;ix<=171;ix++){for(int iy=1;iy<=360;iy++){meanZ += h2_map->GetBinContent(ix,iy); h1_forRMS->Fill(h2_map->GetBinContent(ix,iy));}}
-	
+
 	meanZ = meanZ/(171.0*360.0);
 	float RMSZ = h1_forRMS->GetRMS();
 
@@ -385,38 +386,39 @@ void drawTimingMap(TH2F * h2_map, TString label, TString title="time [ns]", floa
 
 	//DrawCMS(myC, 13, 35922.0);
 	
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+".pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+".png");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+".C");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_Calib.pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_Calib.png");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_Calib.C");
 
 	h2_map->GetYaxis()->SetRangeUser(0.5,50.5);
         h2_map->GetXaxis()->SetRangeUser(0.5,85.5);
         h2_map->Draw("colz");
         myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_zoom.pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_zoom.pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_zoom.png");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_zoom.C");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_zoom_Calib.pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_zoom_Calib.png");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_zoom_Calib.C");
 
 	delete myC;
 	h2_map->GetYaxis()->SetRangeUser(0.5,360.5);
         h2_map->GetXaxis()->SetRangeUser(-85.5,85.5);
         h2_map->Draw("colz");
+	
 	delete h1_forRMS;
-        cout<<"mean and RMS for this map:  "<<meanZ<<"  "<<RMSZ<<endl;
-
+	cout<<"mean and RMS for this map:  "<<meanZ<<"  "<<RMSZ<<endl;
 
 }
-void TimingMap_2016()
+void TimingMap_2016_Calib()
 {
 
 
-	TFile * file_data = new TFile("/data/zhicaiz/data/Run2Analysis/EcalTiming/ntuples_V4p1_31Aug2018/ElectronTiming_All2016.root","READ");
-	TTree * tree_data = (TTree*)file_data->Get("ElectronTiming");
+	TFile * file_data = new TFile("/data/zhicaiz/data/Run2Analysis/EcalTiming/ntuples_V4p1_31Aug2018/All2016.root","READ");
+	TTree * tree_data = (TTree*)file_data->Get("ZeeTiming");
 	tree_data->SetCacheSize(12000000000);//12GB
 
 
 	int N_entries_data = tree_data->GetEntries();	
 	//import input variables
+	
 	float ele1seedE;
 	float seed1_pedestal;
 	bool ele1IsEB;
@@ -427,9 +429,26 @@ void TimingMap_2016()
 	std::vector<float> *ele1Rechit_E = 0;
 	std::vector<float> *ele1Rechit_pedestal = 0;
 	std::vector<float> *ele1Rechit_rawT = 0;
+	std::vector<float> *ele1Rechit_calibT = 0;
 	std::vector<float> *ele1Rechit_t = 0;
 	std::vector<float> *ele1Rechit_IEtaIX = 0;
 	std::vector<float> *ele1Rechit_IPhiIY = 0;
+
+	
+	float ele2seedE;
+	float seed2_pedestal;
+	bool ele2IsEB;
+	float t2_seed;
+	float t2raw_seed;
+	int ele2seedIEta;
+	int ele2seedIPhi;
+	std::vector<float> *ele2Rechit_E = 0;
+	std::vector<float> *ele2Rechit_pedestal = 0;
+	std::vector<float> *ele2Rechit_rawT = 0;
+	std::vector<float> *ele2Rechit_calibT = 0;
+	std::vector<float> *ele2Rechit_t = 0;
+	std::vector<float> *ele2Rechit_IEtaIX = 0;
+	std::vector<float> *ele2Rechit_IPhiIY = 0;
 
 
 	tree_data->SetBranchStatus("ele1seedE",1);	
@@ -442,6 +461,7 @@ void TimingMap_2016()
 	tree_data->SetBranchStatus("ele1Rechit_E",1);	
 	tree_data->SetBranchStatus("ele1Rechit_pedestal",1);	
 	tree_data->SetBranchStatus("ele1Rechit_rawT",1);	
+	tree_data->SetBranchStatus("ele1Rechit_calibT",1);	
 	tree_data->SetBranchStatus("ele1Rechit_t",1);	
 	tree_data->SetBranchStatus("ele1Rechit_IEtaIX",1);	
 	tree_data->SetBranchStatus("ele1Rechit_IPhiIY",1);	
@@ -456,9 +476,42 @@ void TimingMap_2016()
 	tree_data->SetBranchAddress("ele1Rechit_E", & ele1Rechit_E);
 	tree_data->SetBranchAddress("ele1Rechit_pedestal", & ele1Rechit_pedestal);
 	tree_data->SetBranchAddress("ele1Rechit_rawT", & ele1Rechit_rawT);
+	tree_data->SetBranchAddress("ele1Rechit_calibT", & ele1Rechit_calibT);
 	tree_data->SetBranchAddress("ele1Rechit_t", & ele1Rechit_t);
 	tree_data->SetBranchAddress("ele1Rechit_IEtaIX", & ele1Rechit_IEtaIX);
 	tree_data->SetBranchAddress("ele1Rechit_IPhiIY", & ele1Rechit_IPhiIY);
+
+	tree_data->SetBranchStatus("ele2seedE",1);	
+	tree_data->SetBranchStatus("seed2_pedestal",1);	
+	tree_data->SetBranchStatus("ele2IsEB",1);	
+	tree_data->SetBranchStatus("t2_seed",1);	
+	tree_data->SetBranchStatus("t2raw_seed",1);	
+	tree_data->SetBranchStatus("ele2seedIEta",1);	
+	tree_data->SetBranchStatus("ele2seedIPhi",1);	
+	tree_data->SetBranchStatus("ele2Rechit_E",1);	
+	tree_data->SetBranchStatus("ele2Rechit_pedestal",1);	
+	tree_data->SetBranchStatus("ele2Rechit_rawT",1);	
+	tree_data->SetBranchStatus("ele2Rechit_calibT",1);	
+	tree_data->SetBranchStatus("ele2Rechit_t",1);	
+	tree_data->SetBranchStatus("ele2Rechit_IEtaIX",1);	
+	tree_data->SetBranchStatus("ele2Rechit_IPhiIY",1);	
+	
+	tree_data->SetBranchAddress("ele2seedE", & ele2seedE);
+	tree_data->SetBranchAddress("seed2_pedestal", & seed2_pedestal);
+	tree_data->SetBranchAddress("ele2IsEB", & ele2IsEB);
+	tree_data->SetBranchAddress("t2_seed", & t2_seed);
+	tree_data->SetBranchAddress("t2raw_seed", & t2raw_seed);
+	tree_data->SetBranchAddress("ele2seedIEta", & ele2seedIEta);
+	tree_data->SetBranchAddress("ele2seedIPhi", & ele2seedIPhi);
+	tree_data->SetBranchAddress("ele2Rechit_E", & ele2Rechit_E);
+	tree_data->SetBranchAddress("ele2Rechit_pedestal", & ele2Rechit_pedestal);
+	tree_data->SetBranchAddress("ele2Rechit_rawT", & ele2Rechit_rawT);
+	tree_data->SetBranchAddress("ele2Rechit_calibT", & ele2Rechit_calibT);
+	tree_data->SetBranchAddress("ele2Rechit_t", & ele2Rechit_t);
+	tree_data->SetBranchAddress("ele2Rechit_IEtaIX", & ele2Rechit_IEtaIX);
+	tree_data->SetBranchAddress("ele2Rechit_IPhiIY", & ele2Rechit_IPhiIY);
+
+
 
 	gStyle->SetOptFit(1);
 	gStyle->SetOptStat(0);
@@ -505,6 +558,7 @@ void TimingMap_2016()
 	for(int ientry=0;ientry<N_entries_data; ientry++){	
 		if(ientry%1000000 ==0) cout<<"reading original tree entry "<<ientry<<"  out of "<<N_entries_data<<endl;
                 tree_data->GetEntry(ientry);
+
 		if(ele1IsEB && ele1seedE<120.0){
 			float t1 = 0, t2 = 0;
 			int ieta1 = 0, iphi1 = 0;
@@ -513,17 +567,75 @@ void TimingMap_2016()
 				if(ele1seedIEta == ele1Rechit_IEtaIX->at(isd) && ele1seedIPhi == ele1Rechit_IPhiIY->at(isd)){
 					ieta1 = ele1Rechit_IEtaIX->at(isd);
                                         iphi1 = ele1Rechit_IPhiIY->at(isd);
-					t1 = ele1Rechit_rawT->at(isd);
+					t1 = ele1Rechit_calibT->at(isd);
 				}	
 			}
 
-			for(int i=0; i<ele1Rechit_rawT->size(); i++){
+			for(int i=0; i<ele1Rechit_calibT->size(); i++){
 				if(ele1Rechit_E->at(i)<10.0) continue;
 				if(ele1Rechit_E->at(i) > 120.0) continue;
 				//bool pass_neighboring = isNeighboringXtal(ele1seedIEta, ele1seedIPhi, ele1Rechit_IEtaIX->at(i), ele1Rechit_IPhiIY->at(i));
 				ieta2 = ele1Rechit_IEtaIX->at(i);
 				iphi2 = ele1Rechit_IPhiIY->at(i);
-				t2 = ele1Rechit_rawT->at(i);	
+				t2 = ele1Rechit_calibT->at(i);	
+
+				int ieta2_TTlow = int((abs(ieta2)-1)/5)*5+1;
+				int iphi2_TTlow	= int((abs(iphi2)-1)/5)*5+1;
+				
+				h1_array_time_data[ieta2+85][iphi2-1][4]->Fill(t2);
+				if(ieta2>0){
+					for(int ieta2_this=ieta2_TTlow; ieta2_this<ieta2_TTlow+5; ieta2_this++){
+						for(int iphi2_this=iphi2_TTlow; iphi2_this<iphi2_TTlow+5; iphi2_this++){
+							h1_array_time_data[ieta2_this+85][iphi2_this-1][5]->Fill(t2);
+						}
+					}
+				}
+				else{
+					for(int ieta2_this=-1*ieta2_TTlow-4; ieta2_this<-1*ieta2_TTlow+1; ieta2_this++){
+						for(int iphi2_this=iphi2_TTlow; iphi2_this<iphi2_TTlow+5; iphi2_this++){
+							h1_array_time_data[ieta2_this+85][iphi2_this-1][5]->Fill(t2);
+						}
+					}
+				}
+
+				int idx_neighboring = -999;
+				if(ieta2-ieta1 == 1 && iphi2-iphi1 == 0) idx_neighboring = 0;
+				if(ieta2-ieta1 == 0 && iphi2-iphi1 == 1) idx_neighboring = 1;
+				if(ieta2-ieta1 == -1 && iphi2-iphi1 == 0) idx_neighboring = 2;
+				if(ieta2-ieta1 == 0 && iphi2-iphi1 == -1) idx_neighboring = 3;
+				if(idx_neighboring > -1){
+					if(ieta2 >= -85 && ieta2<= 85 && iphi2>0 && iphi2<=360){
+						h1_array_time_data[ieta1+85][iphi1-1][idx_neighboring]->Fill(t1-t2);
+						int idx_neighboring_opposite = -999;
+						if(idx_neighboring == 0) idx_neighboring_opposite = 2;
+						if(idx_neighboring == 1) idx_neighboring_opposite = 3;
+						if(idx_neighboring == 2) idx_neighboring_opposite = 0;
+						if(idx_neighboring == 3) idx_neighboring_opposite = 1;
+						h1_array_time_data[ieta2+85][iphi2-1][idx_neighboring_opposite]->Fill(t2-t1);
+					}
+				}
+			}
+		}
+
+	if(ele2IsEB && ele2seedE<120.0){
+			float t1 = 0, t2 = 0;
+			int ieta1 = 0, iphi1 = 0;
+			int ieta2 = 0, iphi2 = 0;
+			for(int isd=0;isd<ele2Rechit_IEtaIX->size(); isd++){
+				if(ele2seedIEta == ele2Rechit_IEtaIX->at(isd) && ele2seedIPhi == ele2Rechit_IPhiIY->at(isd)){
+					ieta1 = ele2Rechit_IEtaIX->at(isd);
+                                        iphi1 = ele2Rechit_IPhiIY->at(isd);
+					t1 = ele2Rechit_calibT->at(isd);
+				}	
+			}
+
+			for(int i=0; i<ele2Rechit_calibT->size(); i++){
+				if(ele2Rechit_E->at(i)<10.0) continue;
+				if(ele2Rechit_E->at(i) > 120.0) continue;
+				//bool pass_neighboring = isNeighboringXtal(ele2seedIEta, ele2seedIPhi, ele2Rechit_IEtaIX->at(i), ele2Rechit_IPhiIY->at(i));
+				ieta2 = ele2Rechit_IEtaIX->at(i);
+				iphi2 = ele2Rechit_IPhiIY->at(i);
+				t2 = ele2Rechit_calibT->at(i);	
 
 				int ieta2_TTlow = int((abs(ieta2)-1)/5)*5+1;
 				int iphi2_TTlow	= int((abs(iphi2)-1)/5)*5+1;
@@ -571,7 +683,7 @@ void TimingMap_2016()
 				if(iPhi == 11 && iEta%9==0) h1_array_time_data[iEta][iPhi][idx_neighb]->Draw();
 				//float * result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
 				float result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
-				if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+".png");
+				if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+"_Calib.png");
 				//dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus[0];
 				dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus;
 				//h2_time_iEta_vs_iPhi_data->SetBinContent(iEta+1, iPhi+1, result_singGaus[0]);		
@@ -604,9 +716,9 @@ void TimingMap_2016()
 
 	//draw the map
 	TFile * file_out;
-	if(!drawOnly) file_out = new TFile ("IC_maps/IC_average_timing_2016.root","RECREATE");
+	if(!drawOnly) file_out = new TFile ("IC_maps/IC_average_timing_2016_Calib.root","RECREATE");
 	else {
-		file_out = new TFile ("IC_maps/IC_average_timing_2016.root","READ");
+		file_out = new TFile ("IC_maps/IC_average_timing_2016_Calib.root","READ");
 		h2_time_iEta_vs_iPhi_data = (TH2F*)file_out->Get("h2_time_iEta_vs_iPhi_data");
 		h2_timeAll_iEta_vs_iPhi_data = (TH2F*)file_out->Get("h2_timeAll_iEta_vs_iPhi_data");
 		h2_timeTT_iEta_vs_iPhi_data = (TH2F*)file_out->Get("h2_timeTT_iEta_vs_iPhi_data");

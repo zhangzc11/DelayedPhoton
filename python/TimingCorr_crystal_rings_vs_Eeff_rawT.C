@@ -523,7 +523,6 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 	TTree * tree_out_diffTrigTower_data;
 	TTree * tree_out_diffTrigTower_MC;
 
-
 	float E1_sameTrigTowerNeighbor=0, E2_sameTrigTowerNeighbor=0;
 	int iEta1_sameTrigTowerNeighbor=0, iEta2_sameTrigTowerNeighbor=0;
 	int iPhi1_sameTrigTowerNeighbor=0, iPhi2_sameTrigTowerNeighbor=0;
@@ -539,6 +538,22 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 	float pedestal1_diffTrigTowerNeighbor=0.042, pedestal2_diffTrigTowerNeighbor=0.042;
 	TTree * tree_out_diffTrigTowerNeighbor_data;
 	TTree * tree_out_diffTrigTowerNeighbor_MC;
+
+	float E1_diffTrigTowerNeighborEta=0, E2_diffTrigTowerNeighborEta=0;
+	int iEta1_diffTrigTowerNeighborEta=0, iEta2_diffTrigTowerNeighborEta=0;
+	int iPhi1_diffTrigTowerNeighborEta=0, iPhi2_diffTrigTowerNeighborEta=0;
+	float t1_diffTrigTowerNeighborEta=0, t2_diffTrigTowerNeighborEta=0;
+	float pedestal1_diffTrigTowerNeighborEta=0.042, pedestal2_diffTrigTowerNeighborEta=0.042;
+	TTree * tree_out_diffTrigTowerNeighborEta_data;
+	TTree * tree_out_diffTrigTowerNeighborEta_MC;
+
+	float E1_diffTrigTowerNeighborPhi=0, E2_diffTrigTowerNeighborPhi=0;
+	int iEta1_diffTrigTowerNeighborPhi=0, iEta2_diffTrigTowerNeighborPhi=0;
+	int iPhi1_diffTrigTowerNeighborPhi=0, iPhi2_diffTrigTowerNeighborPhi=0;
+	float t1_diffTrigTowerNeighborPhi=0, t2_diffTrigTowerNeighborPhi=0;
+	float pedestal1_diffTrigTowerNeighborPhi=0.042, pedestal2_diffTrigTowerNeighborPhi=0.042;
+	TTree * tree_out_diffTrigTowerNeighborPhi_data;
+	TTree * tree_out_diffTrigTowerNeighborPhi_MC;
 
 
 	if(!drawOnly){
@@ -635,6 +650,32 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 		tree_out_diffTrigTowerNeighbor_data->Branch("iPhi2", &iPhi2_diffTrigTowerNeighbor, "iPhi2/I");	
 
 
+		tree_out_diffTrigTowerNeighborEta_data = new TTree("ZeeTiming_diffTrigTowerNeighborEta_data","second crystal from diffTrigTowerNeighborEta crystals");
+		tree_out_diffTrigTowerNeighborEta_data->Branch("E1", &E1_diffTrigTowerNeighborEta, "E1/F");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("E2", &E2_diffTrigTowerNeighborEta, "E2/F");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("t1", &t1_diffTrigTowerNeighborEta, "t1/F");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("t2", &t2_diffTrigTowerNeighborEta, "t2/F");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("pedestal1", &pedestal1_diffTrigTowerNeighborEta, "pedestal1/F");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("pedestal2", &pedestal2_diffTrigTowerNeighborEta, "pedestal2/F");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("iEta1", &iEta1_diffTrigTowerNeighborEta, "iEta1/I");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("iEta2", &iEta2_diffTrigTowerNeighborEta, "iEta2/I");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("iPhi1", &iPhi1_diffTrigTowerNeighborEta, "iPhi1/I");	
+		tree_out_diffTrigTowerNeighborEta_data->Branch("iPhi2", &iPhi2_diffTrigTowerNeighborEta, "iPhi2/I");	
+
+
+		tree_out_diffTrigTowerNeighborPhi_data = new TTree("ZeeTiming_diffTrigTowerNeighborPhi_data","second crystal from diffTrigTowerNeighborPhi crystals");
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("E1", &E1_diffTrigTowerNeighborPhi, "E1/F");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("E2", &E2_diffTrigTowerNeighborPhi, "E2/F");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("t1", &t1_diffTrigTowerNeighborPhi, "t1/F");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("t2", &t2_diffTrigTowerNeighborPhi, "t2/F");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("pedestal1", &pedestal1_diffTrigTowerNeighborPhi, "pedestal1/F");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("pedestal2", &pedestal2_diffTrigTowerNeighborPhi, "pedestal2/F");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("iEta1", &iEta1_diffTrigTowerNeighborPhi, "iEta1/I");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("iEta2", &iEta2_diffTrigTowerNeighborPhi, "iEta2/I");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("iPhi1", &iPhi1_diffTrigTowerNeighborPhi, "iPhi1/I");	
+		tree_out_diffTrigTowerNeighborPhi_data->Branch("iPhi2", &iPhi2_diffTrigTowerNeighborPhi, "iPhi2/I");	
+
+
 
 		for(int ientry=0;ientry<N_entries_data; ientry++){
 			if(ientry%100000 ==0) cout<<"reading original tree entry "<<ientry<<"  out of "<<N_entries_data<<endl;
@@ -655,6 +696,10 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			float maxE_sameTrigTowerNeighbor = -999.0;
 			bool pass_diffTrigTowerNeighbor_all = false;
 			float maxE_diffTrigTowerNeighbor = -999.0;
+			bool pass_diffTrigTowerNeighborEta_all = false;
+			float maxE_diffTrigTowerNeighborEta = -999.0;
+			bool pass_diffTrigTowerNeighborPhi_all = false;
+			float maxE_diffTrigTowerNeighborPhi = -999.0;
 			
 			if(ele1IsEB && ele1seedE < 120){
 				for(int i=0;i<ele1Rechit_IEtaIX->size(); i++){
@@ -699,6 +744,17 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						iEta1_diffTrigTowerNeighbor=ele1Rechit_IEtaIX->at(i);
 						iPhi1_diffTrigTowerNeighbor=ele1Rechit_IPhiIY->at(i);
 
+						E1_diffTrigTowerNeighborEta=ele1Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborEta=ele1Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborEta=ele1Rechit_rawT->at(i);
+						iEta1_diffTrigTowerNeighborEta=ele1Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborEta=ele1Rechit_IPhiIY->at(i);
+
+						E1_diffTrigTowerNeighborPhi=ele1Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborPhi=ele1Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborPhi=ele1Rechit_rawT->at(i);
+						iEta1_diffTrigTowerNeighborPhi=ele1Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborPhi=ele1Rechit_IPhiIY->at(i);
 
 					}
 
@@ -796,6 +852,35 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						maxE_diffTrigTowerNeighbor = E2_diffTrigTowerNeighbor;
 					}
 
+					//diffTrigTowerNeighborEta
+					bool pass_diffTrigTowerNeighborEta = pass_diffTrigTowerNeighbor && abs(ele1seedIEta-ele1Rechit_IEtaIX->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborEta && ele1Rechit_E->at(i) > maxE_diffTrigTowerNeighborEta){
+						pass_diffTrigTowerNeighborEta_all = pass_diffTrigTowerNeighborEta;
+						E2_diffTrigTowerNeighborEta=ele1Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborEta=ele1Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborEta=ele1Rechit_rawT->at(i);
+						iEta2_diffTrigTowerNeighborEta=ele1Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborEta=ele1Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborEta = E2_diffTrigTowerNeighborEta;
+
+					}
+
+					//diffTrigTowerNeighborPhi
+					bool pass_diffTrigTowerNeighborPhi = pass_diffTrigTowerNeighbor && abs(ele1seedIPhi-ele1Rechit_IPhiIY->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborPhi && ele1Rechit_E->at(i) > maxE_diffTrigTowerNeighborPhi){
+						pass_diffTrigTowerNeighborPhi_all = pass_diffTrigTowerNeighborPhi;
+						E2_diffTrigTowerNeighborPhi=ele1Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborPhi=ele1Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborPhi=ele1Rechit_rawT->at(i);
+						iEta2_diffTrigTowerNeighborPhi=ele1Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborPhi=ele1Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborPhi = E2_diffTrigTowerNeighborPhi;
+
+					}
+
+
 				}
 			}	
 			//fill tree
@@ -806,6 +891,8 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			if(pass_diffTrigTower_all) tree_out_diffTrigTower_data->Fill();
 			if(pass_sameTrigTowerNeighbor_all) tree_out_sameTrigTowerNeighbor_data->Fill();
 			if(pass_diffTrigTowerNeighbor_all) tree_out_diffTrigTowerNeighbor_data->Fill();
+			if(pass_diffTrigTowerNeighborEta_all) tree_out_diffTrigTowerNeighborEta_data->Fill();
+			if(pass_diffTrigTowerNeighborPhi_all) tree_out_diffTrigTowerNeighborPhi_data->Fill();
 	
 			maxE_neighboring = -999.0;
 			pass_neighboring_all = false;
@@ -821,6 +908,10 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			maxE_sameTrigTowerNeighbor = -999.0;
 			pass_diffTrigTowerNeighbor_all = false;
 			maxE_diffTrigTowerNeighbor = -999.0;
+			pass_diffTrigTowerNeighborEta_all = false;
+			maxE_diffTrigTowerNeighborEta = -999.0;
+			pass_diffTrigTowerNeighborPhi_all = false;
+			maxE_diffTrigTowerNeighborPhi = -999.0;
 
 			if(ele2IsEB && ele2seedE < 120){
 				for(int i=0;i<ele2Rechit_IEtaIX->size(); i++){
@@ -867,6 +958,17 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						iEta1_diffTrigTowerNeighbor=ele2Rechit_IEtaIX->at(i);
 						iPhi1_diffTrigTowerNeighbor=ele2Rechit_IPhiIY->at(i);
 
+						E1_diffTrigTowerNeighborEta=ele2Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborEta=ele2Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborEta=ele2Rechit_t->at(i);
+						iEta1_diffTrigTowerNeighborEta=ele2Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborEta=ele2Rechit_IPhiIY->at(i);
+
+						E1_diffTrigTowerNeighborPhi=ele2Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborPhi=ele2Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborPhi=ele2Rechit_t->at(i);
+						iEta1_diffTrigTowerNeighborPhi=ele2Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborPhi=ele2Rechit_IPhiIY->at(i);
 
 					}
 
@@ -963,6 +1065,32 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						maxE_diffTrigTowerNeighbor = E2_diffTrigTowerNeighbor;
 					}
 
+					//diffTrigTowerNeighborEta
+					bool pass_diffTrigTowerNeighborEta = pass_diffTrigTowerNeighbor && abs(ele2seedIEta-ele2Rechit_IEtaIX->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborEta && ele2Rechit_E->at(i) > maxE_diffTrigTowerNeighborEta){
+						pass_diffTrigTowerNeighborEta_all = pass_diffTrigTowerNeighborEta;
+						E2_diffTrigTowerNeighborEta=ele2Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborEta=ele2Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborEta=ele2Rechit_t->at(i);
+						iEta2_diffTrigTowerNeighborEta=ele2Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborEta=ele2Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborEta = E2_diffTrigTowerNeighborEta;
+					}
+
+					//diffTrigTowerNeighborPhi
+					bool pass_diffTrigTowerNeighborPhi = pass_diffTrigTowerNeighbor && abs(ele2seedIPhi-ele2Rechit_IPhiIY->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborPhi && ele2Rechit_E->at(i) > maxE_diffTrigTowerNeighborPhi){
+						pass_diffTrigTowerNeighborPhi_all = pass_diffTrigTowerNeighborPhi;
+						E2_diffTrigTowerNeighborPhi=ele2Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborPhi=ele2Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborPhi=ele2Rechit_t->at(i);
+						iEta2_diffTrigTowerNeighborPhi=ele2Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborPhi=ele2Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborPhi = E2_diffTrigTowerNeighborPhi;
+					}
+
 
 				}
 			}	
@@ -975,6 +1103,7 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			if(pass_diffTrigTower_all) tree_out_diffTrigTower_data->Fill();
 			if(pass_sameTrigTowerNeighbor_all) tree_out_sameTrigTowerNeighbor_data->Fill();
 			if(pass_diffTrigTowerNeighbor_all) tree_out_diffTrigTowerNeighbor_data->Fill();
+			if(pass_diffTrigTowerNeighborEta_all) tree_out_diffTrigTowerNeighborEta_data->Fill();
 
 		}	
 		tree_out_neighboring_data->Write();
@@ -984,6 +1113,8 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 		tree_out_diffTrigTower_data->Write();
 		tree_out_sameTrigTowerNeighbor_data->Write();
 		tree_out_diffTrigTowerNeighbor_data->Write();
+		tree_out_diffTrigTowerNeighborEta_data->Write();
+
 
 		tree_out_neighboring_MC = new TTree("ZeeTiming_neighboring_MC","second crystal from neighboring crystals");
 		tree_out_neighboring_MC->Branch("E1", &E1_neighboring, "E1/F");	
@@ -1077,6 +1208,32 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 		tree_out_diffTrigTowerNeighbor_MC->Branch("iPhi2", &iPhi2_diffTrigTowerNeighbor, "iPhi2/I");	
 
 
+		tree_out_diffTrigTowerNeighborEta_MC = new TTree("ZeeTiming_diffTrigTowerNeighborEta_MC","second crystal from diffTrigTowerNeighborEta crystals");
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("E1", &E1_diffTrigTowerNeighborEta, "E1/F");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("E2", &E2_diffTrigTowerNeighborEta, "E2/F");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("t1", &t1_diffTrigTowerNeighborEta, "t1/F");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("t2", &t2_diffTrigTowerNeighborEta, "t2/F");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("pedestal1", &pedestal1_diffTrigTowerNeighborEta, "pedestal1/F");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("pedestal2", &pedestal2_diffTrigTowerNeighborEta, "pedestal2/F");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("iEta1", &iEta1_diffTrigTowerNeighborEta, "iEta1/I");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("iEta2", &iEta2_diffTrigTowerNeighborEta, "iEta2/I");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("iPhi1", &iPhi1_diffTrigTowerNeighborEta, "iPhi1/I");	
+		tree_out_diffTrigTowerNeighborEta_MC->Branch("iPhi2", &iPhi2_diffTrigTowerNeighborEta, "iPhi2/I");	
+
+
+		tree_out_diffTrigTowerNeighborPhi_MC = new TTree("ZeeTiming_diffTrigTowerNeighborPhi_MC","second crystal from diffTrigTowerNeighborPhi crystals");
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("E1", &E1_diffTrigTowerNeighborPhi, "E1/F");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("E2", &E2_diffTrigTowerNeighborPhi, "E2/F");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("t1", &t1_diffTrigTowerNeighborPhi, "t1/F");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("t2", &t2_diffTrigTowerNeighborPhi, "t2/F");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("pedestal1", &pedestal1_diffTrigTowerNeighborPhi, "pedestal1/F");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("pedestal2", &pedestal2_diffTrigTowerNeighborPhi, "pedestal2/F");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("iEta1", &iEta1_diffTrigTowerNeighborPhi, "iEta1/I");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("iEta2", &iEta2_diffTrigTowerNeighborPhi, "iEta2/I");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("iPhi1", &iPhi1_diffTrigTowerNeighborPhi, "iPhi1/I");	
+		tree_out_diffTrigTowerNeighborPhi_MC->Branch("iPhi2", &iPhi2_diffTrigTowerNeighborPhi, "iPhi2/I");	
+
+
 
 		for(int ientry=0;ientry<N_entries_MC; ientry++){
 			if(ientry%100000 ==0) cout<<"reading original tree entry "<<ientry<<"  out of "<<N_entries_MC<<endl;
@@ -1097,6 +1254,10 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			float maxE_sameTrigTowerNeighbor = -999.0;
 			bool pass_diffTrigTowerNeighbor_all = false;
 			float maxE_diffTrigTowerNeighbor = -999.0;
+			bool pass_diffTrigTowerNeighborEta_all = false;
+			float maxE_diffTrigTowerNeighborEta = -999.0;
+			bool pass_diffTrigTowerNeighborPhi_all = false;
+			float maxE_diffTrigTowerNeighborPhi = -999.0;
 			
 			if(ele1IsEB && ele1seedE < 120){
 				for(int i=0;i<ele1Rechit_IEtaIX->size(); i++){
@@ -1141,8 +1302,20 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						iEta1_diffTrigTowerNeighbor=ele1Rechit_IEtaIX->at(i);
 						iPhi1_diffTrigTowerNeighbor=ele1Rechit_IPhiIY->at(i);
 
+						E1_diffTrigTowerNeighborEta=ele1Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborEta=ele1Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborEta=ele1Rechit_rawT->at(i);
+						iEta1_diffTrigTowerNeighborEta=ele1Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborEta=ele1Rechit_IPhiIY->at(i);
+
+						E1_diffTrigTowerNeighborPhi=ele1Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborPhi=ele1Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborPhi=ele1Rechit_rawT->at(i);
+						iEta1_diffTrigTowerNeighborPhi=ele1Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborPhi=ele1Rechit_IPhiIY->at(i);
 
 					}
+
 					if(ele1Rechit_E->at(i) < 1.0) continue;
 					//neighboring
 					bool pass_neighboring = isNeighboringXtal(ele1seedIEta, ele1seedIPhi, ele1Rechit_IEtaIX->at(i), ele1Rechit_IPhiIY->at(i));
@@ -1237,6 +1410,35 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						maxE_diffTrigTowerNeighbor = E2_diffTrigTowerNeighbor;
 					}
 
+					//diffTrigTowerNeighborEta
+					bool pass_diffTrigTowerNeighborEta = pass_diffTrigTowerNeighbor && abs(ele1seedIEta-ele1Rechit_IEtaIX->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborEta && ele1Rechit_E->at(i) > maxE_diffTrigTowerNeighborEta){
+						pass_diffTrigTowerNeighborEta_all = pass_diffTrigTowerNeighborEta;
+						E2_diffTrigTowerNeighborEta=ele1Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborEta=ele1Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborEta=ele1Rechit_rawT->at(i);
+						iEta2_diffTrigTowerNeighborEta=ele1Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborEta=ele1Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborEta = E2_diffTrigTowerNeighborEta;
+
+					}
+
+					//diffTrigTowerNeighborPhi
+					bool pass_diffTrigTowerNeighborPhi = pass_diffTrigTowerNeighbor && abs(ele1seedIPhi-ele1Rechit_IPhiIY->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborPhi && ele1Rechit_E->at(i) > maxE_diffTrigTowerNeighborPhi){
+						pass_diffTrigTowerNeighborPhi_all = pass_diffTrigTowerNeighborPhi;
+						E2_diffTrigTowerNeighborPhi=ele1Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborPhi=ele1Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborPhi=ele1Rechit_rawT->at(i);
+						iEta2_diffTrigTowerNeighborPhi=ele1Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborPhi=ele1Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborPhi = E2_diffTrigTowerNeighborPhi;
+
+					}
+
+
 				}
 			}	
 			//fill tree
@@ -1247,6 +1449,8 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			if(pass_diffTrigTower_all) tree_out_diffTrigTower_MC->Fill();
 			if(pass_sameTrigTowerNeighbor_all) tree_out_sameTrigTowerNeighbor_MC->Fill();
 			if(pass_diffTrigTowerNeighbor_all) tree_out_diffTrigTowerNeighbor_MC->Fill();
+			if(pass_diffTrigTowerNeighborEta_all) tree_out_diffTrigTowerNeighborEta_MC->Fill();
+			if(pass_diffTrigTowerNeighborPhi_all) tree_out_diffTrigTowerNeighborPhi_MC->Fill();
 	
 			maxE_neighboring = -999.0;
 			pass_neighboring_all = false;
@@ -1262,6 +1466,10 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			maxE_sameTrigTowerNeighbor = -999.0;
 			pass_diffTrigTowerNeighbor_all = false;
 			maxE_diffTrigTowerNeighbor = -999.0;
+			pass_diffTrigTowerNeighborEta_all = false;
+			maxE_diffTrigTowerNeighborEta = -999.0;
+			pass_diffTrigTowerNeighborPhi_all = false;
+			maxE_diffTrigTowerNeighborPhi = -999.0;
 
 			if(ele2IsEB && ele2seedE < 120){
 				for(int i=0;i<ele2Rechit_IEtaIX->size(); i++){
@@ -1308,6 +1516,17 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						iEta1_diffTrigTowerNeighbor=ele2Rechit_IEtaIX->at(i);
 						iPhi1_diffTrigTowerNeighbor=ele2Rechit_IPhiIY->at(i);
 
+						E1_diffTrigTowerNeighborEta=ele2Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborEta=ele2Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborEta=ele2Rechit_t->at(i);
+						iEta1_diffTrigTowerNeighborEta=ele2Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborEta=ele2Rechit_IPhiIY->at(i);
+
+						E1_diffTrigTowerNeighborPhi=ele2Rechit_E->at(i);
+						pedestal1_diffTrigTowerNeighborPhi=ele2Rechit_pedestal->at(i);
+						t1_diffTrigTowerNeighborPhi=ele2Rechit_t->at(i);
+						iEta1_diffTrigTowerNeighborPhi=ele2Rechit_IEtaIX->at(i);
+						iPhi1_diffTrigTowerNeighborPhi=ele2Rechit_IPhiIY->at(i);
 
 					}
 
@@ -1404,6 +1623,32 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 						maxE_diffTrigTowerNeighbor = E2_diffTrigTowerNeighbor;
 					}
 
+					//diffTrigTowerNeighborEta
+					bool pass_diffTrigTowerNeighborEta = pass_diffTrigTowerNeighbor && abs(ele2seedIEta-ele2Rechit_IEtaIX->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborEta && ele2Rechit_E->at(i) > maxE_diffTrigTowerNeighborEta){
+						pass_diffTrigTowerNeighborEta_all = pass_diffTrigTowerNeighborEta;
+						E2_diffTrigTowerNeighborEta=ele2Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborEta=ele2Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborEta=ele2Rechit_t->at(i);
+						iEta2_diffTrigTowerNeighborEta=ele2Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborEta=ele2Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborEta = E2_diffTrigTowerNeighborEta;
+					}
+
+					//diffTrigTowerNeighborPhi
+					bool pass_diffTrigTowerNeighborPhi = pass_diffTrigTowerNeighbor && abs(ele2seedIPhi-ele2Rechit_IPhiIY->at(i)) == 1;
+					if(pass_diffTrigTowerNeighborPhi && ele2Rechit_E->at(i) > maxE_diffTrigTowerNeighborPhi){
+						pass_diffTrigTowerNeighborPhi_all = pass_diffTrigTowerNeighborPhi;
+						E2_diffTrigTowerNeighborPhi=ele2Rechit_E->at(i);
+						pedestal2_diffTrigTowerNeighborPhi=ele2Rechit_pedestal->at(i);
+						t2_diffTrigTowerNeighborPhi=ele2Rechit_t->at(i);
+						iEta2_diffTrigTowerNeighborPhi=ele2Rechit_IEtaIX->at(i);
+						iPhi2_diffTrigTowerNeighborPhi=ele2Rechit_IPhiIY->at(i);
+
+						maxE_diffTrigTowerNeighborPhi = E2_diffTrigTowerNeighborPhi;
+					}
+
 
 				}
 			}	
@@ -1416,6 +1661,7 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 			if(pass_diffTrigTower_all) tree_out_diffTrigTower_MC->Fill();
 			if(pass_sameTrigTowerNeighbor_all) tree_out_sameTrigTowerNeighbor_MC->Fill();
 			if(pass_diffTrigTowerNeighbor_all) tree_out_diffTrigTowerNeighbor_MC->Fill();
+			if(pass_diffTrigTowerNeighborEta_all) tree_out_diffTrigTowerNeighborEta_MC->Fill();
 
 		}	
 		tree_out_neighboring_MC->Write();
@@ -1425,6 +1671,8 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 		tree_out_diffTrigTower_MC->Write();
 		tree_out_sameTrigTowerNeighbor_MC->Write();
 		tree_out_diffTrigTowerNeighbor_MC->Write();
+		tree_out_diffTrigTowerNeighborEta_MC->Write();
+
 
 	}
 	else{
@@ -1442,6 +1690,10 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 		tree_out_sameTrigTowerNeighbor_MC = (TTree*)file_out->Get("ZeeTiming_sameTrigTowerNeighbor_MC");	
 		tree_out_diffTrigTowerNeighbor_data = (TTree*)file_out->Get("ZeeTiming_diffTrigTowerNeighbor_data");	
 		tree_out_diffTrigTowerNeighbor_MC = (TTree*)file_out->Get("ZeeTiming_diffTrigTowerNeighbor_MC");	
+		tree_out_diffTrigTowerNeighborEta_data = (TTree*)file_out->Get("ZeeTiming_diffTrigTowerNeighborEta_data");	
+		tree_out_diffTrigTowerNeighborEta_MC = (TTree*)file_out->Get("ZeeTiming_diffTrigTowerNeighborEta_MC");	
+		tree_out_diffTrigTowerNeighborPhi_data = (TTree*)file_out->Get("ZeeTiming_diffTrigTowerNeighborPhi_data");	
+		tree_out_diffTrigTowerNeighborPhi_MC = (TTree*)file_out->Get("ZeeTiming_diffTrigTowerNeighborPhi_MC");	
 
 	}
 	//draw time resolution vs. effective amplitude
@@ -1452,6 +1704,8 @@ void TimingCorr_crystal_rings_vs_Eeff_rawT()
 	drawTimeResoVsAeff(tree_out_diffTrigTower_data, tree_out_diffTrigTower_MC, "diffTrigTower_rawT");
 	drawTimeResoVsAeff(tree_out_sameTrigTowerNeighbor_data, tree_out_sameTrigTowerNeighbor_MC, "sameTrigTowerNeighbor_rawT");
 	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighbor_data, tree_out_diffTrigTowerNeighbor_MC, "diffTrigTowerNeighbor_rawT");
+	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighborEta_data, tree_out_diffTrigTowerNeighborEta_MC, "diffTrigTowerNeighborEta_rawT");
+	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighborPhi_data, tree_out_diffTrigTowerNeighborPhi_MC, "diffTrigTowerNeighborPhi_rawT");
 
 	file_out->Close();
 }

@@ -42,7 +42,7 @@ def properScale(hist):
 ####load data
 cut = "mass>60 && mass <120 && ele1Pt>30 && ele2Pt>30 && ele1IsEB && ele2IsEB"
 
-label="timeIC"
+label="timeAll"
 
 #file_2016All = TFile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/EcalTiming/ntuples_V4p1_31Aug2018/All2016.root")
 file_2016All = TFile("/data/zhicaiz/release/RazorAnalyzer/CMSSW_9_4_9/src/RazorAnalyzer/ZeeTiming_test_"+label+".root")

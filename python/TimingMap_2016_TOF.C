@@ -1,7 +1,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-bool drawOnly = true;
+bool drawOnly = false;
 
 float axisTitleSize = 0.06;
 float axisTitleOffset = 0.8;
@@ -188,13 +188,13 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 		tree_data->Draw(("t1-t2>>hist_2e_this_data_"+std::to_string(i)).c_str(), cut_2e_this);
 		hist_2e_this_data->Draw();
 		float * result_2e_this_data = doubGausFit(hist_2e_this_data);
-		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+".png");		
+		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+"_TOF.png");		
 
 		TH1F * hist_2e_this_MC = new TH1F(("hist_2e_this_MC_"+std::to_string(i)).c_str(),("hist_2e_this_MC_"+std::to_string(i)).c_str(), 60, -1.5, 1.5);
 		tree_MC->Draw(("t1-t2>>hist_2e_this_MC_"+std::to_string(i)).c_str(), cut_2e_this);
 		hist_2e_this_MC->Draw();
 		float * result_2e_this_MC = doubGausFit(hist_2e_this_MC);
-		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_MC_CLK_"+label+".png");		
+		myC->SaveAs(outputDir+"/ZeeTiming/iEeffFit_xtal_"+std::to_string(i)+"_dt_MC_CLK_"+label+"_TOF.png");		
 
 		y_Eeff_sigma_dt_data[i] = (result_2e_this_data[2]);
 		ey_Eeff_sigma_dt_data[i] = (result_2e_this_data[3]);
@@ -294,9 +294,9 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 
 	DrawCMS(myC, 13, 35922.0);
 
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".png");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".C");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_TOF.pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_TOF.png");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_TOF.C");
 	
 	delete myC;
 	delete gr_Eeff_sigma_dt_data;
@@ -374,20 +374,17 @@ void drawTimingMap(TH2F * h2_map, TString label, TString title="time [ns]", floa
 	h2_map->GetZaxis()->SetTitleOffset( axisTitleOffset - 0.2);
 
 	float meanZ = 0.0;
-	TH1F * h1_forRMS = new TH1F("h1_forRMS","h1_forRMS",1000,-5.0,5.0);
-	for (int ix=1;ix<=171;ix++){for(int iy=1;iy<=360;iy++){meanZ += h2_map->GetBinContent(ix,iy); h1_forRMS->Fill(h2_map->GetBinContent(ix,iy));}}
-	
+	for (int ix=1;ix<=171;ix++){for(int iy=1;iy<=360;iy++){meanZ += h2_map->GetBinContent(ix,iy);}}
 	meanZ = meanZ/(171.0*360.0);
-	float RMSZ = h1_forRMS->GetRMS();
 
 	h2_map->GetZaxis()->SetRangeUser(minZ,maxZ);	
 	h2_map->Draw("colz");
 
 	//DrawCMS(myC, 13, 35922.0);
 	
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+".pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+".png");
-	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+".C");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_TOF.pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_TOF.png");
+	myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_"+label+"_TOF.C");
 
 	h2_map->GetYaxis()->SetRangeUser(0.5,50.5);
         h2_map->GetXaxis()->SetRangeUser(0.5,85.5);
@@ -401,12 +398,9 @@ void drawTimingMap(TH2F * h2_map, TString label, TString title="time [ns]", floa
 	h2_map->GetYaxis()->SetRangeUser(0.5,360.5);
         h2_map->GetXaxis()->SetRangeUser(-85.5,85.5);
         h2_map->Draw("colz");
-	delete h1_forRMS;
-        cout<<"mean and RMS for this map:  "<<meanZ<<"  "<<RMSZ<<endl;
-
 
 }
-void TimingMap_2016()
+void TimingMap_2016_TOF()
 {
 
 
@@ -513,17 +507,17 @@ void TimingMap_2016()
 				if(ele1seedIEta == ele1Rechit_IEtaIX->at(isd) && ele1seedIPhi == ele1Rechit_IPhiIY->at(isd)){
 					ieta1 = ele1Rechit_IEtaIX->at(isd);
                                         iphi1 = ele1Rechit_IPhiIY->at(isd);
-					t1 = ele1Rechit_rawT->at(isd);
+					t1 = ele1Rechit_t->at(isd);
 				}	
 			}
 
-			for(int i=0; i<ele1Rechit_rawT->size(); i++){
+			for(int i=0; i<ele1Rechit_t->size(); i++){
 				if(ele1Rechit_E->at(i)<10.0) continue;
 				if(ele1Rechit_E->at(i) > 120.0) continue;
 				//bool pass_neighboring = isNeighboringXtal(ele1seedIEta, ele1seedIPhi, ele1Rechit_IEtaIX->at(i), ele1Rechit_IPhiIY->at(i));
 				ieta2 = ele1Rechit_IEtaIX->at(i);
 				iphi2 = ele1Rechit_IPhiIY->at(i);
-				t2 = ele1Rechit_rawT->at(i);	
+				t2 = ele1Rechit_t->at(i);	
 
 				int ieta2_TTlow = int((abs(ieta2)-1)/5)*5+1;
 				int iphi2_TTlow	= int((abs(iphi2)-1)/5)*5+1;
@@ -571,7 +565,7 @@ void TimingMap_2016()
 				if(iPhi == 11 && iEta%9==0) h1_array_time_data[iEta][iPhi][idx_neighb]->Draw();
 				//float * result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
 				float result_singGaus = singGausFit(h1_array_time_data[iEta][iPhi][idx_neighb]);
-				if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+".png");
+				if(iPhi == 11 && iEta%9==0) myC->SaveAs(outputDir+"/ZeeTiming/Timing_vs_iEta_iPhi_data_iEta"+std::to_string(iEta)+"_iPhi"+std::to_string(iPhi)+"_ineighb_"+std::to_string(idx_neighb)+"_TOF.png");
 				//dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus[0];
 				dt_array_time_data[iEta][iPhi][idx_neighb] = result_singGaus;
 				//h2_time_iEta_vs_iPhi_data->SetBinContent(iEta+1, iPhi+1, result_singGaus[0]);		
@@ -604,9 +598,9 @@ void TimingMap_2016()
 
 	//draw the map
 	TFile * file_out;
-	if(!drawOnly) file_out = new TFile ("IC_maps/IC_average_timing_2016.root","RECREATE");
+	if(!drawOnly) file_out = new TFile ("IC_maps/IC_average_timing_2016_TOF.root","RECREATE");
 	else {
-		file_out = new TFile ("IC_maps/IC_average_timing_2016.root","READ");
+		file_out = new TFile ("IC_maps/IC_average_timing_2016_TOF.root","READ");
 		h2_time_iEta_vs_iPhi_data = (TH2F*)file_out->Get("h2_time_iEta_vs_iPhi_data");
 		h2_timeAll_iEta_vs_iPhi_data = (TH2F*)file_out->Get("h2_timeAll_iEta_vs_iPhi_data");
 		h2_timeTT_iEta_vs_iPhi_data = (TH2F*)file_out->Get("h2_timeTT_iEta_vs_iPhi_data");

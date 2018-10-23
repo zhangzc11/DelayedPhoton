@@ -49,6 +49,7 @@ print fileNameQCD
 
 print "NTotal before cut: "
 
+#fileData = TFile(fileNameData.replace('GoodLumi.root','GoodLumi_noreweight.root'))
 fileData = TFile(fileNameData)
 treeData = fileData.Get("DelayedPhoton")
 hNEventsData = fileData.Get("NEvents")
