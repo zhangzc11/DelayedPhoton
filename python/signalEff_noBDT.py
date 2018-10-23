@@ -36,7 +36,7 @@ inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAn
 tableFileName = "./effTable.txt"
 
 def print_eff_table(cut):
-	list_ctau = ["0p01","0p1","5","10","50","100","200","400","600","800","1000","1200","4000","20000"]
+	list_ctau = ["0_1","10","200","400","600","800","1000","1200"]
 	list_Lambda  = ["100","150","200","250","300","350","400"]
 
 	weightedcut =  weight_cut + cut
@@ -47,9 +47,7 @@ def print_eff_table(cut):
 
 	for this_ctau in list_ctau:
 		ctau_value = this_ctau
-		if this_ctau == "0p01":
-			ctau_value = "0.01"
-		if this_ctau == "0p1":
+		if this_ctau == "0_1":
 			ctau_value = "0.1"
 		#print >> f1, "$c\\tau ="+ctau_value+" \\mathrm{cm} $ ",
 		print >> f1, ctau_value,
