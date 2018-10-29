@@ -15,7 +15,9 @@ python signalEff_noBDT.py
 python StackPlots_noBDT.py
 
 
-Timing_vs_pt_photon_GJets.py
-Timing_vs_pt_photon_QCD.py
-Timing_vs_pt_photon_signal.py
+python Timing_vs_E_photon_GJets.py
+python Timing_vs_E_photon_QCD.py
+python Timing_vs_E_photon_signal.py
+
+
 

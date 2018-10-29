@@ -71,7 +71,7 @@ cut_GJets = cut_GJets_3J
 cut_skim = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 cut_skim_bkg = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/23Sept2018_withBDT/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/28Oct2018_withBDT/'
 
 ############define the plot you want to make##########
 ##for stack plots

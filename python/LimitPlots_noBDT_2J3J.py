@@ -4,19 +4,19 @@ from Aux import *
 import numpy as np
 import array
 
-from config_noBDT import lumi
-from config_noBDT import outputDir
-#from config_noBDT import limits_vs_lifetime
-#from config_noBDT import mass_limits_vs_lifetime
-#from config_noBDT import limits_vs_mass
-#from config_noBDT import lifetime_limits_vs_mass
-from config_noBDT import list_limits_vs_lifetime
-from config_noBDT import list_limits_vs_mass
+from config_noBDT_new import lumi
+from config_noBDT_new import outputDir
+#from config_noBDT_new import limits_vs_lifetime
+#from config_noBDT_new import mass_limits_vs_lifetime
+#from config_noBDT_new import limits_vs_mass
+#from config_noBDT_new import lifetime_limits_vs_mass
+from config_noBDT_new import list_limits_vs_lifetime
+from config_noBDT_new import list_limits_vs_mass
 
-from config_noBDT import exclusion_region_2D
-from config_noBDT import grid_mass_exclusion_region_2D
-from config_noBDT import grid_lambda_exclusion_region_2D
-from config_noBDT import grid_lifetime_exclusion_region_2D
+from config_noBDT_new import exclusion_region_2D
+from config_noBDT_new import grid_mass_exclusion_region_2D
+from config_noBDT_new import grid_lambda_exclusion_region_2D
+from config_noBDT_new import grid_lifetime_exclusion_region_2D
 
 gROOT.SetBatch(True)
 
@@ -29,7 +29,7 @@ np.set_printoptions(linewidth=200)
 
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/limits")
-os.system("cp config_noBDT.py "+outputDir+"/limits")
+os.system("cp config_noBDT_new.py "+outputDir+"/limits")
 os.system("cp LimitPlots_noBDT.py "+outputDir+"/limits")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
@@ -83,7 +83,7 @@ for list_this in list_limits_vs_lifetime:
 
 	for limit_lifetime in limits_vs_lifetime:
 		print "grid: "+limit_lifetime[0]
-		file_limit = TFile("../fit_results/datacards_3J_noBDT/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
+		file_limit = TFile("../fit_results/datacards_noBDT/higgsCombine"+limit_lifetime[0]+".Asymptotic.mH120.root")
 		limits = []
 		limitTree = file_limit.Get("limit")
 		for entry in limitTree:
@@ -224,9 +224,9 @@ for list_this in list_limits_vs_lifetime:
 	leg_limit_vs_time.AddEntry(graph_lifetime_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_time.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+"_2J3J.pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+"_2J3J.png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_lifetime_M"+str(int(mass_limits_vs_lifetime))+"_2J3J.C")
 
 ##################limit vs mass #######################3
 
@@ -258,7 +258,7 @@ for list_this in list_limits_vs_mass:
 
 	for limit_mass in limits_vs_mass:
 		print "grid: "+limit_mass[0]
-		file_limit = TFile("../fit_results/datacards_3J_noBDT/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
+		file_limit = TFile("../fit_results/datacards_noBDT/higgsCombine"+limit_mass[0]+".Asymptotic.mH120.root")
 		limits = []
 		limitTree = file_limit.Get("limit")
 		for entry in limitTree:
@@ -388,9 +388,9 @@ for list_this in list_limits_vs_mass:
 	leg_limit_vs_mass.AddEntry(graph_mass_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+"_2J3J.pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+"_2J3J.png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_lifetime"+str(int(lifetime_limits_vs_mass))+"_2J3J.C")
 
 
 ##################exclusion region of lifetime and Lambda/mass #######################
@@ -415,7 +415,7 @@ print r_obs_2d_grid
 
 for limit_2D in exclusion_region_2D:
 	#print "grid: "+limit_2D[0]
-	file_limit = TFile("../fit_results/datacards_3J_noBDT/higgsCombine"+limit_2D[0]+".Asymptotic.mH120.root")
+	file_limit = TFile("../fit_results/datacards_noBDT/higgsCombine"+limit_2D[0]+".Asymptotic.mH120.root")
 	limits = []
 	limitTree = file_limit.Get("limit")
 	for entry in limitTree:
@@ -840,9 +840,9 @@ A1_lambda.SetTitleSize(0.04)
 A1_lambda.SetTitleOffset(0.9)
 A1_lambda.Draw()
 
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D.pdf")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D.png")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D.C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2J3J.pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2J3J.png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2J3J.C")
 
 
 
