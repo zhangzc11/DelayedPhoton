@@ -208,7 +208,7 @@ gr_E_mean_data.GetXaxis().SetTitleSize( axisTitleSize )
 gr_E_mean_data.GetXaxis().SetTitleOffset( axisTitleOffset )
 gr_E_mean_data.GetYaxis().SetTitleSize( axisTitleSize )
 gr_E_mean_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
-gr_E_mean_data.GetYaxis().SetRangeUser(-350,600)
+gr_E_mean_data.GetYaxis().SetRangeUser(-350,400)
 
 
 gr_E_mean_GJets  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_GJets), np.array(ex_E), np.array(ey_E_mean_GJets))
@@ -221,7 +221,7 @@ gr_E_mean_diff_GJets  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_me
 gr_E_mean_diff_GJets.SetMarkerColor(kRed+4)
 gr_E_mean_diff_GJets.SetLineColor(kRed+4)
 gr_E_mean_diff_GJets.SetLineWidth(2)
-gr_E_mean_diff_GJets.Draw("Psame")
+#gr_E_mean_diff_GJets.Draw("Psame")
 
 
 gr_E_mean_GJets_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_GJets_corr), np.array(ex_E), np.array(ey_E_mean_GJets_corr))
@@ -234,14 +234,14 @@ gr_E_mean_diff_GJets_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y
 gr_E_mean_diff_GJets_corr.SetMarkerColor(kViolet+4)
 gr_E_mean_diff_GJets_corr.SetLineColor(kViolet+4)
 gr_E_mean_diff_GJets_corr.SetLineWidth(2)
-gr_E_mean_diff_GJets_corr.Draw("Psame")
+#gr_E_mean_diff_GJets_corr.Draw("Psame")
 
 
 
 leg_mean_GJets = TLegend(0.18,0.75,0.93,0.89)
 leg_mean_GJets.SetNColumns(3)
 leg_mean_GJets.SetBorderSize(0)
-leg_mean_GJets.SetTextSize(0.02)
+leg_mean_GJets.SetTextSize(0.035)
 leg_mean_GJets.SetLineColor(1)
 leg_mean_GJets.SetLineStyle(1)
 leg_mean_GJets.SetLineWidth(1)
@@ -249,9 +249,9 @@ leg_mean_GJets.SetFillColor(0)
 leg_mean_GJets.SetFillStyle(1001)
 leg_mean_GJets.AddEntry(gr_E_mean_data, "data", "lep")
 leg_mean_GJets.AddEntry(gr_E_mean_GJets, "#gamma+jets MC", "lep")
-leg_mean_GJets.AddEntry(gr_E_mean_diff_GJets, "#Delta(data, #gamma+jets)", "lep")
+#leg_mean_GJets.AddEntry(gr_E_mean_diff_GJets, "#Delta(data, #gamma+jets)", "lep")
 leg_mean_GJets.AddEntry(gr_E_mean_GJets_corr, "#gamma+jets MC corrected", "lep")
-leg_mean_GJets.AddEntry(gr_E_mean_diff_GJets_corr, "#Delta(data, #gamma+jets corrected)", "lep")
+#leg_mean_GJets.AddEntry(gr_E_mean_diff_GJets_corr, "#Delta(data, #gamma+jets corrected)", "lep")
 leg_mean_GJets.Draw()
 
 drawCMS(myC, 13, lumi)

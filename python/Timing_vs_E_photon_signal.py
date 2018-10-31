@@ -100,8 +100,8 @@ myC.SetFrameBorderMode(0)
 myC.SetFrameBorderMode(0)
 
 ########correction vs. pt##########
-N_E_points = 19
-E_divide = [40.0, 43.0, 46.0, 49.0, 52.0, 55.0, 58.0, 61.0, 64.0, 67.0, 70.0, 73.0, 78.0, 84.0, 91.0, 100.0, 115.0, 140.0, 190.0, 1000.0]
+N_E_points = 7
+E_divide = [40.0, 65.0, 85.0, 100.0, 115.0, 140.0, 190.0, 1000.0]
 
 x_E = np.zeros(N_E_points)
 ex_E = np.zeros(N_E_points)
@@ -211,7 +211,7 @@ gr_E_mean_data.GetXaxis().SetTitleSize( axisTitleSize )
 gr_E_mean_data.GetXaxis().SetTitleOffset( axisTitleOffset )
 gr_E_mean_data.GetYaxis().SetTitleSize( axisTitleSize )
 gr_E_mean_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
-gr_E_mean_data.GetYaxis().SetRangeUser(-350,600)
+gr_E_mean_data.GetYaxis().SetRangeUser(-350,400)
 
 
 gr_E_mean_GMSB_Ctau0_1cm  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_GMSB_Ctau0_1cm), np.array(ex_E), np.array(ey_E_mean_GMSB_Ctau0_1cm))
@@ -224,7 +224,7 @@ gr_E_mean_diff_GMSB_Ctau0_1cm  =  TGraphErrors(N_E_points, np.array(x_E), np.arr
 gr_E_mean_diff_GMSB_Ctau0_1cm.SetMarkerColor(kRed+4)
 gr_E_mean_diff_GMSB_Ctau0_1cm.SetLineColor(kRed+4)
 gr_E_mean_diff_GMSB_Ctau0_1cm.SetLineWidth(2)
-gr_E_mean_diff_GMSB_Ctau0_1cm.Draw("Psame")
+#gr_E_mean_diff_GMSB_Ctau0_1cm.Draw("Psame")
 
 
 gr_E_mean_GMSB_Ctau0_1cm_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_GMSB_Ctau0_1cm_corr), np.array(ex_E), np.array(ey_E_mean_GMSB_Ctau0_1cm_corr))
@@ -237,14 +237,14 @@ gr_E_mean_diff_GMSB_Ctau0_1cm_corr  =  TGraphErrors(N_E_points, np.array(x_E), n
 gr_E_mean_diff_GMSB_Ctau0_1cm_corr.SetMarkerColor(kViolet+4)
 gr_E_mean_diff_GMSB_Ctau0_1cm_corr.SetLineColor(kViolet+4)
 gr_E_mean_diff_GMSB_Ctau0_1cm_corr.SetLineWidth(2)
-gr_E_mean_diff_GMSB_Ctau0_1cm_corr.Draw("Psame")
+#gr_E_mean_diff_GMSB_Ctau0_1cm_corr.Draw("Psame")
 
 
 
 leg_mean_GMSB_Ctau0_1cm = TLegend(0.18,0.75,0.93,0.89)
 leg_mean_GMSB_Ctau0_1cm.SetNColumns(3)
 leg_mean_GMSB_Ctau0_1cm.SetBorderSize(0)
-leg_mean_GMSB_Ctau0_1cm.SetTextSize(0.02)
+leg_mean_GMSB_Ctau0_1cm.SetTextSize(0.035)
 leg_mean_GMSB_Ctau0_1cm.SetLineColor(1)
 leg_mean_GMSB_Ctau0_1cm.SetLineStyle(1)
 leg_mean_GMSB_Ctau0_1cm.SetLineWidth(1)
@@ -252,9 +252,9 @@ leg_mean_GMSB_Ctau0_1cm.SetFillColor(0)
 leg_mean_GMSB_Ctau0_1cm.SetFillStyle(1001)
 leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_data, "data", "lep")
 leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_GMSB_Ctau0_1cm, "GMSB MC", "lep")
-leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_diff_GMSB_Ctau0_1cm, "#Delta(data, GMSB)", "lep")
+#leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_diff_GMSB_Ctau0_1cm, "#Delta(data, GMSB)", "lep")
 leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_GMSB_Ctau0_1cm_corr, "GMSB MC corrected", "lep")
-leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_diff_GMSB_Ctau0_1cm_corr, "#Delta(data, GMSB corrected)", "lep")
+#leg_mean_GMSB_Ctau0_1cm.AddEntry(gr_E_mean_diff_GMSB_Ctau0_1cm_corr, "#Delta(data, GMSB corrected)", "lep")
 leg_mean_GMSB_Ctau0_1cm.Draw()
 
 drawCMS(myC, 13, lumi)

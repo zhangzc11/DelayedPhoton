@@ -18,6 +18,8 @@ from config_noBDT import grid_mass_exclusion_region_2D
 from config_noBDT import grid_lambda_exclusion_region_2D
 from config_noBDT import grid_lifetime_exclusion_region_2D
 
+drawObs=False
+
 gROOT.SetBatch(True)
 
 gStyle.SetOptStat(0)
@@ -200,7 +202,8 @@ for list_this in list_limits_vs_lifetime:
 
 	graph_lifetime_exp2sigma_limit.Draw("Fsame")
 	graph_lifetime_exp1sigma_limit.Draw("Fsame")
-	graph_lifetime_obs_limit.Draw("Lsame")
+	if drawObs:
+		graph_lifetime_obs_limit.Draw("Lsame")
 	graph_lifetime_exp_limit.Draw("Lsame")
 	graph_lifetime_Th_limit.Draw("Lsame")
 
@@ -218,7 +221,8 @@ for list_this in list_limits_vs_lifetime:
 	leg_limit_vs_time.SetFillStyle(1001)
 
 	leg_limit_vs_time.AddEntry(graph_lifetime_Th_limit, "Theoretical cross-section", "L")
-	leg_limit_vs_time.AddEntry(graph_lifetime_obs_limit, "Observed  95% CL upper limit", "L")
+	if drawObs:
+		leg_limit_vs_time.AddEntry(graph_lifetime_obs_limit, "Observed  95% CL upper limit", "L")
 	leg_limit_vs_time.AddEntry(graph_lifetime_exp_limit, "Expected  95% CL upper limit", "L")
 	leg_limit_vs_time.AddEntry(graph_lifetime_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
 	leg_limit_vs_time.AddEntry(graph_lifetime_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
@@ -364,7 +368,8 @@ for list_this in list_limits_vs_mass:
 
 	graph_mass_exp2sigma_limit.Draw("Fsame")
 	graph_mass_exp1sigma_limit.Draw("Fsame")
-	graph_mass_obs_limit.Draw("Lsame")
+	if drawObs:
+		graph_mass_obs_limit.Draw("Lsame")
 	graph_mass_exp_limit.Draw("Lsame")
 	graph_mass_Th_limit.Draw("Lsame")
 
@@ -382,7 +387,8 @@ for list_this in list_limits_vs_mass:
 	leg_limit_vs_mass.SetFillStyle(1001)
 
 	leg_limit_vs_mass.AddEntry(graph_mass_Th_limit, "Theoretical cross-section", "L")
-	leg_limit_vs_mass.AddEntry(graph_mass_obs_limit, "Observed  95% CL upper limit", "L")
+	if drawObs:
+		leg_limit_vs_mass.AddEntry(graph_mass_obs_limit, "Observed  95% CL upper limit", "L")
 	leg_limit_vs_mass.AddEntry(graph_mass_exp_limit, "Expected  95% CL upper limit", "L")
 	leg_limit_vs_mass.AddEntry(graph_mass_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
 	leg_limit_vs_mass.AddEntry(graph_mass_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
@@ -761,16 +767,17 @@ graph_exclusion_exp.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
 graph_exclusion_exp.GetYaxis().SetRangeUser(0.095,1e7)
 graph_exclusion_exp.SetTitle("")
 
-graph_exclusion_exp.SetMarkerStyle(19)
-graph_exclusion_exp.SetMarkerSize(0.0)
-graph_exclusion_exp.SetLineColor(kBlack)
-graph_exclusion_exp.SetLineWidth(2)
-graph_exclusion_exp.SetLineStyle(kDashed)
+graph_exclusion_obs.SetMarkerStyle(19)
+graph_exclusion_obs.SetMarkerSize(0.0)
+graph_exclusion_obs.SetLineColor(kBlack)
+graph_exclusion_obs.SetLineWidth(2)
+graph_exclusion_obs.SetLineStyle(kDashed)
 
-#graph_exclusion_obs.SetFillColor(kAzure + 7)
-graph_exclusion_obs.SetFillColorAlpha(kOrange - 9, 0.65)
-graph_exclusion_exp.Draw("AL*")
-graph_exclusion_obs.Draw("F*same")
+#graph_exclusion_exp.SetFillColor(kAzure + 7)
+graph_exclusion_exp.SetFillColorAlpha(kOrange - 9, 0.65)
+graph_exclusion_exp.Draw("AF")
+if drawObs:
+	graph_exclusion_obs.Draw("Lsames")
 
 #####ATLAS 8TeV
 lambda_atlas_8TeV_2g = np.array([82.5 , 102.5,   140,   160,   180,   200,   220, 260,  300, 302.58, 300, 260, 220, 200 ])
@@ -815,8 +822,9 @@ leg_2d_exclusion.SetLineWidth(1)
 leg_2d_exclusion.SetFillColor(0)
 leg_2d_exclusion.SetFillStyle(1001)
 
-leg_2d_exclusion.AddEntry(graph_exclusion_exp, "CMS Exp 13 TeV, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion.AddEntry(graph_exclusion_obs, "CMS Obs 13 TeV, #gamma#gamma + #slash{E}_{T}", "F")
+leg_2d_exclusion.AddEntry(graph_exclusion_exp, "CMS Exp 13 TeV, #gamma#gamma + #slash{E}_{T}", "F")
+if drawObs:
+	leg_2d_exclusion.AddEntry(graph_exclusion_obs, "CMS Obs 13 TeV, #gamma#gamma + #slash{E}_{T}", "L")
 leg_2d_exclusion.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "L")
 leg_2d_exclusion.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "F")
 leg_2d_exclusion.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV, #gamma + #slash{E}_{T}", "F")
