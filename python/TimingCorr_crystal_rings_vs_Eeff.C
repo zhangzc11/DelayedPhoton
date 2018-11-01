@@ -16,7 +16,7 @@ float rightMargin  = 0.05;
 float topMargin    = 0.09;
 float bottomMargin = 0.12;
 
-TString outputDir="/data/zhicaiz/www/sharebox/DelayedPhoton/23Sept2018/orderByPt/";
+TString outputDir="/data/zhicaiz/www/sharebox/DelayedPhoton/28Oct2018/orderByPt/";
 
 //mkdir(outputDir, S_IRWXU | S_IRWXG | S_IRWXO);
 //mkdir(outputDir+"/ZeeTiming/", S_IRWXU | S_IRWXG | S_IRWXO);

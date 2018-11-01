@@ -3,8 +3,8 @@ from ROOT import TFile, TH1F, TLegend, TCanvas, TPad, gROOT, gStyle, TChain, TCo
 import ROOT
 import os #, sys
 from Aux import drawCMS
-from config import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut, splots, lumi, outputDir, xsecGJets, xsecQCD
-from config import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, cut_GJets_shape, cut_QCD_shape, weight_cut
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut, splots, lumi, outputDir, xsecGJets, xsecQCD
+from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, cut_GJets_shape, cut_QCD_shape, weight_cut
 #import numpy as np
 #import array
 
@@ -15,7 +15,7 @@ gStyle.SetOptFit(111)
 
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/contamination")
-os.system("cp config.py "+outputDir)
+os.system("cp config_noBDT.py "+outputDir)
 os.system("cp containmination.py "+outputDir)
 #os.system("mkdir -p ../data")
 #################plot settings###########################
@@ -107,7 +107,16 @@ weightedcut_QCD_inQCD =  weight_cut + cut_loose + " && !( " + cut +")"
 
 NEventsGJets_ = NEventsGJets[:]
 NEventsQCD_ = NEventsQCD[:]
-for plot in splots:
+splots_this = []
+splots_this.append(["t1MET", "MET_linear", "#slash{E}_{T} [GeV]", 100,0,800, False])
+splots_this.append(["t1MET", "MET_log", "#slash{E}_{T} [GeV]", 100,0,800, True])
+
+splots_this.append(["pho1ClusterTime", "phoTimeCluster_noSmear_linear", "#gamma cluster time [ns]", 100,-15,15, False])
+splots_this.append(["pho1ClusterTime", "phoTimeCluster_noSmear_log", "#gamma cluster time [ns]", 100,-15,15, True])
+splots_this.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_linear", "#gamma cluster time [ns]", 100,-15,15, False])
+splots_this.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_log", "#gamma cluster time [ns]", 100,-15,15, True])
+
+for plot in splots_this:
 	#print NEventsGJets
 	#print NEventsQCD
 	#NEventsGJets_ = NEventsGJets[:]
@@ -266,9 +275,9 @@ for plot in splots:
 
 	drawCMS(myC, 13, lumi)	
 
-	myC.SaveAs(outputDir+"/"+plot[1]+"_contaimination_inGJets.pdf")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_contaimination_inGJets.png")
-	myC.SaveAs(outputDir+"/"+plot[1]+"_contaimination_inGJets.C")
+	myC.SaveAs(outputDir+"/contamination/"+plot[1]+"_contaimination_inGJets.pdf")
+	myC.SaveAs(outputDir+"/contamination/"+plot[1]+"_contaimination_inGJets.png")
+	myC.SaveAs(outputDir+"/contamination/"+plot[1]+"_contaimination_inGJets.C")
 
 	pad1.SetLogy(plot[6])
 	pad1.Draw()
