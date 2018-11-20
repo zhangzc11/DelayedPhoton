@@ -110,23 +110,30 @@ TString _sigModelTitle (sigModelTitle.c_str());
 float xsec = getXsecBR(sigModelName); //pb
 std::string treeName = "DelayedPhoton";
 
-std::string cut, cut_JESUp, cut_JESDown, cut_noHLT, cut_loose, cut_GJets, cut_MET_filter, cut_noSigmaIetaIeta;
+std::string cut, cut_JESUp, cut_JESDown, cut_noHLT, cut_loose, cut_GJets, cut_noSigmaIetaIeta;
 
 std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight*";
 
-cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
+std::string cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
+
+std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1R9 > 0.9 && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994";
+std::string cut_pho1Tight_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1R9 > 0.9 && pho1Sminor>0.15 && pho1Sminor<0.3";
+std::string cut_pho1Loose = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1R9 > 0.5 && pho1Sminor>0.15 && pho1Sminor<0.7 && pho1SigmaIetaIeta < 0.01031";
+std::string cut_pho1Loose_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1R9 > 0.5 && && pho1Sminor>0.15 && pho1Sminor<0.7";
+
+
 
 if(category == "2J")
 {
 	if(!useBDT)
 	{
-		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2 " + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets == 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.01031";
-		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets ==1  && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_noSigmaIetaIeta = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight_noSigmaIetaIeta;
+		cut = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESUp = "n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESDown = "n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_noHLT = "n_Jets == 2 && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_loose = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
+		cut_GJets = "n_Jets == 1 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)&& (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
 	}
 	else
 	{
@@ -144,13 +151,13 @@ else if(category == "3J")
 {
 	if(!useBDT)
 	{
-		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESUp > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets_JESDown > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
-		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.01031";
-		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets < 3 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter + " && pho1SigmaIetaIeta < 0.00994";
+		cut_noSigmaIetaIeta = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight_noSigmaIetaIeta;
+		cut = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESUp = "n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESDown = "n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_noHLT = "n_Jets > 2 && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut_loose = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
+		cut_GJets = "n_Jets < 3 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)&& (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
 	}
 	else
 	{
@@ -294,13 +301,13 @@ if (category=="3J" && !useBDT) shape_file_name = "data/shapes_3J_noBDT.root";
 
 TFile *file_shape = new TFile(shape_file_name.c_str());
 
-mkdir("fit_results", S_IRWXU | S_IRWXG | S_IRWXO);
-mkdir("fit_results/plots_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-mkdir("fit_results/plots_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-mkdir("fit_results/plots_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-mkdir("fit_results/plots_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/2016", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/2016/plots_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/2016/plots_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/2016/plots_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/2016/plots_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 
-TFile *f_Out = new TFile(("fit_results/"+_outPlotsDir+"/fit_ws_"+sigModelName+".root").c_str(),"recreate");
+TFile *f_Out = new TFile(("fit_results/2016/"+_outPlotsDir+"/fit_ws_"+sigModelName+".root").c_str(),"recreate");
 
 int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
 float N_total_GJets_QCD_fit = 0.0;
@@ -505,10 +512,10 @@ metBin.push_back(met_N_fine);
 
 if(fitMode == "binning")
 {
-	mkdir("fit_results/binning_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/binning_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/binning_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/binning_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/binning_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/binning_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/binning_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/binning_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 
 	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
 	TH2F *h2finebinBkg = new TH2F("h2finebinBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
@@ -708,12 +715,12 @@ for(int i=1;i<=Nbins_time;i++)
 
 if(fitMode == "datacard")
 {
-	mkdir("fit_results/datacards_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/datacards_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/datacards_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/datacards_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/datacards_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/datacards_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/datacards_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/datacards_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 
-	TFile *f_Out_combineWS = new TFile(("fit_results/"+_outDataCardsDir+"/fit_combineWS_"+sigModelName+".root").c_str(),"recreate");
+	TFile *f_Out_combineWS = new TFile(("fit_results/2016/"+_outDataCardsDir+"/fit_combineWS_"+sigModelName+".root").c_str(),"recreate");
 
 	////////////make datacard - 2D->1D fit/////////
 	RooWorkspace * ws_combine;
@@ -845,10 +852,10 @@ if(fitMode == "datacard")
 //do the bias test
 if(fitMode == "bias")
 {
-	mkdir("fit_results/bias_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/bias_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/bias_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
-	mkdir("fit_results/bias_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/bias_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/bias_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/bias_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+	mkdir("fit_results/2016/bias_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 	
 
 	Fit1DMETTimeBiasTest( h1combineData, h1combineBkg, h1combineSig, SoverB, nToys, _sigModelName, lumi, outBiasDir);	

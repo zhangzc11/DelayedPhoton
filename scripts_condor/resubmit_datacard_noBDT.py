@@ -14,8 +14,8 @@ if __name__ == "__main__":
 			env_jdl_n = pwd + "/submit_noBDT/" + sig_array[0]+"_datacard.jdl"
 			minsize = 2000
 			actualsize = 0
-			if os.path.isfile("../fit_results/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root"):
-				actualsize =os.path.getsize("../fit_results/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root")
+			if os.path.isfile("../fit_results/2016/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root"):
+				actualsize =os.path.getsize("../fit_results/2016/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root")
 			if actualsize < minsize:
 				print "job "+ sig_array[0]+"  failed, resubmitting now"
 				os.system("rm "+ pwd + "/log_noBDT/"+sig_array[0]+"*")

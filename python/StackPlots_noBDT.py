@@ -193,7 +193,7 @@ for plot in splots:
 		histQCD = TH1F(plot[1]+"_histQCD","",len(xbins_MET)-1, np.array(xbins_MET))
 	'''
 	for i in range(0, len(treeQCD)):
-		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut))
+		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut)),
 		normQCD = NEventsQCD[i] 
 		histThis = TH1F(plot[1]+"_histQCD"+str(i),"",plot[3],plot[4],plot[5])	
 		'''
@@ -208,7 +208,9 @@ for plot in splots:
 			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut_noSigmaIetaIeta)
 		else:
 			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut)
-		if histThis.Integral()>10:
+		print " => " + str(histThis.Integral())
+		#print " lumi - " + str(lumi) + " scaleBkg - "+  str(scaleBkg)+ "  xsecQCD - "+ str(xsecQCD[i]) + "  normQCD - " +str(normQCD)
+		if histThis.Integral()>0:
 			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
@@ -229,7 +231,8 @@ for plot in splots:
 	print NEventsQCD
 
 	for i in range(0, len(treeGJets)):
-		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut))
+		#print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut))
+		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut)),
 		normGJets = NEventsGJets[i] 
 		histThis = TH1F(plot[1]+"_histGJets"+str(i),"",plot[3],plot[4],plot[5])	
 		'''
@@ -244,7 +247,8 @@ for plot in splots:
 			treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut_noSigmaIetaIeta)
 		else:
 			treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut)
-		if histThis.Integral()>10:
+		print " => " + str(histThis.Integral())
+		if histThis.Integral()>0:
 			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
