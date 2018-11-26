@@ -1,9 +1,9 @@
 Combination of ch2016=/data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2016/datacards_3J_noBDT/DelayedPhotonCard_L300TeV_Ctau600cm.txt  ch2017=/data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2017/datacard_GMSB_L300TeV_CTau600cm.txt
 imax 2 number of bins
 jmax 3 number of processes minus 1
-kmax 6 number of nuisance parameters
+kmax 7 number of nuisance parameters
 ----------------------------------------------------------------------------------------------------------------------------------
-shapes background  ch2016      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2016/datacards_3J_noBDT/fit_combineWS_L300TeV_Ctau600cm.root ws_combine:fitModelBkg ws_combine:fitModelBkg_$SYSTEMATIC
+shapes background  ch2016      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2016/datacards_3J_noBDT/fit_combineWS_L300TeV_Ctau600cm.root ws_combine:rpBkg ws_combine:rpBkg_$SYSTEMATIC
 shapes data_obs    ch2016      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2016/datacards_3J_noBDT/fit_combineWS_L300TeV_Ctau600cm.root ws_combine:data_toy
 shapes signal      ch2016      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2016/datacards_3J_noBDT/fit_combineWS_L300TeV_Ctau600cm.root ws_combine:rpSig ws_combine:rpSig_$SYSTEMATIC
 shapes bkg         ch2017      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2017/ws_final.root workspace_2D:Bkgd_PDF_2D
@@ -11,16 +11,17 @@ shapes data_obs    ch2017      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/s
 shapes sig         ch2017      /data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/fit_results/2017/ws_final.root workspace_2D:GMSB_L300_CTau600_PDF_2D
 ----------------------------------------------------------------------------------------------------------------------------------
 bin          ch2016   ch2017 
-observation  51807.0  -1.0   
+observation  66275.0  -1.0   
 ----------------------------------------------------------------------------------------------------------------------------------
-bin                                 ch2016      ch2016      ch2017      ch2017    
-process                             signal      background  sig         bkg       
-process                             -1          1           0           2         
-rate                                1.9640      51807.0900  1.0000      1.0000    
+bin                                  ch2016      ch2016      ch2017      ch2017    
+process                              signal      background  sig         bkg       
+process                              -1          1           0           2         
+rate                                 2.1265      66275.1600  1.0000      1.0000    
 ----------------------------------------------------------------------------------------------------------------------------------
-CMS_lumi                lnN         -           -           1.05        -         
-JES                     shapeN2     1.0         -           -           -         
-Photon_                 lnN         1.01        -           -           -         
-TimeCorr                shapeN2     1.0         -           -           -         
-Trigger_                lnN         1.01        -           -           -         
-lumi                    lnN         1.025       -           -           -         
+BkgEstimation           shapeN2      -           1.0         -           -         
+CMS_lumi                lnN          -           -           1.05        -         
+JES                     shapeN2      1.0         -           -           -         
+Photon_                 lnN          1.01        -           -           -         
+TimeCorr                shapeN2      1.0         -           -           -         
+Trigger_                lnN          1.01        -           -           -         
+lumi                    lnN          1.025       -           -           -         

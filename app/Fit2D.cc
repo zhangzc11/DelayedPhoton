@@ -116,10 +116,11 @@ std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF*tri
 
 std::string cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
-std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1R9 > 0.9 && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994";
-std::string cut_pho1Tight_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1R9 > 0.9 && pho1Sminor>0.15 && pho1Sminor<0.3";
-std::string cut_pho1Loose = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1R9 > 0.5 && pho1Sminor>0.15 && pho1Sminor<0.7 && pho1SigmaIetaIeta < 0.01031";
-std::string cut_pho1Loose_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1R9 > 0.5 && && pho1Sminor>0.15 && pho1Sminor<0.7";
+std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994";
+std::string cut_pho1Tight_GJets = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1SigmaIetaIeta < 0.00994";
+std::string cut_pho1Tight_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3";
+std::string cut_pho1Loose = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.7 && pho1SigmaIetaIeta < 0.01031";
+std::string cut_pho1Loose_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.7";
 
 
 
@@ -133,7 +134,7 @@ if(category == "2J")
 		cut_JESDown = "n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
 		cut_noHLT = "n_Jets == 2 && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
 		cut_loose = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
-		cut_GJets = "n_Jets == 1 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)&& (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
+		cut_GJets = "n_Jets == 1 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)&& (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
 	}
 	else
 	{
@@ -157,7 +158,7 @@ else if(category == "3J")
 		cut_JESDown = "n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
 		cut_noHLT = "n_Jets > 2 && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
 		cut_loose = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
-		cut_GJets = "n_Jets < 3 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)&& (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Loose;
+		cut_GJets = "n_Jets < 3 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)&& (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
 	}
 	else
 	{
@@ -182,7 +183,7 @@ cut_GJets = "weight_sumET * ("+cut_GJets+")";
 cout<<"cut --> "<<cut<<endl;
 cout<<"cut_loose --> "<<cut_loose<<endl;
 cout<<"cut_GJets --> "<<cut_GJets<<endl;
-
+cout<<"cut_QCD --> "<<cut_loose + " && ! (" + cut + ")"<<endl;
 
 TString outPlotsDir;
 if(category == "2J" && useBDT ) outPlotsDir = "plots_2J_withBDT";
@@ -651,6 +652,8 @@ h1newbinSig_MET->Scale((1.0*N_sig_expected)/(1.0*h1newbinSig_MET->Integral()));
 TH1F * h1combineData = new TH1F("h1combineData","h1combineData", Nbins_total , 0, Nbins_total);
 TH1 * h1combineData_toy = new TH1F("h1combineData_toy","h1combineData_toy", Nbins_total , 0, Nbins_total);
 TH1F * h1combineBkg = new TH1F("h1combineBkg","h1combineBkg", Nbins_total , 0, Nbins_total);
+TH1F * h1combineBkg_BkgEstimationUp = new TH1F("h1combineBkg_BkgEstimationUp","h1combineBkg_BkgEstimationUp", Nbins_total , 0, Nbins_total);
+TH1F * h1combineBkg_BkgEstimationDown = new TH1F("h1combineBkg_BkgEstimationDown","h1combineBkg_BkgEstimationDown", Nbins_total , 0, Nbins_total);
 TH1F * h1combineGJets = new TH1F("h1combineGJets","h1combineGJets", Nbins_total , 0, Nbins_total);
 TH1F * h1combineQCD = new TH1F("h1combineQCD","h1combineQCD", Nbins_total , 0, Nbins_total);
 TH1F * h1combineSig = new TH1F("h1combineSig","h1combineSig", Nbins_total , 0, Nbins_total);
@@ -668,6 +671,9 @@ for(int i=1;i<=Nbins_MET;i++)
 		h1combineGJets->SetBinContent(thisBin, h2newbinGJets->GetBinContent(j,i));	
 		h1combineQCD->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i));	
 		h1combineBkg->SetBinContent(thisBin, h2newbinQCD->GetBinContent(j,i) + h2newbinGJets->GetBinContent(j,i));
+		h1combineBkg_BkgEstimationUp->SetBinContent(thisBin, 0.2*h2newbinQCD->GetBinContent(j,i)/frac_QCD + 0.8*h2newbinGJets->GetBinContent(j,i)/frac_GJets);
+		h1combineBkg_BkgEstimationDown->SetBinContent(thisBin, 0.8*h2newbinQCD->GetBinContent(j,i)/frac_QCD + 0.2*h2newbinGJets->GetBinContent(j,i)/frac_GJets);
+
 		h1combineSig->SetBinContent(thisBin, h2newbinSig->GetBinContent(j,i));	
 		h1combineSig_JESUp->SetBinContent(thisBin, h2newbinSig_JESUp->GetBinContent(j,i));	
 		h1combineSig_TimeCorrUp->SetBinContent(thisBin, h2newbinSig_TimeCorrUp->GetBinContent(j,i));	
@@ -680,12 +686,16 @@ for(int i=1; i<=Nbins_total; i++)
 {
 	//float ndata = h1combineData->GetBinContent(i);
 	float nbkg = h1combineBkg->GetBinContent(i);
+	float nbkg_BkgEstimationUp = h1combineBkg_BkgEstimationUp->GetBinContent(i);
+	float nbkg_BkgEstimationDown = h1combineBkg_BkgEstimationDown->GetBinContent(i);
 	float nsig = h1combineSig->GetBinContent(i);
 	float nsig_JESUp = h1combineSig_JESUp->GetBinContent(i);
 	float nsig_TimeCorrUp = h1combineSig_TimeCorrUp->GetBinContent(i);
 	float nsig_JESDown = h1combineSig_JESDown->GetBinContent(i);
 	float nsig_TimeCorrDown = h1combineSig_TimeCorrDown->GetBinContent(i);
 	if(nbkg < 1e-3 ) h1combineBkg->SetBinContent(i, 1e-3);
+	if(nbkg_BkgEstimationUp < 1e-3 ) h1combineBkg_BkgEstimationUp->SetBinContent(i, 1e-3);
+	if(nbkg_BkgEstimationDown < 1e-3 ) h1combineBkg_BkgEstimationDown->SetBinContent(i, 1e-3);
 	if(nsig < 1e-3 ) h1combineSig->SetBinContent(i, 1e-3);
 	if(nsig_JESUp < 1e-3 ) h1combineSig_JESUp->SetBinContent(i, 1e-3);
 	if(nsig_TimeCorrUp < 1e-3 ) h1combineSig_TimeCorrUp->SetBinContent(i, 1e-3);
@@ -736,25 +746,38 @@ if(fitMode == "datacard")
 	cout<<"Sig_TimeCorrDown: int = "<<h1combineSig_TimeCorrDown->Integral()<<endl;
 	
 	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData, h1combineGJets, h1combineQCD, h1combineSig, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy, outPlotsDir);
+	//rpBkg
+	RooDataHist* rhBkg = new RooDataHist("rhBkg", "rhBkg", RooArgSet(*ws_combine->var("bin")), h1combineBkg);
+	RooHistPdf * rpBkg = new RooHistPdf("rpBkg", "rpBkg", RooArgSet(*ws_combine->var("bin")), *rhBkg, 0);
+	
+	ws_combine->import(*rpBkg);
+	//BkgEstimationUp shape
+	RooDataHist* rhBkg_BkgEstimationUp = new RooDataHist("rhBkg_BkgEstimationUp", "rhBkg_BkgEstimationUp", RooArgSet(*ws_combine->var("bin")), h1combineBkg_BkgEstimationUp);
+	RooHistPdf * rpBkg_BkgEstimationUp = new RooHistPdf("rpBkg_BkgEstimationUp", "rpBkg_BkgEstimationUp", RooArgSet(*ws_combine->var("bin")), *rhBkg_BkgEstimationUp, 0);
+
+	ws_combine->import(*rpBkg_BkgEstimationUp);
+	//BkgEstimationDown shape
+	RooDataHist* rhBkg_BkgEstimationDown = new RooDataHist("rhBkg_BkgEstimationDown", "rhBkg_BkgEstimationDown", RooArgSet(*ws_combine->var("bin")), h1combineBkg_BkgEstimationDown);
+	RooHistPdf * rpBkg_BkgEstimationDown = new RooHistPdf("rpBkg_BkgEstimationDown", "rpBkg_BkgEstimationDown", RooArgSet(*ws_combine->var("bin")), *rhBkg_BkgEstimationDown, 0);
+
+	ws_combine->import(*rpBkg_BkgEstimationDown);
 	//JESUp shape
-	RooDataHist* rhSig_JESUp = new RooDataHist("rhSig_JESUp", "rhSig_JESup", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESUp);
+	RooDataHist* rhSig_JESUp = new RooDataHist("rhSig_JESUp", "rhSig_JESUp", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESUp);
 	RooHistPdf * rpSig_JESUp = new RooHistPdf("rpSig_JESUp", "rpSig_JESUp", RooArgSet(*ws_combine->var("bin")), *rhSig_JESUp, 0);
 	ws_combine->import(*rpSig_JESUp);	
 	//JESDown shape
-	RooDataHist* rhSig_JESDown = new RooDataHist("rhSig_JESDown", "rhSig_JESup", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESDown);
+	RooDataHist* rhSig_JESDown = new RooDataHist("rhSig_JESDown", "rhSig_JESUp", RooArgSet(*ws_combine->var("bin")), h1combineSig_JESDown);
 	RooHistPdf * rpSig_JESDown = new RooHistPdf("rpSig_JESDown", "rpSig_JESDown", RooArgSet(*ws_combine->var("bin")), *rhSig_JESDown, 0);
 	ws_combine->import(*rpSig_JESDown);	
 
-
 	//TimeCorrUp shape
-	RooDataHist* rhSig_TimeCorrUp = new RooDataHist("rhSig_TimeCorrUp", "rhSig_TimeCorrup", RooArgSet(*ws_combine->var("bin")), h1combineSig_TimeCorrUp);
+	RooDataHist* rhSig_TimeCorrUp = new RooDataHist("rhSig_TimeCorrUp", "rhSig_TimeCorrUp", RooArgSet(*ws_combine->var("bin")), h1combineSig_TimeCorrUp);
 	RooHistPdf * rpSig_TimeCorrUp = new RooHistPdf("rpSig_TimeCorrUp", "rpSig_TimeCorrUp", RooArgSet(*ws_combine->var("bin")), *rhSig_TimeCorrUp, 0);
 	ws_combine->import(*rpSig_TimeCorrUp);	
 	//TimeCorrDown shape
-	RooDataHist* rhSig_TimeCorrDown = new RooDataHist("rhSig_TimeCorrDown", "rhSig_TimeCorrup", RooArgSet(*ws_combine->var("bin")), h1combineSig_TimeCorrDown);
+	RooDataHist* rhSig_TimeCorrDown = new RooDataHist("rhSig_TimeCorrDown", "rhSig_TimeCorrUp", RooArgSet(*ws_combine->var("bin")), h1combineSig_TimeCorrDown);
 	RooHistPdf * rpSig_TimeCorrDown = new RooHistPdf("rpSig_TimeCorrDown", "rpSig_TimeCorrDown", RooArgSet(*ws_combine->var("bin")), *rhSig_TimeCorrDown, 0);
 	ws_combine->import(*rpSig_TimeCorrDown);	
-
 
 
 	ws_combine->SetName("ws_combine");
@@ -785,6 +808,8 @@ if(fitMode == "datacard")
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "JES", "shapeN2");	
 	//Timing correction
 	AddSystematics_shape(_sigModelName, "-", "1", outDataCardsDir, "TimeCorr", "shapeN2");	
+	//Bkg estimation correction
+	AddSystematics_shape(_sigModelName, "1", "-", outDataCardsDir, "BkgEstimation", "shapeN2");	
 		
 	//save the histograms
 	h1combineData_toy = ws_combine->data("data_toy")->createHistogram("bin", Nbins_total);

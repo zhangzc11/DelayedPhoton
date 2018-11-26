@@ -1,0 +1,19 @@
+ <<< Combine >>> 
+ WARNING --  From combine v7, method Asymptotic has been renamed to AsymptoticLimits
+>>> including systematics
+>>> method used is Asymptotic
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+Constraints of type SimpleGaussianConstraint: 6
+Constraints of type SimpleGaussianConstraint: 6
+Constraints of type SimpleGaussianConstraint: 6
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 2.3410
+Expected  2.5%: r < 0.7129
+Expected 16.0%: r < 1.2336
+Expected 50.0%: r < 2.2812
+Expected 84.0%: r < 4.1908
+Expected 97.5%: r < 6.9155
+
+Done in 0.00 min (cpu), 0.00 min (real)

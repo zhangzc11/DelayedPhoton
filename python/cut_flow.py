@@ -8,9 +8,9 @@ from config_noBDT import weight_cut, fileNameData, fileNameSig
 
 gROOT.SetBatch(True)
 
-cut_blind = "(pho1ClusterTime_SmearToData < 3 || t1MET < 200)"
+cut_blind = "(pho1ClusterTime_SmearToData < 1 || t1MET < 300)"
 cut_trigger = "(HLTDecision[81] == 1)"
-cut_photonID = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994"
+cut_photonID = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994 "
 cut_nJets = "n_Jets > 2"
 cut_nPhotons = "n_Photons == 2"
 cut_MET_filter = "Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
@@ -60,10 +60,10 @@ print int(100.0*n_triggerSig/n_blindSig)
 f1=open(tableFileName, 'a')
 
 #print  "without cut (data blinded) & "+ "%.0f " % n_blindSig + "(100\\%)& "+"%.0f " % n_blindSig + "(100\\%) & "+ "%.5f" % float(n_blindSig/np.sqrt(float(n_blindSig))) + "\\\\"
-print  "without cut (data blinded) & "+ "%.0f " % n_blindData + "(100\\%)& "+"%.2f " % n_blindSig + "(100\\%) & "+ "%.5f" % float(n_blindSig/np.sqrt(float(n_blindData))) + "\\\\"
-print  "+ trigger path& "+"%.0f" % n_triggerData+"("+"%.0f"%float(100.0*n_triggerData/n_blindData)+"\\%)  & "+"%.2f"%n_triggerSig + "("+"%.0f"%float(100.0*n_triggerSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_triggerSig/np.sqrt(n_triggerData))+"\\\\"
-print  "+ photon ID cut& "+"%.0f" % n_photonIDData+"("+"%.0f"%float(100.0*n_photonIDData/n_blindData)+"\\%)  & "+"%.2f"%n_photonIDSig + "("+"%.0f"%float(100.0*n_photonIDSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_photonIDSig/np.sqrt(n_photonIDData))+"\\\\"
-print  "+ nJets cut& "+"%.0f" % n_nJetsData+"("+"%.0f"%float(100.0*n_nJetsData/n_blindData)+"\\%)  & "+"%.2f"%n_nJetsSig + "("+"%.0f"%float(100.0*n_nJetsSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_nJetsSig/np.sqrt(n_nJetsData))+"\\\\"
-print  "+ nPhotons cut& "+"%.0f" % n_nPhotonsData+"("+"%.0f"%float(100.0*n_nPhotonsData/n_blindData)+"\\%)  & "+"%.2f"%n_nPhotonsSig + "("+"%.0f"%float(100.0*n_nPhotonsSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_nPhotonsSig/np.sqrt(n_nPhotonsData))+"\\\\"
-print  "+ MET filters & "+"%.0f" % n_MET_filterData+"("+"%.0f"%float(100.0*n_MET_filterData/n_blindData)+"\\%)  & "+"%.2f"%n_MET_filterSig + "("+"%.0f"%float(100.0*n_MET_filterSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_MET_filterSig/np.sqrt(n_MET_filterData))+"\\\\"
+print >> f1,  "without cut (data blinded) & "+ "%.0f " % n_blindData + "(100\\%)& "+"%.2f " % n_blindSig + "(100\\%) & "+ "%.5f" % float(n_blindSig/np.sqrt(float(n_blindData))) + "\\\\"
+print >> f1,  "+ trigger path& "+"%.0f" % n_triggerData+"("+"%.1f"%float(100.0*n_triggerData/n_blindData)+"\\%)  & "+"%.2f"%n_triggerSig + "("+"%.1f"%float(100.0*n_triggerSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_triggerSig/np.sqrt(n_triggerData))+"\\\\"
+print >> f1, "+ photon ID cut& "+"%.0f" % n_photonIDData+"("+"%.1f"%float(100.0*n_photonIDData/n_blindData)+"\\%)  & "+"%.2f"%n_photonIDSig + "("+"%.1f"%float(100.0*n_photonIDSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_photonIDSig/np.sqrt(n_photonIDData))+"\\\\"
+print >> f1, "+ nJets cut& "+"%.0f" % n_nJetsData+"("+"%.1f"%float(100.0*n_nJetsData/n_blindData)+"\\%)  & "+"%.2f"%n_nJetsSig + "("+"%.1f"%float(100.0*n_nJetsSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_nJetsSig/np.sqrt(n_nJetsData))+"\\\\"
+print >> f1, "+ nPhotons cut& "+"%.0f" % n_nPhotonsData+"("+"%.1f"%float(100.0*n_nPhotonsData/n_blindData)+"\\%)  & "+"%.2f"%n_nPhotonsSig + "("+"%.1f"%float(100.0*n_nPhotonsSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_nPhotonsSig/np.sqrt(n_nPhotonsData))+"\\\\"
+print >> f1,  "+ MET filters & "+"%.0f" % n_MET_filterData+"("+"%.1f"%float(100.0*n_MET_filterData/n_blindData)+"\\%)  & "+"%.2f"%n_MET_filterSig + "("+"%.1f"%float(100.0*n_MET_filterSig/n_blindSig)+"\\%) & "+"%.5f"%float(n_MET_filterSig/np.sqrt(n_MET_filterData))+"\\\\"
 
