@@ -2,9 +2,20 @@
 
 import subprocess, time, sys, os, shlex
 
-inputData = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root"
+inputData = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT_badPhotonID/DelayedPhoton_DoubleEG_2016All_GoodLumi.root"
 
-inputSigDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
+inputSigDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT_badPhotonID/"
+
+outputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/"
+
+os.system("rm -rf "+outputDir+"/2016/*noBDT \n")
+os.system("mkdir -p "+outputDir+" \n")
+os.system("mkdir -p "+outputDir+"/2016 \n")
+os.system("mkdir -p "+outputDir+"/2016/datacards_3J_noBDT/ \n")
+os.system("mkdir -p "+outputDir+"/2016/datacards_2J_noBDT/ \n")
+os.system("mkdir -p "+outputDir+"/2016/plots_2J_noBDT/ \n")
+os.system("mkdir -p "+outputDir+"/2016/plots_3J_noBDT/ \n")
+os.system("mkdir -p "+outputDir+"/2016/datacards_noBDT/ \n")
 
 
 if __name__ == "__main__":
@@ -24,32 +35,49 @@ if __name__ == "__main__":
 			env_script_f.write("\n")
 			env_script_f.write("hostname\n")
 			env_script_f.write("date\n")
+			env_script_f.write("currentDir=`pwd` \n")
 			env_script_f.write("cd " + work_directory + "\n")
 			env_script_f.write("source /cvmfs/cms.cern.ch/cmsset_default.sh \n")
 			env_script_f.write("export SCRAM_ARCH=slc6_amd64_gcc530 \n")
 			env_script_f.write("ulimit -c 0 \n")
 			env_script_f.write("eval `scram runtime -sh` \n")
 			env_script_f.write('echo "running on category 3J ======= " \n')
+
+			env_script_f.write("cd ${currentDir} \n")
+			env_script_f.write("cp "+ work_directory + "/Fit2D ./ \n")
+			env_script_f.write("cp -r "+ work_directory + "/data ./ \n")
+
 			env_script_f.write("./Fit2D "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" 3J datacard no \n')
-			env_script_f.write("cd "+ work_directory +"fit_results/2016/datacards_3J_noBDT \n")
+			env_script_f.write("cd fit_results/2016/datacards_3J_noBDT \n")
 			env_script_f.write('echo "L100TeV_Ctau1000cm limits below (3J):" \n')
 			env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
+
 	
+			env_script_f.write("cd ${currentDir} \n")
+			env_script_f.write("cp fit_results/2016/plots_3J_noBDT/* "+outputDir+"/2016/plots_3J_noBDT/ \n")
+			env_script_f.write("cp fit_results/2016/datacards_3J_noBDT/* "+outputDir+"/2016/datacards_3J_noBDT/ \n")
 			env_script_f.write('echo "running on category 2J ======= " \n')
-			env_script_f.write("cd " + work_directory + "\n")
 			env_script_f.write("./Fit2D "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" 2J datacard no \n')
 	
-			env_script_f.write("cd "+ work_directory +"fit_results/2016/datacards_2J_noBDT \n")
+			env_script_f.write("cd fit_results/2016/datacards_2J_noBDT \n")
 			env_script_f.write('echo "L100TeV_Ctau1000cm limits below (2J):" \n')
 			env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
 	
+
 			
+			env_script_f.write("cd ${currentDir} \n")
+			env_script_f.write("cp fit_results/2016/datacards_2J_noBDT/* "+outputDir+"/2016/datacards_2J_noBDT/ \n")
+			env_script_f.write("cp fit_results/2016/plots_2J_noBDT/* "+outputDir+"/2016/plots_2J_noBDT/ \n")
 			env_script_f.write('echo "combining 2J and 3J datacards:" \n')
-			env_script_f.write("mkdir -p "+ work_directory +"fit_results/2016/datacards_noBDT \n")
-			env_script_f.write("cd "+ work_directory +"fit_results/2016/datacards_noBDT \n")
+			env_script_f.write("mkdir -p fit_results/2016/datacards_noBDT \n")
+			env_script_f.write("cd fit_results/2016/datacards_noBDT \n")
 			env_script_f.write("combineCards.py ch2J=../datacards_2J_noBDT/DelayedPhotonCard_"+sig_array[0]+".txt ch3J=../datacards_3J_noBDT/DelayedPhotonCard_"+sig_array[0]+".txt > DelayedPhotonCard_"+sig_array[0]+".txt \n")	
 			env_script_f.write('echo "L100TeV_Ctau1000cm limits below (2J+3J):" \n')
 			env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
+
+			env_script_f.write("cd ${currentDir} \n")
+			env_script_f.write("cp fit_results/2016/datacards_noBDT/* "+outputDir+"/2016/datacards_noBDT/ \n")
+
 			env_script_f.write("date\n")
 			env_script_f.close()
 	
@@ -71,6 +99,3 @@ if __name__ == "__main__":
 	
 			os.system("condor_submit "+env_jdl_n)
 
-		
-			
-	

@@ -302,6 +302,7 @@ if (category=="3J" && !useBDT) shape_file_name = "data/shapes_3J_noBDT.root";
 
 TFile *file_shape = new TFile(shape_file_name.c_str());
 
+mkdir("fit_results", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016/plots_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016/plots_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
