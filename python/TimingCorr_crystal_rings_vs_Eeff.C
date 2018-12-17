@@ -11,12 +11,12 @@ float axisTitleOffsetRatioX = 0.94;
 float axisTitleSizeRatioY   = 0.15;
 float axisLabelSizeRatioY   = 0.108;
 float axisTitleOffsetRatioY = 0.32;
-float leftMargin   = 0.12;
+float leftMargin   = 0.15;
 float rightMargin  = 0.05;
 float topMargin    = 0.09;
 float bottomMargin = 0.12;
 
-TString outputDir="/data/zhicaiz/www/sharebox/DelayedPhoton/28Oct2018/orderByPt/";
+TString outputDir="/data/zhicaiz/www/sharebox/DelayedPhoton/06Dec2018/orderByPt/";
 
 //mkdir(outputDir, S_IRWXU | S_IRWXG | S_IRWXO);
 //mkdir(outputDir+"/ZeeTiming/", S_IRWXU | S_IRWXG | S_IRWXO);
@@ -120,8 +120,10 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	myC->SetFrameBorderMode(0);
 	myC->SetFrameBorderMode(0);
 	
-	const int N_Eeff_points = 10;	
-	float Eeff_divide[11] = {200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0, 700.0, 900.0, 2000.0};	
+	//const int N_Eeff_points = 10;	
+	//float Eeff_divide[11] = {200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0, 700.0, 900.0, 2000.0};	
+	const int N_Eeff_points = 15;	
+	float Eeff_divide[16] = {75.0, 100.0, 125.0, 150.0, 175.0, 225.0, 275.0, 325.0, 375.0, 475.0, 600.0, 750.0, 950.0, 1275.0, 1700.0, 2250.0};
 	
 	float x_Eeff[N_Eeff_points] = {0};
 	float ex_Eeff[N_Eeff_points] = {0};
@@ -165,10 +167,10 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 		delete hist_2e_this_data;
 		delete hist_2e_this_MC;
 		cout<<"===bin "<<i<<"  "<<y_Eeff_sigma_dt_data[i]<<"   "<<ey_Eeff_sigma_dt_data[i]<<"   "<<y_Eeff_sigma_dt_MC[i]<<"   "<<ey_Eeff_sigma_dt_MC[i]<<endl;
-		if(y_Eeff_sigma_dt_data[i]>0.05 && y_Eeff_sigma_dt_data[i]<0.35 && y_Eeff_sigma_dt_MC[i]>0.05 && y_Eeff_sigma_dt_MC[i] < 0.35) max_aeff = Eeff_divide[i+1];
+		if(y_Eeff_sigma_dt_data[i]>0.05 && y_Eeff_sigma_dt_data[i]<0.5 && y_Eeff_sigma_dt_MC[i]>0.05 && y_Eeff_sigma_dt_MC[i] < 0.5) max_aeff = Eeff_divide[i+1];
 	}
 	for(int i=N_Eeff_points-1; i>=0; i--){
-		if(y_Eeff_sigma_dt_data[i]>0.05 && y_Eeff_sigma_dt_data[i]<0.35 && y_Eeff_sigma_dt_MC[i]>0.05 && y_Eeff_sigma_dt_MC[i] < 0.35) min_aeff = Eeff_divide[i];
+		if(y_Eeff_sigma_dt_data[i]>0.05 && y_Eeff_sigma_dt_data[i]<0.5 && y_Eeff_sigma_dt_MC[i]>0.05 && y_Eeff_sigma_dt_MC[i] < 0.5) min_aeff = Eeff_divide[i];
 	}
 
 	
@@ -176,6 +178,7 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	myC->SetGridy(1);
 	myC->SetGridx(1);
 	myC->SetLogx(1);
+	//myC->SetLogy(1);
 
 	TGraphErrors *gr_Eeff_sigma_dt_data  =  new TGraphErrors(N_Eeff_points, x_Eeff, y_Eeff_sigma_dt_data, ex_Eeff, ey_Eeff_sigma_dt_data);
 	gr_Eeff_sigma_dt_data->Draw("AP");
@@ -188,10 +191,11 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleSize( axisTitleSize - 0.02 );
 	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleOffset( axisTitleOffset  + 0.6);
 	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleSize( axisTitleSize );
-	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleOffset( axisTitleOffset +0.18 );
-	gr_Eeff_sigma_dt_data->GetYaxis()->SetRangeUser(0.05,0.35);
-	gr_Eeff_sigma_dt_data->GetXaxis()->SetRangeUser(200,2000);
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleOffset( axisTitleOffset +0.5 );
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetRangeUser(0.07,1.00);
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetRangeUser(75,2250);
 	gr_Eeff_sigma_dt_data->GetXaxis()->SetMoreLogLabels();
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetMoreLogLabels();
 
 	TF1 * tf1_dt_vs_Eeff_data = new TF1("tf1_dt_vs_Eeff_data","sqrt([0]/(x*x)+[1])", min_aeff, max_aeff);
 	tf1_dt_vs_Eeff_data->SetLineColor(kBlue);
@@ -238,7 +242,7 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	tlatex->SetTextFont(63);
 	tlatex->SetTextAlign(11);
 	tlatex->SetTextSize(25);
-	tlatex->DrawLatex(0.5, 0.85, "#sigma = #frac{N}{A_{eff}/#sigma_{n}} #oplus #sqrt{2} C");
+	tlatex->DrawLatex(0.55, 0.85, "#sigma = #frac{N}{A_{eff}/#sigma_{n}} #oplus #sqrt{2} C");
 
 	float N_data=sqrt(abs(fit_dt_a_data));
 	float eN_data=abs(efit_dt_a_data)/(2.0*sqrt(abs(fit_dt_a_data)));
@@ -251,17 +255,22 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	float eC_MC=abs(efit_dt_b_MC)/(4.0*sqrt(abs(fit_dt_b_MC)/2.0));
 
 	tlatex->SetTextColor(kBlue);
-	tlatex->DrawLatex(0.5, 0.78, Form("N^{data} = %.1f #pm %.1f ns", N_data, eN_data));
-	tlatex->DrawLatex(0.5, 0.71, Form("C^{data} = %.3f #pm %.3f ns", C_data, eC_data));
+	tlatex->DrawLatex(0.55, 0.78, Form("N^{data} = %.1f #pm %.1f ns", N_data, eN_data));
+	tlatex->DrawLatex(0.55, 0.71, Form("C^{data} = %.3f #pm %.3f ns", C_data, eC_data));
 	tlatex->SetTextColor(kRed);
-	tlatex->DrawLatex(0.5, 0.64, Form("N^{MC} = %.1f #pm %.1f ns", N_MC, eN_MC));
-	tlatex->DrawLatex(0.5, 0.57, Form("C^{MC} = %.3f #pm %.3f ns", C_MC, eC_MC));
+	tlatex->DrawLatex(0.55, 0.64, Form("N^{MC} = %.1f #pm %.1f ns", N_MC, eN_MC));
+	tlatex->DrawLatex(0.55, 0.57, Form("C^{MC} = %.3f #pm %.3f ns", C_MC, eC_MC));
 
 	DrawCMS(myC, 13, 35922.0);
 
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".pdf");
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".png");
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".C");
+	
+	myC->SetLogy(1);
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.png");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.C");
 	
 	delete myC;
 	delete gr_Eeff_sigma_dt_data;
@@ -1446,12 +1455,14 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	}
 	//draw time resolution vs. effective amplitude
 	drawTimeResoVsAeff(tree_out_neighboring_data, tree_out_neighboring_MC, "neighboring");
+	
 	drawTimeResoVsAeff(tree_out_ring1_data, tree_out_ring1_MC, "ring1");
 	drawTimeResoVsAeff(tree_out_ring2_data, tree_out_ring2_MC, "ring2");
 	drawTimeResoVsAeff(tree_out_sameTrigTower_data, tree_out_sameTrigTower_MC, "sameTrigTower");
 	drawTimeResoVsAeff(tree_out_diffTrigTower_data, tree_out_diffTrigTower_MC, "diffTrigTower");
 	drawTimeResoVsAeff(tree_out_sameTrigTowerNeighbor_data, tree_out_sameTrigTowerNeighbor_MC, "sameTrigTowerNeighbor");
 	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighbor_data, tree_out_diffTrigTowerNeighbor_MC, "diffTrigTowerNeighbor");
+	
 
 	file_out->Close();
 }

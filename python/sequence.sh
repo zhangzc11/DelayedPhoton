@@ -1,5 +1,4 @@
-python TimingCorr_vs_eta.py > log_cor_vs_eta.log
-python TimingCorr_vs_pt.py > log_cor_vs_pt.log
+python TimingCorr_vs_E.py > log_cor_vs_E.log
 python skim_noBDT.py
 
 python saveShapes_noBDT.py
