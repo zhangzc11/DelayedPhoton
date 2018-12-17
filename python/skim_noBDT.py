@@ -47,7 +47,9 @@ TFile.GetKeyNames = GetKeyNames
 TFile.GetClassNames = GetClassNames
 
 
-fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameDataSkim
+#fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameDataSkim
+#fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameEWKSkim
+fileName_all = fileNameEWKGSkim
 
 for i in range(0,len(fileName_all)):
 	print "skim file "+fileName_all[i]

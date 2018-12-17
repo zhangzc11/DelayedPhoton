@@ -39,7 +39,8 @@ def print_eff_table(cut):
 	list_ctau = ["0_1","10","200","400","600","800","1000","1200"]
 	list_Lambda  = ["100","150","200","250","300","350","400"]
 
-	weightedcut =  weight_cut + cut
+	weightedcut =  weight_cut + "("+cut+")"
+	#weightedcut =  weight_cut + cut
 
 	print weightedcut
 
@@ -87,7 +88,6 @@ print >> f2, "------------------------------------------------"
 print >> f2, "cut_tight_3J_2G"
 print >> f2, "------------------------------------------------"
 print_eff_table(cut_tight_3J_2G)
-
 
 f2=open(tableFileName, 'a') 
 print >> f2, "------------------------------------------------"
