@@ -12,10 +12,10 @@ if __name__ == "__main__":
 			sig_array = shlex.split(this_sig)
 			env_script_n = pwd + "/submit_noBDT/" + sig_array[0]+"_datacard.sh"
 			env_jdl_n = pwd + "/submit_noBDT/" + sig_array[0]+"_datacard.jdl"
-			minsize = 2000
+			minsize = 200
 			actualsize = 0
-			if os.path.isfile("../fit_results/2016/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root"):
-				actualsize =os.path.getsize("../fit_results/2016/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root")
+			if os.path.isfile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root"):
+				actualsize =os.path.getsize("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root")
 			if actualsize < minsize:
 				print "job "+ sig_array[0]+"  failed, resubmitting now"
 				os.system("rm "+ pwd + "/log_noBDT/"+sig_array[0]+"*")

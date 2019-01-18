@@ -1,5 +1,27 @@
 #! /usr/bin/env python
 from ROOT import TLatex, TCanvas
+import shlex
+
+def getXsecBR(Lambda, Ctau):
+        fxsecBR = 0.0
+        efxsecBR = 0.0
+        Ctau_this=str(Ctau)
+        if Ctau_this == "0.1":
+                Ctau_this = "0_1"
+        if Ctau_this == "0.01":
+                Ctau_this = "0_01"
+
+        model_to_find="L"+str(Lambda)+"TeV_Ctau"+Ctau_this+"cm"
+
+        with open("../data/XsecBR.dat","r") as xsec_file:
+                for this_model in xsec_file:
+                        this_model_array = shlex.split(this_model)
+                        if this_model_array[0] == model_to_find:
+                                #print this_model
+                                fxsecBR = float(this_model_array[4])
+                                efxsecBR = float(this_model_array[5])
+        #print model_to_find
+        return fxsecBR,efxsecBR
 
 def drawCMS(myC, energy, lumi):
 

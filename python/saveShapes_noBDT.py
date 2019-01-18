@@ -3,7 +3,7 @@ import ROOT
 import os, sys
 from Aux import drawCMS, drawCMS2
 from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut_2J, cut_3J, cut_2J_noSigmaIetaIeta, cut_3J_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config_noBDT import scaleBkg
+from config_noBDT import kFactor
 from config_noBDT import cut_GJets_shape_2J, cut_QCD_shape_2J, shapes, weight_cut
 from config_noBDT import cut_GJets_shape_2J_noSigmaIetaIeta, cut_QCD_shape_2J_noSigmaIetaIeta
 from config_noBDT import cut_GJets_shape_3J, cut_QCD_shape_3J
@@ -49,7 +49,6 @@ print fileNameQCD
 
 print "NTotal before cut: "
 
-#fileData = TFile(fileNameData.replace('GoodLumi.root','GoodLumi_noreweight.root'))
 fileData = TFile(fileNameData)
 treeData = fileData.Get("DelayedPhoton")
 hNEventsData = fileData.Get("NEvents")
@@ -111,7 +110,7 @@ fileOut_2J = TFile("../data/shapes_2J_noBDT.root","RECREATE")
 fileOut_2J.cd()
 
 for shape in shapes:
-	print "\n shapeting stack shapes for " + shape[1]
+	print "\n shaping stack shapes for " + shape[1]
 	
 	#data
 	if shape[0] == "pho1SigmaIetaIeta":
@@ -144,7 +143,7 @@ for shape in shapes:
 		else:
 			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_2J)
 		if histThis.Integral()>10:
-			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
+			histThis.Scale(lumi*kFactor*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -166,7 +165,7 @@ for shape in shapes:
 		else:
 			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_2J)
 		if histThis.Integral()>10:
-			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
+			histThis.Scale(lumi*kFactor*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -224,7 +223,7 @@ fileOut_3J.cd()
 print "now working on 3J category: "
 for shape in shapes:
 
-	print "\n shapeting stack shapes for " + shape[1]
+	print "\n shaping stack shapes for " + shape[1]
 	
 	#data
 	if shape[0] == "pho1SigmaIetaIeta":
@@ -257,7 +256,7 @@ for shape in shapes:
 		else:
 			treeQCD[i].Draw(shape[0]+">>"+shape[1]+"_histQCD"+str(i),weightedcut_QCD_shape_3J)
 		if histThis.Integral()>10:
-			histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
+			histThis.Scale(lumi*kFactor*xsecQCD[i]/(normQCD))
 		histQCD.Add(histThis)
 		print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()
@@ -279,7 +278,7 @@ for shape in shapes:
 		else:
 			treeGJets[i].Draw(shape[0]+">>"+shape[1]+"_histGJets"+str(i),weightedcut_GJets_shape_3J)
 		if histThis.Integral()>10:
-			histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
+			histThis.Scale(lumi*kFactor*xsecGJets[i]/(normGJets))
 		histGJets.Add(histThis)
 		print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
 		histThis.Write()

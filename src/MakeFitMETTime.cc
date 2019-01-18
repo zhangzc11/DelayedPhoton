@@ -737,7 +737,7 @@ RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QC
 
 
 
-RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float lumi,float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy, TString outPlotsDir)
+RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float lumi,float fracGJets, float fracQCD, TString modelName, TString modelTitle, TString outPlotsDir)
 {
 	RooWorkspace* ws = new RooWorkspace( "ws_combine", "ws_combine" );
 	// define variables
@@ -765,13 +765,6 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 	
 	RooAbsPdf * fitModelBkg = new RooAddPdf("fitModelBkg", "fitModelBkg", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));	
 
-	//create toy data
-	//TRandom3* r3 = new TRandom3(0);
-	//double npoints = r3->PoissonD(h1Data->Integral());	
-	//RooDataHist* data_toy = fitModelBkg->generateBinned(RooArgSet(bin), npoints, RooFit::ExpectedData());
-	RooDataHist* data_toy = fitModelBkg->generateBinned(RooArgSet(bin), npoints);
-	data_toy->SetName("data_toy");
-
 	RooRealVar nSig ("rpSig_yield", "rpSig_yield", 0.0, 0.0, 0.1*npoints);
 	nSig.setConstant(kFALSE);
 	RooRealVar nBkg ("fitModelBkg_yield", "fitModelBkg_yield", npoints, 0.0, 1.5*npoints);
@@ -782,8 +775,7 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 	//fit
 	RooAbsReal* nll = fitModelBkgSig->createNLL(*data, RooFit::NumCPU(8)) ;
 	RooFitResult * fres;
-	if(useToy) fres = fitModelBkgSig->fitTo( *data_toy, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
-	else fres = fitModelBkgSig->fitTo( *data, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+	fres = fitModelBkgSig->fitTo( *data, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
        
 	cout<<"DEBUG: fit 1D result === "<<endl; 
 	nGJets.Print();
@@ -808,8 +800,7 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 
        
 	RooPlot * frame_bin = bin.frame(0, h1Data->GetSize()-2, h1Data->GetSize()-2);
-        if(useToy) data_toy->plotOn( frame_bin, RooFit::Name("bin_data") );
-        else data->plotOn( frame_bin, RooFit::Name("bin_data") );
+        data->plotOn( frame_bin, RooFit::Name("bin_data") );
         fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_Bkg"), RooFit::Components("fitModelBkg"), RooFit::LineColor(kBlue) );
         fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_Sig"), RooFit::Components("rpSig"), RooFit::LineColor(kGreen) );
         fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_all"), RooFit::Components("fitModelBkgSig"), RooFit::LineColor(kRed) );
@@ -861,7 +852,6 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 
 	
 	ws->import(*data);
-	ws->import(*data_toy);
         ws->import(*rhGJets);
         ws->import(*rhQCD);
 	ws->import(*rpSig);
@@ -876,6 +866,207 @@ RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QC
 	
 	//MakeDataCard(modelName, ws);
 	
+        return ws;
+	
+};
+
+
+RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, TH1F * h1EWK, float lumi,float fracGJets, float fracQCD, TString modelName, TString modelTitle, TString outPlotsDir)
+{
+	RooWorkspace* ws = new RooWorkspace( "ws_combine", "ws_combine" );
+	// define variables
+	RooRealVar bin("bin","2D bin",0,h1Data->GetSize()-2,"");
+	
+	cout<<"DEBUG: bin size = "<<h1Data->GetSize()-2<<endl;
+
+	double npoints = 1.0*h1Data->Integral();
+
+	RooRealVar nGJets ("nGJets", "nGJets", fracGJets*(1.0-1.0*h1EWK->Integral()/npoints));
+        nGJets.setConstant(kTRUE);
+        RooRealVar nQCD ("nQCD", "nQCD", fracQCD*(1.0-1.0*h1EWK->Integral()/npoints));
+        nQCD.setConstant(kTRUE);
+        RooRealVar nEWK_fromMC ("nEWK_fromMC", "nEWK_fromMC", 1.0*h1EWK->Integral()/npoints);
+        nEWK_fromMC.setConstant(kTRUE);
+
+	
+	//RooDataHist
+	RooDataHist* data = new RooDataHist("data", "data", RooArgSet(bin), h1Data);	
+	RooDataHist* rhGJets = new RooDataHist("rhGJets", "rhGJets", RooArgSet(bin), h1GJets);	
+	RooDataHist* rhQCD = new RooDataHist("rhQCD", "rhQCD", RooArgSet(bin), h1QCD);	
+	RooDataHist* rhSig = new RooDataHist("rhSig", "rhSig", RooArgSet(bin), h1Sig);	
+	RooDataHist* rhEWK = new RooDataHist("rhEWK", "rhEWK", RooArgSet(bin), h1EWK);	
+
+	//pdf
+	RooHistPdf * rpGJets = new RooHistPdf("rpGJets", "rpGJets", RooArgSet(bin), *rhGJets, 0);
+	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(bin), *rhQCD, 0);
+	RooHistPdf * rpSig = new RooHistPdf("rpSig", "rpSig", RooArgSet(bin), *rhSig, 0);
+	RooHistPdf * rpEWK = new RooHistPdf("rpEWK", "rpEWK", RooArgSet(bin), *rhEWK, 0);
+	
+
+	RooRealVar nSig ("rpSig_yield", "rpSig_yield", 0.0, 0.0, 0.1*npoints);
+	//RooRealVar nSig ("rpSig_yield", "rpSig_yield", 0.0000001, 0.0, 1.0*h1Sig->Integral());
+	nSig.setConstant(kFALSE);
+	//RooRealVar nEWK ("rpEWK_yield", "rpEWK_yield", 1.0*h1EWK->Integral(), 0.0, 2.0*h1EWK->Integral());
+	//RooRealVar nEWK ("rpEWK_yield", "rpEWK_yield", 0.05*h1EWK->Integral(), 0.0, 0.1*h1EWK->Integral());
+	RooRealVar nEWK ("rpEWK_yield", "rpEWK_yield", 1.0*h1EWK->Integral(), 0.0, 1.0*npoints);
+	nEWK.setConstant(kFALSE);
+
+	RooRealVar nQCDGJets ("fitModelQCDGJets_yield", "fitModelQCDGJets_yield", npoints-1.0*h1EWK->Integral(), 0.0, 1.5*npoints);
+	nQCDGJets.setConstant(kFALSE);
+
+	RooAbsPdf * fitModelQCDGJets = new RooAddPdf("fitModelQCDGJets", "fitModelQCDGJets", RooArgSet(*rpGJets, *rpQCD), RooArgSet(nGJets, nQCD));	
+	RooAbsPdf * fitModelBkgSig = new RooAddPdf("fitModelBkgSig", "fitModelBkgSig", RooArgSet(*fitModelQCDGJets, *rpEWK, *rpSig), RooArgSet(nQCDGJets, nEWK, nSig));	
+	//fit
+	RooAbsReal* nll = fitModelBkgSig->createNLL(*data, RooFit::NumCPU(8)) ;
+	RooFitResult * fres;
+	fres = fitModelBkgSig->fitTo( *data, RooFit::Extended( kTRUE ), RooFit::Save( kTRUE ));
+       
+	cout<<"DEBUG: fit 1D result === "<<endl; 
+	nGJets.Print();
+	nQCD.Print();
+	nQCDGJets.Print();
+        nEWK.Print();
+        nSig.Print();
+
+	//draw some plot-s
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+	myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+
+	myC->SetLogy(1);
+
+       
+	RooPlot * frame_bin = bin.frame(0, h1Data->GetSize()-2, h1Data->GetSize()-2);
+        data->plotOn( frame_bin, RooFit::Name("bin_data") );
+        fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_QCDGJets"), RooFit::Components("fitModelQCDGJets"), RooFit::LineColor(kBlue) );
+        fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_EWK"), RooFit::Components("rpEWK"), RooFit::LineColor(kOrange) );
+        fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_Sig"), RooFit::Components("rpSig"), RooFit::LineColor(kGreen) );
+        fitModelBkgSig->plotOn( frame_bin, RooFit::Name("bin_all"), RooFit::Components("fitModelBkgSig"), RooFit::LineColor(kRed) );
+        frame_bin->SetName("bin_frame");
+	
+	frame_bin->SetMaximum(1000.0*frame_bin->GetMaximum());
+	frame_bin->SetMinimum(1e-3);
+	frame_bin->SetTitle("");
+	frame_bin->Draw();
+
+	TLegend * leg_bin = new TLegend(0.18, 0.7, 0.93, 0.89);
+	leg_bin->SetNColumns(2);
+        leg_bin->SetBorderSize(0);
+        leg_bin->SetTextSize(0.03);
+        leg_bin->SetLineColor(1);
+        leg_bin->SetLineStyle(1);
+        leg_bin->SetLineWidth(1);
+        leg_bin->SetFillColor(0);
+        leg_bin->SetFillStyle(1001);
+	leg_bin->AddEntry("bin_data","data","lep");
+	leg_bin->AddEntry("bin_QCDGJets","#gamma + jets/QCD bkg","l");
+	leg_bin->AddEntry("bin_EWK","EWK bkg","l");
+	leg_bin->AddEntry("bin_Sig",modelTitle,"l");
+	leg_bin->AddEntry("bin_all","combined fit","l");
+	leg_bin->Draw();
+
+	DrawCMS(myC, 13, lumi);
+
+     	myC->SetTitle("");
+        myC->SaveAs("fit_results/2016/"+outPlotsDir+"/"+modelName+"_fit_bkgsig_bin.pdf");
+        myC->SaveAs("fit_results/2016/"+outPlotsDir+"/"+modelName+"_fit_bkgsig_bin.png");
+        myC->SaveAs("fit_results/2016/"+outPlotsDir+"/"+modelName+"_fit_bkgsig_bin.C");
+
+        RooPlot * frame_nQCDGJets_LL = nQCDGJets.frame(0.0, 1.5*npoints, 100);
+	RooAbsReal* pll_nQCDGJets = nll->createProfile(nQCDGJets) ;
+	nll->plotOn(frame_nQCDGJets_LL, RooFit::ShiftToZero()) ;
+	pll_nQCDGJets->plotOn(frame_nQCDGJets_LL, RooFit::LineColor(kRed)) ;
+	frame_nQCDGJets_LL->SetName("nQCDGJets_frame_Likelihood");
+
+	RooPlot * frame_nEWK_LL = nEWK.frame(0.0, 1.5*npoints, 100);
+	RooAbsReal* pll_nEWK = nll->createProfile(nEWK) ;
+	nll->plotOn(frame_nEWK_LL, RooFit::ShiftToZero()) ;
+	pll_nEWK->plotOn(frame_nEWK_LL, RooFit::LineColor(kRed)) ;
+	frame_nEWK_LL->SetName("nEWK_frame_Likelihood");
+
+        RooPlot * frame_nSig_LL = nSig.frame(0.0, 0.1*npoints, 100);
+	RooAbsReal* pll_nSig = nll->createProfile(nSig) ;
+	nll->plotOn(frame_nSig_LL, RooFit::ShiftToZero()) ;
+	pll_nSig->plotOn(frame_nSig_LL, RooFit::LineColor(kRed)) ;
+	frame_nSig_LL->SetName("nSig_frame_Likelihood");
+	
+	myC->SetLogy(0);
+	myC->SetLogz(1);
+	myC->SetTheta(69.64934);
+   	myC->SetPhi(-51.375);
+
+	
+	ws->import(*data);
+        ws->import(*rhGJets);
+        ws->import(*rhQCD);
+	ws->import(*rpSig);
+	ws->import(*rpEWK);
+	ws->import(*fitModelQCDGJets);
+	ws->import(nSig);
+	ws->import(nEWK);
+	ws->import(nQCDGJets);
+        //ws->import(*fitModelBkgSig);
+        ws->import(*frame_bin);
+        ws->import(*frame_nQCDGJets_LL);
+        ws->import(*frame_nEWK_LL);
+        ws->import(*frame_nSig_LL);
+        ws->import(*fres);
+	
+	//MakeDataCard(modelName, ws);
+	
+        return ws;
+	
+};
+
+RooWorkspace* GenerateToyData( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, TH1F * h1EWK, float fracGJets, float fracQCD, float scaleSig)
+{
+	RooWorkspace* ws = new RooWorkspace( "ws_combine", "ws_combine" );
+	// define variables
+	RooRealVar bin("bin","2D bin",0,h1Data->GetSize()-2,"");
+	
+	cout<<"DEBUG: bin size = "<<h1Data->GetSize()-2<<endl;
+
+	double npoints = 1.0*h1Data->Integral();
+
+	RooRealVar nGJets ("nGJets", "nGJets", fracGJets*(1.0-1.0*h1EWK->Integral()/npoints));
+	nGJets.setConstant(kTRUE);
+	RooRealVar nQCD ("nQCD", "nQCD", fracQCD*(1.0-1.0*h1EWK->Integral()/npoints));
+	nQCD.setConstant(kTRUE);
+	RooRealVar nSig ("nSig", "nSig", scaleSig*h1Sig->Integral()/npoints);
+	nSig.setConstant(kTRUE);
+	RooRealVar nEWK_fromMC ("nEWK_fromMC", "nEWK_fromMC", 1.0*h1EWK->Integral()/npoints);
+	nEWK_fromMC.setConstant(kTRUE);
+	
+	//RooDataHist
+	RooDataHist* data = new RooDataHist("data", "data", RooArgSet(bin), h1Data);	
+	RooDataHist* rhGJets = new RooDataHist("rhGJets", "rhGJets", RooArgSet(bin), h1GJets);	
+	RooDataHist* rhQCD = new RooDataHist("rhQCD", "rhQCD", RooArgSet(bin), h1QCD);	
+	RooDataHist* rhSig = new RooDataHist("rhSig", "rhSig", RooArgSet(bin), h1Sig);	
+	RooDataHist* rhEWK = new RooDataHist("rhEWK", "rhEWK", RooArgSet(bin), h1EWK);	
+
+	//pdf
+	RooHistPdf * rpGJets = new RooHistPdf("rpGJets", "rpGJets", RooArgSet(bin), *rhGJets, 0);
+	RooHistPdf * rpQCD = new RooHistPdf("rpQCD", "rpQCD", RooArgSet(bin), *rhQCD, 0);
+	RooHistPdf * rpSig = new RooHistPdf("rpSig", "rpSig", RooArgSet(bin), *rhSig, 0);
+	RooHistPdf * rpEWK = new RooHistPdf("rpEWK", "rpEWK", RooArgSet(bin), *rhEWK, 0);
+	
+	//create toy data
+	//TRandom3* r3 = new TRandom3(0);
+	//double npoints = r3->PoissonD(h1Data->Integral());	
+	//RooDataHist* data_toy = fitModelBkg->generateBinned(RooArgSet(bin), npoints, RooFit::ExpectedData());
+	RooAbsPdf * fitModelBkg = new RooAddPdf("fitModelBkg", "fitModelBkg", RooArgSet(*rpGJets, *rpQCD, *rpEWK, *rpSig), RooArgSet(nGJets, nQCD, nEWK_fromMC, nSig));	
+	RooDataHist* data_toy = fitModelBkg->generateBinned(RooArgSet(bin), npoints);
+	data_toy->SetName("data_toy");
+	
+	ws->import(*data_toy);
         return ws;
 	
 };
@@ -897,7 +1088,7 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg,
 	//fprintf(m_outfile, "shapes background bin1 fit_combineWS_%s.root %s:fitModelBkg %s:fitModelBkg_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
 	fprintf(m_outfile, "shapes background bin1 fit_combineWS_%s.root %s:rpBkg %s:rpBkg_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
 	fprintf(m_outfile, "shapes signal bin1 fit_combineWS_%s.root %s:rpSig %s:rpSig_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
-	fprintf(m_outfile, "shapes data_obs bin1 fit_combineWS_%s.root %s:data_toy\n", _modelName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes data_obs bin1 fit_combineWS_%s.root %s:data\n", _modelName.c_str(), _wsName.c_str());
 
 	fprintf(m_outfile, "---------------\n");
 	fprintf(m_outfile, "bin bin1\n");
@@ -911,6 +1102,38 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg,
 	//fprintf(m_outfile, "lumi     lnN    1.057      1.057\n");
 	fclose(m_outfile);	
 };
+
+void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_QCDGJets, float N_EWK, float N_sig, TString outDataCardsDir)
+{
+	std::string _modelName ((const char*) modelName);
+	std::string _wsName ((const char*)ws->GetName());
+	std::string _outDataCardsDir ((const char*) outDataCardsDir);
+	
+	FILE * m_outfile = fopen(("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "w");
+	cout<<"Writting fit result to datacard: "<<("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	fprintf(m_outfile, "imax 1\n");
+	fprintf(m_outfile, "jmax 2\n");
+	fprintf(m_outfile, "kmax *\n");
+	fprintf(m_outfile, "---------------\n");
+	//fprintf(m_outfile, "shapes background bin1 fit_combineWS_%s.root %s:fitModelBkg %s:fitModelBkg_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes QCDGJets bin1 fit_combineWS_%s.root %s:rpQCDGJets %s:rpQCDGJets_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes EWK bin1 fit_combineWS_%s.root %s:rpEWK %s:rpEWK_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes signal bin1 fit_combineWS_%s.root %s:rpSig %s:rpSig_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes data_obs bin1 fit_combineWS_%s.root %s:data_toy\n", _modelName.c_str(), _wsName.c_str());
+
+	fprintf(m_outfile, "---------------\n");
+	fprintf(m_outfile, "bin bin1\n");
+	fprintf(m_outfile, "observation %6.2f\n", N_obs);
+	fprintf(m_outfile, "--------------------------------------------\n");
+	fprintf(m_outfile, "bin             bin1       bin1         bin1\n");
+	fprintf(m_outfile, "process         signal     QCDGJets     EWK\n");
+	fprintf(m_outfile, "process         0          1            2\n");
+	fprintf(m_outfile, "rate            %10.6f          %6.2f         %6.2f\n", N_sig, N_QCDGJets, N_EWK);
+	fprintf(m_outfile, "--------------------------------------------\n");
+	//fprintf(m_outfile, "lumi     lnN    1.057      1.057\n");
+	fclose(m_outfile);	
+};
+
 
 void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString outDataCardsDir, TString sysName, TString distType)
 {
@@ -928,6 +1151,32 @@ void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString ou
 	fclose(m_outfile);	
 }
 
+
+void AddSystematics_Norm(TString modelName, float N_QCDGJets, float N_EWK, float N_sig, TString outDataCardsDir, TString sysName, TString distType)
+{
+        std::string _modelName ((const char*) modelName);
+        std::string _sysName ((const char*) sysName);
+        std::string _distType ((const char*) distType);
+        std::string _outDataCardsDir ((const char*) outDataCardsDir);
+
+        FILE * m_outfile = fopen(("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "a");
+	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	cout<<"N_QCDGJets: "<<N_QCDGJets<<"   N_EWK: "<<N_EWK<<"   N_sig:  "<<N_sig<<endl;
+	if(N_sig > 0.001 && N_QCDGJets > 0.001 && N_EWK) fprintf(m_outfile, "%s   %s   %10.6f   %10.6f   %10.6f\n", _sysName.c_str(), _distType.c_str(), N_sig, N_QCDGJets, N_EWK); // for both signal and backgrounds
+	else 
+	{
+		if(N_sig > 0.001 && N_QCDGJets > 0.001) fprintf(m_outfile, "%s   %s   %10.6f   %10.6f   -\n", _sysName.c_str(), _distType.c_str(), N_sig, N_QCDGJets); //for signal + QCDGJets
+		else if(N_sig > 0.001 && N_EWK > 0.001) fprintf(m_outfile, "%s   %s   %10.6f   -        %10.6f\n", _sysName.c_str(), _distType.c_str(), N_sig, N_EWK); //for signal + EWK
+		else if(N_QCDGJets > 0.001 && N_EWK > 0.001) fprintf(m_outfile, "%s   %s   -      %10.6f   %10.6f\n", _sysName.c_str(), _distType.c_str(), N_QCDGJets, N_EWK); //for QCDGJets + EWK
+		else if(N_sig > 0.001) fprintf(m_outfile, "%s   %s   %10.6f   -      -\n", _sysName.c_str(), _distType.c_str(), N_sig); //for signal only
+		else if(N_QCDGJets > 0.001) fprintf(m_outfile, "%s   %s   -      %10.6f      -\n", _sysName.c_str(), _distType.c_str(), N_QCDGJets); //for QCDGJetsnal only
+		else if(N_EWK > 0.001) fprintf(m_outfile, "%s   %s   -      -      %10.6f\n", _sysName.c_str(), _distType.c_str(), N_EWK); //for EWKnal only
+	}
+	fclose(m_outfile);	
+}
+
+
+
 void AddSystematics_shape(TString modelName, TString N_bkg, TString N_sig, TString outDataCardsDir, TString sysName, TString distType)
 {
         std::string _modelName ((const char*) modelName);
@@ -941,6 +1190,24 @@ void AddSystematics_shape(TString modelName, TString N_bkg, TString N_sig, TStri
 	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
 	cout<<"N_bkg: "<<N_bkg<<"   N_sig:  "<<N_sig<<endl;
 	fprintf(m_outfile, "%s   %s   %s   %s\n", _sysName.c_str(), _distType.c_str(), _N_sig.c_str(), _N_bkg.c_str());
+	fclose(m_outfile);	
+}
+
+
+void AddSystematics_shape(TString modelName, TString N_QCDGJets, TString N_EWK, TString N_sig, TString outDataCardsDir, TString sysName, TString distType)
+{
+        std::string _modelName ((const char*) modelName);
+        std::string _N_QCDGJets ((const char*) N_QCDGJets);
+        std::string _N_EWK ((const char*) N_EWK);
+        std::string _N_sig ((const char*) N_sig);
+        std::string _sysName ((const char*) sysName);
+        std::string _distType ((const char*) distType);
+        std::string _outDataCardsDir ((const char*) outDataCardsDir);
+
+        FILE * m_outfile = fopen(("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "a");
+	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	cout<<"N_QCDGJets: "<<N_QCDGJets<<"   N_EWK: "<<N_EWK<<"   N_sig:  "<<N_sig<<endl;
+	fprintf(m_outfile, "%s   %s   %s   %s   %s\n", _sysName.c_str(), _distType.c_str(), _N_sig.c_str(), _N_QCDGJets.c_str(), _N_EWK.c_str());
 	fclose(m_outfile);	
 }
 

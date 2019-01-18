@@ -41,7 +41,9 @@ fileNameEWKG = [
 	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_ZGGJets_ZToHadOrNu_5f_LO_madgraph_pythia8.root',
 	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WZG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root',
 	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WGGJets_TuneCUETP8M1_13TeV_madgraphMLM_pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WWG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root'
+	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WWG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root',
+	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DiPhotonJetsBox_M40_80-Sherpa.root',
+        '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'	
 ]	
 
 
@@ -58,11 +60,11 @@ xsecGJets = [20790.0, 9238.0, 2305, 274.4, 93.46] #pb, see: https://twiki.cern.c
 xsecQCD = [1712000, 347700, 32100, 6831, 1207, 119.9, 25.24] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#QCD
 xsecTTJets = 831.76
 xsecWJets = [1345.0, 359.7, 48.91, 12.05, 5.501, 1.329, 0.03216]
-xsecEWKG = [2.967, 0.007793, 3.795, 0.3570, 0.04123, 1.715, 0.2147]
-fractionGJets = 0.01 #0.5271 # from fit to SigmaIetaIeta
-fractionQCD = 0.99 #0.4729 # from fit fo SigmaIetaIeta
+xsecEWKG = [2.967, 0.007793, 3.795, 0.3570, 0.04123, 1.715, 0.2147, 308.3, 5349.0]
+fractionGJets = 0.5271*0.92 # from fit to SigmaIetaIeta
+fractionQCD = 0.4729*0.92 # from fit fo SigmaIetaIeta
 useFraction = True
-kFactor = 1.69
+kFactor = 1.0
 timeShift = 0.297
 
 ###############cuts and outputs########################
@@ -129,7 +131,7 @@ cut_GJets_noSigmaIetaIeta = cut_GJets_3J_noSigmaIetaIeta
 cut_skim = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 cut_skim_bkg = "pho1Pt > 40 && abs(pho1Eta)<1.44 && pho1passEleVeto && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/06Dec2018/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/16Jan2019/orderByPt/'
 
 ############define the plot you want to make##########
 ##for stack plots
@@ -439,15 +441,17 @@ fileNameQCDSkim = [
 		]	
 
 fileNameEWKSkim = [
+	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_DiPhotonJetsBox_M40_80-Sherpa.root',
+	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
 	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-70To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-70To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/DelayedPhoton_WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'
 ]	
 
 
@@ -519,4 +523,29 @@ fileNameSigSkim = [
 		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau400cm_13TeV-pythia8.root',
 		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau600cm_13TeV-pythia8.root',
 		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau800cm_13TeV-pythia8.root'
+		]
+
+
+fileNameSigPrivateSkim = [
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L100TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L100TeV_Ctau10000cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L150TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L150TeV_Ctau10000cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau10000cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L250TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L250TeV_Ctau10000cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L300TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L300TeV_Ctau0_1cm_13TeV-pythia8_private.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L300TeV_Ctau1200cm_13TeV-pythia8_private.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L300TeV_Ctau10000cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L350TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L350TeV_Ctau10000cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau0_001cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau10000cm_13TeV-pythia8.root'
+		]
+fileNameSigNewSkim = [
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L150TeV_Ctau1200cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L250TeV_Ctau0_1cm_13TeV-pythia8.root',
+		'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L100TeV_Ctau800cm_13TeV-pythia8.root'
 		]

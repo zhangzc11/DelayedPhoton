@@ -144,7 +144,7 @@ def properScale(hist, norm):
         for i in range(0, hist.GetNbinsX()+1):
                 v0 = hist.GetBinContent(i)
                 hist.SetBinContent(i, norm*v0)
-                if v0 > 1:
+                if v0 > 0.0000001:
                         hist.SetBinError(i, norm*v0/np.sqrt(v0))
                 else:
                         hist.SetBinError(i, 0.0)
@@ -336,7 +336,7 @@ for plot in splots:
 	#EWK MC
 	histEWK = TH1F(plot[1]+"_histEWK","",plot[3],plot[4],plot[5])	
 
-	histTTJets = TH1F(plot[1]+"_histTTJets"+str(i),"",plot[3],plot[4],plot[5])	
+	histTTJets = TH1F(plot[1]+"_histTTJets","",plot[3],plot[4],plot[5])	
 	
 	if plot[0]=="disc":
 		treeTTJets.Draw(plot[0]+">>"+plot[1]+"_histTTJets",weightedcut_noDisc)
@@ -347,8 +347,10 @@ for plot in splots:
 	else:
 		treeTTJets.Draw(plot[0]+">>"+plot[1]+"_histTTJets",weightedcut)
 	#histTTJets.Scale(lumi*xsecTTJets/NEventsTTJets)
+	print "#TTJets - before/after cut: " + str(treeTTJets.GetEntries()) + " => " + str(treeTTJets.GetEntries(weightedcut)) + " => " + str(histTTJets.Integral())
 	properScale(histTTJets, lumi*kFactor*xsecTTJets/NEventsTTJets)
 	histEWK.Add(histTTJets)
+	print "TTJets -  xsec * lumi * cut  " + str(histTTJets.Integral())
 	
 	for i in range(0, len(treeWJets)):
 		print "#WJets - "+str(i)+" - before/after cut: " + str(treeWJets[i].GetEntries()) + " => " + str(treeWJets[i].GetEntries(weightedcut)),
@@ -395,7 +397,8 @@ for plot in splots:
 
 	histEWK.SetFillColor(7)
 	histEWK.SetLineColor(7)
-	
+
+	print "total events in EWK backgrounds: "+str(histEWK.Integral())	
 	
 	#GJets, data-driven
 	histGJets_CR = TH1F(plot[1]+"_histGJets_CR","",plot[3],plot[4],plot[5])	

@@ -47,7 +47,9 @@ RooWorkspace* Fit2DMETTimeDataBkg( TTree * treeData, TTree * treeGJets, TTree * 
 RooWorkspace* Fit2DMETTimeDataBkg( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  float fracGJets, float fracGJetsErr, float fracQCD, float fracQCDErr, TString outPlotsDir = "plots_3J"); 
 
 RooWorkspace* Fit2DMETTimeDataBkgSig( TH2F * h2Data, TH2F * h2GJets, TH2F * h2QCD,  TH2F * h2Sig, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy = true, TString outPlotsDir = "plots_3J"); 
-RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float lumi, float fracGJets, float fracQCD, TString modelName, TString modelTitle, bool useToy = true, TString outPlotsDir = "plots_3J"); 
+RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, float lumi, float fracGJets, float fracQCD, TString modelName, TString modelTitle, TString outPlotsDir = "plots_3J"); 
+RooWorkspace* Fit1DMETTimeDataBkgSig( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, TH1F * h1EWK, float lumi, float fracGJets, float fracQCD, TString modelName, TString modelTitle, TString outPlotsDir = "plots_3J"); 
+RooWorkspace* GenerateToyData( TH1F * h1Data, TH1F * h1GJets, TH1F * h1QCD,  TH1F * h1Sig, TH1F * h1EWK, float fracGJets, float fracQCD, float scaleSig); 
 
 void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float SoverB, int ntoys, TString modelName, float lumi, TString outBiasDir = "bias_3J"); 
 
@@ -55,8 +57,11 @@ double Fit1DMETTimeSignificance(TH1F *h1Data, TH1F * h1Bkg,  TH1F * h1Sig, int n
 double CalculateMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig); 
 
 void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg, float N_sig, TString outDataCardsDir = "datacards_3J");
+void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_QCDGJets, float N_EWK, float N_sig, TString outDataCardsDir = "datacards_3J");
 void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString outDataCardsDir, TString sysName, TString distType);
+void AddSystematics_Norm(TString modelName, float N_QCDGJets, float N_EWK, float N_sig, TString outDataCardsDir, TString sysName, TString distType);
 void AddSystematics_shape(TString modelName, TString N_bkg, TString N_sig, TString outDataCardsDir, TString sysName, TString distType);
+void AddSystematics_shape(TString modelName, TString N_QCDGJets, TString N_EWK, TString N_sig, TString outDataCardsDir, TString sysName, TString distType);
 
 void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName, TString ourBinningDir = "binning_3J");
 

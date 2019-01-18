@@ -1,0 +1,867 @@
+void L400TeV_Ctau10cm_fit_bkgsig_bin()
+{
+//=========Macro generated from canvas: myC/
+//=========  (Fri Jan 18 00:24:06 2019) by ROOT version6.06/09
+   TCanvas *myC = new TCanvas("myC", "",0,0,800,800);
+   gStyle->SetOptFit(1);
+   gStyle->SetOptStat(0);
+   myC->SetHighLightColor(2);
+   myC->Range(-4.756097,-4.610937,31.82927,8.813541);
+   myC->SetFillColor(0);
+   myC->SetBorderMode(0);
+   myC->SetBorderSize(2);
+   myC->SetLogy();
+   myC->SetLeftMargin(0.13);
+   myC->SetRightMargin(0.05);
+   myC->SetTopMargin(0.07);
+   myC->SetBottomMargin(0.12);
+   myC->SetFrameBorderMode(0);
+   myC->SetFrameBorderMode(0);
+   
+   TH1D *frame_901f730__3 = new TH1D("frame_901f730__3","",30,0,30);
+   frame_901f730__3->SetBinContent(1,74787.27);
+   frame_901f730__3->SetMinimum(0.001);
+   frame_901f730__3->SetMaximum(7.478727e+07);
+   frame_901f730__3->SetEntries(1);
+   frame_901f730__3->SetDirectory(0);
+   frame_901f730__3->SetStats(0);
+
+   Int_t ci;      // for color index setting
+   TColor *color; // for color definition with alpha
+   ci = TColor::GetColor("#000099");
+   frame_901f730__3->SetLineColor(ci);
+   frame_901f730__3->GetXaxis()->SetTitle("2D bin");
+   frame_901f730__3->GetXaxis()->SetLabelFont(42);
+   frame_901f730__3->GetXaxis()->SetLabelSize(0.035);
+   frame_901f730__3->GetXaxis()->SetTitleSize(0.035);
+   frame_901f730__3->GetXaxis()->SetTitleFont(42);
+   frame_901f730__3->GetYaxis()->SetTitle("Events / ( 1 )");
+   frame_901f730__3->GetYaxis()->SetLabelFont(42);
+   frame_901f730__3->GetYaxis()->SetLabelSize(0.035);
+   frame_901f730__3->GetYaxis()->SetTitleSize(0.035);
+   frame_901f730__3->GetYaxis()->SetTitleFont(42);
+   frame_901f730__3->GetZaxis()->SetLabelFont(42);
+   frame_901f730__3->GetZaxis()->SetLabelSize(0.035);
+   frame_901f730__3->GetZaxis()->SetTitleSize(0.035);
+   frame_901f730__3->GetZaxis()->SetTitleFont(42);
+   frame_901f730__3->Draw("FUNC");
+   
+   Double_t bin_data_fx3002[30] = {
+   0.5,
+   1.5,
+   2.5,
+   3.5,
+   4.5,
+   5.5,
+   6.5,
+   7.5,
+   8.5,
+   9.5,
+   10.5,
+   11.5,
+   12.5,
+   13.5,
+   14.5,
+   15.5,
+   16.5,
+   17.5,
+   18.5,
+   19.5,
+   20.5,
+   21.5,
+   22.5,
+   23.5,
+   24.5,
+   25.5,
+   26.5,
+   27.5,
+   28.5,
+   29.5};
+   Double_t bin_data_fy3002[30] = {
+   3996.852,
+   70959.51,
+   17447.75,
+   2585.439,
+   69.58594,
+   236.2631,
+   2548.147,
+   1222.722,
+   172.5173,
+   8.34008,
+   0.4927244,
+   113.1928,
+   44.79484,
+   13.67906,
+   0.7305827,
+   2.542556,
+   20.26165,
+   6.075489,
+   2.724812,
+   -0.01172932,
+   -0.1399018,
+   -0.7549815,
+   1.411419,
+   -0.08416185,
+   -0.003587226,
+   -0.4371684,
+   7.515994,
+   2.160788,
+   3.737009,
+   -0.01120945};
+   Double_t bin_data_felx3002[30] = {
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5};
+   Double_t bin_data_fely3002[30] = {
+   63.22066,
+   266.3823,
+   132.0899,
+   50.84721,
+   8.341819,
+   15.37085,
+   50.47917,
+   34.96745,
+   13.13458,
+   2.88792,
+   0.7019433,
+   10.63921,
+   6.692895,
+   3.698521,
+   0.8547413,
+   1.59454,
+   4.501295,
+   2.464851,
+   1.6507,
+   0.108302,
+   0.3740345,
+   0.8688967,
+   1.188032,
+   0.2901066,
+   0.05989346,
+   0.6611872,
+   2.741531,
+   1.469962,
+   1.933135,
+   0.1058747};
+   Double_t bin_data_fehx3002[30] = {
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5};
+   Double_t bin_data_fehy3002[30] = {
+   63.22066,
+   266.3823,
+   132.0899,
+   50.84721,
+   8.341819,
+   15.37085,
+   50.47917,
+   34.96745,
+   13.13458,
+   2.88792,
+   0.7019433,
+   10.63921,
+   6.692895,
+   3.698521,
+   0.8547413,
+   1.59454,
+   4.501295,
+   2.464851,
+   1.6507,
+   0.108302,
+   0.3740345,
+   0.8688967,
+   1.188032,
+   0.2901066,
+   0.05989346,
+   0.6611872,
+   2.741531,
+   1.469962,
+   1.933135,
+   0.1058747};
+   TGraphAsymmErrors *grae = new TGraphAsymmErrors(30,bin_data_fx3002,bin_data_fy3002,bin_data_felx3002,bin_data_fehx3002,bin_data_fely3002,bin_data_fehy3002);
+   grae->SetName("bin_data");
+   grae->SetTitle("Histogram of data_plot__bin");
+   grae->SetFillColor(1);
+   grae->SetMarkerStyle(8);
+   
+   TH1F *Graph_bin_data3002 = new TH1F("Graph_bin_data3002","Histogram of data_plot__bin",100,0,33);
+   Graph_bin_data3002->SetMinimum(78.3485);
+   Graph_bin_data3002->SetMaximum(78348.5);
+   Graph_bin_data3002->SetDirectory(0);
+   Graph_bin_data3002->SetStats(0);
+
+   ci = TColor::GetColor("#000099");
+   Graph_bin_data3002->SetLineColor(ci);
+   Graph_bin_data3002->GetXaxis()->SetLabelFont(42);
+   Graph_bin_data3002->GetXaxis()->SetLabelSize(0.035);
+   Graph_bin_data3002->GetXaxis()->SetTitleSize(0.035);
+   Graph_bin_data3002->GetXaxis()->SetTitleFont(42);
+   Graph_bin_data3002->GetYaxis()->SetLabelFont(42);
+   Graph_bin_data3002->GetYaxis()->SetLabelSize(0.035);
+   Graph_bin_data3002->GetYaxis()->SetTitleSize(0.035);
+   Graph_bin_data3002->GetYaxis()->SetTitleFont(42);
+   Graph_bin_data3002->GetZaxis()->SetLabelFont(42);
+   Graph_bin_data3002->GetZaxis()->SetLabelSize(0.035);
+   Graph_bin_data3002->GetZaxis()->SetTitleSize(0.035);
+   Graph_bin_data3002->GetZaxis()->SetTitleFont(42);
+   grae->SetHistogram(Graph_bin_data3002);
+   
+   grae->Draw("p");
+   
+   Double_t bin_Bkg_fx4[67] = {
+   -0.4918033,
+   -0.4918033,
+   0,
+   3.0603e-07,
+   0.9999997,
+   1,
+   2,
+   2,
+   3,
+   3,
+   4,
+   4,
+   5,
+   5,
+   6,
+   6,
+   7,
+   7,
+   8,
+   8,
+   9,
+   9,
+   10,
+   10,
+   11,
+   11,
+   12,
+   12,
+   13,
+   13,
+   14,
+   14,
+   15,
+   15,
+   16,
+   16,
+   17,
+   17,
+   18,
+   18,
+   19,
+   19,
+   20,
+   20,
+   21,
+   21,
+   22,
+   22,
+   23,
+   23,
+   24,
+   24,
+   25,
+   25,
+   26,
+   26,
+   27,
+   27,
+   28,
+   28,
+   29,
+   29,
+   30,
+   30,
+   30,
+   30.4918,
+   30.4918};
+   Double_t bin_Bkg_fy4[67] = {
+   0,
+   0,
+   0,
+   4894.247,
+   4894.247,
+   64598.34,
+   64598.34,
+   21731.41,
+   21731.41,
+   3105.305,
+   3105.305,
+   68.78382,
+   68.78382,
+   276.0441,
+   276.0441,
+   3238.082,
+   3238.082,
+   1077.328,
+   1077.328,
+   188.804,
+   188.804,
+   4.437165,
+   4.437165,
+   5.918172,
+   5.918172,
+   179.6067,
+   179.6067,
+   53.37679,
+   53.37679,
+   4.438629,
+   4.438629,
+   1.479543,
+   1.479543,
+   2.959086,
+   2.959086,
+   17.28084,
+   17.28084,
+   4.438629,
+   4.438629,
+   1.479543,
+   1.479543,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   6.807028,
+   6.807028,
+   2.959086,
+   2.959086,
+   1.479543,
+   1.479543,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0};
+   TGraph *graph = new TGraph(67,bin_Bkg_fx4,bin_Bkg_fy4);
+   graph->SetName("bin_Bkg");
+   graph->SetTitle("Projection of fitModelBkgSig");
+   graph->SetFillColor(1);
+
+   ci = TColor::GetColor("#0000ff");
+   graph->SetLineColor(ci);
+   graph->SetLineWidth(3);
+   
+   TH1F *Graph_bin_Bkg4 = new TH1F("Graph_bin_Bkg4","Projection of fitModelBkgSig",100,-3.590164,33.59016);
+   Graph_bin_Bkg4->SetMinimum(71.05818);
+   Graph_bin_Bkg4->SetMaximum(71058.18);
+   Graph_bin_Bkg4->SetDirectory(0);
+   Graph_bin_Bkg4->SetStats(0);
+
+   ci = TColor::GetColor("#000099");
+   Graph_bin_Bkg4->SetLineColor(ci);
+   Graph_bin_Bkg4->GetXaxis()->SetLabelFont(42);
+   Graph_bin_Bkg4->GetXaxis()->SetLabelSize(0.035);
+   Graph_bin_Bkg4->GetXaxis()->SetTitleSize(0.035);
+   Graph_bin_Bkg4->GetXaxis()->SetTitleFont(42);
+   Graph_bin_Bkg4->GetYaxis()->SetLabelFont(42);
+   Graph_bin_Bkg4->GetYaxis()->SetLabelSize(0.035);
+   Graph_bin_Bkg4->GetYaxis()->SetTitleSize(0.035);
+   Graph_bin_Bkg4->GetYaxis()->SetTitleFont(42);
+   Graph_bin_Bkg4->GetZaxis()->SetLabelFont(42);
+   Graph_bin_Bkg4->GetZaxis()->SetLabelSize(0.035);
+   Graph_bin_Bkg4->GetZaxis()->SetTitleSize(0.035);
+   Graph_bin_Bkg4->GetZaxis()->SetTitleFont(42);
+   graph->SetHistogram(Graph_bin_Bkg4);
+   
+   graph->Draw("l");
+   
+   Double_t bin_Sig_fx5[67] = {
+   -0.4918033,
+   -0.4918033,
+   0,
+   3.0603e-07,
+   0.9999997,
+   1,
+   2,
+   2,
+   3,
+   3,
+   4,
+   4,
+   5,
+   5,
+   6,
+   6,
+   7,
+   7,
+   8,
+   8,
+   9,
+   9,
+   10,
+   10,
+   11,
+   11,
+   12,
+   12,
+   13,
+   13,
+   14,
+   14,
+   15,
+   15,
+   16,
+   16,
+   17,
+   17,
+   18,
+   18,
+   19,
+   19,
+   20,
+   20,
+   21,
+   21,
+   22,
+   22,
+   23,
+   23,
+   24,
+   24,
+   25,
+   25,
+   26,
+   26,
+   27,
+   27,
+   28,
+   28,
+   29,
+   29,
+   30,
+   30,
+   30,
+   30.4918,
+   30.4918};
+   Double_t bin_Sig_fy5[67] = {
+   0,
+   0,
+   0,
+   2.013524e-08,
+   2.013524e-08,
+   2.984347e-07,
+   2.984347e-07,
+   2.009834e-07,
+   2.009834e-07,
+   4.984706e-08,
+   4.984706e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   5.886804e-07,
+   5.886804e-07,
+   6.217678e-07,
+   6.217678e-07,
+   9.902865e-08,
+   9.902865e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   1.779636e-06,
+   1.779636e-06,
+   1.277816e-06,
+   1.277816e-06,
+   2.431619e-07,
+   2.431619e-07,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   1.511842e-06,
+   1.511842e-06,
+   1.144592e-06,
+   1.144592e-06,
+   2.087193e-07,
+   2.087193e-07,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   6.357541e-07,
+   6.357541e-07,
+   4.26602e-07,
+   4.26602e-07,
+   5.374392e-08,
+   5.374392e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.341708e-08,
+   2.341708e-08,
+   8.620506e-06,
+   8.620506e-06,
+   5.758055e-06,
+   5.758055e-06,
+   9.883862e-07,
+   9.883862e-07,
+   4.332652e-08,
+   4.332652e-08,
+   0,
+   0,
+   0,
+   0};
+   graph = new TGraph(67,bin_Sig_fx5,bin_Sig_fy5);
+   graph->SetName("bin_Sig");
+   graph->SetTitle("Projection of fitModelBkgSig");
+   graph->SetFillColor(1);
+
+   ci = TColor::GetColor("#00ff00");
+   graph->SetLineColor(ci);
+   graph->SetLineWidth(3);
+   
+   TH1F *Graph_bin_Sig5 = new TH1F("Graph_bin_Sig5","Projection of fitModelBkgSig",100,-3.590164,33.59016);
+   Graph_bin_Sig5->SetMinimum(9.482557e-09);
+   Graph_bin_Sig5->SetMaximum(9.482557e-06);
+   Graph_bin_Sig5->SetDirectory(0);
+   Graph_bin_Sig5->SetStats(0);
+
+   ci = TColor::GetColor("#000099");
+   Graph_bin_Sig5->SetLineColor(ci);
+   Graph_bin_Sig5->GetXaxis()->SetLabelFont(42);
+   Graph_bin_Sig5->GetXaxis()->SetLabelSize(0.035);
+   Graph_bin_Sig5->GetXaxis()->SetTitleSize(0.035);
+   Graph_bin_Sig5->GetXaxis()->SetTitleFont(42);
+   Graph_bin_Sig5->GetYaxis()->SetLabelFont(42);
+   Graph_bin_Sig5->GetYaxis()->SetLabelSize(0.035);
+   Graph_bin_Sig5->GetYaxis()->SetTitleSize(0.035);
+   Graph_bin_Sig5->GetYaxis()->SetTitleFont(42);
+   Graph_bin_Sig5->GetZaxis()->SetLabelFont(42);
+   Graph_bin_Sig5->GetZaxis()->SetLabelSize(0.035);
+   Graph_bin_Sig5->GetZaxis()->SetTitleSize(0.035);
+   Graph_bin_Sig5->GetZaxis()->SetTitleFont(42);
+   graph->SetHistogram(Graph_bin_Sig5);
+   
+   graph->Draw("l");
+   
+   Double_t bin_all_fx6[67] = {
+   -0.4918033,
+   -0.4918033,
+   0,
+   3.0603e-07,
+   0.9999997,
+   1,
+   2,
+   2,
+   3,
+   3,
+   4,
+   4,
+   5,
+   5,
+   6,
+   6,
+   7,
+   7,
+   8,
+   8,
+   9,
+   9,
+   10,
+   10,
+   11,
+   11,
+   12,
+   12,
+   13,
+   13,
+   14,
+   14,
+   15,
+   15,
+   16,
+   16,
+   17,
+   17,
+   18,
+   18,
+   19,
+   19,
+   20,
+   20,
+   21,
+   21,
+   22,
+   22,
+   23,
+   23,
+   24,
+   24,
+   25,
+   25,
+   26,
+   26,
+   27,
+   27,
+   28,
+   28,
+   29,
+   29,
+   30,
+   30,
+   30,
+   30.4918,
+   30.4918};
+   Double_t bin_all_fy6[67] = {
+   0,
+   0,
+   0,
+   4894.247,
+   4894.247,
+   64598.34,
+   64598.34,
+   21731.41,
+   21731.41,
+   3105.305,
+   3105.305,
+   68.78382,
+   68.78382,
+   276.0441,
+   276.0441,
+   3238.082,
+   3238.082,
+   1077.328,
+   1077.328,
+   188.804,
+   188.804,
+   4.437165,
+   4.437165,
+   5.918172,
+   5.918172,
+   179.6067,
+   179.6067,
+   53.37679,
+   53.37679,
+   4.438629,
+   4.438629,
+   1.479543,
+   1.479543,
+   2.959086,
+   2.959086,
+   17.28084,
+   17.28084,
+   4.43863,
+   4.43863,
+   1.479543,
+   1.479543,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.013524e-08,
+   6.357541e-07,
+   6.357541e-07,
+   4.26602e-07,
+   4.26602e-07,
+   5.374392e-08,
+   5.374392e-08,
+   2.013524e-08,
+   2.013524e-08,
+   2.341708e-08,
+   2.341708e-08,
+   6.807037,
+   6.807037,
+   2.959092,
+   2.959092,
+   1.479544,
+   1.479544,
+   4.332652e-08,
+   4.332652e-08,
+   0,
+   0,
+   0,
+   0};
+   graph = new TGraph(67,bin_all_fx6,bin_all_fy6);
+   graph->SetName("bin_all");
+   graph->SetTitle("Projection of fitModelBkgSig");
+   graph->SetFillColor(1);
+
+   ci = TColor::GetColor("#ff0000");
+   graph->SetLineColor(ci);
+   graph->SetLineWidth(3);
+   
+   TH1F *Graph_bin_all6 = new TH1F("Graph_bin_all6","Projection of fitModelBkgSig",100,-3.590164,33.59016);
+   Graph_bin_all6->SetMinimum(71.05818);
+   Graph_bin_all6->SetMaximum(71058.18);
+   Graph_bin_all6->SetDirectory(0);
+   Graph_bin_all6->SetStats(0);
+
+   ci = TColor::GetColor("#000099");
+   Graph_bin_all6->SetLineColor(ci);
+   Graph_bin_all6->GetXaxis()->SetLabelFont(42);
+   Graph_bin_all6->GetXaxis()->SetLabelSize(0.035);
+   Graph_bin_all6->GetXaxis()->SetTitleSize(0.035);
+   Graph_bin_all6->GetXaxis()->SetTitleFont(42);
+   Graph_bin_all6->GetYaxis()->SetLabelFont(42);
+   Graph_bin_all6->GetYaxis()->SetLabelSize(0.035);
+   Graph_bin_all6->GetYaxis()->SetTitleSize(0.035);
+   Graph_bin_all6->GetYaxis()->SetTitleFont(42);
+   Graph_bin_all6->GetZaxis()->SetLabelFont(42);
+   Graph_bin_all6->GetZaxis()->SetLabelSize(0.035);
+   Graph_bin_all6->GetZaxis()->SetTitleSize(0.035);
+   Graph_bin_all6->GetZaxis()->SetTitleFont(42);
+   graph->SetHistogram(Graph_bin_all6);
+   
+   graph->Draw("l");
+   
+   TH1D *frame_901f730__4 = new TH1D("frame_901f730__4","",30,0,30);
+   frame_901f730__4->SetBinContent(1,74787.27);
+   frame_901f730__4->SetMinimum(0.001);
+   frame_901f730__4->SetMaximum(7.478727e+07);
+   frame_901f730__4->SetEntries(1);
+   frame_901f730__4->SetDirectory(0);
+   frame_901f730__4->SetStats(0);
+
+   ci = TColor::GetColor("#000099");
+   frame_901f730__4->SetLineColor(ci);
+   frame_901f730__4->GetXaxis()->SetTitle("2D bin");
+   frame_901f730__4->GetXaxis()->SetLabelFont(42);
+   frame_901f730__4->GetXaxis()->SetLabelSize(0.035);
+   frame_901f730__4->GetXaxis()->SetTitleSize(0.035);
+   frame_901f730__4->GetXaxis()->SetTitleFont(42);
+   frame_901f730__4->GetYaxis()->SetTitle("Events / ( 1 )");
+   frame_901f730__4->GetYaxis()->SetLabelFont(42);
+   frame_901f730__4->GetYaxis()->SetLabelSize(0.035);
+   frame_901f730__4->GetYaxis()->SetTitleSize(0.035);
+   frame_901f730__4->GetYaxis()->SetTitleFont(42);
+   frame_901f730__4->GetZaxis()->SetLabelFont(42);
+   frame_901f730__4->GetZaxis()->SetLabelSize(0.035);
+   frame_901f730__4->GetZaxis()->SetTitleSize(0.035);
+   frame_901f730__4->GetZaxis()->SetTitleFont(42);
+   frame_901f730__4->Draw("AXISSAME");
+   
+   TLegend *leg = new TLegend(0.18,0.7,0.93,0.89,NULL,"brNDC");
+   leg->SetBorderSize(0);
+   leg->SetTextSize(0.03);
+   leg->SetLineColor(1);
+   leg->SetLineStyle(1);
+   leg->SetLineWidth(1);
+   leg->SetFillColor(0);
+   leg->SetFillStyle(1001);
+   TLegendEntry *entry=leg->AddEntry("bin_data","data","lep");
+   entry->SetLineColor(1);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(1);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(8);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   entry=leg->AddEntry("bin_Bkg","#gamma + jets/QCD bkg","l");
+
+   ci = TColor::GetColor("#0000ff");
+   entry->SetLineColor(ci);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(3);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   entry=leg->AddEntry("bin_Sig","signal ( L400TeV_Ctau10 )","l");
+
+   ci = TColor::GetColor("#00ff00");
+   entry->SetLineColor(ci);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(3);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   entry=leg->AddEntry("bin_all","combined fit","l");
+
+   ci = TColor::GetColor("#ff0000");
+   entry->SetLineColor(ci);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(3);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   leg->Draw();
+   TLatex *   tex = new TLatex(0.16,0.95,"CMS");
+tex->SetNDC();
+   tex->SetTextFont(63);
+   tex->SetTextSize(25);
+   tex->SetLineWidth(2);
+   tex->Draw();
+      tex = new TLatex(0.23,0.95,"Preliminary");
+tex->SetNDC();
+   tex->SetTextFont(53);
+   tex->SetTextSize(25);
+   tex->SetLineWidth(2);
+   tex->Draw();
+      tex = new TLatex(0.9,0.95,"35.92 fb^{-1} (13 TeV)");
+tex->SetNDC();
+   tex->SetTextAlign(31);
+   tex->SetTextFont(43);
+   tex->SetTextSize(23);
+   tex->SetLineWidth(2);
+   tex->Draw();
+   myC->Modified();
+   myC->cd();
+   myC->SetSelected(myC);
+}

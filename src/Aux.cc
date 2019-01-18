@@ -78,6 +78,73 @@ float getXsecBR(std::string sigModelName)
 }
 ;
 
+void DrawDataBkgSig(TH1F *h1Data, TH1F *h1QCDGJets, TH1F *h1EWK, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix, TString outPlotsDir)
+{
+	
+	
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+        myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+	myC->SetLogy(1);	
+	
+	h1Data->SetLineWidth(2);
+	h1Data->SetLineColor(kBlack);
+	h1Data->SetMarkerStyle(8);
+	h1Data->GetYaxis()->SetTitleSize(axisTitleSize);
+	h1Data->GetXaxis()->SetTitleSize(axisTitleSize);
+	h1Data->GetYaxis()->SetTitleOffset(axisTitleOffset);
+	h1Data->GetXaxis()->SetTitleOffset(axisTitleOffset);
+
+	h1Data->Draw("E");
+	h1Data->GetYaxis()->SetRangeUser(1e-3, 1000.0*h1Data->GetMaximum());
+	
+	h1QCDGJets->SetLineColor(kBlue);
+	h1QCDGJets->SetLineWidth(2);
+	h1EWK->SetLineColor(kOrange);
+	h1EWK->SetLineWidth(2);
+	h1Sig->SetLineColor(kGreen);
+	h1Sig->SetLineWidth(2);
+	h1all->SetLineColor(kRed);
+	h1all->SetLineWidth(2);
+
+	h1QCDGJets->Draw("samehisto");
+	h1EWK->Draw("samehisto");
+	h1Sig->Draw("samehisto");
+	h1all->Draw("samehisto");
+	
+	TLegend * leg = new TLegend(0.18, 0.7, 0.93, 0.89);
+        leg->SetNColumns(2);
+        leg->SetBorderSize(0);
+        leg->SetTextSize(0.03);
+        leg->SetLineColor(1);
+        leg->SetLineStyle(1);
+        leg->SetLineWidth(1);
+        leg->SetFillColor(0);
+        leg->SetFillStyle(1001);
+        leg->AddEntry(h1Data,"data","lep");
+        leg->AddEntry(h1QCDGJets,"#gamma + jets/QCD bkg","l");
+        leg->AddEntry(h1EWK,"EWK bkg","l");
+        leg->AddEntry(h1Sig, sigModelTitle.c_str(),"l");
+        leg->AddEntry(h1all,"combined fit","l");
+        leg->Draw();
+
+	DrawCMS(myC, 13, lumi);
+        myC->SetTitle("");
+        myC->SaveAs("fit_results/2016/"+outPlotsDir+("/"+sigModelName+"_postfit_bkgsig_"+suffix+".pdf").c_str());
+        myC->SaveAs("fit_results/2016/"+outPlotsDir+("/"+sigModelName+"_postfit_bkgsig_"+suffix+".png").c_str());
+        myC->SaveAs("fit_results/2016/"+outPlotsDir+("/"+sigModelName+"_postfit_bkgsig_"+suffix+".C").c_str());
+	
+}
+;
+
 void DrawDataBkgSig(TH1F *h1Data, TH1F *h1Bkg, TH1F *h1Sig, TH1F *h1all, float lumi, std::string sigModelTitle, std::string sigModelName, std::string suffix, TString outPlotsDir)
 {
 	
@@ -172,3 +239,16 @@ void DrawCMS(TCanvas *myC, int energy, float lumi)
         tlatex->DrawLatex(0.9, 0.95, Lumi.c_str());
         tlatex->SetTextAlign(11);
 };
+
+void properScale(TH1F * hist, float norm)
+{
+	for(int i=0; i<hist->GetNbinsX()+1; i++)
+	{
+		float v0 = hist->GetBinContent(i);
+		hist->SetBinContent(i,norm*v0);
+		if(v0>0.0000001) hist->SetBinError(i, norm*v0/sqrt(v0));
+		else hist->SetBinError(i, 0);
+	}
+
+
+}

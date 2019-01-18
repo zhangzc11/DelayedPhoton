@@ -4,15 +4,15 @@ kmax *
 ---------------
 shapes background bin1 fit_combineWS_L250TeV_Ctau1200cm.root ws_combine:rpBkg ws_combine:rpBkg_$SYSTEMATIC
 shapes signal bin1 fit_combineWS_L250TeV_Ctau1200cm.root ws_combine:rpSig ws_combine:rpSig_$SYSTEMATIC
-shapes data_obs bin1 fit_combineWS_L250TeV_Ctau1200cm.root ws_combine:data_toy
+shapes data_obs bin1 fit_combineWS_L250TeV_Ctau1200cm.root ws_combine:data
 ---------------
 bin bin1
-observation 66275.00
+observation 56085.75
 ------------------------------
 bin             bin1       bin1
 process         signal     background
 process         0          1
-rate              2.758792          66275.16
+rate              2.578016          56085.85
 --------------------------------
 lumi   lnN     1.025000   -
 Photon_   lnN     1.010000   -
