@@ -6,11 +6,16 @@ import array
 
 from config_noBDT import weight_cut
 
-fileNameData = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root'
-#fileNameData_noSelection = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT_badPhotonID/DelayedPhoton_DoubleEG_2016All_GoodLumi.root'
-fileNameSig1 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L350TeV_Ctau0_1cm_13TeV-pythia8.root'
-fileNameSig2 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root'
-fileNameSig3 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L350TeV_Ctau1200cm_13TeV-pythia8.root'
+'''
+fileNameData = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root'
+fileNameSig1 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L350TeV_Ctau0_1cm_13TeV-pythia8.root'
+fileNameSig2 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root'
+fileNameSig3 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L350TeV_Ctau1200cm_13TeV-pythia8.root'
+'''
+fileNameData = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt//skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root'
+fileNameSig1 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt//withcut/GMSB_L350TeV_Ctau0_1cm_13TeV-pythia8.root'
+fileNameSig2 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt//withcut/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root'
+fileNameSig3 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt//withcut/GMSB_L350TeV_Ctau1200cm_13TeV-pythia8.root'
 
 gROOT.SetBatch(True)
 
@@ -25,7 +30,9 @@ cut_photonID_Sminor = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFCl
 cut_photonID_SigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994 "
 cut_photonID = "pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994 "
 cut_nJets = "n_Jets > 2"
-cut_nPhotons = "n_Photons == 2"
+cut_nPhotons = "n_Photons == 2 && pho2passIsoLoose_PFClusterIso && pho2passEleVeto && deltaR_pho12 > 0.3"
+#cut_nPhotons = "n_Photons == 2 && deltaR_pho12 > 0.3"
+#cut_nPhotons = "n_Photons == 2"
 cut_MET_filter1 = "Flag_HBHENoiseFilter == 1"
 cut_MET_filter2 = "Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1"
 cut_MET_filter3 = "Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1"

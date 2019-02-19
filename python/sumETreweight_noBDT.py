@@ -11,7 +11,7 @@ from config_noBDT import fileNameData
 from Aux import *
 
 from config_noBDT import fileNameGJets, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, weight_cut
-from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
+from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend
 
 root.gROOT.ProcessLine("struct MyStruct{float weight_sumET;};")
 from ROOT import MyStruct
@@ -105,6 +105,9 @@ xbins_sumET = [0.0, 100.0, 200.0, 400.0, 600.0, 800, 1000.0, 1250.0, 1500.0, 175
 weightedcut_CR =  weight_cut + cut_GJets
 weightedcut_SR =  weight_cut + cut
 
+print "weightedcut_CR ===> "+ weightedcut_CR
+print "weightedcut_SR ===> "+ weightedcut_SR
+
 #######obtain the weight: SR/CR:
 
 hist_CR = root.TH1F("hist_CR","hist_CR", len(xbins_sumET)-1, np.array(xbins_sumET))
@@ -125,9 +128,9 @@ for i in range(0,len(fileNameGJets)):
 	thisTree.Draw("sumMET>>hist_SR_this_"+str(i), weightedcut_SR)	
 	
 	if hist_SR_this.Integral() > 10.0:
-		hist_SR_this.Scale(lumi*scaleBkg*xsecGJets[i]/thisNEvents)
+		hist_SR_this.Scale(lumi*kFactor*xsecGJets[i]/thisNEvents)
 	if hist_CR_this.Integral() > 10.0:
-		hist_CR_this.Scale(lumi*scaleBkg*xsecGJets[i]/thisNEvents)
+		hist_CR_this.Scale(lumi*kFactor*xsecGJets[i]/thisNEvents)
 	
 	hist_CR.Add(hist_CR_this)	
 	hist_SR.Add(hist_SR_this)	

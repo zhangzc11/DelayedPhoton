@@ -34,7 +34,7 @@ Double_t xbins_time[21] = {-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0
 //Double_t xbins_time_lowT[21] = {-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15};
 //Double_t xbins_time_highT[21] = {-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15};
 Double_t xbins_time_lowT[6] = {-15.0, -0.7, 0.3, 0.8, 1.4, 15.0};
-Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 2.1, 10.0, 15.0};
+Double_t xbins_time_highT[8] = {-15.0, -0.7, 0.0, 0.9, 1.6, 3.0, 10.0, 15.0};
 
 bool useLowTBinning = false;
 bool useBDT = true;
@@ -142,12 +142,12 @@ if(category == "2J")
 	}
 	else
 	{
-		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && n_Photons == 2" + cut_MET_filter;
-		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && n_Photons == 2 " + cut_MET_filter;
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
 		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 1 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
 	}
 }
@@ -166,12 +166,12 @@ else if(category == "3J")
 	}
 	else
 	{
-		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
-		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && n_Photons == 2" + cut_MET_filter;
-		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2" + cut_MET_filter;
+		cut_noSigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut_noHLT = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && n_Photons == 2 " + cut_MET_filter;
+		cut_loose = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.0586 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
 		cut_GJets = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets < 3 && (HLTDecision[81] == 1) && n_Photons == 2 && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter;
 	}
 }
@@ -869,9 +869,10 @@ if(fitMode == "datacard")
 	//cout<<"DEBUG ======= below is the fit with QCD and GJets background only, with data subtracted by EWK"<<endl;
 	//mkdir("fit_results/2016/temp_subtractEWK", S_IRWXU | S_IRWXG | S_IRWXO);
 	//RooWorkspace * ws_combine_temp_subtractEWK = Fit1DMETTimeDataBkgSig( h1combineData_subtractEWK, h1combineGJets, h1combineQCD, h1combineSig, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, _useToy, "temp_subtractEWK/");
-	//cout<<"DEBUG ======= below is the fit with QCD, GJets and EWK background"<<endl;
-	//mkdir("fit_results/2016/temp", S_IRWXU | S_IRWXG | S_IRWXO);
-	//RooWorkspace * ws_combine_temp = Fit1DMETTimeDataBkgSig( h1combineData_toy, h1combineGJets, h1combineQCD, h1combineSig, h1combineEWK, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, "temp/");
+	cout<<"DEBUG ======= below is the fit with QCD, GJets and EWK background"<<endl;
+	mkdir("fit_results/2016/temp", S_IRWXU | S_IRWXG | S_IRWXO);
+	RooWorkspace * ws_combine_temp = Fit1DMETTimeDataBkgSig( h1combineData_toy, h1combineGJets, h1combineQCD, h1combineSig, h1combineEWK, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, "temp/");
+
 	cout<<"DEBUG ======= below is the fit with QCD and GJets background only, with data subtracted by EWK"<<endl;
 	ws_combine = Fit1DMETTimeDataBkgSig( h1combineData_subtractEWK, h1combineGJets, h1combineQCD, h1combineSig, lumi, frac_GJets, frac_QCD, _sigModelName, _sigModelTitle, outPlotsDir);
 	//rpQCDGJets
@@ -1018,8 +1019,8 @@ if(fitMode == "datacard")
 	h1newbinBkg_time->Scale((1.0*nBkg_2DFit_combine_DataBkgSig)/(1.0*h1newbinBkg_time->Integral()));
 	//h1newbinBkg_MET->Scale((1.0*nQCDGJets_2DFit_combine_DataBkgSig)/(1.0*h1newbinBkg_MET->Integral()));
 	h1newbinBkg_MET->Scale((1.0*nBkg_2DFit_combine_DataBkgSig)/(1.0*h1newbinBkg_MET->Integral()));
-	//h1newbinEWK_time->Scale((1.0*nEWK_2DFit_combine_DataBkgSig)/(1.0*h1newbinEWK_time->Integral()));
-	//h1newbinEWK_MET->Scale((1.0*nEWK_2DFit_combine_DataBkgSig)/(1.0*h1newbinEWK_MET->Integral()));
+	h1newbinEWK_time->Scale((1.0*nEWK_2DFit_combine_DataBkgSig)/(1.0*h1newbinEWK_time->Integral()));
+	h1newbinEWK_MET->Scale((1.0*nEWK_2DFit_combine_DataBkgSig)/(1.0*h1newbinEWK_MET->Integral()));
 	h1newbinSig_time->Scale((1.0*nSig_2DFit_combine_DataBkgSig)/(1.0*h1newbinSig_time->Integral()));
 	h1newbinSig_MET->Scale((1.0*nSig_2DFit_combine_DataBkgSig)/(1.0*h1newbinSig_MET->Integral()));
 	

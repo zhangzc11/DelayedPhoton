@@ -25,6 +25,17 @@ topMargin    = 0.07
 bottomMargin = 0.12
 ##############load delayed photon input tree#############
 
+print "\n"
+print "input file names: "
+print "Data tree: "
+print fileNameDataSkim
+print "Sig tree: "
+print fileNameSigSkim
+print "GJets tree: "
+print fileNameGJetsSkim
+print "QCD tree: "
+print fileNameQCDSkim
+
 def GetKeyNames( self, dir = "" ):
         self.cd(dir)
         return [key.GetName() for key in gDirectory.GetListOfKeys()]
@@ -38,11 +49,8 @@ TFile.GetClassNames = GetClassNames
 
 #fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameDataSkim
 #fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameEWKSkim
-fileName_all = fileNameEWKSkim
-#fileName_all = fileNameSigSkim + fileNameDataSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameEWKSkim
-
-print "files to be skimmed:"
-print fileName_all
+#fileName_all = fileNameEWKGSkim
+fileName_all = fileNameDataSkim
 
 for i in range(0,len(fileName_all)):
 	print "skim file "+fileName_all[i]

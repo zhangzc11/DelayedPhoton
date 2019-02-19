@@ -1119,7 +1119,7 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_QCDG
 	fprintf(m_outfile, "shapes QCDGJets bin1 fit_combineWS_%s.root %s:rpQCDGJets %s:rpQCDGJets_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
 	fprintf(m_outfile, "shapes EWK bin1 fit_combineWS_%s.root %s:rpEWK %s:rpEWK_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
 	fprintf(m_outfile, "shapes signal bin1 fit_combineWS_%s.root %s:rpSig %s:rpSig_$SYSTEMATIC\n", _modelName.c_str(), _wsName.c_str(), _wsName.c_str());
-	fprintf(m_outfile, "shapes data_obs bin1 fit_combineWS_%s.root %s:data_toy\n", _modelName.c_str(), _wsName.c_str());
+	fprintf(m_outfile, "shapes data_obs bin1 fit_combineWS_%s.root %s:data\n", _modelName.c_str(), _wsName.c_str());
 
 	fprintf(m_outfile, "---------------\n");
 	fprintf(m_outfile, "bin bin1\n");
@@ -1134,6 +1134,134 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_QCDG
 	fclose(m_outfile);	
 };
 
+void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, int Nbins_time, int Nbins_MET, TString modelName, TString outDataCardsDir)
+{
+	std::string _modelName ((const char*) modelName);
+	std::string _outDataCardsDir ((const char*) outDataCardsDir);
+	
+	FILE * m_outfile = fopen(("fit_results/2016ABCD/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "w");
+	cout<<"Writting fit result to datacard: "<<("fit_results/2016ABCD/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	fprintf(m_outfile, "imax %d\n", Nbins_time*Nbins_MET);
+	fprintf(m_outfile, "jmax 1\n");
+	fprintf(m_outfile, "kmax *\n");
+	fprintf(m_outfile, "---------------\n");
+
+	fprintf(m_outfile, "---------------\n");
+	fprintf(m_outfile, "bin     ");
+	for(int iM=0;iM<Nbins_MET;iM++)
+	{
+		for(int iT=0; iT<Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "ch%d%d     ",iT, iM);
+		}
+	}
+	fprintf(m_outfile, "\n");
+	fprintf(m_outfile, "observation ");
+	
+	for(int iM=1;iM<=Nbins_MET;iM++)
+	{
+		for(int iT=1; iT<=Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "%6.2f ",h2_rate_Data->GetBinContent(iT, iM));
+		}
+	}
+	fprintf(m_outfile, "\n");
+
+	fprintf(m_outfile, "------------------------------\n");
+
+	fprintf(m_outfile, "bin             ");
+	
+	for(int iM=0;iM<Nbins_MET;iM++)
+	{
+		for(int iT=0; iT<Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "ch%d%d ch%d%d ",iT, iM, iT, iM);
+		}
+	}
+	fprintf(m_outfile, "\n");
+
+	fprintf(m_outfile, "process         ");
+	for(int iM=0;iM<Nbins_MET;iM++)
+	{
+		for(int iT=0; iT<Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "sig  bkg  ");
+		}
+	}
+	fprintf(m_outfile, "\n");
+
+	fprintf(m_outfile, "process         ");
+	for(int iM=0;iM<Nbins_MET;iM++)
+	{
+		for(int iT=0; iT<Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "0    1    ");
+		}
+	}
+	fprintf(m_outfile, "\n");
+
+	fprintf(m_outfile, "rate            ");
+	for(int iM=1;iM<=Nbins_MET;iM++)
+	{
+		for(int iT=1; iT<=Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "%e  1.0  ",h2_rate_Sig->GetBinContent(iT, iM));
+		}
+	}
+	fprintf(m_outfile, "\n");
+
+	fprintf(m_outfile, "--------------------------------\n");
+	
+	//rate parameters
+	
+	fprintf(m_outfile, "NA      rateParam   ch00   bkg   %6.2f\n", h2_rate_Data->GetBinContent(1, 1));
+	for(int iT=1;iT<Nbins_time; iT++)
+	{
+		fprintf(m_outfile, "NA      rateParam   ch%d0   bkg   %6.2f\n", iT,h2_rate_Data->GetBinContent(1, 1));
+		fprintf(m_outfile, "x%d      rateParam   ch%d0   bkg   %e\n", iT, iT, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
+	}
+
+	for(int iM=1;iM<Nbins_MET; iM++)
+	{
+		fprintf(m_outfile, "NA      rateParam   ch0%d   bkg   %6.2f\n", iM, h2_rate_Data->GetBinContent(1, 1));
+		fprintf(m_outfile, "y%d      rateParam   ch0%d   bkg   %e\n", iM, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
+	}
+	
+	for(int iM=1;iM<Nbins_MET;iM++)
+	{
+		for(int iT=1; iT<Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "NA      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2_rate_Data->GetBinContent(1, 1));
+			fprintf(m_outfile, "x%d      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
+			fprintf(m_outfile, "y%d      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
+		}
+	}
+
+	fclose(m_outfile);	
+};
+
+void AddSystematics_Norm_ABCD(TH2F * h2_sys_Sig, int Nbins_time, int Nbins_MET, TString sysName, TString distType, TString modelName, TString outDataCardsDir)
+{
+        std::string _modelName ((const char*) modelName);
+        std::string _sysName ((const char*) sysName);
+        std::string _distType ((const char*) distType);
+        std::string _outDataCardsDir ((const char*) outDataCardsDir);
+
+        FILE * m_outfile = fopen(("fit_results/2016ABCD/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "a");
+	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	
+	
+	fprintf(m_outfile, "%s  %s   ", _sysName.c_str(), _distType.c_str());
+	for(int iM=1;iM<=Nbins_MET;iM++)
+	{
+		for(int iT=1; iT<=Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "%10.6f   -   ", h2_sys_Sig->GetBinContent(iT, iM));
+		}
+	}
+	fprintf(m_outfile, "\n");
+	fclose(m_outfile);	
+}
 
 void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString outDataCardsDir, TString sysName, TString distType)
 {
@@ -1790,3 +1918,417 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 
 };
 
+void OptimizeBinningABCD(int Nbins_MET, int Nbins_time, float min_events, float min_events_sig_frac, std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName, TString ourBinningDir)
+{
+	float NSig_total_events = h2Sig->Integral();
+	float NBkg_total_events = h2Bkg->Integral();
+	
+	float min_events_sig = min_events_sig_frac*NSig_total_events;
+
+	std::string _modelName ((const char*) modelName);
+	std::string _outBinningDir ((const char*) ourBinningDir);
+        //TFile *f_Out_binning = new TFile(("fit_results/2016ABCD/binning/binning_"+_modelName+".root").c_str(),"recreate");
+
+	bool debug_thisFunc = false;
+	//initial status: 1 bin in time, and 1 bin in MET
+	int nTotal_time = h2Bkg->GetNbinsX();
+	int nTotal_met = h2Bkg->GetNbinsY();
+
+	cout<<" binning optimization... "<<endl;	
+	cout<<"time bins # "<<nTotal_time<<endl;
+	cout<<"met bins # "<<nTotal_met<<endl;
+	cout<<"NSig: "<<NSig_total_events<<endl;
+	cout<<"NBkg: "<<NBkg_total_events<<endl;
+	cout<<"task is to split into "<<Nbins_MET<<" met x "<<Nbins_time<<" time bins"<<endl;
+
+	bool isConverged_time = false;
+	bool isConverged_met = false;
+	bool isConverged_all = false;
+	
+	/*************generate toy data**************/
+	TH2F * h2Data = new TH2F("h2Data","h2Data", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH1F * h1ConvertData = new TH1F("h1ConvertData","h1ConvertData", time_N_fine*met_N_fine, 0, time_N_fine*met_N_fine);
+	TH1 * h1ConvertData_toy = new TH1F("h1ConvertData_toy","h1ConvertData_toy", time_N_fine*met_N_fine, 0, time_N_fine*met_N_fine);
+	//2D to 1D convert
+	for(int i=1;i<=time_N_fine;i++)
+	{
+		for(int j=1;j<=met_N_fine;j++)
+		{
+			int thisBin = (i-1)*met_N_fine + j;
+			h1ConvertData->SetBinContent(thisBin, h2Bkg->GetBinContent(i,j) + h2Sig->GetBinContent(i,j));
+		}
+	}		
+	if(debug_thisFunc) cout<<"binning optimization: 2D data to 1D data conversion : "<<h2Bkg->Integral()+h2Sig->Integral()<<" -> "<<h1ConvertData->Integral()<<endl;
+	//toy generation
+	RooRealVar bin("bin","2D bin",0,h1ConvertData->GetSize()-2,"");
+	RooDataHist* rhData = new RooDataHist("rhData", "rhData", RooArgSet(bin), h1ConvertData);	
+	RooHistPdf * rpData = new RooHistPdf("rpData", "rpData", RooArgSet(bin), *rhData, 0);
+		
+	//create toy data
+	TRandom3* r3 = new TRandom3(0);
+	double nData_toy = r3->PoissonD(h1ConvertData->Integral());	
+	
+	RooDataHist* data_toy = rpData->generateBinned(RooArgSet(bin), nData_toy);
+	data_toy->SetName("data_toy");
+
+	h1ConvertData_toy = data_toy->createHistogram("bin", time_N_fine*met_N_fine);	
+	
+	if(debug_thisFunc) cout<<"binning optimization: 1D data vs toy data : "<<h1ConvertData->Integral()<<"  ->  "<<h1ConvertData_toy->Integral()<<endl;
+
+	//1D to 2D convert
+	for(int i=1;i<=time_N_fine;i++)
+	{
+		for(int j=1;j<=met_N_fine;j++)
+		{
+			int thisBin = (i-1)*met_N_fine + j;
+			h2Data->SetBinContent(i, j, h1ConvertData_toy->GetBinContent(thisBin));
+		}
+	}		
+	/*************end of toy data****************/
+	
+	//while( (!isConverged_time) || (!isConverged_met))
+	
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+	myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+	myC->SetTitle("");
+
+	int iteration = 0;
+	
+	int Nsplit_time = 0;
+	int Nsplit_MET = 0;
+	while( !isConverged_all )
+	{
+		//start spliting in time dimension
+		int new_idx_time = -99;
+		int new_idx_met = -99;
+		
+		if(!isConverged_time)
+		{
+			cout<<"tring to add a time split..."<<endl;
+			TString s_hist_name = Form("_h1_qnot_time_iter_%d", iteration);
+        		std::string _s_hist_name2 ((const char*) s_hist_name);
+			std::string _s_hist_name = _modelName+_s_hist_name2;
+			TH1F * h1_qnot_time = new TH1F(_s_hist_name.c_str(), _s_hist_name.c_str(), time_N_fine, time_Low, time_High);
+			double maxSignificance = -9999.0;
+			for(int idx=1;idx<nTotal_time;idx++)
+			{
+				if(std::find(timeBin.begin(), timeBin.end(), idx) != timeBin.end()) continue; // add a new split
+				double this_time = time_Low + (time_High - time_Low) * (1.0*idx)/(1.0*time_N_fine);
+				
+				int dist_min = 9999;
+				for(int i=0;i<timeBin.size();i++)
+				{
+					if(abs(timeBin[i] - idx) < dist_min) dist_min = abs(timeBin[i] - idx);
+				}
+				//if(dist_min < 5) continue; // not too narrow binning
+
+				std::vector <int> temp_bin_time;
+				for(int idx_temp : timeBin) 
+				{
+					temp_bin_time.push_back(idx_temp);
+				}
+				temp_bin_time.push_back(idx);
+				std::sort(temp_bin_time.begin(), temp_bin_time.end());
+				//if(debug_thisFunc) cout<<"DEBUG binningOptimization time: tring to add split at idx = "<<idx<<endl;
+				for(int inx_temp : temp_bin_time)
+				{
+					cout<<inx_temp<<" , ";
+				}
+				cout<<endl;
+				//avoid too narrow binning: each bin must have at least min_events
+				bool hasSmallBin = false;
+				float smallest_Bkg = 999999;
+				float smallest_Sig = 999999;
+
+				//construct 1D histogram of time and met
+				TH1F *h1Data = new TH1F ("h1Data","h1Data", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
+				TH1F *h1Bkg = new TH1F ("h1Bkg","h1Bkg", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
+				TH1F *h1Sig = new TH1F ("h1Sig","h1Sig", (temp_bin_time.size()-1)*(metBin.size()-1), 0, (temp_bin_time.size()-1)*(metBin.size()-1)*1.0);
+				for(int iT=1;iT<= temp_bin_time.size()-1; iT++)
+				{
+					for(int iM=1;iM<= metBin.size()-1; iM++)
+					{
+						int thisBin = (iT-1)*(metBin.size()-1) + iM;
+						float NData = h2Data->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
+						float NBkg = h2Bkg->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
+						float NSig = h2Sig->Integral(temp_bin_time[iT-1]+1, temp_bin_time[iT], metBin[iM-1]+1, metBin[iM]);
+						if(NBkg < pow(3.0, 1.0 * (Nbins_time - 1 - Nsplit_time + Nbins_MET - Nsplit_MET)-2.0) * min_events) hasSmallBin = true;
+						if(NSig < pow(3.0, 1.0 * (Nbins_time - 1 - Nsplit_time + Nbins_MET - Nsplit_MET)-2.0) * min_events_sig) hasSmallBin = true;
+						if(NSig < smallest_Sig) smallest_Sig = NSig;
+						if(NBkg < smallest_Bkg) smallest_Bkg = NBkg;
+
+						h1Data->SetBinContent(thisBin, NData);
+						h1Bkg->SetBinContent(thisBin, NBkg);
+						h1Sig->SetBinContent(thisBin, NSig);
+						//cout<<"iT = "<<iT<<"  iM = "<<iM<<" thiBin = "<<thisBin<<"  NBkg = "<<NBkg<<"   NSig = "<<NSig<<endl;
+					}	
+				}
+				
+				if(hasSmallBin) 
+				{
+					if(debug_thisFunc) cout<<"split resulting to too narror bin smallest (Sig, Bkg) bin integral = "<<smallest_Sig<<", "<<smallest_Bkg<<" - cut is "<<pow(3.0, 1.0 * (Nbins_time - 1 - Nsplit_time + Nbins_MET - Nsplit_MET) -2.0 ) * min_events_sig<<", "<<pow(3.0, 1.0 * (Nbins_time - 1 - Nsplit_time + Nbins_MET - Nsplit_MET)-2.0) * min_events<<endl;
+					continue;
+				}
+				
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: validation of 2D conversion (Bkg): "<<h2Bkg->Integral()<<" -> "<<h1Bkg->Integral()<<endl;
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization time: validation of 2D conversion (Sig): "<<h2Sig->Integral()<<" -> "<<h1Sig->Integral()<<endl;
+	
+				for(int i=1;i<= (temp_bin_time.size()-1)*(metBin.size()-1); i++)
+				{
+					if(h1Bkg->GetBinContent(i) < 1e-3 ) h1Bkg->SetBinContent(i, 1e-3);
+					if(h1Sig->GetBinContent(i) < 1e-3 ) h1Sig->SetBinContent(i, 1e-3);
+					//h1Data->SetBinContent(i, h1Bkg->GetBinContent(i) + h1Sig->GetBinContent(i));
+				}
+	
+				//double qnot = Fit1DMETTimeSignificance(h1Data, h1Bkg, h1Sig, 10);
+				double qnot = CalculateMETTimeSignificance(h1Bkg, h1Sig);
+			
+				//if(debug_thisFunc) cout<<"DEBUG binningOptimization time: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
+				if(qnot > 1.000*maxSignificance)	
+				{
+					maxSignificance = qnot;
+					new_idx_time = idx; 
+				}
+				if(qnot>0.001) h1_qnot_time->SetBinContent(idx, qnot);	
+
+				//delete 	h1Data;
+				//delete 	h1Bkg;
+				//delete 	h1Sig;
+				delete gROOT->FindObject("h1Data");
+				delete gROOT->FindObject("h1Bkg");
+				delete gROOT->FindObject("h1Sig");
+
+			}
+
+			h1_qnot_time->SetLineWidth(2);
+        		h1_qnot_time->SetLineColor(kBlack);
+                        h1_qnot_time->SetTitle("");
+        		h1_qnot_time->GetXaxis()->SetTitle("new split on #gamma cluster time [ns]");
+        		h1_qnot_time->GetYaxis()->SetTitle("q_{0}");
+        		h1_qnot_time->GetYaxis()->SetTitleSize(axisTitleSize);
+        		h1_qnot_time->GetYaxis()->SetRangeUser(0.15, 1.2*h1_qnot_time->GetMaximum());
+        		h1_qnot_time->GetXaxis()->SetRangeUser(0.2+time_Low, time_High-0.2);
+        		h1_qnot_time->GetXaxis()->SetTitleSize(axisTitleSize);
+        		h1_qnot_time->GetYaxis()->SetTitleOffset(axisTitleOffset);
+        		h1_qnot_time->GetXaxis()->SetTitleOffset(axisTitleOffset);
+			h1_qnot_time->Draw();
+			for(int ih=0;ih<timeBin.size();ih++)
+			{
+				TString s_ih_name = Form("h1_qnot_time_iter_%d_i%d", iteration, ih);
+                        	std::string _s_ih_name ((const char*) s_ih_name);
+	
+				TH1F *h1_temp = new TH1F(_s_ih_name.c_str(), _s_ih_name.c_str(), time_N_fine, time_Low, time_High);
+				h1_temp->SetBinContent(timeBin[ih], 1.2*h1_qnot_time->GetMaximum());
+				h1_temp->SetLineWidth(3);
+				h1_temp->SetLineColor(kRed);
+				h1_temp->Draw("same");
+			}
+
+			if(new_idx_time > 0)
+			{
+	
+				myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/binning_"+to_string(Nbins_time)+"x"+to_string(Nbins_MET)+_s_hist_name+".pdf").c_str());
+				myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/binning_"+to_string(Nbins_time)+"x"+to_string(Nbins_MET)+_s_hist_name+".png").c_str());
+				myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/binning_"+to_string(Nbins_time)+"x"+to_string(Nbins_MET)+_s_hist_name+".C").c_str());
+
+	
+				if(debug_thisFunc) cout<<"best split point added : "<<new_idx_time<<"  maxSignificance = "<<maxSignificance<<endl;
+				timeBin.push_back(new_idx_time);
+				std::sort(timeBin.begin(), timeBin.end());	
+				Nsplit_time++;
+			}
+			else isConverged_time = true;	
+	
+			if(Nsplit_time+1 >= Nbins_time) isConverged_time = true;	
+		}
+
+
+		if(!isConverged_met)
+		{
+			cout<<"tring to add a met split..."<<endl;
+			TString s_hist_name = Form("_h1_qnot_met_iter_%d", iteration);
+        		std::string _s_hist_name2 ((const char*) s_hist_name);
+			std::string _s_hist_name = _modelName + _s_hist_name2;
+			
+			TH1F * h1_qnot_met = new TH1F(_s_hist_name.c_str(), _s_hist_name.c_str(), met_N_fine, met_Low, met_High);
+			double maxSignificance = -9999.0;
+
+			for(int idx=1;idx<nTotal_met;idx++)
+			{
+				if(std::find(metBin.begin(), metBin.end(), idx) != metBin.end()) continue; // add a new split
+				double this_met = met_Low + (met_High - met_Low) * (1.0*idx)/(1.0*met_N_fine);
+			
+				int dist_min = 9999;
+				for(int i=0;i<metBin.size();i++)
+				{
+					if(abs(metBin[i] - idx) < dist_min) dist_min = abs(metBin[i] - idx);
+				}
+				//if(dist_min < 5) continue; // not too narrow binning
+
+
+				std::vector <int> temp_bin_met;
+				for(int idx_temp : metBin) 
+				{
+					temp_bin_met.push_back(idx_temp);
+				}
+				temp_bin_met.push_back(idx);
+				std::sort(temp_bin_met.begin(), temp_bin_met.end());
+				//if(debug_thisFunc) cout<<"DEBUG binningOptimization met: tring to add split at idx = "<<idx<<endl;
+				for(int inx_temp : temp_bin_met)
+				{
+					cout<<inx_temp<<" , ";
+				}
+				cout<<endl;
+				//avoid too narrow binning: each bin must have at least min_events
+				bool hasSmallBin = false;		
+				float smallest_Bkg = 999999;
+                                float smallest_Sig = 999999;
+				//construct 1D histogram of met and time
+				TH1F *h1Data = new TH1F ("h1Data","h1Data", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
+				TH1F *h1Bkg = new TH1F ("h1Bkg","h1Bkg", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
+				TH1F *h1Sig = new TH1F ("h1Sig","h1Sig", (temp_bin_met.size()-1)*(timeBin.size()-1), 0, (temp_bin_met.size()-1)*(timeBin.size()-1)*1.0);
+				for(int iT=1;iT<= timeBin.size()-1; iT++)
+				{
+					for(int iM=1;iM<= temp_bin_met.size()-1; iM++)
+					{
+						int thisBin = (iT-1)*(temp_bin_met.size()-1) + iM;
+						float NData = h2Data->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
+						float NBkg = h2Bkg->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
+						float NSig = h2Sig->Integral(timeBin[iT-1]+1, timeBin[iT], temp_bin_met[iM-1]+1, temp_bin_met[iM]);
+						if(NBkg < pow(3.0, 1.0* (Nbins_time - Nsplit_time + Nbins_MET - 1 - Nsplit_MET)-2.0) * min_events) hasSmallBin = true;
+						if(NSig < pow(3.0, 1.0* (Nbins_time - Nsplit_time + Nbins_MET - 1 - Nsplit_MET)-2.0) * min_events_sig) hasSmallBin = true;
+						if(NSig < smallest_Sig) smallest_Sig = NSig;
+                                                if(NBkg < smallest_Bkg) smallest_Bkg = NBkg;
+
+						h1Data->SetBinContent(thisBin, NData);
+						h1Bkg->SetBinContent(thisBin, NBkg);
+						h1Sig->SetBinContent(thisBin, NSig);
+						//cout<<"iT = "<<iT<<"  iM = "<<iM<<" thiBin = "<<thisBin<<"  NBkg = "<<NBkg<<"   NSig = "<<NSig<<endl;
+					}	
+				}
+		
+				if(hasSmallBin) 
+				{
+					if(debug_thisFunc) cout<<"split resulting to too narror bin smallest (Sig, Bkg) bin integral = "<<smallest_Sig<<", "<<smallest_Bkg<<" - cut is "<<pow(3.0, 1.0 * (Nbins_time - Nsplit_time + Nbins_MET - 1 - Nsplit_MET)-2.0) * min_events_sig<<", "<<pow(3.0, 1.0*(Nbins_time - Nsplit_time + Nbins_MET - 1 - Nsplit_MET) -2.0) * min_events<<endl;
+					continue;
+				}
+			
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: validation of 2D conversion (Bkg): "<<h2Bkg->Integral()<<" -> "<<h1Bkg->Integral()<<endl;
+				if(debug_thisFunc) cout<<"DEBUG binningOptimization met: validation of 2D conversion (Sig): "<<h2Sig->Integral()<<" -> "<<h1Sig->Integral()<<endl;
+	
+				for(int i=1;i<= (temp_bin_met.size()-1)*(timeBin.size()-1); i++)
+				{
+					if(h1Bkg->GetBinContent(i) < 1e-3 ) h1Bkg->SetBinContent(i, 1e-3);
+					if(h1Sig->GetBinContent(i) < 1e-3 ) h1Sig->SetBinContent(i, 1e-3);
+					//h1Data->SetBinContent(i, h1Bkg->GetBinContent(i) + h1Sig->GetBinContent(i));
+				}
+	
+				//double qnot = Fit1DMETTimeSignificance(h1Data, h1Bkg, h1Sig, 10);
+				double qnot = CalculateMETTimeSignificance(h1Bkg, h1Sig);
+			
+				//if(debug_thisFunc) cout<<"DEBUG binningOptimization met: significance of new split = "<<qnot<<" vs. maxSignificance = "<<maxSignificance<<endl;	
+				if(qnot > 1.000*maxSignificance)	
+				{
+					maxSignificance = qnot;
+					new_idx_met = idx; 
+				}
+				h1_qnot_met->SetBinContent(idx, qnot);
+	
+				//delete 	h1Data;
+				//delete 	h1Bkg;
+				//delete 	h1Sig;
+				delete gROOT->FindObject("h1Data");
+				delete gROOT->FindObject("h1Bkg");
+				delete gROOT->FindObject("h1Sig");
+			}
+			
+			h1_qnot_met->SetLineWidth(2);
+                        h1_qnot_met->SetLineColor(kBlack);
+                        h1_qnot_met->SetTitle("");
+                        h1_qnot_met->GetXaxis()->SetTitle("new split on #slash{E}_{T} [GeV]");
+                        h1_qnot_met->GetYaxis()->SetTitle("q_{0}");
+                        h1_qnot_met->GetYaxis()->SetTitleSize(axisTitleSize);
+        		h1_qnot_met->GetYaxis()->SetRangeUser(0.15, 1.2*h1_qnot_met->GetMaximum());
+        		h1_qnot_met->GetXaxis()->SetRangeUser(10.0+met_Low, met_High-10.0);
+                        h1_qnot_met->GetXaxis()->SetTitleSize(axisTitleSize);
+                        h1_qnot_met->GetYaxis()->SetTitleOffset(axisTitleOffset);
+                        h1_qnot_met->GetXaxis()->SetTitleOffset(axisTitleOffset);
+                        h1_qnot_met->Draw();
+
+			for(int ih=0;ih<metBin.size();ih++)
+			{
+				TString s_ih_name = Form("h1_qnot_met_iter_%d_i%d", iteration, ih);
+                        	std::string _s_ih_name ((const char*) s_ih_name);
+	
+				TH1F *h1_temp = new TH1F(_s_ih_name.c_str(), _s_ih_name.c_str(), met_N_fine, met_Low, met_High);
+				h1_temp->SetBinContent(metBin[ih], 1.2*h1_qnot_met->GetMaximum());
+				h1_temp->SetLineWidth(3);
+				h1_temp->SetLineColor(kRed);
+				h1_temp->Draw("same");
+			}
+
+			if(new_idx_met > 0)
+			{
+
+       	                 	myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/binning_"+to_string(Nbins_time)+"x"+to_string(Nbins_MET)+_s_hist_name+".pdf").c_str());
+       	                 	myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/binning_"+to_string(Nbins_time)+"x"+to_string(Nbins_MET)+_s_hist_name+".png").c_str());
+       	                 	myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/binning_"+to_string(Nbins_time)+"x"+to_string(Nbins_MET)+_s_hist_name+".C").c_str());
+
+				if(debug_thisFunc) cout<<"best split point added met : "<<new_idx_met<<"  maxSignificance = "<<maxSignificance<<endl;
+				metBin.push_back(new_idx_met);
+				std::sort(metBin.begin(), metBin.end());	
+				Nsplit_MET++;
+			}
+			else isConverged_met = true;
+			
+			if(Nsplit_MET+1 >= Nbins_MET) isConverged_met = true;	
+
+		}
+		
+		if(isConverged_time && isConverged_met) isConverged_all = true;
+	
+		iteration ++;
+	}
+
+};
+
+
+void Draw2DBinning(TH2F * h2_rate, TString plotLabel, TString modelName, TString ourBinningDir)
+{
+	std::string _plotLabel ((const char*) plotLabel);
+	std::string _modelName ((const char*) modelName);
+	std::string _outBinningDir ((const char*) ourBinningDir);
+
+	TCanvas *myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+        myC->SetHighLightColor(2);
+        myC->SetFillColor(0);
+        myC->SetBorderMode(0);
+        myC->SetBorderSize(2);
+        myC->SetLeftMargin( leftMargin );
+        myC->SetRightMargin( rightMargin );
+        myC->SetTopMargin( topMargin );
+        myC->SetBottomMargin( bottomMargin );
+        myC->SetFrameBorderMode(0);
+        myC->SetFrameBorderMode(0);
+        myC->SetTitle("");
+
+	myC->SetGridx(1);
+	myC->SetGridy(1);
+
+	h2_rate->SetMarkerSize(2);
+	h2_rate->Draw("COL, TEXT");
+
+	myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/ABCDBinning_"+_modelName+"_"+_plotLabel+".pdf").c_str());
+	myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/ABCDBinning_"+_modelName+"_"+_plotLabel+".png").c_str());
+	myC->SaveAs(("fit_results/2016ABCD/"+_outBinningDir+"/ABCDBinning_"+_modelName+"_"+_plotLabel+".C").c_str());
+
+};

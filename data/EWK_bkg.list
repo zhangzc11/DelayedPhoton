@@ -15,4 +15,5 @@ WZG_TuneCUETP8M1_13TeV-amcatnlo-pythia8 0.04123
 WGGJets_TuneCUETP8M1_13TeV_madgraphMLM_pythia8 1.715
 WWG_TuneCUETP8M1_13TeV-amcatnlo-pythia8 0.2147
 DiPhotonJetsBox_M40_80-Sherpa 308.3
+DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa 87.54
 DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 5349.0
