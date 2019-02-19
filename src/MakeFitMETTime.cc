@@ -1457,11 +1457,13 @@ void Fit1DMETTimeBiasTest( TH1F * h1Data, TH1F * h1Bkg,  TH1F * h1Sig, float Sov
 
 double CalculateMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig)
 {
+//reference: https://arxiv.org/pdf/1007.1727.pdf
 	int nsteps = 2e3;
   	double mu_steps = 1.0e-2;
   	double minNll = 9999999;
 	double bestMu = -1.0;	
 	
+	//get the best mu to maximize the log likelyhood, see equation 6 in reference
 	for(int i = 0; i < nsteps; i++)
 	{
 		double mu = mu_steps*i;
@@ -1470,7 +1472,7 @@ double CalculateMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig)
 		{
 			double s = h1Sig->GetBinContent(j);
 			double b = h1Bkg->GetBinContent(j);
-			nll += - ( (s+b)*std::log(mu*s+b)  - (mu*s+b));	
+			nll += - ( (s+b)*std::log(mu*s+b)  - (mu*s+b));	 
 		}
 		if(nll < minNll)
 		{
@@ -1479,6 +1481,7 @@ double CalculateMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig)
 		}	
 	}
 		
+	//calculate the significance with the best mu obtained: q = sqrt(2(s+b)ln(1+us/b)-us)
 	double qnot = 0.0;
 	double qnot2 = 0.0;
 
