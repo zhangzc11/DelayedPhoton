@@ -1,4 +1,6 @@
 //C++ INCLUDES
+#include <stdlib.h>
+#include <algorithm>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -1919,6 +1921,162 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 		iteration ++;
 	}
 
+};
+
+void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &TimeBin, std::vector<int> &METBin, TH2F * h2Data, TH2F *h2Sig, TString modelName, TString ourBinningDir)
+{
+	float NSig_total_events = h2Sig->Integral();
+	float NData_total_events = h2Data->Integral();
+
+	std::string _modelName ((const char*) modelName);
+	std::string _outBinningDir ((const char*) ourBinningDir);
+
+	bool debug_thisFunc = true;
+	//initial status: 1 bin in Time, and 1 bin in MET
+	int nTotal_Time = h2Data->GetNbinsX();
+	int nTotal_MET = h2Data->GetNbinsY();
+
+	cout<<" binning optimization... "<<endl;	
+	cout<<"Time bins # "<<nTotal_Time<<endl;
+	cout<<"MET bins # "<<nTotal_MET<<endl;
+	cout<<"NSig: "<<NSig_total_events<<endl;
+	cout<<"NData: "<<NData_total_events<<endl;
+	cout<<"task is to split into "<<Nbins_MET<<" MET x "<<Nbins_Time<<" Time bins"<<endl;
+
+	std::vector <int> combIndex_Time;
+	std::vector <int> combIndex_MET;
+	cout<<"getting all the possible choices of Time splits..."<<endl;
+	int N_comb_Time = Combination(nTotal_Time-1, Nbins_Time-1, combIndex_Time);
+	cout<<"N_comb_Time = "<<N_comb_Time<<endl;
+	cout<<"getting all the possible choices of MET splits..."<<endl;
+	int N_comb_MET = Combination(nTotal_MET-1, Nbins_MET-1, combIndex_MET);
+	cout<<"N_comb_MET = "<<N_comb_MET<<endl;
+
+
+	float minLimits = 999999.9;
+	std::vector<int> best_split_Time;
+	std::vector<int> best_split_MET;
+	
+	system(("rm fit_results/2016ABCD/datacards_temp/higgsCombine"+_modelName+"*.Asymptotic.mH120.root").c_str());	
+	system(("rm fit_results/2016ABCD/datacards_temp/DelayedPhotonCard_"+_modelName+"*.txt").c_str());
+
+	for(int icomb_Time = 0; icomb_Time<N_comb_Time; icomb_Time ++)
+	{
+		std::vector<int> index_Time_split;
+		index_Time_split.push_back(0);
+		for(int idxT = 0; idxT<(Nbins_Time-1); idxT++)
+		{
+			index_Time_split.push_back(combIndex_Time[icomb_Time*(Nbins_Time-1) + idxT]);
+		}
+		index_Time_split.push_back(nTotal_Time);
+
+		for(int icomb_MET = 0; icomb_MET<N_comb_MET; icomb_MET ++)
+		{
+			std::vector<int> index_MET_split;
+			index_MET_split.push_back(0);
+			for(int idxM= 0; idxM<(Nbins_MET-1); idxM++)
+			{
+				index_MET_split.push_back(combIndex_MET[icomb_MET*(Nbins_MET-1) + idxM]);
+			}
+			index_MET_split.push_back(nTotal_MET);
+
+			cout<<"calculating limits for the following Time and met splits..."<<endl;
+			for(int idxT = 0; idxT<(Nbins_Time+1); idxT++)
+			{
+				cout<<index_Time_split[idxT]<<" ";
+			}
+			cout<<" , ";
+			for(int idxM = 0; idxM<(Nbins_MET+1); idxM++)
+			{
+				cout<<index_MET_split[idxM]<<" ";
+			}
+			cout<<endl;
+			//make the datacards
+			TH2F *h2_rate_Data_inBins = new TH2F("h2_rate_Data_inBins","; #gamma Time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_rate_Sig_inBins = new TH2F("h2_rate_Sig_inBins","; #gamma Time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			for(int iT=1; iT<=Nbins_Time; iT++)
+			{
+				for(int iM=1; iM<=Nbins_MET; iM++)
+				{
+					h2_rate_Data_inBins->SetBinContent(iT, iM, h2Data->Integral(index_Time_split[iT-1]+1, index_Time_split[iT], index_MET_split[iM-1]+1, index_MET_split[iM]));
+					h2_rate_Sig_inBins->SetBinContent(iT, iM, h2Sig->Integral(index_Time_split[iT-1]+1, index_Time_split[iT], index_MET_split[iM-1]+1, index_MET_split[iM]));
+				}
+			}
+			cout<<"in resized 2D histograms, nData = "<<h2_rate_Data_inBins->Integral()<<",  nSig = "<<h2_rate_Sig_inBins->Integral()<<endl;
+			MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins, Nbins_Time, Nbins_MET, (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp");	
+			//run combine to get the limits...
+			cout<<"running combine tool on the fly now...."<<endl;
+			system(("combine -M Asymptotic fit_results/2016ABCD/datacards_temp/DelayedPhotonCard_"+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)+".txt -v -1 -n "+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str());	
+			//extract the expected limit...
+			TFile * file_limit = new TFile(("higgsCombine"+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)+".Asymptotic.mH120.root").c_str());
+			TTree * tree_limit = (TTree*)file_limit->Get("limit");
+			Double_t limits;
+			tree_limit->SetBranchAddress("limit", &limits);
+			tree_limit->GetEntry(2);
+			cout<<"expected limit of this split = "<<limits<<endl;
+			if(limits < minLimits)
+			{
+				minLimits = limits;
+				best_split_Time.clear();
+				best_split_MET.clear();
+				for(int iT=0; iT<index_Time_split.size(); iT++)
+				{
+					best_split_Time.push_back(index_Time_split[iT]);
+				}
+				for(int iM=0; iM<index_MET_split.size(); iM++)
+				{
+					best_split_MET.push_back(index_MET_split[iM]);
+				}
+
+	
+			}
+			file_limit->Close();
+				
+			system(("mv higgsCombine"+_modelName+"*.Asymptotic.mH120.root fit_results/2016ABCD/datacards_temp/").c_str());	
+
+			//delete
+			delete gROOT->FindObject("h2_rate_Data_inBins");
+			delete gROOT->FindObject("h2_rate_Sig_inBins");
+
+		}
+	}
+
+	
+	cout<<"best expected limit found: "<<minLimits<<endl;
+	
+	for(int iT=1; iT<best_split_Time.size()-1; iT++)
+	{
+		TimeBin.push_back(best_split_Time[iT]);
+	}
+	
+	for(int iM=1; iM<best_split_MET.size()-1; iM++)
+	{
+		METBin.push_back(best_split_MET[iM]);
+	}
+	
+	std::sort(TimeBin.begin(), TimeBin.end());
+	std::sort(METBin.begin(), METBin.end());
+	
+};
+
+int Combination(int N, int K, std::vector<int> & comb)
+{
+	std::string bitmask(K, 1); // K leading 1's
+	bitmask.resize(N, 0); // N-K trailing 0's
+	int N_comb = 0;
+	do {
+		for (int i = 0; i < N; ++i)
+		{
+			if (bitmask[i]) 
+			{
+				//std::cout << " " << i+1;
+				comb.push_back(i+1);
+			}
+		}
+		//std::cout << std::endl;
+		N_comb ++;
+	} while (std::prev_permutation(bitmask.begin(), bitmask.end()));
+	return N_comb;
 };
 
 void OptimizeBinningABCD(int Nbins_MET, int Nbins_time, float min_events, float min_events_sig_frac, std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName, TString ourBinningDir)

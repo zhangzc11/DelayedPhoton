@@ -1,0 +1,37 @@
+imax 9
+jmax 1
+kmax *
+---------------
+---------------
+bin     ch00     ch10     ch20     ch01     ch11     ch21     ch02     ch12     ch22     
+observation 44242.00 11091.00 4649.00 157.00  45.00  11.00  84.00  22.00   5.38 
+------------------------------
+bin             ch00 ch00 ch10 ch10 ch20 ch20 ch01 ch01 ch11 ch11 ch21 ch21 ch02 ch02 ch12 ch12 ch22 ch22 
+process         sig  bkg  sig  bkg  sig  bkg  sig  bkg  sig  bkg  sig  bkg  sig  bkg  sig  bkg  sig  bkg  
+process         0    1    0    1    0    1    0    1    0    1    0    1    0    1    0    1    0    1    
+rate            1.490932e+00  1.0  2.296955e+00  1.0  3.785917e+01  1.0  1.060033e-01  1.0  1.344021e-01  1.0  1.896747e+00  1.0  5.010249e-01  1.0  6.379035e-01  1.0  8.356350e+00  1.0  
+--------------------------------
+NA      rateParam   ch00   bkg   44242.00
+NA      rateParam   ch10   bkg   44242.00
+x1      rateParam   ch10   bkg   2.506894e-01
+NA      rateParam   ch20   bkg   44242.00
+x2      rateParam   ch20   bkg   1.050811e-01
+NA      rateParam   ch01   bkg   44242.00
+y1      rateParam   ch01   bkg   3.548664e-03
+NA      rateParam   ch02   bkg   44242.00
+y2      rateParam   ch02   bkg   1.898648e-03
+NA      rateParam   ch11   bkg   44242.00
+x1      rateParam   ch11   bkg   2.506894e-01
+y1      rateParam   ch11   bkg   3.548664e-03
+NA      rateParam   ch21   bkg   44242.00
+x2      rateParam   ch21   bkg   1.050811e-01
+y1      rateParam   ch21   bkg   3.548664e-03
+NA      rateParam   ch12   bkg   44242.00
+x1      rateParam   ch12   bkg   2.506894e-01
+y2      rateParam   ch12   bkg   1.898648e-03
+NA      rateParam   ch22   bkg   44242.00
+x2      rateParam   ch22   bkg   1.050811e-01
+y2      rateParam   ch22   bkg   1.898648e-03
+lumi  lnN     1.025000   -     1.025000   -     1.025000   -     1.025000   -     1.025000   -     1.025000   -     1.025000   -     1.025000   -     1.025000   -   
+Photon  lnN     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -   
+Trigger  lnN     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -     1.010000   -   

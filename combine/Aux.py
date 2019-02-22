@@ -10,6 +10,8 @@ def getXsecBR(Lambda, Ctau):
 		Ctau_this = "0_1"
 	if Ctau_this == "0.01":
 		Ctau_this = "0_01"
+	if Ctau_this == "0.001":
+		Ctau_this = "0_001"
 
 	model_to_find="L"+str(Lambda)+"TeV_Ctau"+Ctau_this+"cm"
 	

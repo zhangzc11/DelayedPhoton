@@ -192,7 +192,6 @@ xsec, exsec = getXsecBR(400, 1200)
 A, B, C, D, eA, eB, eC, eD = getABCDMC("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau1200cm_13TeV-pythia8.root", weight_cutA, weight_cutB, weight_cutC, weight_cutD, xsec*lumi)
 print "L400CTau1200 & "+"%.4f"%A +"$\\pm$"+"%.4f"%eA+" & "+"%.4f"%B +"$\\pm$"+"%.4f"%eB+" & "+"%.4f"%C+"$\\pm$"+"%.4f"%eC+" & "+"%.4f"%D+"$\\pm$"+"%.4f"%eD+" & "+"%.4f"%(D*B/A)+"$\\pm$"+"%.4f"%np.sqrt((B*eD/A)**2 + (D*eB/A)**2 + (eA*D*B/(A*A))**2)
 
-'''
 #data, GJets CR
 A, B, C, D, eA, eB, eC, eD = getABCDData("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", cutA_GJets, cutB_GJets, cutC_GJets, cutD_GJets)
 print "#gamma+Jets CR & "+"%.2f"%A +"$\\pm$"+"%.2f"%eA+" & "+"%.2f"%B +"$\\pm$"+"%.2f"%eB+" & "+"%.2f"%C+"$\\pm$"+"%.2f"%eC+" & "+"%.2f"%D+"$\\pm$"+"%.2f"%eD+" & "+"%.2f"%(D*B/A)+"$\\pm$"+"%.2f"%np.sqrt((B*eD/A)**2 + (D*eB/A)**2 + (eA*D*B/(A*A))**2)
@@ -204,7 +203,6 @@ print "QCD CR & "+"%.2f"%A +"$\\pm$"+"%.2f"%eA+" & "+"%.2f"%B +"$\\pm$"+"%.2f"%e
 #data, EWK CR
 A, B, C, D, eA, eB, eC, eD = getABCDData("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", cutA_EWK, cutB_EWK, cutC_EWK, cutD_EWK)
 print "EWK CR & "+"%.2f"%A +"$\\pm$"+"%.2f"%eA+" & "+"%.2f"%B +"$\\pm$"+"%.2f"%eB+" & "+"%.2f"%C+"$\\pm$"+"%.2f"%eC+" & "+"%.2f"%D+"$\\pm$"+"%.2f"%eD+" & "+"%.2f"%(D*B/A)+"$\\pm$"+"%.2f"%np.sqrt((B*eD/A)**2 + (D*eB/A)**2 + (eA*D*B/(A*A))**2)
-'''
 
 
 print "without correction......."
@@ -224,7 +222,6 @@ xsec, exsec = getXsecBR(400, 1200)
 A, B, C, D, eA, eB, eC, eD = getABCDMC("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/GMSB_L400TeV_Ctau1200cm_13TeV-pythia8.root", weight_cutA, weight_cutB, weight_cutC, weight_cutD, xsec*lumi)
 print "L400CTau1200 & "+"%.4f"%A +"$\\pm$"+"%.4f"%eA+" & "+"%.4f"%B +"$\\pm$"+"%.4f"%eB+" & "+"%.4f"%C+"$\\pm$"+"%.4f"%eC+" & "+"%.4f"%D+"$\\pm$"+"%.4f"%eD+" & "+"%.4f"%(D*B/A)+"$\\pm$"+"%.4f"%np.sqrt((B*eD/A)**2 + (D*eB/A)**2 + (eA*D*B/(A*A))**2)
 
-'''
 #data, GJets CR
 A, B, C, D, eA, eB, eC, eD = getABCDData("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", cutA_GJets, cutB_GJets, cutC_GJets, cutD_GJets)
 print "#gamma+Jets CR & "+"%.2f"%A +"$\\pm$"+"%.2f"%eA+" & "+"%.2f"%B +"$\\pm$"+"%.2f"%eB+" & "+"%.2f"%C+"$\\pm$"+"%.2f"%eC+" & "+"%.2f"%D+"$\\pm$"+"%.2f"%eD+" & "+"%.2f"%(D*B/A)+"$\\pm$"+"%.2f"%np.sqrt((B*eD/A)**2 + (D*eB/A)**2 + (eA*D*B/(A*A))**2)
@@ -236,4 +233,3 @@ print "QCD CR & "+"%.2f"%A +"$\\pm$"+"%.2f"%eA+" & "+"%.2f"%B +"$\\pm$"+"%.2f"%e
 #data, EWK CR
 A, B, C, D, eA, eB, eC, eD = getABCDData("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", cutA_EWK, cutB_EWK, cutC_EWK, cutD_EWK)
 print "EWK CR & "+"%.2f"%A +"$\\pm$"+"%.2f"%eA+" & "+"%.2f"%B +"$\\pm$"+"%.2f"%eB+" & "+"%.2f"%C+"$\\pm$"+"%.2f"%eC+" & "+"%.2f"%D+"$\\pm$"+"%.2f"%eD+" & "+"%.2f"%(D*B/A)+"$\\pm$"+"%.2f"%np.sqrt((B*eD/A)**2 + (D*eB/A)**2 + (eA*D*B/(A*A))**2)
-'''

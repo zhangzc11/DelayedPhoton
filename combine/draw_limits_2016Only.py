@@ -5,10 +5,10 @@ import numpy as np
 import array
 
 lumi_2016 = 35922.0
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/15Nov2018/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/16Jan2019/orderByPt/'
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
-ctau_points = [0.1, 10, 200, 400, 600, 1000, 1200]
+ctau_points = [0.001, 0.1, 10, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
 drawObs=False
@@ -102,6 +102,8 @@ for ctau_this in ctau_points:
 		ctau_this_str = "0_1"
 	if ctau_this_str == "0.01":
 		ctau_this_str = "0_01"
+	if ctau_this_str == "0.001":
+		ctau_this_str = "0_001"
 		
 	index_lambda = - 1
 	for lambda_this in lambda_points:
@@ -275,6 +277,8 @@ for i in range(0, N_ctau):
 	lambda_point_boundary_exp_m1sig_2016[i] = graph_lambda_vs_r_exp_m1sig_2016.Eval(1.0)
 	graph_lambda_vs_r_obs_2016 =  TGraph(len(lambda_interp_2016), np.array(r_obs_interp_2016), np.array(lambda_interp_2016))
 	lambda_point_boundary_obs_2016[i] = graph_lambda_vs_r_obs_2016.Eval(1.0)
+	print "lambda boundary (obs) = "+str(lambda_point_boundary_obs_2016[i])
+	print "lambda boundary (exp) = "+str(lambda_point_boundary_exp_2016[i])
 
 
 print "lambda points:"
@@ -331,7 +335,7 @@ graph_exclusion_exp_2016.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
 graph_exclusion_exp_2016.GetXaxis().SetLimits(100.0, 600.0)
 graph_exclusion_exp_2016.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.05,1.0e7)
+graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.001,1.0e10)
 graph_exclusion_exp_2016.SetTitle("")
 
 graph_exclusion_exp_2016.SetMarkerStyle(19)
@@ -431,7 +435,7 @@ drawCMS2(myC2D, 13, lumi_2016)
 
 #Lambda axis
 f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-A1_lambda = TGaxis(100.0, 0.0015,600.0,0.0015,"f1",1010)
+A1_lambda = TGaxis(100.0, 0.00001,600.0,0.00001,"f1",1010)
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)

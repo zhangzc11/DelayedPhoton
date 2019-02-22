@@ -1,0 +1,315 @@
+
+ WARNING --  From combine v7, method Asymptotic has been renamed to AsymptoticLimits
+>>> including systematics
+>>> method used is Asymptotic
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+Nuisance parameters after fit for asimov dataset: 
+  1) RooRealVar::    lumi = 0 +/- 0.996602
+  2) RooRealVar::  Photon = 0 +/- 0.996602
+  3) RooRealVar:: Trigger = 0 +/- 0.996602
+Global observables for data: 
+  1) RooRealVar::    lumi_In = 0
+  2) RooRealVar::  Photon_In = 0
+  3) RooRealVar:: Trigger_In = 0
+Global observables for asimov: 
+  1) RooRealVar::    lumi_In = 0
+  2) RooRealVar::  Photon_In = 0
+  3) RooRealVar:: Trigger_In = 0
+[#1] INFO:ObjectHandling -- RooWorkspace::import(w) importing dataset _Asymptotic_asimovDataset_
+[#1] INFO:Minization --  Including the following contraint terms in minimization: (nuisancePdf)
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+Fit to asimov dataset:
+
+  RooFitResult: minimized FCN value: 2.56929, estimated distance to minimum: 0.00292584
+                covariance matrix quality: Full, accurate covariance matrix
+                Status : MINIMIZE=0 
+
+    Constant Parameter    Value     
+  --------------------  ------------
+             Photon_In    0.0000e+00
+            Trigger_In    0.0000e+00
+               lumi_In    0.0000e+00
+
+    Floating Parameter  InitialValue    FinalValue +/-  Error     GblCorr.
+  --------------------  ------------  --------------------------  --------
+                    NA    5.0274e+04    5.0272e+04 +/-  4.39e+02  <none>
+                Photon    0.0000e+00    8.8439e-04 +/-  1.93e+00  <none>
+               Trigger    0.0000e+00    8.8439e-04 +/-  1.93e+00  <none>
+                  lumi    0.0000e+00    2.1954e-03 +/-  1.93e+00  <none>
+                     r    2.0000e-01    2.5941e-02 +/-  2.58e+00  <none>
+                    x1    1.9907e-01    1.9901e-01 +/-  4.30e-03  <none>
+                    y1    4.7742e-04    4.7758e-04 +/-  1.88e-04  <none>
+
+WARNING: Best fit of asimov dataset is at r = 0.025941 (0.001297 times rMax), while it should be at zero
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+At r = 0.820312:	delta(nll) = 1.92190
+Median for expected limits: 0.820312
+Sigma  for expected limits: 0.418534
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+At r = 0.400543:	delta(nll) = 0.56297
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+At r = 0.554677:	delta(nll) = 0.99719
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+At r = 1.245387:	delta(nll) = 3.71815
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+At r = 1.819364:	delta(nll) = 6.52512
+[#1] INFO:Minization --  Including the following contraint terms in minimization: (nuisancePdf)
+[#1] INFO:Minization --  Including the following contraint terms in minimization: (nuisancePdf)
+Restricting r to positive values.
+  1) RooRealVar::         NA = 50274
+  2) RooRealVar::     Photon = 0 +/- 1
+  3) RooRealVar::  Photon_In = 0
+  4) RooRealVar::    Trigger = 0 +/- 1
+  5) RooRealVar:: Trigger_In = 0
+  6) RooRealVar::       lumi = 0 +/- 1
+  7) RooRealVar::    lumi_In = 0
+  8) RooRealVar::          r = 2
+  9) RooRealVar::         x1 = 0.199069
+ 10) RooRealVar::         y1 = 0.000477384
+
+Make global fit of real data
+NLL at global minimum of data: 18.8433 (r = 0.00950908)
+   0) NA                             =   50274.7
+   1) Photon                         = 0.00374786
+   2) Photon_In                      =         0
+   3) Trigger                        = 0.00374786
+   4) Trigger_In                     =         0
+   5) lumi                           = 0.00884255
+   6) lumi_In                        =         0
+   7) r                              = 0.00950908
+   8) x1                             =  0.199052
+   9) y1                             = 0.000476029
+
+
+Make global fit of asimov data
+NLL at global minimum of asimov: 18.8428 (r = 0.0031242)
+   0) NA                             =   50274.1
+   1) Photon                         = -0.0311439
+   2) Photon_In                      =         0
+   3) Trigger                        = -0.0311439
+   4) Trigger_In                     =         0
+   5) lumi                           = -0.0772851
+   6) lumi_In                        =         0
+   7) r                              =    0.8201
+   8) x1                             =  0.198327
+   9) y1                             = 0.000422373
+
+At r = 0.820100:	q_mu = 3.84594	q_A  = 3.84998	CLsb = 0.02493	CLb  = 0.50041	CLs  = 0.04983
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 0.8201
+Expected  2.5%: r < 0.4005
+Expected 16.0%: r < 0.5547
+Expected 50.0%: r < 0.8203
+Expected 84.0%: r < 1.2421
+Expected 97.5%: r < 1.8243
+
+Done in 0.00 min (cpu), 0.00 min (real)
+Printing Message Summary From ... combine_logger.out
+----------------------------------------------
+Messages of type INFO : 200
+Messages of type DEBUG : 1
+Messages of type ERROR : 0
+----------------------------------------------
+INFO: (function: run) Combine.cc: 874 -- Computing results starting from observation (a-posteriori)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+DEBUG: (function: runLimitExpected) AsymptoticLimits.cc: 416 -- Best fit of asimov dataset is at r = 0.025941 (0.001297 times rMax), while it should be at zero
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: runLimitExpected) AsymptoticLimits.cc: 429 -- Median for expected limits = 0.820312 (Sigma for expected limits = 0.418534)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: runLimit) AsymptoticLimits.cc: 186 -- NLL at global minimum of data = 18.8433 (r=0.00950908)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: runLimit) AsymptoticLimits.cc: 206 -- NLL at global minimum of asimov = 18.8428 (r=0.0031242)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.932003:	q_mu = 25.27094	q_A  = 25.27864	CLsb = 0.00000	CLb  = 0.50031	CLs  = 0.00000
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 1.470756:	q_mu = 9.56079	q_A  = 9.56637	CLsb = 0.00099	CLb  = 0.50036	CLs  = 0.00199
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.740133:	q_mu = 3.25091	q_A  = 3.25472	CLsb = 0.03569	CLb  = 0.50042	CLs  = 0.07132
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 1.105444:	q_mu = 6.18931	q_A  = 6.19410	CLsb = 0.00643	CLb  = 0.50038	CLs  = 0.01284
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.922789:	q_mu = 4.65373	q_A  = 4.65805	CLsb = 0.01549	CLb  = 0.50040	CLs  = 0.03096
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.838863:	q_mu = 3.99035	q_A  = 3.99444	CLsb = 0.02288	CLb  = 0.50041	CLs  = 0.04572
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.803236:	q_mu = 3.71783	q_A  = 3.72182	CLsb = 0.02692	CLb  = 0.50041	CLs  = 0.05379
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.823180:	q_mu = 3.86950	q_A  = 3.87355	CLsb = 0.02459	CLb  = 0.50041	CLs  = 0.04913
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.816103:	q_mu = 3.81545	q_A  = 3.81947	CLsb = 0.02539	CLb  = 0.50041	CLs  = 0.05074
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 0.820100:	q_mu = 3.84594	q_A  = 3.84998	CLsb = 0.02493	CLb  = 0.50041	CLs  = 0.04983

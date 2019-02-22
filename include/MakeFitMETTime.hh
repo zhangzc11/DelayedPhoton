@@ -68,6 +68,9 @@ void AddSystematics_shape(TString modelName, TString N_QCDGJets, TString N_EWK, 
 
 void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName, TString ourBinningDir = "binning_3J");
 void OptimizeBinningABCD(int Nbins_MET, int Nbins_time, float min_events, float min_events_sig_frac, std::vector<int> &timeBin, std::vector<int> &metBin, TH2F * h2Bkg, TH2F *h2Sig, float time_Low, float time_High, int time_N_fine, float met_Low, float met_High, int met_N_fine, TString modelName, TString ourBinningDir);
+void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &TimeBin, std::vector<int> &METBin, TH2F * h2Data, TH2F *h2Sig, TString modelName, TString ourBinningDir);
+
+int Combination(int N, int K, std::vector<int> & comb);
 
 void Draw2DBinning(TH2F * h2_rate, TString plotLabel, TString modelName, TString ourBinningDir);
 

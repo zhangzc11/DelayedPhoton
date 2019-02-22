@@ -38,6 +38,8 @@ float lumi = 35922.0; //pb^-1
 float NEvents_sig = 1.0;
 bool _useToy = true;
 
+std::string binningAlgorithm = "limit";//or "significance"
+
 bool doAllBkgFracFit = false;
 
 int main( int argc, char* argv[])
@@ -250,6 +252,7 @@ mkdir("fit_results/2016ABCD/datacards_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016ABCD/datacards_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016ABCD/datacards_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016ABCD/datacards_3J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
+mkdir("fit_results/2016ABCD/datacards_temp", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016ABCD/binning_2J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016ABCD/binning_2J_noBDT", S_IRWXU | S_IRWXG | S_IRWXO);
 mkdir("fit_results/2016ABCD/binning_3J_withBDT", S_IRWXU | S_IRWXG | S_IRWXO);
@@ -275,91 +278,180 @@ tree_signal = (TTree*)file_signal->Get(treeName.c_str());
 TH1F *h1_NEvents_sig = (TH1F*) file_signal->Get("NEvents");
 NEvents_sig = h1_NEvents_sig->GetBinContent(1);
 ///////////////////////////Binning optimization
+std::vector <float> rate_Data_inBins;
+std::vector <float> rate_Sig_inBins;
 
-float time_Low = -15.0;
-float time_High = 15.0;
-int time_N_fine = 600;
-
-float met_Low = 0.0;
-float met_High = 1000.0;
-int met_N_fine = 400;
-
-std::vector <int> timeBin;
-std::vector <int> metBin;
-
-timeBin.push_back(0);
-timeBin.push_back(time_N_fine);
-
-metBin.push_back(0);
-metBin.push_back(met_N_fine);
-
-////binning optimization
-TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
-TH2F *h2finebinSig = new TH2F("h2finebinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
-
-tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", cut.c_str());
-tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", (weight_cut + "( "+cut+" )").c_str());
-
-float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
-h2finebinSig->Scale((1.0*N_sig_expected)/(1.0*h2finebinSig->Integral()));
-
-cout<<"optimizing met and time bin..."<<endl;
-OptimizeBinningABCD(Nbins_MET, Nbins_time, 10.0, 0.0001, timeBin, metBin, h2finebinData, h2finebinSig, time_Low, time_High, time_N_fine, met_Low, met_High, met_N_fine, _sigModelName, outBinningDir);
-
-cout<<"optimized met and time bin:-----------"<<endl;
-cout<<"time: ";
-for(int i=0;i<timeBin.size();i++)
+if(binningAlgorithm == "significance")
 {
-	xbins_time.push_back(time_Low + (time_High - time_Low) * (1.0*timeBin[i])/(1.0*time_N_fine));
-	cout<<time_Low + (time_High - time_Low) * (1.0*timeBin[i])/(1.0*time_N_fine)<<"  ,  ";
-}
-cout<<endl;
+	float time_Low = -15.0;
+	float time_High = 15.0;
+	int time_N_fine = 600;
 
-cout<<"time bin: ";
-for(int i=0;i<timeBin.size();i++)
-{
-	cout<<timeBin[i]<<"  ,  ";
-}
-cout<<endl;
+	float met_Low = 0.0;
+	float met_High = 1000.0;
+	int met_N_fine = 400;
 
-cout<<"met: ";
-for(int i=0;i<metBin.size();i++)
-{
-	xbins_MET.push_back(met_Low + (met_High - met_Low) * (1.0*metBin[i])/(1.0*met_N_fine));
-	cout<<met_Low + (met_High - met_Low) * (1.0*metBin[i])/(1.0*met_N_fine)<<"  ,  ";
-}
-cout<<endl;
+	std::vector <int> timeBin;
+	std::vector <int> metBin;
 
-cout<<"met bin: ";
-for(int i=0;i<metBin.size();i++)
-{
-	cout<<metBin[i]<<"   ,   ";
+	timeBin.push_back(0);
+	timeBin.push_back(time_N_fine);
+
+	metBin.push_back(0);
+	metBin.push_back(met_N_fine);
+
+	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH2F *h2finebinSig = new TH2F("h2finebinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+
+	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", cut.c_str());
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", (weight_cut + "( "+cut+" )").c_str());
+
+	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
+	h2finebinSig->Scale((1.0*N_sig_expected)/(1.0*h2finebinSig->Integral()));
+
+	cout<<"binning optimization with data.int = "<<h2finebinData->Integral()<<", sig.Int = "<<h2finebinSig->Integral()<<endl;	
+
+	OptimizeBinningABCD(Nbins_MET, Nbins_time, 10.0, 0.0001, timeBin, metBin, h2finebinData, h2finebinSig, time_Low, time_High, time_N_fine, met_Low, met_High, met_N_fine, _sigModelName, outBinningDir);
+
+	cout<<"optimized met and time bin:-----------"<<endl;
+	cout<<"time: ";
+	for(int i=0;i<timeBin.size();i++)
+	{
+		xbins_time.push_back(time_Low + (time_High - time_Low) * (1.0*timeBin[i])/(1.0*time_N_fine));
+		cout<<time_Low + (time_High - time_Low) * (1.0*timeBin[i])/(1.0*time_N_fine)<<"  ,  ";
+	}
+	cout<<endl;
+
+	cout<<"time bin: ";
+	for(int i=0;i<timeBin.size();i++)
+	{
+		cout<<timeBin[i]<<"  ,  ";
+	}
+	cout<<endl;
+
+	cout<<"met: ";
+	for(int i=0;i<metBin.size();i++)
+	{
+		xbins_MET.push_back(met_Low + (met_High - met_Low) * (1.0*metBin[i])/(1.0*met_N_fine));
+		cout<<met_Low + (met_High - met_Low) * (1.0*metBin[i])/(1.0*met_N_fine)<<"  ,  ";
+	}
+	cout<<endl;
+
+	cout<<"met bin: ";
+	for(int i=0;i<metBin.size();i++)
+	{
+		cout<<metBin[i]<<"   ,   ";
+	}
+	cout<<endl;
+
+	
+	for(int iT=1;iT<= timeBin.size()-1; iT++)
+	{
+		for(int iM=1;iM<= metBin.size()-1; iM++)
+		{
+			rate_Data_inBins.push_back(h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
+			rate_Sig_inBins.push_back(h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
+		}
+	}
+
 }
-cout<<endl;
+
+if(binningAlgorithm == "limit")
+{
+
+	//pre-defined bins:
+
+	const int met_N_fine = 8;
+	double MET_finebins[9] = {0.0, 50.0, 100.0, 150.0, 200.0, 300.0, 500.0, 1000.0, 3000.0};
+	const int time_N_fine = 8;
+	double Time_finebins[9]= {-2.0, 0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 25.0};
+
+	std::vector <int> timeBin;
+	std::vector <int> metBin;
+
+	timeBin.push_back(0);
+	timeBin.push_back(time_N_fine);
+
+	metBin.push_back(0);
+	metBin.push_back(met_N_fine);
+
+	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma time bin; #slash{E}_{T} bin; Events", time_N_fine, Time_finebins, met_N_fine, MET_finebins);
+	TH2F *h2finebinSig = new TH2F("h2finebinSig","; #gamma time bin; #slash{E}_{T} bin; Events", time_N_fine, Time_finebins, met_N_fine, MET_finebins);
+
+	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", cut.c_str());
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", (weight_cut + "( "+cut+" )").c_str());
+	//tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", (weight_cut + "( "+cut+" )").c_str());
+
+	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
+	h2finebinSig->Scale((1.0*N_sig_expected)/(1.0*h2finebinSig->Integral()));
+	
+	//blind the top cornor of the data
+	
+	if(_useToy)
+	{
+		float A = h2finebinData->GetBinContent(time_N_fine-1, met_N_fine-1);
+		float B = h2finebinData->GetBinContent(time_N_fine-1, met_N_fine);
+		float D = h2finebinData->GetBinContent(time_N_fine, met_N_fine-1);
+		if(A > 0.0)	h2finebinData->SetBinContent(time_N_fine, met_N_fine, B*D/A);
+	}			
+	
+	cout<<"binning optimization with data.int = "<<h2finebinData->Integral()<<", sig.Int = "<<h2finebinSig->Integral()<<endl;	
+	
+	OptimizeBinningABCDLimits(Nbins_MET, Nbins_time, timeBin, metBin, h2finebinData, h2finebinSig, _sigModelName, outBinningDir);
+	
+	cout<<"optimized met and time bin:-----------"<<endl;
+	cout<<"time: ";
+	for(int i=0;i<timeBin.size();i++)
+	{
+		xbins_time.push_back(Time_finebins[timeBin[i]]);
+		cout<<Time_finebins[timeBin[i]]<<"  ,  ";
+	}
+	cout<<endl;
+
+	cout<<"time bin: ";
+	for(int i=0;i<timeBin.size();i++)
+	{
+		cout<<timeBin[i]<<"  ,  ";
+	}
+	cout<<endl;
+
+	cout<<"met: ";
+	for(int i=0;i<metBin.size();i++)
+	{
+		xbins_MET.push_back(MET_finebins[metBin[i]]);
+		cout<<MET_finebins[metBin[i]]<<"  ,  ";
+	}
+	cout<<endl;
+
+	cout<<"met bin: ";
+	for(int i=0;i<metBin.size();i++)
+	{
+		cout<<metBin[i]<<"   ,   ";
+	}
+	cout<<endl;
+
+
+	for(int iT=1;iT<= timeBin.size()-1; iT++)
+	{
+		for(int iM=1;iM<= metBin.size()-1; iM++)
+		{
+			rate_Data_inBins.push_back(h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
+			rate_Sig_inBins.push_back(h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
+		}
+	}
+
+}
 
 if(xbins_MET.size() != Nbins_MET + 1) 
 {
-        std::cerr << "[ERROR]: binning procedure didn't manage to get the target number of MET bins..." << std::endl;
+	std::cerr << "[ERROR]: binning procedure didn't manage to get the target number of MET bins..." << std::endl;
 	return -1;
 }
 
 if(xbins_time.size() != Nbins_time + 1) 
 {
-        std::cerr << "[ERROR]: binning procedure didn't manage to get the target number of time bins..." << std::endl;
+	std::cerr << "[ERROR]: binning procedure didn't manage to get the target number of time bins..." << std::endl;
 	return -1;
-}
-
-
-/////////////////////////////////////Binning setup and visuallization
-std::vector <float> rate_Data_inBins;
-std::vector <float> rate_Sig_inBins;
-for(int iT=1;iT<= timeBin.size()-1; iT++)
-{
-	for(int iM=1;iM<= metBin.size()-1; iM++)
-	{
-		rate_Data_inBins.push_back(h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
-		rate_Sig_inBins.push_back(h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
-	}
 }
 
 // B | C
@@ -371,8 +463,6 @@ if(_useToy)
 	rate_Data_inBins[Nbins_time*Nbins_MET-1] = rate_Data_inBins[Nbins_time*Nbins_MET-2]*rate_Data_inBins[(Nbins_time-1)*Nbins_MET-1]/rate_Data_inBins[(Nbins_time-1)*Nbins_MET-2];
 }
 
-cout<<"total observed data: "<<h2finebinData->Integral()<<endl;
-cout<<"total signal: "<<h2finebinSig->Integral()<<endl;
 cout<<"in ABCD bins...."<<endl;
 float sum_rate_Data = 0.0;
 float sum_rate_Sig = 0.0;

@@ -7,7 +7,7 @@ import array
 lumi = 35922.0
 outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/14Feb2019/orderByPt/'
 
-datacards_template = "../fit_results/2016/datacards_3J_noBDT/"
+datacards_template = "../fit_results/2016Template/datacards_3J_noBDT/"
 datacards_ABCD_2x2 = "../fit_results/2016ABCD_2x2/datacards_3J_noBDT/"
 datacards_ABCD_3x3 = "../fit_results/2016ABCD_3x3/datacards_3J_noBDT/"
 
