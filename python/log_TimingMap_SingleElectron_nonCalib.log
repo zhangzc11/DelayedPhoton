@@ -1,0 +1,16 @@
+
+Processing TimingMap_2016.C...
+draw timing map for data_dtIC
+mean and RMS for this map:  -1.96965  1.23003
+draw timing map for data_dt4
+mean and RMS for this map:  0.0425126  0.0529077
+draw timing map for data_dt5
+mean and RMS for this map:  0.0449414  0.0310886
+draw timing map for data_dt0
+mean and RMS for this map:  0.000188038  0.0710431
+draw timing map for data_dt1
+mean and RMS for this map:  0.00122285  0.0455987
+draw timing map for data_dt2
+mean and RMS for this map:  -0.00018707  0.0710436
+draw timing map for data_dt3
+mean and RMS for this map:  -0.00122252  0.0455986

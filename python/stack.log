@@ -1,0 +1,775 @@
+
+
+input file names: 
+Data tree: /mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root
+Sig tree: /mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L350TeV_Ctau200cm_13TeV-pythia8.root
+GJets tree: 
+['/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root']
+QCD tree: 
+['/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root', '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root']
+NTotal before cut: 
+Data: 497041728.0
+Sig: 100000.0
+TTJets: 65523003392.0
+GJets - 0  7621049.0
+GJets - 1  8157895.0
+GJets - 2  19075774.0
+GJets - 3  5060070.0
+GJets - 4  4021547.0
+QCD - 0  54581328.0
+QCD - 1  49453012.0
+QCD - 2  54322216.0
+QCD - 3  15361012.0
+QCD - 4  11639978.0
+QCD - 5  11076898.0
+QCD - 6  5756017.0
+WJets - 0  1489432.0
+WJets - 1  1916740.0
+WJets - 2  1333652.0
+WJets - 3  642734.0
+WJets - 4  248114.0
+WJets - 5  157136.0
+WJets - 6  69718.0
+EWKG - 0  4588089.0
+EWKG - 1  174780.0
+EWKG - 2  33054812.0
+EWKG - 3  291922.0
+EWKG - 4  37255.0351562
+EWKG - 5  67629.0
+EWKG - 6  109657.210938
+EWKG - 7  3380774.75
+EWKG - 8  93460792.0
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+[1489432.0, 1916740.0, 1333652.0, 642734.0, 248114.0, 157136.0, 69718.0]
+[4588089.0, 174780.0, 33054812.0, 291922.0, 37255.03515625, 67629.0, 109657.2109375, 3380774.75, 93460792.0]
+
+ cut = 1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994)
+
+ plotting stack plots for MET_log
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994 && pho1ClusterTime_SmearToData < 3.0))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  202.32518436
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392218333
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.63465118
+#QCD - 1 - before/after cut: 70373 => 53  => 27.2634849548
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  6885.79081726
+#QCD - 2 - before/after cut: 338414 => 289  => 154.860640883
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3287.22259772
+#QCD - 3 - before/after cut: 150042 => 152  => 90.541502893
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1446.34754944
+#QCD - 4 - before/after cut: 143809 => 215  => 130.341522053
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  485.510250092
+#QCD - 5 - before/after cut: 157588 => 286  => 161.64401219
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  62.8522967435
+#QCD - 6 - before/after cut: 89741 => 202  => 119.268803343
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  18.7868797258
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575798437
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738269806
+#GJets - 1 - before/after cut: 124870 => 60  => 31.2517232448
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1271.25981903
+#GJets - 2 - before/after cut: 917343 => 3756  => 1986.11273728
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  8620.91101444
+#GJets - 3 - before/after cut: 428753 => 4099  => 2324.44546825
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  4528.01080203
+#GJets - 4 - before/after cut: 455236 => 4989  => 2887.6097554
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2410.63598949
+#TTJets - before/after cut: 153792 => 3805 => 4327349.74512
+TTJets -  xsec * lumi * cut  1973.2710208
+#WJets - 0 - before/after cut: 2272 => 2  => 0.541211843491
+#WJets - 0 xsec * lumi * cut  17.5561542511
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.5561542511
+#WJets - 1 - before/after cut: 11802 => 42  => 21.753356263
+#WJets - 1 xsec * lumi * cut  146.643902123
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  146.643902123
+#WJets - 2 - before/after cut: 22061 => 126  => 70.4080824554
+#WJets - 2 xsec * lumi * cut  92.7551788092
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  92.7551788092
+#WJets - 3 - before/after cut: 16642 => 97  => 50.1301680021
+#WJets - 3 xsec * lumi * cut  33.7610109299
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  33.7610109299
+#WJets - 4 - before/after cut: 8254 => 57  => 31.5987114459
+#WJets - 4 xsec * lumi * cut  25.1663513258
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  25.1663513258
+#WJets - 5 - before/after cut: 6691 => 48  => 30.5087622553
+#WJets - 5 xsec * lumi * cut  9.26903199032
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  9.26903199032
+#WJets - 6 - before/after cut: 3599 => 19  => 11.2994291596
+#WJets - 6 xsec * lumi * cut  0.187235471269
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.187235471269
+#EWKG - 0 - before/after cut: 49022 => 1859  => 3680.26334786
+#EWKG - 0 xsec * lumi * cut  85.4919289853
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  85.4919289853
+#EWKG - 1 - before/after cut: 25084 => 3300  => 1873.88537633
+#EWKG - 1 xsec * lumi * cut  3.00134879869
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  3.00134879869
+#EWKG - 2 - before/after cut: 525909 => 50577  => 189617.577869
+#EWKG - 2 xsec * lumi * cut  782.016991162
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  782.016991162
+#EWKG - 3 - before/after cut: 15112 => 608  => 348.26526747
+#EWKG - 3 xsec * lumi * cut  15.2993176309
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  15.2993176309
+#EWKG - 4 - before/after cut: 76834 => 5681  => 157.668558141
+#EWKG - 4 xsec * lumi * cut  6.26807172039
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  6.26807172039
+#EWKG - 5 - before/after cut: 1622 => 44  => 26.1086161733
+#EWKG - 5 xsec * lumi * cut  23.7834860384
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  23.7834860384
+#EWKG - 6 - before/after cut: 40311 => 2736  => 394.749182014
+#EWKG - 6 xsec * lumi * cut  27.763652426
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  27.763652426
+#EWKG - 7 - before/after cut: 79230 => 1447  => 87.2924987778
+#EWKG - 7 xsec * lumi * cut  285.953041193
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  285.953041193
+#EWKG - 8 - before/after cut: 347574 => 1157  => 615.311886251
+#EWKG - 8 xsec * lumi * cut  1265.02456248
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1265.02456248
+total events in EWK backgrounds: 4793.21235759
+#GJets all - xsec * lumi * cut 16908.1914619
+#GJets all CR - xsec * lumi * cut 29522.6598256
+#QCD all - xsec * lumi * cut 13633.145001
+#QCD all CR - xsec * lumi * cut 26486.9395278
+#EWK all - xsec * lumi * cut 4793.21235759
+#EWK all CR - xsec * lumi * cut 4793.21232826
+#MC all - xsec * lumi * cut 35334.5481421
+
+ plotting stack plots for MET_linear
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994 && pho1ClusterTime_SmearToData < 3.0))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  202.32518436
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392218333
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.63465118
+#QCD - 1 - before/after cut: 70373 => 53  => 27.2634849548
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  6885.79081726
+#QCD - 2 - before/after cut: 338414 => 289  => 154.860640883
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3287.22259772
+#QCD - 3 - before/after cut: 150042 => 152  => 90.541502893
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1446.34754944
+#QCD - 4 - before/after cut: 143809 => 215  => 130.341522053
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  485.510250092
+#QCD - 5 - before/after cut: 157588 => 286  => 161.64401219
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  62.8522967435
+#QCD - 6 - before/after cut: 89741 => 202  => 119.268803343
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  18.7868797258
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575798437
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738269806
+#GJets - 1 - before/after cut: 124870 => 60  => 31.2517232448
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1271.25981903
+#GJets - 2 - before/after cut: 917343 => 3756  => 1986.11273728
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  8620.91101444
+#GJets - 3 - before/after cut: 428753 => 4099  => 2324.44546825
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  4528.01080203
+#GJets - 4 - before/after cut: 455236 => 4989  => 2887.6097554
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2410.63598949
+#TTJets - before/after cut: 153792 => 3805 => 4327349.74512
+TTJets -  xsec * lumi * cut  1973.2710208
+#WJets - 0 - before/after cut: 2272 => 2  => 0.541211843491
+#WJets - 0 xsec * lumi * cut  17.5561542511
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.5561542511
+#WJets - 1 - before/after cut: 11802 => 42  => 21.753356263
+#WJets - 1 xsec * lumi * cut  146.643902123
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  146.643902123
+#WJets - 2 - before/after cut: 22061 => 126  => 70.4080824554
+#WJets - 2 xsec * lumi * cut  92.7551788092
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  92.7551788092
+#WJets - 3 - before/after cut: 16642 => 97  => 50.1301680021
+#WJets - 3 xsec * lumi * cut  33.7610109299
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  33.7610109299
+#WJets - 4 - before/after cut: 8254 => 57  => 31.5987114459
+#WJets - 4 xsec * lumi * cut  25.1663513258
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  25.1663513258
+#WJets - 5 - before/after cut: 6691 => 48  => 30.5087622553
+#WJets - 5 xsec * lumi * cut  9.26903199032
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  9.26903199032
+#WJets - 6 - before/after cut: 3599 => 19  => 11.2994291596
+#WJets - 6 xsec * lumi * cut  0.187235471269
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.187235471269
+#EWKG - 0 - before/after cut: 49022 => 1859  => 3680.26334786
+#EWKG - 0 xsec * lumi * cut  85.4919289853
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  85.4919289853
+#EWKG - 1 - before/after cut: 25084 => 3300  => 1873.88537633
+#EWKG - 1 xsec * lumi * cut  3.00134879869
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  3.00134879869
+#EWKG - 2 - before/after cut: 525909 => 50577  => 189617.577869
+#EWKG - 2 xsec * lumi * cut  782.016991162
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  782.016991162
+#EWKG - 3 - before/after cut: 15112 => 608  => 348.26526747
+#EWKG - 3 xsec * lumi * cut  15.2993176309
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  15.2993176309
+#EWKG - 4 - before/after cut: 76834 => 5681  => 157.668558141
+#EWKG - 4 xsec * lumi * cut  6.26807172039
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  6.26807172039
+#EWKG - 5 - before/after cut: 1622 => 44  => 26.1086161733
+#EWKG - 5 xsec * lumi * cut  23.7834860384
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  23.7834860384
+#EWKG - 6 - before/after cut: 40311 => 2736  => 394.749182014
+#EWKG - 6 xsec * lumi * cut  27.763652426
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  27.763652426
+#EWKG - 7 - before/after cut: 79230 => 1447  => 87.2924987778
+#EWKG - 7 xsec * lumi * cut  285.953041193
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  285.953041193
+#EWKG - 8 - before/after cut: 347574 => 1157  => 615.311886251
+#EWKG - 8 xsec * lumi * cut  1265.02456248
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1265.02456248
+total events in EWK backgrounds: 4793.21235759
+#GJets all - xsec * lumi * cut 16908.1914619
+#GJets all CR - xsec * lumi * cut 29522.6598256
+#QCD all - xsec * lumi * cut 13633.145001
+#QCD all CR - xsec * lumi * cut 26486.9395278
+#EWK all - xsec * lumi * cut 4793.21235759
+#EWK all CR - xsec * lumi * cut 4793.21232826
+#MC all - xsec * lumi * cut 35334.5481421
+
+ plotting stack plots for phoTimeCluster_log
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994 && t1MET < 300.0))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  110.146223642
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392218333
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.63471222
+#QCD - 1 - before/after cut: 70373 => 53  => 27.2634847164
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  6885.79071045
+#QCD - 2 - before/after cut: 338414 => 289  => 154.860640846
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3287.22261441
+#QCD - 3 - before/after cut: 150042 => 152  => 90.5415070951
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1446.34762394
+#QCD - 4 - before/after cut: 143809 => 215  => 130.341522932
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  485.510262012
+#QCD - 5 - before/after cut: 157588 => 285  => 161.009643912
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  62.6056338847
+#QCD - 6 - before/after cut: 89741 => 200  => 118.239985228
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  18.6248235106
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575798437
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738269806
+#GJets - 1 - before/after cut: 124870 => 60  => 31.2517227642
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1271.25981206
+#GJets - 2 - before/after cut: 917343 => 3756  => 1986.11240494
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  8620.90967751
+#GJets - 3 - before/after cut: 428753 => 4099  => 2324.44539523
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  4528.0105741
+#GJets - 4 - before/after cut: 455236 => 4988  => 2886.81675179
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2409.97398577
+#TTJets - before/after cut: 153792 => 3763 => 4300297.17114
+TTJets -  xsec * lumi * cut  1960.9350549
+#WJets - 0 - before/after cut: 2272 => 2  => 0.541211865842
+#WJets - 0 xsec * lumi * cut  17.5561564863
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.5561564863
+#WJets - 1 - before/after cut: 11802 => 42  => 21.7533561289
+#WJets - 1 xsec * lumi * cut  146.643898249
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  146.643898249
+#WJets - 2 - before/after cut: 22061 => 123  => 69.4240208268
+#WJets - 2 xsec * lumi * cut  91.4587820768
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  91.4587820768
+#WJets - 3 - before/after cut: 16642 => 95  => 49.3059427738
+#WJets - 3 xsec * lumi * cut  33.2059227228
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  33.2059227228
+#WJets - 4 - before/after cut: 8254 => 51  => 27.4409191757
+#WJets - 4 xsec * lumi * cut  21.8549358323
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  21.8549358323
+#WJets - 5 - before/after cut: 6691 => 42  => 26.5994287729
+#WJets - 5 xsec * lumi * cut  8.08131636679
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  8.08131636679
+#WJets - 6 - before/after cut: 3599 => 18  => 11.0989012718
+#WJets - 6 xsec * lumi * cut  0.183912658133
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.183912658133
+#EWKG - 0 - before/after cut: 49022 => 1850  => 3716.52579117
+#EWKG - 0 xsec * lumi * cut  86.3343001604
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  86.3343001604
+#EWKG - 1 - before/after cut: 25084 => 3274  => 1857.59043803
+#EWKG - 1 xsec * lumi * cut  2.97524972852
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  2.97524972852
+#EWKG - 2 - before/after cut: 525909 => 49972  => 187440.803587
+#EWKG - 2 xsec * lumi * cut  773.039570212
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  773.039570212
+#EWKG - 3 - before/after cut: 15112 => 604  => 345.962460041
+#EWKG - 3 xsec * lumi * cut  15.1981550306
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  15.1981550306
+#EWKG - 4 - before/after cut: 76834 => 5495  => 152.356808171
+#EWKG - 4 xsec * lumi * cut  6.05690464214
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  6.05690464214
+#EWKG - 5 - before/after cut: 1622 => 43  => 25.3663244247
+#EWKG - 5 xsec * lumi * cut  23.1073001623
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  23.1073001623
+#EWKG - 6 - before/after cut: 40311 => 2647  => 380.664325118
+#EWKG - 6 xsec * lumi * cut  26.7730306555
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  26.7730306555
+#EWKG - 7 - before/after cut: 79230 => 1447  => 87.2925002687
+#EWKG - 7 xsec * lumi * cut  285.953043193
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  285.953043193
+#EWKG - 8 - before/after cut: 347574 => 1157  => 615.311971843
+#EWKG - 8 xsec * lumi * cut  1265.02473211
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1265.02473211
+total events in EWK backgrounds: 4764.38219246
+#GJets all - xsec * lumi * cut 16907.5281654
+#GJets all CR - xsec * lumi * cut 29523.6302205
+#QCD all - xsec * lumi * cut 13632.7369927
+#QCD all CR - xsec * lumi * cut 26487.8100985
+#EWK all - xsec * lumi * cut 4764.38219246
+#EWK all CR - xsec * lumi * cut 4764.38220167
+#MC all - xsec * lumi * cut 35304.6476764
+
+ plotting stack plots for phoTimeCluster_linear
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994 && t1MET < 300.0))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  110.146223642
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392218333
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.63471222
+#QCD - 1 - before/after cut: 70373 => 53  => 27.2634847164
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  6885.79071045
+#QCD - 2 - before/after cut: 338414 => 289  => 154.860640846
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3287.22261441
+#QCD - 3 - before/after cut: 150042 => 152  => 90.5415070951
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1446.34762394
+#QCD - 4 - before/after cut: 143809 => 215  => 130.341522932
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  485.510262012
+#QCD - 5 - before/after cut: 157588 => 285  => 161.009643912
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  62.6056338847
+#QCD - 6 - before/after cut: 89741 => 200  => 118.239985228
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  18.6248235106
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575798437
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738269806
+#GJets - 1 - before/after cut: 124870 => 60  => 31.2517227642
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1271.25981206
+#GJets - 2 - before/after cut: 917343 => 3756  => 1986.11240494
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  8620.90967751
+#GJets - 3 - before/after cut: 428753 => 4099  => 2324.44539523
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  4528.0105741
+#GJets - 4 - before/after cut: 455236 => 4988  => 2886.81675179
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2409.97398577
+#TTJets - before/after cut: 153792 => 3763 => 4300297.17114
+TTJets -  xsec * lumi * cut  1960.9350549
+#WJets - 0 - before/after cut: 2272 => 2  => 0.541211865842
+#WJets - 0 xsec * lumi * cut  17.5561564863
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.5561564863
+#WJets - 1 - before/after cut: 11802 => 42  => 21.7533561289
+#WJets - 1 xsec * lumi * cut  146.643898249
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  146.643898249
+#WJets - 2 - before/after cut: 22061 => 123  => 69.4240208268
+#WJets - 2 xsec * lumi * cut  91.4587820768
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  91.4587820768
+#WJets - 3 - before/after cut: 16642 => 95  => 49.3059427738
+#WJets - 3 xsec * lumi * cut  33.2059227228
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  33.2059227228
+#WJets - 4 - before/after cut: 8254 => 51  => 27.4409191757
+#WJets - 4 xsec * lumi * cut  21.8549358323
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  21.8549358323
+#WJets - 5 - before/after cut: 6691 => 42  => 26.5994287729
+#WJets - 5 xsec * lumi * cut  8.08131636679
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  8.08131636679
+#WJets - 6 - before/after cut: 3599 => 18  => 11.0989012718
+#WJets - 6 xsec * lumi * cut  0.183912658133
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.183912658133
+#EWKG - 0 - before/after cut: 49022 => 1850  => 3716.52579117
+#EWKG - 0 xsec * lumi * cut  86.3343001604
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  86.3343001604
+#EWKG - 1 - before/after cut: 25084 => 3274  => 1857.59043803
+#EWKG - 1 xsec * lumi * cut  2.97524972852
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  2.97524972852
+#EWKG - 2 - before/after cut: 525909 => 49972  => 187440.803587
+#EWKG - 2 xsec * lumi * cut  773.039570212
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  773.039570212
+#EWKG - 3 - before/after cut: 15112 => 604  => 345.962460041
+#EWKG - 3 xsec * lumi * cut  15.1981550306
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  15.1981550306
+#EWKG - 4 - before/after cut: 76834 => 5495  => 152.356808171
+#EWKG - 4 xsec * lumi * cut  6.05690464214
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  6.05690464214
+#EWKG - 5 - before/after cut: 1622 => 43  => 25.3663244247
+#EWKG - 5 xsec * lumi * cut  23.1073001623
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  23.1073001623
+#EWKG - 6 - before/after cut: 40311 => 2647  => 380.664325118
+#EWKG - 6 xsec * lumi * cut  26.7730306555
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  26.7730306555
+#EWKG - 7 - before/after cut: 79230 => 1447  => 87.2925002687
+#EWKG - 7 xsec * lumi * cut  285.953043193
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  285.953043193
+#EWKG - 8 - before/after cut: 347574 => 1157  => 615.311971843
+#EWKG - 8 xsec * lumi * cut  1265.02473211
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1265.02473211
+total events in EWK backgrounds: 4764.38219246
+#GJets all - xsec * lumi * cut 16907.5281654
+#GJets all CR - xsec * lumi * cut 29523.6302205
+#QCD all - xsec * lumi * cut 13632.7369927
+#QCD all CR - xsec * lumi * cut 26487.8100985
+#EWK all - xsec * lumi * cut 4764.38219246
+#EWK all CR - xsec * lumi * cut 4764.38220167
+#MC all - xsec * lumi * cut 35304.6476764
+
+ plotting stack plots for phoTimeCluster_noSmear_log
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994 && t1MET < 300.0))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  110.146225767
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392219543
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.63464355
+#QCD - 1 - before/after cut: 70373 => 53  => 27.2634850144
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  6885.79090881
+#QCD - 2 - before/after cut: 338414 => 289  => 154.86063838
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3287.22259629
+#QCD - 3 - before/after cut: 150042 => 152  => 90.5415031016
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1446.34754956
+#QCD - 4 - before/after cut: 143809 => 215  => 130.341529846
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  485.510285378
+#QCD - 5 - before/after cut: 157588 => 285  => 161.009643555
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  62.6056348085
+#QCD - 6 - before/after cut: 89741 => 200  => 118.239986826
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  18.6248236345
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575798437
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738250732
+#GJets - 1 - before/after cut: 124870 => 60  => 31.2517208457
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1271.25973892
+#GJets - 2 - before/after cut: 917343 => 3756  => 1986.11182666
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  8620.90697765
+#GJets - 3 - before/after cut: 428753 => 4099  => 2324.44602208
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  4528.01190861
+#GJets - 4 - before/after cut: 455236 => 4988  => 2886.81471294
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2409.97224092
+#TTJets - before/after cut: 153792 => 3763 => 4300298.24854
+TTJets -  xsec * lumi * cut  1960.93559003
+#WJets - 0 - before/after cut: 2272 => 2  => 0.541211865842
+#WJets - 0 xsec * lumi * cut  17.5561564863
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.5561564863
+#WJets - 1 - before/after cut: 11802 => 42  => 21.7533565462
+#WJets - 1 xsec * lumi * cut  146.643906832
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  146.643906832
+#WJets - 2 - before/after cut: 22061 => 123  => 69.4240187407
+#WJets - 2 xsec * lumi * cut  91.4587812424
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  91.4587812424
+#WJets - 3 - before/after cut: 16642 => 95  => 49.3059427915
+#WJets - 3 xsec * lumi * cut  33.2059229151
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  33.2059229151
+#WJets - 4 - before/after cut: 8254 => 51  => 27.4409188032
+#WJets - 4 xsec * lumi * cut  21.8549363613
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  21.8549363613
+#WJets - 5 - before/after cut: 6691 => 42  => 26.5994276889
+#WJets - 5 xsec * lumi * cut  8.08131609671
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  8.08131609671
+#WJets - 6 - before/after cut: 3599 => 18  => 11.0989012718
+#WJets - 6 xsec * lumi * cut  0.183912655339
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.183912655339
+#EWKG - 0 - before/after cut: 49022 => 1850  => 3716.52706623
+#EWKG - 0 xsec * lumi * cut  86.3343290389
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  86.3343290389
+#EWKG - 1 - before/after cut: 25084 => 3274  => 1857.59018916
+#EWKG - 1 xsec * lumi * cut  2.97524929483
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  2.97524929483
+#EWKG - 2 - before/after cut: 525909 => 49972  => 187441.046906
+#EWKG - 2 xsec * lumi * cut  773.040562272
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  773.040562272
+#EWKG - 3 - before/after cut: 15112 => 604  => 345.962439537
+#EWKG - 3 xsec * lumi * cut  15.198154062
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  15.198154062
+#EWKG - 4 - before/after cut: 76834 => 5495  => 152.356816612
+#EWKG - 4 xsec * lumi * cut  6.05690488545
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  6.05690488545
+#EWKG - 5 - before/after cut: 1622 => 43  => 25.3663209677
+#EWKG - 5 xsec * lumi * cut  23.1072973013
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  23.1072973013
+#EWKG - 6 - before/after cut: 40311 => 2647  => 380.66432023
+#EWKG - 6 xsec * lumi * cut  26.7730306536
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  26.7730306536
+#EWKG - 7 - before/after cut: 79230 => 1447  => 87.2924802564
+#EWKG - 7 xsec * lumi * cut  285.952981859
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  285.952981859
+#EWKG - 8 - before/after cut: 347574 => 1157  => 615.312050343
+#EWKG - 8 xsec * lumi * cut  1265.02489519
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1265.02489519
+total events in EWK backgrounds: 4764.38392472
+#GJets all - xsec * lumi * cut 16907.5247904
+#GJets all CR - xsec * lumi * cut 29523.6302205
+#QCD all - xsec * lumi * cut 13632.7363363
+#QCD all CR - xsec * lumi * cut 26487.8100985
+#EWK all - xsec * lumi * cut 4764.38392472
+#EWK all CR - xsec * lumi * cut 4764.38402033
+#MC all - xsec * lumi * cut 35304.645192
+
+ plotting stack plots for phoTimeCluster_noSmear_linear
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994 && t1MET < 300.0))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  110.146225767
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392219543
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.63464355
+#QCD - 1 - before/after cut: 70373 => 53  => 27.2634850144
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  6885.79090881
+#QCD - 2 - before/after cut: 338414 => 289  => 154.86063838
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3287.22259629
+#QCD - 3 - before/after cut: 150042 => 152  => 90.5415031016
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1446.34754956
+#QCD - 4 - before/after cut: 143809 => 215  => 130.341529846
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  485.510285378
+#QCD - 5 - before/after cut: 157588 => 285  => 161.009643555
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  62.6056348085
+#QCD - 6 - before/after cut: 89741 => 200  => 118.239986826
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  18.6248236345
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575798437
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738250732
+#GJets - 1 - before/after cut: 124870 => 60  => 31.2517208457
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1271.25973892
+#GJets - 2 - before/after cut: 917343 => 3756  => 1986.11182666
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  8620.90697765
+#GJets - 3 - before/after cut: 428753 => 4099  => 2324.44602208
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  4528.01190861
+#GJets - 4 - before/after cut: 455236 => 4988  => 2886.81471294
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2409.97224092
+#TTJets - before/after cut: 153792 => 3763 => 4300298.24854
+TTJets -  xsec * lumi * cut  1960.93559003
+#WJets - 0 - before/after cut: 2272 => 2  => 0.541211865842
+#WJets - 0 xsec * lumi * cut  17.5561564863
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.5561564863
+#WJets - 1 - before/after cut: 11802 => 42  => 21.7533565462
+#WJets - 1 xsec * lumi * cut  146.643906832
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  146.643906832
+#WJets - 2 - before/after cut: 22061 => 123  => 69.4240187407
+#WJets - 2 xsec * lumi * cut  91.4587812424
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  91.4587812424
+#WJets - 3 - before/after cut: 16642 => 95  => 49.3059427915
+#WJets - 3 xsec * lumi * cut  33.2059229151
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  33.2059229151
+#WJets - 4 - before/after cut: 8254 => 51  => 27.4409188032
+#WJets - 4 xsec * lumi * cut  21.8549363613
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  21.8549363613
+#WJets - 5 - before/after cut: 6691 => 42  => 26.5994276889
+#WJets - 5 xsec * lumi * cut  8.08131609671
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  8.08131609671
+#WJets - 6 - before/after cut: 3599 => 18  => 11.0989012718
+#WJets - 6 xsec * lumi * cut  0.183912655339
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.183912655339
+#EWKG - 0 - before/after cut: 49022 => 1850  => 3716.52706623
+#EWKG - 0 xsec * lumi * cut  86.3343290389
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  86.3343290389
+#EWKG - 1 - before/after cut: 25084 => 3274  => 1857.59018916
+#EWKG - 1 xsec * lumi * cut  2.97524929483
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  2.97524929483
+#EWKG - 2 - before/after cut: 525909 => 49972  => 187441.046906
+#EWKG - 2 xsec * lumi * cut  773.040562272
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  773.040562272
+#EWKG - 3 - before/after cut: 15112 => 604  => 345.962439537
+#EWKG - 3 xsec * lumi * cut  15.198154062
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  15.198154062
+#EWKG - 4 - before/after cut: 76834 => 5495  => 152.356816612
+#EWKG - 4 xsec * lumi * cut  6.05690488545
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  6.05690488545
+#EWKG - 5 - before/after cut: 1622 => 43  => 25.3663209677
+#EWKG - 5 xsec * lumi * cut  23.1072973013
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  23.1072973013
+#EWKG - 6 - before/after cut: 40311 => 2647  => 380.66432023
+#EWKG - 6 xsec * lumi * cut  26.7730306536
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  26.7730306536
+#EWKG - 7 - before/after cut: 79230 => 1447  => 87.2924802564
+#EWKG - 7 xsec * lumi * cut  285.952981859
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  285.952981859
+#EWKG - 8 - before/after cut: 347574 => 1157  => 615.312050343
+#EWKG - 8 xsec * lumi * cut  1265.02489519
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1265.02489519
+total events in EWK backgrounds: 4764.38392472
+#GJets all - xsec * lumi * cut 16907.5247904
+#GJets all CR - xsec * lumi * cut 29523.6302205
+#QCD all - xsec * lumi * cut 13632.7363363
+#QCD all CR - xsec * lumi * cut 26487.8100985
+#EWK all - xsec * lumi * cut 4764.38392472
+#EWK all CR - xsec * lumi * cut 4764.38402033
+#MC all - xsec * lumi * cut 35304.645192
+
+ plotting stack plots for Sminor_linear
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  290.260620389
+#QCD - 0 - before/after cut: 4061 => 3  => 1.90429102164
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  2145.62335968
+#QCD - 1 - before/after cut: 70373 => 53  => 32.145344913
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  8118.77565002
+#QCD - 2 - before/after cut: 338414 => 289  => 188.334389329
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3997.76898122
+#QCD - 3 - before/after cut: 150042 => 152  => 108.801475644
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1738.03995037
+#QCD - 4 - before/after cut: 143809 => 215  => 160.406805828
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  597.500701964
+#QCD - 5 - before/after cut: 157588 => 286  => 194.560872555
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  75.6514113694
+#QCD - 6 - before/after cut: 89741 => 202  => 137.041546598
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  21.5863906462
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575791918
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738261461
+#GJets - 1 - before/after cut: 124870 => 60  => 40.2670590878
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1637.98629761
+#GJets - 2 - before/after cut: 917343 => 3756  => 2372.35115432
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  10297.415577
+#GJets - 3 - before/after cut: 428753 => 4099  => 2741.25761133
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  5339.95926694
+#GJets - 4 - before/after cut: 455236 => 4989  => 3421.14123405
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2856.03907553
+#TTJets - before/after cut: 153792 => 3805 => 5191581.27814
+TTJets -  xsec * lumi * cut  2367.36054145
+#WJets - 0 - before/after cut: 2272 => 2  => 0.547424422111
+#WJets - 0 xsec * lumi * cut  17.7576816082
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.7576816082
+#WJets - 1 - before/after cut: 11802 => 42  => 27.2775122523
+#WJets - 1 xsec * lumi * cut  183.883388519
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  183.883388519
+#WJets - 2 - before/after cut: 22061 => 126  => 82.64754669
+#WJets - 2 xsec * lumi * cut  108.879374125
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  108.879374125
+#WJets - 3 - before/after cut: 16642 => 97  => 61.6674641892
+#WJets - 3 xsec * lumi * cut  41.5309983827
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  41.5309983827
+#WJets - 4 - before/after cut: 8254 => 57  => 36.5908573866
+#WJets - 4 xsec * lumi * cut  29.1422761977
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  29.1422761977
+#WJets - 5 - before/after cut: 6691 => 48  => 33.0795172453
+#WJets - 5 xsec * lumi * cut  10.0500670969
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  10.0500670969
+#WJets - 6 - before/after cut: 3599 => 19  => 14.3130788803
+#WJets - 6 xsec * lumi * cut  0.237172697671
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.237172697671
+#EWKG - 0 - before/after cut: 49022 => 1859  => 4110.13379717
+#EWKG - 0 xsec * lumi * cut  95.4777507335
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  95.4777507335
+#EWKG - 1 - before/after cut: 25084 => 3300  => 2214.32930487
+#EWKG - 1 xsec * lumi * cut  3.54662809079
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  3.54662809079
+#EWKG - 2 - before/after cut: 525909 => 50577  => 223886.41047
+#EWKG - 2 xsec * lumi * cut  923.347829426
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  923.347829426
+#EWKG - 3 - before/after cut: 15112 => 608  => 416.917481586
+#EWKG - 3 xsec * lumi * cut  18.3152144474
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  18.3152144474
+#EWKG - 4 - before/after cut: 76834 => 5681  => 186.056344334
+#EWKG - 4 xsec * lumi * cut  7.39662079723
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  7.39662079723
+#EWKG - 5 - before/after cut: 1622 => 44  => 31.1466479301
+#EWKG - 5 xsec * lumi * cut  28.3728509545
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  28.3728509545
+#EWKG - 6 - before/after cut: 40311 => 2736  => 462.775830368
+#EWKG - 6 xsec * lumi * cut  32.5481290646
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  32.5481290646
+#EWKG - 7 - before/after cut: 79230 => 1447  => 102.855967305
+#EWKG - 7 xsec * lumi * cut  336.935905635
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  336.935905635
+#EWKG - 8 - before/after cut: 347574 => 1157  => 767.023058399
+#EWKG - 8 xsec * lumi * cut  1576.92873961
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1576.92873961
+total events in EWK backgrounds: 5781.71121651
+#GJets all - xsec * lumi * cut 20208.7738256
+#GJets all CR - xsec * lumi * cut 36426.1516557
+#QCD all - xsec * lumi * cut 16694.9466937
+#QCD all CR - xsec * lumi * cut 32680.5677614
+#EWK all - xsec * lumi * cut 5781.71121651
+#EWK all CR - xsec * lumi * cut 5781.71117985
+#MC all - xsec * lumi * cut 42685.4311218
+
+ plotting stack plots for Sminor_log
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  290.260620389
+#QCD - 0 - before/after cut: 4061 => 3  => 1.90429102164
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  2145.62335968
+#QCD - 1 - before/after cut: 70373 => 53  => 32.145344913
+#QCD - 1 xsec * kf * lumi * cut = 347700 * 1.0 * 35922.0 * Int / 49453012.0   ===  8118.77565002
+#QCD - 2 - before/after cut: 338414 => 289  => 188.334389329
+#QCD - 2 xsec * kf * lumi * cut = 32100 * 1.0 * 35922.0 * Int / 54322216.0   ===  3997.76898122
+#QCD - 3 - before/after cut: 150042 => 152  => 108.801475644
+#QCD - 3 xsec * kf * lumi * cut = 6831 * 1.0 * 35922.0 * Int / 15361012.0   ===  1738.03995037
+#QCD - 4 - before/after cut: 143809 => 215  => 160.406805828
+#QCD - 4 xsec * kf * lumi * cut = 1207 * 1.0 * 35922.0 * Int / 11639978.0   ===  597.500701964
+#QCD - 5 - before/after cut: 157588 => 286  => 194.560872555
+#QCD - 5 xsec * kf * lumi * cut = 119.9 * 1.0 * 35922.0 * Int / 11076898.0   ===  75.6514113694
+#QCD - 6 - before/after cut: 89741 => 202  => 137.041546598
+#QCD - 6 xsec * kf * lumi * cut = 25.24 * 1.0 * 35922.0 * Int / 5756017.0   ===  21.5863906462
+[7621049.0, 8157895.0, 19075774.0, 5060070.0, 4021547.0]
+[54581328.0, 49453012.0, 54322216.0, 15361012.0, 11639978.0, 11076898.0, 5756017.0]
+#GJets - 0 - before/after cut: 18367 => 4  => 0.789575791918
+#GJets - 0 xsec * kf * lumi * cut = 20790.0 * 1.0 * 35922.0 * Int / 7621049.0   ===  77.3738261461
+#GJets - 1 - before/after cut: 124870 => 60  => 40.2670590878
+#GJets - 1 xsec * kf * lumi * cut = 9238.0 * 1.0 * 35922.0 * Int / 8157895.0   ===  1637.98629761
+#GJets - 2 - before/after cut: 917343 => 3756  => 2372.35115432
+#GJets - 2 xsec * kf * lumi * cut = 2305 * 1.0 * 35922.0 * Int / 19075774.0   ===  10297.415577
+#GJets - 3 - before/after cut: 428753 => 4099  => 2741.25761133
+#GJets - 3 xsec * kf * lumi * cut = 274.4 * 1.0 * 35922.0 * Int / 5060070.0   ===  5339.95926694
+#GJets - 4 - before/after cut: 455236 => 4989  => 3421.14123405
+#GJets - 4 xsec * kf * lumi * cut = 93.46 * 1.0 * 35922.0 * Int / 4021547.0   ===  2856.03907553
+#TTJets - before/after cut: 153792 => 3805 => 5191581.27814
+TTJets -  xsec * lumi * cut  2367.36054145
+#WJets - 0 - before/after cut: 2272 => 2  => 0.547424422111
+#WJets - 0 xsec * lumi * cut  17.7576816082
+#WJets - 0 xsec * kf * lumi * cut = 1345.0 * 1.0 * 35922.0 * Int / 1489432.0   ===  17.7576816082
+#WJets - 1 - before/after cut: 11802 => 42  => 27.2775122523
+#WJets - 1 xsec * lumi * cut  183.883388519
+#WJets - 1 xsec * kf * lumi * cut = 359.7 * 1.0 * 35922.0 * Int / 1916740.0   ===  183.883388519
+#WJets - 2 - before/after cut: 22061 => 126  => 82.64754669
+#WJets - 2 xsec * lumi * cut  108.879374125
+#WJets - 2 xsec * kf * lumi * cut = 48.91 * 1.0 * 35922.0 * Int / 1333652.0   ===  108.879374125
+#WJets - 3 - before/after cut: 16642 => 97  => 61.6674641892
+#WJets - 3 xsec * lumi * cut  41.5309983827
+#WJets - 3 xsec * kf * lumi * cut = 12.05 * 1.0 * 35922.0 * Int / 642734.0   ===  41.5309983827
+#WJets - 4 - before/after cut: 8254 => 57  => 36.5908573866
+#WJets - 4 xsec * lumi * cut  29.1422761977
+#WJets - 4 xsec * kf * lumi * cut = 5.501 * 1.0 * 35922.0 * Int / 248114.0   ===  29.1422761977
+#WJets - 5 - before/after cut: 6691 => 48  => 33.0795172453
+#WJets - 5 xsec * lumi * cut  10.0500670969
+#WJets - 5 xsec * kf * lumi * cut = 1.329 * 1.0 * 35922.0 * Int / 157136.0   ===  10.0500670969
+#WJets - 6 - before/after cut: 3599 => 19  => 14.3130788803
+#WJets - 6 xsec * lumi * cut  0.237172697671
+#WJets - 6 xsec * kf * lumi * cut = 0.03216 * 1.0 * 35922.0 * Int / 69718.0   ===  0.237172697671
+#EWKG - 0 - before/after cut: 49022 => 1859  => 4110.13379717
+#EWKG - 0 xsec * lumi * cut  95.4777507335
+#EWKG - 0 xsec * kf * lumi * cut = 2.967 * 1.0 * 35922.0 * Int / 4588089.0   ===  95.4777507335
+#EWKG - 1 - before/after cut: 25084 => 3300  => 2214.32930487
+#EWKG - 1 xsec * lumi * cut  3.54662809079
+#EWKG - 1 xsec * kf * lumi * cut = 0.007793 * 1.0 * 35922.0 * Int / 174780.0   ===  3.54662809079
+#EWKG - 2 - before/after cut: 525909 => 50577  => 223886.41047
+#EWKG - 2 xsec * lumi * cut  923.347829426
+#EWKG - 2 xsec * kf * lumi * cut = 3.795 * 1.0 * 35922.0 * Int / 33054812.0   ===  923.347829426
+#EWKG - 3 - before/after cut: 15112 => 608  => 416.917481586
+#EWKG - 3 xsec * lumi * cut  18.3152144474
+#EWKG - 3 xsec * kf * lumi * cut = 0.357 * 1.0 * 35922.0 * Int / 291922.0   ===  18.3152144474
+#EWKG - 4 - before/after cut: 76834 => 5681  => 186.056344334
+#EWKG - 4 xsec * lumi * cut  7.39662079723
+#EWKG - 4 xsec * kf * lumi * cut = 0.04123 * 1.0 * 35922.0 * Int / 37255.0351562   ===  7.39662079723
+#EWKG - 5 - before/after cut: 1622 => 44  => 31.1466479301
+#EWKG - 5 xsec * lumi * cut  28.3728509545
+#EWKG - 5 xsec * kf * lumi * cut = 1.715 * 1.0 * 35922.0 * Int / 67629.0   ===  28.3728509545
+#EWKG - 6 - before/after cut: 40311 => 2736  => 462.775830368
+#EWKG - 6 xsec * lumi * cut  32.5481290646
+#EWKG - 6 xsec * kf * lumi * cut = 0.2147 * 1.0 * 35922.0 * Int / 109657.210938   ===  32.5481290646
+#EWKG - 7 - before/after cut: 79230 => 1447  => 102.855967305
+#EWKG - 7 xsec * lumi * cut  336.935905635
+#EWKG - 7 xsec * kf * lumi * cut = 308.3 * 1.0 * 35922.0 * Int / 3380774.75   ===  336.935905635
+#EWKG - 8 - before/after cut: 347574 => 1157  => 767.023058399
+#EWKG - 8 xsec * lumi * cut  1576.92873961
+#EWKG - 8 xsec * kf * lumi * cut = 5349.0 * 1.0 * 35922.0 * Int / 93460792.0   ===  1576.92873961
+total events in EWK backgrounds: 5781.71121651
+#GJets all - xsec * lumi * cut 20208.7738256
+#GJets all CR - xsec * lumi * cut 36426.1516557
+#QCD all - xsec * lumi * cut 16694.9466937
+#QCD all CR - xsec * lumi * cut 32680.5677614
+#EWK all - xsec * lumi * cut 5781.71121651
+#EWK all CR - xsec * lumi * cut 5781.71117985
+#MC all - xsec * lumi * cut 42685.4311218
+
+ plotting stack plots for pho1R9_log
+weighted cut  ==>  (weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (1.0*(pho1Pt > 70 &&  abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && n_Jets > 2 && pho1Sminor>0.15 && pho1Sminor<0.3 && (HLTDecision[81] == 1) && n_Photons == 2 && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1SigmaIetaIeta < 0.00994))
+#data before/after cut: 27732779 => 60882
+#signal before/after cut: 53442 => 6140
+#signal xsec * lumi * cut  222.814452934
+#QCD - 0 - before/after cut: 4061 => 3  => 1.28392218333
+#QCD - 0 xsec * kf * lumi * cut = 1712000 * 1.0 * 35922.0 * Int / 54581328.0   ===  1446.6346
