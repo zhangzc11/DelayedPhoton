@@ -7,9 +7,11 @@ import array
 lumi = 35922.0
 outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/14Feb2019/orderByPt/'
 
+plotABCDLabel = "_MaxSignificanceMethod"
+
 datacards_template = "../fit_results/2016Template/datacards_3J_noBDT/"
-datacards_ABCD_2x2 = "../fit_results/2016ABCD_2x2/datacards_3J_noBDT/"
-datacards_ABCD_3x3 = "../fit_results/2016ABCD_3x3/datacards_3J_noBDT/"
+datacards_ABCD_2x2 = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD_OptimizeSignificance/2016ABCD_2x2/datacards_3J_noBDT/"
+datacards_ABCD_3x3 = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD_OptimizeSignificance/2016ABCD_3x3/datacards_3J_noBDT/"
 
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
@@ -401,9 +403,9 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass_ABCD_2x2.AddEntry(graph_limit_vs_mass_ABCD_2x2_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass_ABCD_2x2.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_2x2_ctau"+ctau_this_str+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_2x2_ctau"+ctau_this_str+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_2x2_ctau"+ctau_this_str+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_2x2_ctau"+ctau_this_str+plotABCDLabel+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_2x2_ctau"+ctau_this_str+plotABCDLabel+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_2x2_ctau"+ctau_this_str+plotABCDLabel+".C")
 
 	#ABCD_3x3
 	graph_limit_vs_mass_ABCD_3x3_obs_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_ABCD_3x3_obs))
@@ -472,9 +474,9 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass_ABCD_3x3.AddEntry(graph_limit_vs_mass_ABCD_3x3_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass_ABCD_3x3.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_3x3_ctau"+ctau_this_str+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_3x3_ctau"+ctau_this_str+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_3x3_ctau"+ctau_this_str+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_3x3_ctau"+ctau_this_str+plotABCDLabel+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_3x3_ctau"+ctau_this_str+plotABCDLabel+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_ABCD_3x3_ctau"+ctau_this_str+plotABCDLabel+".C")
 
 	###overlay template and ABCD_2x2 in the same plot
 
@@ -525,9 +527,9 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_ABCD_3x3_exp_limit, "Expected  95% CL upper limit, ABCD_3x3", "L")
 	leg_limit_vs_mass.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_template_ABCD_ctau"+ctau_this_str+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_template_ABCD_ctau"+ctau_this_str+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_template_ABCD_ctau"+ctau_this_str+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_template_ABCD_ctau"+ctau_this_str+plotABCDLabel+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_template_ABCD_ctau"+ctau_this_str+plotABCDLabel+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_template_ABCD_ctau"+ctau_this_str+plotABCDLabel+".C")
 
 
 ##################exclusion region of ctau and Lambda/mass #######################
@@ -1091,7 +1093,7 @@ drawCMS2(myC2D, 13, lumi)
 
 A1_lambda.Draw()
 
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_template_ABCD.pdf")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_template_ABCD.png")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_template_ABCD.C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_template_ABCD"+plotABCDLabel+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_template_ABCD"+plotABCDLabel+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_template_ABCD"+plotABCDLabel+".C")
 
