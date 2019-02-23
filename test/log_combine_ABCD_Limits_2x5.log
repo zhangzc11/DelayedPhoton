@@ -1,0 +1,868 @@
+
+ WARNING --  From combine v7, method Asymptotic has been renamed to AsymptoticLimits
+>>> including systematics
+>>> method used is Asymptotic
+>>> random number generator seed is 123456
+Computing results starting from observation (a-posteriori)
+Nuisance parameters after fit for asimov dataset: 
+  1) RooRealVar::    lumi = 0 +/- 5.8903
+  2) RooRealVar::  Photon = 0 +/- 5.8903
+  3) RooRealVar:: Trigger = 0 +/- 5.8903
+Global observables for data: 
+  1) RooRealVar::    lumi_In = 0
+  2) RooRealVar::  Photon_In = 0
+  3) RooRealVar:: Trigger_In = 0
+Global observables for asimov: 
+  1) RooRealVar::    lumi_In = 0
+  2) RooRealVar::  Photon_In = 0
+  3) RooRealVar:: Trigger_In = 0
+[#1] INFO:ObjectHandling -- RooWorkspace::import(w) importing dataset _Asymptotic_asimovDataset_
+[#1] INFO:Minization --  Including the following contraint terms in minimization: (nuisancePdf)
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+Fit to asimov dataset:
+
+  RooFitResult: minimized FCN value: -723.449, estimated distance to minimum: 3.46899
+                covariance matrix quality: Approximation only, not accurate
+                Status : MINIMIZE=-1 
+
+    Constant Parameter    Value     
+  --------------------  ------------
+             Photon_In    0.0000e+00
+            Trigger_In    0.0000e+00
+               lumi_In    0.0000e+00
+
+    Floating Parameter  InitialValue    FinalValue +/-  Error     GblCorr.
+  --------------------  ------------  --------------------------  --------
+                    NA    5.8284e+04    5.9198e+04 +/-  0.00e+00  <none>
+                Photon    0.0000e+00   -2.9787e-02 +/-  1.93e+00  <none>
+               Trigger    0.0000e+00   -2.9787e-02 +/-  1.93e+00  <none>
+                  lumi    0.0000e+00   -7.3955e-02 +/-  1.93e+00  <none>
+                     r    2.0000e-01    2.9884e-01 +/-  1.06e-01  <none>
+                    x1    2.8996e-02    2.8960e-02 +/-  1.40e-03  <none>
+                    y1    4.0491e-03    3.9978e-03 +/-  5.01e-04  <none>
+                    y2    0.0000e+00   -1.1731e-02 +/-  3.78e-05  <none>
+                    y3    3.4315e-05    4.8316e-05 +/-  5.21e-05  <none>
+                    y4    0.0000e+00   -3.3557e-04 +/-  3.78e-05  <none>
+
+WARNING: Best fit of asimov dataset is at r = 0.298841 (0.014942 times rMax), while it should be at zero
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 7.48779e+306
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+Will search for NLL crossing by stepping.
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 4.29772e+209
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 8.54155e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.84046e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 2.68279e+305
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59005.9 +/- 1.7146e-15,Photon = -0.258226 +/- 0,Trigger = -0.258226 +/- 0,lumi = -0.596914 +/- 0,r = 1.75 +/- 0.106194,x1 = 0.028576 +/- 4.49373e-22,y1 = 0.00362695 +/- 1.97594e-22,y2 = -0.0120164 +/- 3.49174e-23,y3 = -3.15359e-05 +/- 3.77206e-23,y4 = -0.000399807 +/- 1.07692e-23)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+At r = 1.750000:	delta(nll) = -nan
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59005.9 +/- 1.7146e-15,Photon = -0.258226 +/- 0,Trigger = -0.258226 +/- 0,lumi = -0.596914 +/- 0,r = 1.625 +/- 0.106194,x1 = 0.028576 +/- 8.30363e-23,y1 = 0.00362695 +/- 1.05394e-23,y2 = -0.0120164 +/- 3.49174e-23,y3 = -3.15359e-05 +/- 9.18104e-26,y4 = -0.000399807 +/- 1.16193e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+At r = 1.625000:	delta(nll) = -nan
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59005.9 +/- 1.7146e-15,Photon = -0.258226 +/- 0,Trigger = -0.258226 +/- 0,lumi = -0.596914 +/- 0,r = 1.5625 +/- 0.106194,x1 = 0.028576 +/- 8.30363e-23,y1 = 0.00362695 +/- 1.05394e-23,y2 = -0.0120164 +/- 3.49174e-23,y3 = -3.15359e-05 +/- 9.18104e-26,y4 = -0.000399807 +/- 1.16193e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+At r = 1.562500:	delta(nll) = -nan
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59005.9 +/- 1.7146e-15,Photon = -0.258226 +/- 0,Trigger = -0.258226 +/- 0,lumi = -0.596914 +/- 0,r = 1.53125 +/- 0.106194,x1 = 0.028576 +/- 8.30363e-23,y1 = 0.00362695 +/- 1.05394e-23,y2 = -0.0120164 +/- 3.49174e-23,y3 = -3.15359e-05 +/- 9.18104e-26,y4 = -0.000399807 +/- 1.16193e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+At r = 1.531250:	delta(nll) = -nan
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59005.9 +/- 1.7146e-15,Photon = -0.258226 +/- 0,Trigger = -0.258226 +/- 0,lumi = -0.596914 +/- 0,r = 1.51562 +/- 0.106194,x1 = 0.028576 +/- 8.30363e-23,y1 = 0.00362695 +/- 1.05394e-23,y2 = -0.0120164 +/- 3.49174e-23,y3 = -3.15359e-05 +/- 9.18104e-26,y4 = -0.000399807 +/- 1.16193e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+At r = 1.515625:	delta(nll) = -nan
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59005.9 +/- 1.7146e-15,Photon = -0.258226 +/- 0,Trigger = -0.258226 +/- 0,lumi = -0.596914 +/- 0,r = 1.50781 +/- 0.106194,x1 = 0.028576 +/- 8.30363e-23,y1 = 0.00362695 +/- 1.05394e-23,y2 = -0.0120164 +/- 3.49174e-23,y3 = -3.15359e-05 +/- 9.18104e-26,y4 = -0.000399807 +/- 1.16193e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.00165)
+At r = 1.507812:	delta(nll) = -nan
+Median for expected limits: 1.50391
+Sigma  for expected limits: 0.767313
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-0.091815
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.83726e-05/1,pdf_binch10 = 0.00960719/1,pdf_binch01 = 0.0169498/1,pdf_binch11 = 0.0027992/1,pdf_binch02 = inf/1,pdf_binch12 = 1.98923e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.335251/1,pdf_binch04 = 5.64872e+09/1,pdf_binch14 = 1.86046/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-0.97631
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.89807e-05/1,pdf_binch10 = 0.00970108/1,pdf_binch01 = 0.012649/1,pdf_binch11 = 0.0478393/1,pdf_binch02 = inf/1,pdf_binch12 = 3.54039e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.580488/1,pdf_binch04 = 9.96997e+09/1,pdf_binch14 = 1.91072/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.41856
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.92914e-05/1,pdf_binch10 = 0.00969799/1,pdf_binch01 = 0.0106015/1,pdf_binch11 = 0.117417/1,pdf_binch02 = inf/1,pdf_binch12 = 4.72317e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.745189/1,pdf_binch04 = 1.32454e+10/1,pdf_binch14 = 1.93635/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.63968
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.94484e-05/1,pdf_binch10 = 0.00968386/1,pdf_binch01 = 0.00963085/1,pdf_binch11 = 0.146414/1,pdf_binch02 = inf/1,pdf_binch12 = 5.45539e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.818196/1,pdf_binch04 = 1.52669e+10/1,pdf_binch14 = 1.9493/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.75024
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95274e-05/1,pdf_binch10 = 0.00967365/1,pdf_binch01 = 0.00916149/1,pdf_binch11 = 0.150642/1,pdf_binch02 = inf/1,pdf_binch12 = 5.86302e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.806891/1,pdf_binch04 = 1.63906e+10/1,pdf_binch14 = 1.95581/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.80552
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0161755
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95669e-05/1,pdf_binch10 = 0.00966776/1,pdf_binch01 = 0.00893107/1,pdf_binch11 = 0.14898/1,pdf_binch02 = inf/1,pdf_binch12 = 6.07812e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.69831e+10/1,pdf_binch14 = 1.95907/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.83317
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0346749
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95868e-05/1,pdf_binch10 = 0.00966462/1,pdf_binch01 = 0.00881696/1,pdf_binch11 = 0.147105/1,pdf_binch02 = inf/1,pdf_binch12 = 6.18861e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.72873e+10/1,pdf_binch14 = 1.9607/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.84699
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0439246
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95967e-05/1,pdf_binch10 = 0.009663/1,pdf_binch01 = 0.00876018/1,pdf_binch11 = 0.1459/1,pdf_binch02 = inf/1,pdf_binch12 = 6.24461e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.74414e+10/1,pdf_binch14 = 1.96152/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.8539
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0485495
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.96016e-05/1,pdf_binch10 = 0.00966218/1,pdf_binch01 = 0.00873187/1,pdf_binch11 = 0.14523/1,pdf_binch02 = inf/1,pdf_binch12 = 6.27279e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.7519e+10/1,pdf_binch14 = 1.96193/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.85735
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0508619
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.96041e-05/1,pdf_binch10 = 0.00966177/1,pdf_binch01 = 0.00871772/1,pdf_binch11 = 0.144878/1,pdf_binch02 = inf/1,pdf_binch12 = 6.28694e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.7558e+10/1,pdf_binch14 = 1.96213/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.85908
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0520181
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.96054e-05/1,pdf_binch10 = 0.00966156/1,pdf_binch01 = 0.00871066/1,pdf_binch11 = 0.144698/1,pdf_binch02 = inf/1,pdf_binch12 = 6.29402e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.75774e+10/1,pdf_binch14 = 1.96223/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+At r = 0.000734:	delta(nll) = 1415.93509
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-0.0913831
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.83723e-05/1,pdf_binch10 = 0.00960711/1,pdf_binch01 = 0.0169519/1,pdf_binch11 = 0.00279471/1,pdf_binch02 = inf/1,pdf_binch12 = 1.98867e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.335159/1,pdf_binch04 = 5.64715e+09/1,pdf_binch14 = 1.86043/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-0.975663
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.89802e-05/1,pdf_binch10 = 0.00970106/1,pdf_binch01 = 0.0126521/1,pdf_binch11 = 0.0477605/1,pdf_binch02 = inf/1,pdf_binch12 = 3.5389e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.580264/1,pdf_binch04 = 9.96582e+09/1,pdf_binch14 = 1.91068/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.4178
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.92909e-05/1,pdf_binch10 = 0.00969803/1,pdf_binch01 = 0.0106048/1,pdf_binch11 = 0.117292/1,pdf_binch02 = inf/1,pdf_binch12 = 4.72085e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.744902/1,pdf_binch04 = 1.3239e+10/1,pdf_binch14 = 1.93631/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.63887
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.94478e-05/1,pdf_binch10 = 0.00968393/1,pdf_binch01 = 0.00963433/1,pdf_binch11 = 0.146351/1,pdf_binch02 = inf/1,pdf_binch12 = 5.45251e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.818023/1,pdf_binch04 = 1.5259e+10/1,pdf_binch14 = 1.94925/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.74941
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95268e-05/1,pdf_binch10 = 0.00967373/1,pdf_binch01 = 0.009165/1,pdf_binch11 = 0.150646/1,pdf_binch02 = inf/1,pdf_binch12 = 5.85982e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = 0.807682/1,pdf_binch04 = 1.63818e+10/1,pdf_binch14 = 1.95576/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.80467
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0156064
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95663e-05/1,pdf_binch10 = 0.00966786/1,pdf_binch01 = 0.00893459/1,pdf_binch11 = 0.149026/1,pdf_binch02 = inf/1,pdf_binch12 = 6.07475e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.69738e+10/1,pdf_binch14 = 1.95902/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.83231
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0341013
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95862e-05/1,pdf_binch10 = 0.00966472/1,pdf_binch01 = 0.00882049/1,pdf_binch11 = 0.147174/1,pdf_binch02 = inf/1,pdf_binch12 = 6.18515e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.72778e+10/1,pdf_binch14 = 1.96065/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.84613
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0433488
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.95961e-05/1,pdf_binch10 = 0.00966311/1,pdf_binch01 = 0.00876371/1,pdf_binch11 = 0.14598/1,pdf_binch02 = inf/1,pdf_binch12 = 6.2411e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.74318e+10/1,pdf_binch14 = 1.96147/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.85303
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0479725
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.9601e-05/1,pdf_binch10 = 0.00966229/1,pdf_binch01 = 0.0087354/1,pdf_binch11 = 0.145316/1,pdf_binch02 = inf/1,pdf_binch12 = 6.26927e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.75093e+10/1,pdf_binch14 = 1.96188/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.85649
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0502843
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.96035e-05/1,pdf_binch10 = 0.00966187/1,pdf_binch01 = 0.00872125/1,pdf_binch11 = 0.144967/1,pdf_binch02 = inf/1,pdf_binch12 = 6.2834e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.75482e+10/1,pdf_binch14 = 1.96208/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch03) evaluation error, 
+ origin       : RooPoisson::pdf_binch03[ x=n_obs_binch03 mean=n_exp_binch03 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch03=2, mean=n_exp_binch03=-1.85821
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(pdf_binch13) evaluation error, 
+ origin       : RooPoisson::pdf_binch13[ x=n_obs_binch13 mean=n_exp_binch13 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: x=n_obs_binch13=0.0579919, mean=n_exp_binch13=-0.0514403
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(modelObs_s) evaluation error, 
+ origin       : RooProdPdf::modelObs_s[ pdf_binch00 * pdf_binch10 * pdf_binch01 * pdf_binch11 * pdf_binch02 * pdf_binch12 * pdf_binch03 * pdf_binch13 * pdf_binch04 * pdf_binch14 ]
+ message      : p.d.f value is Not-a-Number (-nan), forcing value to zero
+ server values: !pdfs=(pdf_binch00 = 1.96047e-05/1,pdf_binch10 = 0.00966167/1,pdf_binch01 = 0.00871419/1,pdf_binch11 = 0.144788/1,pdf_binch02 = inf/1,pdf_binch12 = 6.29048e+08/1,pdf_binch03 = -nan/1,pdf_binch13 = -nan/1,pdf_binch04 = 1.75677e+10/1,pdf_binch14 = 1.96218/1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = -nan/1,nuisancePdf = 1)
+At r = 0.001101:	delta(nll) = 1415.93509
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 4.78353e+303
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59007.3 +/- 1,Photon = -0.40429 +/- 5.88046,Trigger = -0.40429 +/- 5.88046,lumi = -1.00031 +/- 5.82984,r = 1.88756 +/- 0.106194,x1 = 0.0284278 +/- 1,y1 = 0.0034949 +/- 1,y2 = -0.0120182 +/- 1,y3 = -3.23389e-05 +/- 1,y4 = -0.000401634 +/- 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.42057)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59007.3 +/- 6.09391e-16,Photon = -0.40429 +/- 0,Trigger = -0.40429 +/- 0,lumi = -1.00031 +/- 0,r = 1.69573 +/- 0.106194,x1 = 0.0284278 +/- 6.09391e-19,y1 = 0.0034949 +/- 6.09391e-19,y2 = -0.0120182 +/- 6.09391e-19,y3 = -3.23389e-05 +/- 6.09391e-19,y4 = -0.000401634 +/- 6.09391e-19)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.42057)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59007.3 +/- 1.71464e-15,Photon = -0.40429 +/- 0,Trigger = -0.40429 +/- 0,lumi = -1.00031 +/- 0,r = 1.59982 +/- 0.106194,x1 = 0.0284278 +/- 8.26058e-23,y1 = 0.0034949 +/- 1.01557e-23,y2 = -0.0120182 +/- 3.49227e-23,y3 = -3.23389e-05 +/- 9.41436e-26,y4 = -0.000401634 +/- 1.16724e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.42057)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59007.3 +/- 1.71464e-15,Photon = -0.40429 +/- 0,Trigger = -0.40429 +/- 0,lumi = -1.00031 +/- 0,r = 1.55186 +/- 0.106194,x1 = 0.0284278 +/- 8.26058e-23,y1 = 0.0034949 +/- 1.01557e-23,y2 = -0.0120182 +/- 3.49227e-23,y3 = -3.23389e-05 +/- 9.41436e-26,y4 = -0.000401634 +/- 1.16724e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.42057)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59007.3 +/- 1.71464e-15,Photon = -0.40429 +/- 0,Trigger = -0.40429 +/- 0,lumi = -1.00031 +/- 0,r = 1.52788 +/- 0.106194,x1 = 0.0284278 +/- 8.26058e-23,y1 = 0.0034949 +/- 1.01557e-23,y2 = -0.0120182 +/- 3.49227e-23,y3 = -3.23389e-05 +/- 9.41436e-26,y4 = -0.000401634 +/- 1.16724e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.42057)
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: inf
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(NA,Photon,Trigger,lumi,r,x1,y1,y2,y3,y4) ]
+ message      : function value is NAN
+ server values: paramSet=(NA = 59007.3 +/- 1.71464e-15,Photon = -0.40429 +/- 0,Trigger = -0.40429 +/- 0,lumi = -1.00031 +/- 0,r = 1.5159 +/- 0.106194,x1 = 0.0284278 +/- 8.26058e-23,y1 = 0.0034949 +/- 1.01557e-23,y2 = -0.0120182 +/- 3.49227e-23,y3 = -3.23389e-05 +/- 9.41436e-26,y4 = -0.000401634 +/- 1.16724e-24)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 3.42057)
+At r = 1.515896:	delta(nll) = -nan
+[#1] INFO:Fitting -- RooAddition::defaultErrorLevel(nll_model_s__Asymptotic_asimovDataset__with_constr) Summation contains a RooNLLVar, using its error level
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.93705e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.47482e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.37739e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.78868e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.89688e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 4.67699e+306
+[#0] WARNING:Eval -- RooAbsPdf::getLogVal(model_s) WARNING: large likelihood value: 9.8324e+306
+At r = 4.549228:	delta(nll) = 0.56432
+[#1] INFO:Minization --  Including the following contraint terms in minimization: (nuisancePdf)
+[#1] INFO:Minization --  Including the following contraint terms in minimization: (nuisancePdf)
+Restricting r to positive values.
+  1) RooRealVar::         NA = 58284
+  2) RooRealVar::     Photon = 0 +/- 1
+  3) RooRealVar::  Photon_In = 0
+  4) RooRealVar::    Trigger = 0 +/- 1
+  5) RooRealVar:: Trigger_In = 0
+  6) RooRealVar::       lumi = 0 +/- 1
+  7) RooRealVar::    lumi_In = 0
+  8) RooRealVar::          r = 2
+  9) RooRealVar::         x1 = 0.0289959
+ 10) RooRealVar::         y1 = 0.00404914
+ 11) RooRealVar::         y2 = 0
+ 12) RooRealVar::         y3 = 3.43147e-05
+ 13) RooRealVar::         y4 = 0
+
+Make global fit of real data
+NLL at global minimum of data: -704.114 (r = 2.29546)
+   0) NA                             =   58364.7
+   1) Photon                         = 0.0698381
+   2) Photon_In                      =         0
+   3) Trigger                        = 0.0698381
+   4) Trigger_In                     =         0
+   5) lumi                           =  0.170259
+   6) lumi_In                        =         0
+   7) r                              =   2.29546
+   8) x1                             = 0.0289048
+   9) y1                             = 0.00400349
+  10) y2                             = -0.00153257
+  11) y3                             = -2.19657e-06
+  12) y4                             = -0.0113855
+
+
+Make global fit of asimov data
+NLL at global minimum of asimov: -nan (r = 2.29546)
+At r = 2.302143:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+
+ -- AsymptoticLimits ( CLs ) --
+Observed Limit: r < 2.3021
+Expected  2.5%: r < 0.0004
+Expected 16.0%: r < 0.0007
+Expected 50.0%: r < 1.5039
+Expected 84.0%: r < 1.5099
+Expected 97.5%: r < 4.5612
+
+Done in 0.01 min (cpu), 0.01 min (real)
+Printing Message Summary From ... combine_logger.out
+----------------------------------------------
+Messages of type INFO : 210
+Messages of type DEBUG : 87
+Messages of type ERROR : 0
+----------------------------------------------
+INFO: (function: run) Combine.cc: 874 -- Computing results starting from observation (a-posteriori)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+DEBUG: (function: runLimitExpected) AsymptoticLimits.cc: 416 -- Best fit of asimov dataset is at r = 0.298841 (0.014942 times rMax), while it should be at zero
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: runLimitExpected) AsymptoticLimits.cc: 429 -- Median for expected limits = 1.50391 (Sigma for expected limits = 0.767313)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: runLimit) AsymptoticLimits.cc: 186 -- NLL at global minimum of data = -704.114 (r=2.29546)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: runLimit) AsymptoticLimits.cc: 206 -- NLL at global minimum of asimov = -nan (r=2.29546)
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 173 -- finished with status 1 (covariance forced positive definite), this could indicate a problem with the minimim.
+INFO: (function: improveOnce) CascadeMinimizer.cc: 177 -- Minimization success! status=0
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 3.495456:	q_mu = -nan	q_A  = -nan	CLsb =    -nan	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 6.990912:	q_mu = 0.00000	q_A  = -nan	CLsb = 0.50000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 13.981824:	q_mu = 244.59136	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 27.963648:	q_mu = 0.00000	q_A  = -nan	CLsb = 0.50000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 55.927296:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 57.075024:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 29.685240:	q_mu = 95.17964	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 15.990348:	q_mu = -nan	q_A  = -nan	CLsb =    -nan	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 9.142902:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 5.719179:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 4.007318:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 3.151387:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.723421:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.509439:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.402447:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.348952:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.322204:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.308830:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 149 -- Minimisation configured with Type=Minuit2, Algo=Migrad, strategy=1, tolerance=0.1
+INFO: (function: improveOnce) CascadeMinimizer.cc: 172 -- Minimisation finished with status=-1
+DEBUG: (function: improveOnce) CascadeMinimizer.cc: 178 -- Minimization ended with latest status != 0 or 1
+INFO: (function: getCLs) AsymptoticLimits.cc: 336 -- At r = 2.302143:	q_mu = 2831.92176	q_A  = -nan	CLsb = 0.00000	CLb  =    -nan	CLs  =    -nan
