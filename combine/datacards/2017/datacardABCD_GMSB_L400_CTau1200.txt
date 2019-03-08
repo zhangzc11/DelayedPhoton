@@ -1,0 +1,20 @@
+imax 4 number of bins
+jmax 1 number of processes minus 1
+kmax 0 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin Bin1 Bin2 Bin3 Bin4 
+observation 506288.781250 957.478943 0.603720 319.230957 
+----------------------------------------------------------------------------------------------------------------------------------
+bin Bin1 Bin1 Bin2 Bin2 Bin3 Bin3 Bin4 Bin4 
+process sig bkg sig bkg sig bkg sig bkg 
+process 0 1 0 1 0 1 0 1 
+rate 0.061399 1 0.318731 1 0.183197 1 0.035017 1 
+----------------------------------------------------------------------------------------------------------------------------------
+bkg1 rateParam Bin1 bkg 506288.784241
+bkg1 rateParam Bin2 bkg 506288.784241
+c1 rateParam Bin2 bkg 0.001891
+bkg1 rateParam Bin3 bkg 506288.784241
+c2 rateParam Bin3 bkg 0.000631
+c1 rateParam Bin3 bkg 0.001891
+bkg1 rateParam Bin4 bkg 506288.784241
+c2 rateParam Bin4 bkg 0.000631

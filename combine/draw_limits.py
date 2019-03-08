@@ -7,10 +7,10 @@ import array
 lumi_2016 = 35922.0
 lumi_2017 = 41530.0
 lumi = lumi_2016+lumi_2017
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/15Nov2018/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/06Mar2019/orderByPt/'
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
-ctau_points = [0.1, 10, 600, 1200]
+ctau_points = [0.001, 0.1, 10, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
 drawObs=False
@@ -29,8 +29,8 @@ os.system("cp draw_limits.py "+outputDir+"/limits")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 
-axisTitleSize = 0.05
-axisTitleOffset = 1.0
+axisTitleSize = 0.044
+axisTitleOffset = 0.9
 axisTitleSizeRatioX   = 0.18
 axisLabelSizeRatioX   = 0.12
 axisTitleOffsetRatioX = 0.94
@@ -88,7 +88,6 @@ print r_obs_2d_grid_2016And2017
 index_ctau = -1
 for ctau_this in ctau_points:
 	index_ctau = index_ctau + 1
-	print "plotting xsec*BR limit for ctau = "+str(ctau_this)
 
 	xValue_lambda = []
 	xValue_lambda_exp1sigma = []
@@ -137,35 +136,73 @@ for ctau_this in ctau_points:
 	ctau_this_str = str(ctau_this)
 	if ctau_this_str == "0.1":
 		ctau_this_str = "0p1"
-	if ctau_this_str == "0.01":
-		ctau_this_str = "0p01"
+	if ctau_this_str == "0.001":
+		ctau_this_str = "0p001"
 		
 	index_lambda = - 1
 	for lambda_this in lambda_points:
+		print "limits for ctau = "+str(ctau_this)+" and lambda = "+str(lambda_this)
 		index_lambda = index_lambda + 1
+		limits_SF = 1.0
+                if lambda_this == 100:
+                        limits_SF = 0.01
+
 		minsize = 1000
 		actualsize_2016 = 0
 		actualsize_2017 = 0
 		actualsize_2016And2017 = 0
-		if os.path.isfile("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root"):
-			actualsize_2016 = os.path.getsize("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root")	
-		if os.path.isfile("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017.Asymptotic.mH120.root"):
-			actualsize_2017 = os.path.getsize("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017.Asymptotic.mH120.root")	
-		if os.path.isfile("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root"):
-			actualsize_2016And2017 = os.path.getsize("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")	
+		if os.path.isfile("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root"):
+			actualsize_2016 = os.path.getsize("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root")	
+		if os.path.isfile("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017.Asymptotic.mH120.root"):
+			actualsize_2017 = os.path.getsize("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017.Asymptotic.mH120.root")	
+		if os.path.isfile("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root"):
+			actualsize_2016And2017 = os.path.getsize("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")	
 
 		if actualsize_2016 > minsize and actualsize_2017 > minsize and actualsize_2016And2017 > minsize:
-			xValue_lambda.append(lambda_this)
-			xValue_mass.append(lambda_this*1.454-6.0)
 			th_xsec_this, eth_xsec_this = getXsecBR(lambda_this, ctau_this)
-			yValue_limit_this_Th.append(th_xsec_this)
 
-			file_limit_2016 = TFile("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root")
+			file_limit_2016 = TFile("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root")
 			limits_2016 = []
 			limitTree_2016 = file_limit_2016.Get("limit")
 			for entry in limitTree_2016:
 				limits_2016.append(entry.limit)
+			print "2016 limits:"
 			print limits_2016
+
+			file_limit_2017 = TFile("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017.Asymptotic.mH120.root")
+			limits_2017 = []
+			limitTree_2017 = file_limit_2017.Get("limit")
+			for entry in limitTree_2017:
+				limits_2017.append(entry.limit)
+			print "2017 limits:"
+			print limits_2017
+
+			file_limit_2016And2017 = TFile("limitTrees/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")
+			limits_2016And2017 = []
+			limitTree_2016And2017 = file_limit_2016And2017.Get("limit")
+			for entry in limitTree_2016And2017:
+				limits_2016And2017.append(entry.limit)
+			print "combined limits:"
+			print limits_2016And2017
+	
+			if len(limits_2016) < 6 or len(limits_2017) < 6 or len(limits_2016And2017) < 6:
+				continue
+			
+			for idx in range(len(limits_2016)):
+				limits_2016[idx] = limits_2016[idx]*limits_SF
+				limits_2017[idx] = limits_2017[idx]*limits_SF
+				limits_2016And2017[idx] = limits_2016And2017[idx]*limits_SF
+
+			xValue_lambda.append(lambda_this)
+			xValue_mass.append(lambda_this*1.454-6.0)
+			yValue_limit_this_Th.append(th_xsec_this)
+
+			limit_this_2017_exp2p5.append(limits_2017[0]*th_xsec_this)	
+			limit_this_2017_exp16p0.append(limits_2017[1]*th_xsec_this)	
+			limit_this_2017_exp50p0.append(limits_2017[2]*th_xsec_this)	
+			limit_this_2017_exp84p0.append(limits_2017[3]*th_xsec_this)	
+			limit_this_2017_exp97p5.append(limits_2017[4]*th_xsec_this)	
+			limit_this_2017_obs.append(limits_2017[5]*th_xsec_this)	
 
 			limit_this_2016_exp2p5.append(limits_2016[0]*th_xsec_this)	
 			limit_this_2016_exp16p0.append(limits_2016[1]*th_xsec_this)	
@@ -179,31 +216,10 @@ for ctau_this in ctau_points:
 			r_exp_m1sig_2d_grid_2016[index_ctau][index_lambda] = limits_2016[1]
 			r_obs_2d_grid_2016[index_ctau][index_lambda] = limits_2016[5]
 
-			file_limit_2017 = TFile("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017.Asymptotic.mH120.root")
-			limits_2017 = []
-			limitTree_2017 = file_limit_2017.Get("limit")
-			for entry in limitTree_2017:
-				limits_2017.append(entry.limit)
-			print limits_2017
-
-			limit_this_2017_exp2p5.append(limits_2017[0]*th_xsec_this)	
-			limit_this_2017_exp16p0.append(limits_2017[1]*th_xsec_this)	
-			limit_this_2017_exp50p0.append(limits_2017[2]*th_xsec_this)	
-			limit_this_2017_exp84p0.append(limits_2017[3]*th_xsec_this)	
-			limit_this_2017_exp97p5.append(limits_2017[4]*th_xsec_this)	
-			limit_this_2017_obs.append(limits_2017[5]*th_xsec_this)	
-
 			r_exp_2d_grid_2017[index_ctau][index_lambda] = limits_2017[2]
 			r_exp_p1sig_2d_grid_2017[index_ctau][index_lambda] = limits_2017[3]
 			r_exp_m1sig_2d_grid_2017[index_ctau][index_lambda] = limits_2017[1]
 			r_obs_2d_grid_2017[index_ctau][index_lambda] = limits_2017[5]
-
-			file_limit_2016And2017 = TFile("datacards/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")
-			limits_2016And2017 = []
-			limitTree_2016And2017 = file_limit_2016And2017.Get("limit")
-			for entry in limitTree_2016And2017:
-				limits_2016And2017.append(entry.limit)
-			print limits_2016And2017
 
 			limit_this_2016And2017_exp2p5.append(limits_2016And2017[0]*th_xsec_this)	
 			limit_this_2016And2017_exp16p0.append(limits_2016And2017[1]*th_xsec_this)	
@@ -513,6 +529,7 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016_Th_limit, "Theoretical cross-section", "L")
 	if drawObs:
 		leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016_obs_limit, "Observed  95% CL upper limit, 2016", "L")
+		leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017_obs_limit, "Observed  95% CL upper limit, 2017", "L")
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016_exp_limit, "Expected  95% CL upper limit, 2016", "L")
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017_exp_limit, "Expected  95% CL upper limit, 2017", "L")
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016And2017_exp_limit, "Expected  95% CL upper limit, 2016+2017", "L")
@@ -705,7 +722,7 @@ graph_exclusion_exp_2016.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
 graph_exclusion_exp_2016.GetXaxis().SetLimits(100.0, 600.0)
 graph_exclusion_exp_2016.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.05,1.0e7)
+graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.001,1.0e10)
 graph_exclusion_exp_2016.SetTitle("")
 
 graph_exclusion_exp_2016.SetMarkerStyle(19)
@@ -761,7 +778,7 @@ graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
 
 ######CMS 7TeV
 mass_cms_7TeV_1g = np.array([100., 145., 157., 179., 192., 216., 221., 218., 218., 221., 216., 192., 179., 157., 145., 100.])
-ctau_cms_7TeV_1g  = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10., 25.0, 50.0, 100.0, 200.0, 400.0, 600.0, 600.0])
+ctau_cms_7TeV_1g  = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 10., 25.0, 50.0, 100.0, 200.0, 400.0, 600.0, 600.0])
 graph_exclusion_cms_7TeV_1g = TGraph(16, mass_cms_7TeV_1g, ctau_cms_7TeV_1g)
 graph_exclusion_cms_7TeV_1g.SetFillColorAlpha(kPink, 0.65)
 graph_exclusion_cms_7TeV_1g.Draw("Fsames")
@@ -791,13 +808,13 @@ leg_2d_exclusion_2016.SetLineWidth(1)
 leg_2d_exclusion_2016.SetFillColor(0)
 leg_2d_exclusion_2016.SetFillStyle(1001)
 
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_exp_2016, "CMS Exp (#pm 1#sigma) 13 TeV, #gamma#gamma + #slash{E}_{T}", "LF")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_exp_2016, "CMS Exp (#pm 1#sigma) 13 TeV #gamma#gamma (2016)", "LF")
 if drawObs:
-	leg_2d_exclusion_2016.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13 TeV, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV, #gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV, #gamma + #slash{E}_{T}", "F")
+	leg_2d_exclusion_2016.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13 TeV #gamma#gamma (2016)", "L")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
 
 leg_2d_exclusion_2016.Draw()
 
@@ -805,7 +822,7 @@ drawCMS2(myC2D, 13, lumi_2016)
 
 #Lambda axis
 f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-A1_lambda = TGaxis(100.0, 0.0015,600.0,0.0015,"f1",1010)
+A1_lambda = TGaxis(100.0, 0.00001,600.0,0.00001,"f1",1010)
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)
@@ -833,7 +850,7 @@ graph_exclusion_exp_2017.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
 graph_exclusion_exp_2017.GetXaxis().SetLimits(100.0, 600.0)
 graph_exclusion_exp_2017.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2017.GetYaxis().SetRangeUser(0.05,1.0e7)
+graph_exclusion_exp_2017.GetYaxis().SetRangeUser(0.001,1.0e10)
 graph_exclusion_exp_2017.SetTitle("")
 
 graph_exclusion_exp_2017.SetMarkerStyle(19)
@@ -890,13 +907,13 @@ leg_2d_exclusion_2017.SetLineWidth(1)
 leg_2d_exclusion_2017.SetFillColor(0)
 leg_2d_exclusion_2017.SetFillStyle(1001)
 
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp (#pm 1#sigma) 13 TeV, #gamma + #slash{E}_{T}", "LF")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp (#pm 1#sigma) 13 TeV #gamma (2017)", "LF")
 if drawObs:
-	leg_2d_exclusion_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13 TeV, #gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV, #gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV, #gamma + #slash{E}_{T}", "F")
+	leg_2d_exclusion_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13 TeV #gamma (2017)", "L")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
 
 leg_2d_exclusion_2017.Draw()
 
@@ -923,7 +940,7 @@ graph_exclusion_exp_2016And2017.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016And2017.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
 graph_exclusion_exp_2016And2017.GetXaxis().SetLimits(100.0, 600.0)
 graph_exclusion_exp_2016And2017.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2016And2017.GetYaxis().SetRangeUser(0.05,1.0e7)
+graph_exclusion_exp_2016And2017.GetYaxis().SetRangeUser(0.001,1.0e10)
 graph_exclusion_exp_2016And2017.SetTitle("")
 
 graph_exclusion_exp_2016And2017.SetMarkerStyle(19)
@@ -980,13 +997,13 @@ leg_2d_exclusion_2016And2017.SetLineWidth(1)
 leg_2d_exclusion_2016And2017.SetFillColor(0)
 leg_2d_exclusion_2016And2017.SetFillStyle(1001)
 
-leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp (#pm 1#sigma) 13 TeV, #gamma(#gamma) + #slash{E}_{T}", "LF")
+leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp (#pm 1#sigma) 13 TeV #gamma(#gamma) (2016+2017)", "LF")
 if drawObs:
-	leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13 TeV, #gamma(#gamma) + #slash{E}_{T}", "L")
-leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV, #gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV, #gamma + #slash{E}_{T}", "F")
+	leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13 TeV #gamma(#gamma) (2016+2017)", "L")
+leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
 
 leg_2d_exclusion_2016And2017.Draw()
 
@@ -1066,17 +1083,17 @@ leg_2d_exclusion_2016_2017.SetLineWidth(1)
 leg_2d_exclusion_2016_2017.SetFillColor(0)
 leg_2d_exclusion_2016_2017.SetFillStyle(1001)
 
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016, "CMS Exp (#pm 1#sigma) 2016 data, #gamma#gamma + #slash{E}_{T}", "LF")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp (#pm 1#sigma) 2017 data, #gamma + #slash{E}_{T}", "LF")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp (#pm 1#sigma) 2016+2017 data, #gamma(#gamma) + #slash{E}_{T}", "LF")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016, "CMS Exp (#pm 1#sigma) 13TeV #gamma#gamma (2016)", "LF")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp (#pm 1#sigma) 13TeV #gamma (2017)", "LF")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp (#pm 1#sigma) 13TeV #gamma(#gamma) (2016+2017)", "LF")
 if drawObs:
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016, "CMS Obs 2016 data, #gamma#gamma + #slash{E}_{T}", "L")
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 2017 data, #gamma#gamma + #slash{E}_{T}", "L")
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 2016+2017 data, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "L")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV, #gamma + #slash{E}_{T}", "F")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV, #gamma + #slash{E}_{T}", "F")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13TeV #gamma#gamma (2016)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma (2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13TeV #gamma(#gamma) (2016+2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
 
 leg_2d_exclusion_2016_2017.Draw()
 

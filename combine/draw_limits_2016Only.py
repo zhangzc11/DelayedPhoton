@@ -5,13 +5,19 @@ import numpy as np
 import array
 
 lumi_2016 = 35922.0
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/16Jan2019/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/06Mar2019/orderByPt/'
+
+datacardsDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD/datacards_3J_noBDT"
+#datacardsDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD_binAndDatacard/datacards_3J_noBDT"
+
+plotNameTag = "sixCategories"
+#plotNameTag = "individualBins"
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
 ctau_points = [0.001, 0.1, 10, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
-drawObs=False
+drawObs=True
 gROOT.SetBatch(True)
 
 gStyle.SetOptStat(0)
@@ -108,35 +114,37 @@ for ctau_this in ctau_points:
 	index_lambda = - 1
 	for lambda_this in lambda_points:
 		index_lambda = index_lambda + 1
+		limits_SF = 1.0
+		if lambda_this == 100:
+			limits_SF = 0.01
 		minsize = 1000
 		actualsize_2016 = 0
-		if os.path.isfile("../fit_results/2016/datacards_3J_noBDT//higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root"):
-			actualsize_2016 = os.path.getsize("../fit_results/2016/datacards_3J_noBDT//higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root")	
+		if os.path.isfile(datacardsDir+"/higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root"):
+			actualsize_2016 = os.path.getsize(datacardsDir+"/higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root")	
 
 		if actualsize_2016 > minsize:
-			xValue_lambda.append(lambda_this)
-			xValue_mass.append(lambda_this*1.454-6.0)
 			th_xsec_this, eth_xsec_this = getXsecBR(lambda_this, ctau_this)
-			yValue_limit_this_Th.append(th_xsec_this)
-
-			file_limit_2016 = TFile("../fit_results/2016/datacards_3J_noBDT//higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root")
+			file_limit_2016 = TFile(datacardsDir+"/higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root")
 			limits_2016 = []
 			limitTree_2016 = file_limit_2016.Get("limit")
 			for entry in limitTree_2016:
 				limits_2016.append(entry.limit)
 			print limits_2016
+			if len(limits_2016) > 5:
+				xValue_lambda.append(lambda_this)
+				xValue_mass.append(lambda_this*1.454-6.0)
+				yValue_limit_this_Th.append(th_xsec_this)
+				limit_this_2016_exp2p5.append(limits_2016[0]*th_xsec_this*limits_SF)	
+				limit_this_2016_exp16p0.append(limits_2016[1]*th_xsec_this*limits_SF)	
+				limit_this_2016_exp50p0.append(limits_2016[2]*th_xsec_this*limits_SF)	
+				limit_this_2016_exp84p0.append(limits_2016[3]*th_xsec_this*limits_SF)	
+				limit_this_2016_exp97p5.append(limits_2016[4]*th_xsec_this*limits_SF)	
+				limit_this_2016_obs.append(limits_2016[5]*th_xsec_this*limits_SF)	
 
-			limit_this_2016_exp2p5.append(limits_2016[0]*th_xsec_this)	
-			limit_this_2016_exp16p0.append(limits_2016[1]*th_xsec_this)	
-			limit_this_2016_exp50p0.append(limits_2016[2]*th_xsec_this)	
-			limit_this_2016_exp84p0.append(limits_2016[3]*th_xsec_this)	
-			limit_this_2016_exp97p5.append(limits_2016[4]*th_xsec_this)	
-			limit_this_2016_obs.append(limits_2016[5]*th_xsec_this)	
-
-			r_exp_2d_grid_2016[index_ctau][index_lambda] = limits_2016[2]
-			r_exp_p1sig_2d_grid_2016[index_ctau][index_lambda] = limits_2016[3]
-			r_exp_m1sig_2d_grid_2016[index_ctau][index_lambda] = limits_2016[1]
-			r_obs_2d_grid_2016[index_ctau][index_lambda] = limits_2016[5]
+				r_exp_2d_grid_2016[index_ctau][index_lambda] = limits_2016[2]*limits_SF
+				r_exp_p1sig_2d_grid_2016[index_ctau][index_lambda] = limits_2016[3]*limits_SF
+				r_exp_m1sig_2d_grid_2016[index_ctau][index_lambda] = limits_2016[1]*limits_SF
+				r_obs_2d_grid_2016[index_ctau][index_lambda] = limits_2016[5]*limits_SF
 
 	NPoints_mass = len(xValue_mass)
 
@@ -232,9 +240,10 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass_2016.AddEntry(graph_limit_vs_mass_2016_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass_2016.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only.pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only.png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only.C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".root")
 
 
 ##################exclusion region of ctau and Lambda/mass #######################
@@ -445,7 +454,8 @@ A1_lambda.SetTitleSize(0.04)
 A1_lambda.SetTitleOffset(0.9)
 A1_lambda.Draw()
 
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only.pdf")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only.png")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only.C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".root")
 

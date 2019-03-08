@@ -1,0 +1,24 @@
+imax 4
+jmax 1
+kmax *
+---------------
+---------------
+bin     ch00     ch10     ch01     ch11     
+observation 27798.00 32426.00  33.00  38.49 
+------------------------------
+bin             ch00 ch00 ch10 ch10 ch01 ch01 ch11 ch11 
+process         sig  bkg  sig  bkg  sig  bkg  sig  bkg  
+process         0    1    0    1    0    1    0    1    
+rate            1.040585e+01  1.0  3.279973e+01  1.0  7.947753e+00  1.0  2.289588e+01  1.0  
+--------------------------------
+NA      rateParam   ch00   bkg   26810.65
+NA      rateParam   ch10   bkg   26810.65
+x1      rateParam   ch10   bkg   1.168185e+00
+NA      rateParam   ch01   bkg   26810.65
+y1      rateParam   ch01   bkg   1.325170e-03
+NA      rateParam   ch11   bkg   26810.65
+x1      rateParam   ch11   bkg   1.168185e+00
+y1      rateParam   ch11   bkg   1.325170e-03
+lumi  lnN     1.025000   -     1.025000   -     1.025000   -     1.025000   -   
+Photon  lnN     1.010000   -     1.010000   -     1.010000   -     1.010000   -   
+Trigger  lnN     1.010000   -     1.010000   -     1.010000   -     1.010000   -   

@@ -1,0 +1,32 @@
+Combination of ch2016=/data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/combine/datacards/2016/DelayedPhotonCard_L100TeV_Ctau10cm.txt  ch2017=/data/zhicaiz/release/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhoton/combine/datacards/2017/datacardABCD_GMSB_L100_CTau10.txt
+imax 8 number of bins
+jmax 1 number of processes minus 1
+kmax 3 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch2016_ch00   ch2016_ch10   ch2016_ch01   ch2016_ch11   ch2017_Bin1   ch2017_Bin2   ch2017_Bin3   ch2017_Bin4 
+observation  27696.0       32292.0       135.0         157.4         505333.625    955.672546    138.488098    73228.742188
+----------------------------------------------------------------------------------------------------------------------------------
+bin                             ch2016_ch00   ch2016_ch00   ch2016_ch10   ch2016_ch10   ch2016_ch01   ch2016_ch01   ch2016_ch11   ch2016_ch11   ch2017_Bin1   ch2017_Bin1   ch2017_Bin2   ch2017_Bin2   ch2017_Bin3   ch2017_Bin3   ch2017_Bin4   ch2017_Bin4 
+process                         sig           bkg           sig           bkg           sig           bkg           sig           bkg           sig           bkg           sig           bkg           sig           bkg           sig           bkg         
+process                         0             1             0             1             0             1             0             1             0             1             0             1             0             1             0             1           
+rate                            15.8869       1.0000        38.6457       1.0000        11.9122       1.0000        26.7357       1.0000        37.1668       1.0000        32.0725       1.0000        9.2488        1.0000        10.8820       1.0000      
+----------------------------------------------------------------------------------------------------------------------------------
+Photon                  lnN     1.01          -             1.01          -             1.01          -             1.01          -             -             -             -             -             -             -             -             -           
+Trigger                 lnN     1.01          -             1.01          -             1.01          -             1.01          -             -             -             -             -             -             -             -             -           
+lumi                    lnN     1.025         -             1.025         -             1.025         -             1.025         -             -             -             -             -             -             -             -             -           
+NA            rateParam ch2016_ch01 bkg 26734.62  
+y1            rateParam ch2016_ch01 bkg 5.254117e-03  
+bkg1          rateParam ch2017_Bin4 bkg 505333.639892  
+c2            rateParam ch2017_Bin4 bkg 0.144912  
+bkg1          rateParam ch2017_Bin1 bkg 505333.639892  
+NA            rateParam ch2016_ch11 bkg 26734.62  
+x1            rateParam ch2016_ch11 bkg 1.168185e+00  
+y1            rateParam ch2016_ch11 bkg 5.254117e-03  
+bkg1          rateParam ch2017_Bin3 bkg 505333.639892  
+c2            rateParam ch2017_Bin3 bkg 0.144912  
+c1            rateParam ch2017_Bin3 bkg 0.001891  
+NA            rateParam ch2016_ch10 bkg 26734.62  
+x1            rateParam ch2016_ch10 bkg 1.168185e+00  
+NA            rateParam ch2016_ch00 bkg 26734.62  
+bkg1          rateParam ch2017_Bin2 bkg 505333.639892  
+c1            rateParam ch2017_Bin2 bkg 0.001891  
