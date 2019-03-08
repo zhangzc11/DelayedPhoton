@@ -542,6 +542,9 @@ def getTimeAndMETCorrFactor(fileName, label, cutsig, Timesplit, METsplit):
 Timesplit = [-2, 0, 0.5, 1.0, 1.5, 3.0, 25]
 METsplit = [0, 50, 100, 200, 300, 500, 3000]
 
+
+
+'''
 drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_Data", cut, Timesplit, METsplit)
 drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_Data", cut, 6)
 
@@ -600,4 +603,28 @@ getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/De
 getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/GMSB_L200TeV_Ctau10000cm_13TeV-pythia8.root", "NoCorr_L200TeV_Ctau10000cm", cut, Timesplit, METsplit)
 getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_Data", cut, Timesplit, METsplit)
 
+'''
+getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "GJetsCR", cut_GJets, Timesplit, METsplit)
+drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "GJetsCR", cut_GJets, 6)
+drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "GJetsCR", cut_GJets, Timesplit, METsplit)
+
+drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_GJetsCR", cut_GJets, Timesplit, METsplit)
+drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_GJetsCR", cut_GJets, 6)
+getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_GJetsCR", cut_GJets, Timesplit, METsplit)
+
+getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "QCDCR", cut_loose + " && !( " + cut +")", Timesplit, METsplit)
+drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "QCDCR", cut_loose + " && !( " + cut +")", 6)
+drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "QCDCR", cut_loose + " && !( " + cut +")", Timesplit, METsplit)
+
+drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_QCDCR", cut_loose + " && !( " + cut +")", Timesplit, METsplit)
+drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_QCDCR", cut_loose + " && !( " + cut +")", 6)
+getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_QCDCR", cut_loose + " && !( " + cut +")", Timesplit, METsplit)
+
+getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "EWKCR", cut_EWKCR, Timesplit, METsplit)
+drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "EWKCR", cut_EWKCR, 6)
+drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "EWKCR", cut_EWKCR, Timesplit, METsplit)
+
+drawTimeAndMETShapes("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_EWKCR", cut_EWKCR, Timesplit, METsplit)
+drawTimeAndMETShapesRandN("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_EWKCR", cut_EWKCR, 6)
+getTimeAndMETCorrFactor("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "NoCorr_EWKCR", cut_EWKCR, Timesplit, METsplit)
 

@@ -1136,7 +1136,7 @@ void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_QCDG
 	fclose(m_outfile);	
 };
 
-void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, int Nbins_time, int Nbins_MET, TString modelName, TString outDataCardsDir)
+void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, TH2F * h2MCBkg, TH1F *h1DataShape_Time, TH1F *h1DataShape_MET, int Nbins_time, int Nbins_MET, TString modelName, TString outDataCardsDir, bool blindABD)
 {
 	std::string _modelName ((const char*) modelName);
 	std::string _outDataCardsDir ((const char*) outDataCardsDir);
@@ -1159,13 +1159,28 @@ void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, int Nbins_time, i
 	}
 	fprintf(m_outfile, "\n");
 	fprintf(m_outfile, "observation ");
-	
+	if(blindABD)	
+	{
+	for(int iM=1;iM<=Nbins_MET;iM++)
+	{
+		float rate_iM_iT1 = h2MCBkg->GetBinContent(1, 1) * h1DataShape_MET->GetBinContent(iM)/h1DataShape_MET->GetBinContent(1);
+
+		for(int iT=1; iT<=Nbins_time; iT++)
+		{
+			fprintf(m_outfile, "%6.2f ", rate_iM_iT1 * h1DataShape_Time->GetBinContent(iT)/h1DataShape_Time->GetBinContent(1));
+		}
+	}
+	}
+	else
+	{
 	for(int iM=1;iM<=Nbins_MET;iM++)
 	{
 		for(int iT=1; iT<=Nbins_time; iT++)
 		{
 			fprintf(m_outfile, "%6.2f ",h2_rate_Data->GetBinContent(iT, iM));
 		}
+	}
+
 	}
 	fprintf(m_outfile, "\n");
 
@@ -1216,26 +1231,34 @@ void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, int Nbins_time, i
 	
 	//rate parameters
 	
-	fprintf(m_outfile, "NA      rateParam   ch00   bkg   %6.2f\n", h2_rate_Data->GetBinContent(1, 1));
+	//fprintf(m_outfile, "NA      rateParam   ch00   bkg   %6.2f\n", h2_rate_Data->GetBinContent(1, 1));
+	fprintf(m_outfile, "NA      rateParam   ch00   bkg   %6.2f\n", h2MCBkg->GetBinContent(1, 1));
 	for(int iT=1;iT<Nbins_time; iT++)
 	{
-		fprintf(m_outfile, "NA      rateParam   ch%d0   bkg   %6.2f\n", iT,h2_rate_Data->GetBinContent(1, 1));
-		fprintf(m_outfile, "x%d      rateParam   ch%d0   bkg   %e\n", iT, iT, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
+		//fprintf(m_outfile, "NA      rateParam   ch%d0   bkg   %6.2f\n", iT,h2_rate_Data->GetBinContent(1, 1));
+		fprintf(m_outfile, "NA      rateParam   ch%d0   bkg   %6.2f\n", iT,h2MCBkg->GetBinContent(1, 1));
+		//fprintf(m_outfile, "x%d      rateParam   ch%d0   bkg   %e\n", iT, iT, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
+		fprintf(m_outfile, "x%d      rateParam   ch%d0   bkg   %e\n", iT, iT, h1DataShape_Time->GetBinContent(iT+1)/h1DataShape_Time->GetBinContent(1));
 	}
 
 	for(int iM=1;iM<Nbins_MET; iM++)
 	{
-		fprintf(m_outfile, "NA      rateParam   ch0%d   bkg   %6.2f\n", iM, h2_rate_Data->GetBinContent(1, 1));
-		fprintf(m_outfile, "y%d      rateParam   ch0%d   bkg   %e\n", iM, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
+		//fprintf(m_outfile, "NA      rateParam   ch0%d   bkg   %6.2f\n", iM, h2_rate_Data->GetBinContent(1, 1));
+		fprintf(m_outfile, "NA      rateParam   ch0%d   bkg   %6.2f\n", iM, h2MCBkg->GetBinContent(1, 1));
+		//fprintf(m_outfile, "y%d      rateParam   ch0%d   bkg   %e\n", iM, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
+		fprintf(m_outfile, "y%d      rateParam   ch0%d   bkg   %e\n", iM, iM, h1DataShape_MET->GetBinContent(iM+1)/h1DataShape_MET->GetBinContent(1));
 	}
 	
 	for(int iM=1;iM<Nbins_MET;iM++)
 	{
 		for(int iT=1; iT<Nbins_time; iT++)
 		{
-			fprintf(m_outfile, "NA      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2_rate_Data->GetBinContent(1, 1));
-			fprintf(m_outfile, "x%d      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
-			fprintf(m_outfile, "y%d      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
+			//fprintf(m_outfile, "NA      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2_rate_Data->GetBinContent(1, 1));
+			fprintf(m_outfile, "NA      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2MCBkg->GetBinContent(1, 1));
+			//fprintf(m_outfile, "x%d      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
+			fprintf(m_outfile, "x%d      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h1DataShape_Time->GetBinContent(iT+1)/h1DataShape_Time->GetBinContent(1));
+			//fprintf(m_outfile, "y%d      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
+			fprintf(m_outfile, "y%d      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h1DataShape_MET->GetBinContent(iM+1)/h1DataShape_MET->GetBinContent(1));
 		}
 	}
 
@@ -1923,7 +1946,7 @@ void OptimizeBinning(std::vector<int> &timeBin, std::vector<int> &metBin, TH2F *
 
 };
 
-void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &TimeBin, std::vector<int> &METBin, TH2F * h2Data, TH2F *h2Sig, TString modelName, TString ourBinningDir)
+void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &TimeBin, std::vector<int> &METBin, TH2F * h2Data, TH2F *h2Sig, TH2F * h2MCBkg, TH1F *h1DataShape_Time, TH1F *h1DataShape_MET, TString modelName, TString ourBinningDir, bool blindABD)
 {
 	float NSig_total_events = h2Sig->Integral();
 	float NData_total_events = h2Data->Integral();
@@ -1959,6 +1982,8 @@ void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &
 	
 	system(("rm fit_results/2016ABCD/datacards_temp/higgsCombine"+_modelName+"*.Asymptotic.mH120.root").c_str());	
 	system(("rm fit_results/2016ABCD/datacards_temp/DelayedPhotonCard_"+_modelName+"*.txt").c_str());
+	
+	float minDataRateCut = 10.0;
 
 	for(int icomb_Time = 0; icomb_Time<N_comb_Time; icomb_Time ++)
 	{
@@ -1993,30 +2018,72 @@ void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &
 			cout<<endl;
 			//make the datacards
 			TH2F *h2_rate_Data_inBins = new TH2F("h2_rate_Data_inBins","; #gamma Time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH1F *h1_rate_DataShape_Time_inBins = new TH1F("h1_rate_DataShape_Time_inBins","; #gamma Time bin; Events", Nbins_Time, 0, 1.0*Nbins_Time);
+			TH1F *h1_rate_DataShape_MET_inBins = new TH1F("h1_rate_DataShape_MET_inBins","; #slash{E}_{T} bin; Events", Nbins_MET, 0, 1.0*Nbins_MET);
 			TH2F *h2_rate_Sig_inBins = new TH2F("h2_rate_Sig_inBins","; #gamma Time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_rate_MCBkg_inBins = new TH2F("h2_rate_MCBkg_inBins","; #gamma Time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			
+			float minDataRate = 999999.9;
 			for(int iT=1; iT<=Nbins_Time; iT++)
 			{
 				for(int iM=1; iM<=Nbins_MET; iM++)
 				{
-					h2_rate_Data_inBins->SetBinContent(iT, iM, h2Data->Integral(index_Time_split[iT-1]+1, index_Time_split[iT], index_MET_split[iM-1]+1, index_MET_split[iM]));
+					float datarate_this = h2Data->Integral(index_Time_split[iT-1]+1, index_Time_split[iT], index_MET_split[iM-1]+1, index_MET_split[iM]);
+					if(datarate_this < minDataRate) minDataRate = datarate_this;
+					h2_rate_Data_inBins->SetBinContent(iT, iM, datarate_this);
 					h2_rate_Sig_inBins->SetBinContent(iT, iM, h2Sig->Integral(index_Time_split[iT-1]+1, index_Time_split[iT], index_MET_split[iM-1]+1, index_MET_split[iM]));
+					h2_rate_MCBkg_inBins->SetBinContent(iT, iM, h2MCBkg->Integral(index_Time_split[iT-1]+1, index_Time_split[iT], index_MET_split[iM-1]+1, index_MET_split[iM]));
+					if(iT == 1) h1_rate_DataShape_MET_inBins->SetBinContent(iM, h1DataShape_MET->Integral(index_MET_split[iM-1]+1, index_MET_split[iM]));
 				}
+				h1_rate_DataShape_Time_inBins->SetBinContent(iT, h1DataShape_Time->Integral(index_Time_split[iT-1]+1, index_Time_split[iT]));
 			}
+			//blind the top cornor bin in data
+			float A_ = h2_rate_Data_inBins->GetBinContent(Nbins_Time-1, Nbins_MET-1);
+                	float B_ = h2_rate_Data_inBins->GetBinContent(Nbins_Time-1, Nbins_MET);
+                	float D_ = h2_rate_Data_inBins->GetBinContent(Nbins_Time, Nbins_MET-1);
+                	if(A_ > 0.0)     
+			{
+				h2_rate_Data_inBins->SetBinContent(Nbins_Time, Nbins_MET, B_*D_/A_);
+				if(B_*D_/A_ < minDataRate) minDataRate = B_*D_/A_;
+			}
+		
+			//if(minDataRate < minDataRateCut)
+			//{
+				//cout<<"this time and met split has a data bin with only "<<minDataRate<<" events, will not use this split"<<endl;
+				//continue;
+			//}
+		
+
 			cout<<"in resized 2D histograms, nData = "<<h2_rate_Data_inBins->Integral()<<",  nSig = "<<h2_rate_Sig_inBins->Integral()<<endl;
-			MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins, Nbins_Time, Nbins_MET, (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp");	
+			MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins, h2_rate_MCBkg_inBins, h1_rate_DataShape_Time_inBins, h1_rate_DataShape_MET_inBins, Nbins_Time, Nbins_MET, (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", blindABD);	
 			//run combine to get the limits...
 			cout<<"running combine tool on the fly now...."<<endl;
 			system(("combine -M Asymptotic fit_results/2016ABCD/datacards_temp/DelayedPhotonCard_"+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)+".txt -v -1 -n "+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str());	
 			//extract the expected limit...
 			TFile * file_limit = new TFile(("higgsCombine"+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)+".Asymptotic.mH120.root").c_str());
 			TTree * tree_limit = (TTree*)file_limit->Get("limit");
-			Double_t limits;
+			Double_t limits=9999, expLimit=9999, obsLimit=9999;
 			tree_limit->SetBranchAddress("limit", &limits);
-			tree_limit->GetEntry(2);
-			cout<<"expected limit of this split = "<<limits<<endl;
-			if(limits < minLimits)
+			if(tree_limit->GetEntries() < 6)
 			{
-				minLimits = limits;
+				cout<<"BAD BIN CHOICE: didn't get all the limits"<<endl;
+				continue;
+			}
+			tree_limit->GetEntry(2);
+			expLimit = limits;
+			tree_limit->GetEntry(5);
+			obsLimit = limits;
+			if((obsLimit > 5*expLimit) || (obsLimit < 0.2*expLimit)) 
+			{
+			
+				cout<<"BAD BIN CHOICE: expected and observed limit are too different"<<endl;
+				continue;	
+			}
+
+			cout<<"expected limit of this split = "<<limits<<endl;
+			if(expLimit < minLimits)
+			{
+				minLimits = expLimit;
 				best_split_Time.clear();
 				best_split_MET.clear();
 				for(int iT=0; iT<index_Time_split.size(); iT++)

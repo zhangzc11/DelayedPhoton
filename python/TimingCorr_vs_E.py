@@ -196,10 +196,10 @@ for i in range(0, N_E_points):
 	tree_data.Draw("t1-t2>>hist_2e_this_data_"+str(i), cut_2e_this)
 	hist_1e_this_data.Draw()
 	result_1e_this_data = doubGausFit(hist_1e_this_data)#, -0.6, 0.6) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iEFit_Zee_"+str(i)+"_time_data.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iEFit_Zee_"+str(i)+"_time_data.png")
 	hist_2e_this_data.Draw()
 	result_2e_this_data = doubGausFit(hist_2e_this_data)#, -1.5, 1.5, 0.2, 0.4) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iEFit_Zee_"+str(i)+"_dt_data.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iEFit_Zee_"+str(i)+"_dt_data.png")
 	y_E_mean_data[i] = result_1e_this_data[0]
 	ey_E_mean_data[i] = result_1e_this_data[1]
 	y_E_sigma_dt_data[i] = result_2e_this_data[2]
@@ -214,10 +214,10 @@ for i in range(0, N_E_points):
 	tree_MC.Draw("t1-t2>>hist_2e_this_MC_"+str(i),  "(weight*pileupWeight) * " + cut_2e_this)
 	hist_1e_this_MC.Draw()
 	result_1e_this_MC = doubGausFit(hist_1e_this_MC)#, -0.6, 0.6) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iEFit_Zee_"+str(i)+"_time_MC.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iEFit_Zee_"+str(i)+"_time_MC.png")
 	hist_2e_this_MC.Draw()
 	result_2e_this_MC = doubGausFit(hist_2e_this_MC)#, -1.0, 1.0, 0.15, 0.30) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iEFit_Zee_"+str(i)+"_dt_MC.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iEFit_Zee_"+str(i)+"_dt_MC.png")
 	y_E_mean_MC[i] = result_1e_this_MC[0]
 	ey_E_mean_MC[i] = result_1e_this_MC[1]
 	y_E_sigma_dt_MC[i] = result_2e_this_MC[2]
@@ -238,10 +238,10 @@ for i in range(0, N_E_points):
 	tree_MC.Draw("t1_SmearToData-t2_SmearToData>>hist_2e_this_MC_corr_"+str(i),  "(weight*pileupWeight) * " + cut_2e_this)
 	hist_1e_this_MC_corr.Draw()
 	result_1e_this_MC_corr = doubGausFit(hist_1e_this_MC_corr)#, -0.6, 0.6) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iEFit_Zee_"+str(i)+"_time_MC_corr.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iEFit_Zee_"+str(i)+"_time_MC_corr.png")
 	hist_2e_this_MC_corr.Draw()
 	result_2e_this_MC_corr = doubGausFit(hist_2e_this_MC_corr)#, -1.0, 1.0, 0.15, 0.30) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iEFit_Zee_"+str(i)+"_dt_MC_corr.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iEFit_Zee_"+str(i)+"_dt_MC_corr.png")
 	y_E_mean_MC_corr[i] = result_1e_this_MC_corr[0]
 	ey_E_mean_MC_corr[i] = result_1e_this_MC_corr[1]
 	y_E_sigma_dt_MC_corr[i] = result_2e_this_MC_corr[2]
@@ -376,6 +376,13 @@ drawCMS(myC, 13, lumi)
 myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.pdf")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.png")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.C")
+file_plot_shift = TFile(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.root","RECREATE")
+gr_E_mean_data.Write("gr_data")
+gr_E_mean_MC.Write("gr_MC")
+gr_E_mean_MC_corr.Write("gr_MC_corr")
+gr_E_mean_diff.Write("gr_diff")
+file_plot_shift.Close()
+
 
 gr_E_sigma_dt_data  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_dt_data), np.array(ex_pt), np.array(ey_E_sigma_dt_data))
 gr_E_sigma_dt_data.Draw("AP")
@@ -476,6 +483,12 @@ drawCMS(myC, 13, lumi)
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.pdf")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.png")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.C")
+file_plot_dt = TFile(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.root", "RECREATE")
+gr_E_sigma_dt_data.Write("gr_data")
+gr_E_sigma_dt_MC.Write("gr_MC")
+gr_E_sigma_dt_MC_corr.Write("gr_MC_corr")
+gr_E_sigma_dt_diff.Write("gr_diff")
+file_plot_dt.Close()
 
 
 gr_E_sigma_time_data  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_time_data), np.array(ex_pt), np.array(ey_E_sigma_time_data))

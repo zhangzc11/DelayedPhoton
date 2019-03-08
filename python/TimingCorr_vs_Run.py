@@ -179,7 +179,7 @@ for i in range(0, N_Run_points):
 	tree_data.Draw("t1_seed-t2_seed>>hist_2e_this_data_"+str(i), cut_2e_this)
 	hist_2e_this_data.Draw()
 	result_2e_this_data = doubGausFit(hist_2e_this_data)#, -1.5, 1.5, 0.2, 0.4) 
-	myC.SaveAs(outputDir+"/ZeeTiming/iRunFit_Zee_"+str(i)+"_dt_data.png")
+	myC.SaveAs(outputDir+"/ZeeTiming/fits/iRunFit_Zee_"+str(i)+"_dt_data.png")
 	if result_2e_this_data[3] < 0.05:
 		y_Run_sigma_dt_data[i] = result_2e_this_data[2]
 		ey_Run_sigma_dt_data[i] = result_2e_this_data[3]
@@ -222,5 +222,9 @@ drawCMS(myC, 13, lumi)
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Run_sigma_Data_2016.pdf")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Run_sigma_Data_2016.png")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Run_sigma_Data_2016.C")
+
+file_out = TFile(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Run_sigma_Data_2016.root","RECREATE")
+gr_Run_sigma_dt_data.Write("gr_data")
+file_out.Close()
 
 

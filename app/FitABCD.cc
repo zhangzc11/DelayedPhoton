@@ -18,20 +18,12 @@
 
 using namespace std;
 
-const Int_t Nbins_MET_lowT = 3;
-const Int_t Nbins_MET_highT = 3;
-const Int_t Nbins_time_lowT = 3;
-const Int_t Nbins_time_highT = 3;
-Int_t Nbins_total_lowT = Nbins_MET_lowT*Nbins_time_lowT;
-Int_t Nbins_total_highT = Nbins_MET_highT*Nbins_time_highT;
-
-Int_t Nbins_MET = 0;
-Int_t Nbins_time = 0;
+const Int_t Nbins_MET = 2;
+const Int_t Nbins_time = 2;
 
 std::vector <float> xbins_MET;
 std::vector <float> xbins_time;
 
-bool useLowTBinning = false;
 bool useBDT = true;
 
 float lumi = 35922.0; //pb^-1
@@ -41,6 +33,14 @@ bool _useToy = true;
 std::string binningAlgorithm = "limit";//or "significance"
 
 bool doAllBkgFracFit = false;
+
+
+//binning setup for 2x2 time and met, with 6 categories
+
+int BIN_CATEGORY = 0;
+float time_split_by_CAT[6] = {1.5, 0.0, 1.5, 1.5, 0.0, 1.5};
+float met_split_by_CAT[6] = {300.0, 200.0, 100.0, 300.0, 300.0, 150.0};
+
 
 int main( int argc, char* argv[])
 {
@@ -90,15 +90,26 @@ else
 float SoverB = 0.0;
 int nToys = 1000;
 
-if (sigModelName.find("0p") != std::string::npos || sigModelName.find("5cm") != std::string::npos || sigModelName.find("10cm") != std::string::npos || sigModelName.find("50cm") != std::string::npos) useLowTBinning = true;
-
-Nbins_MET = useLowTBinning ? Nbins_MET_lowT : Nbins_MET_highT;
-Nbins_time = useLowTBinning ? Nbins_time_lowT : Nbins_time_highT;
+//assign binning category:
+if (sigModelName.find("L100TeV") != std::string::npos || sigModelName.find("L150TeV") != std::string::npos || sigModelName.find("L200TeV") != std::string::npos)
+{
+if (sigModelName.find("Ctau0_001cm") != std::string::npos || sigModelName.find("Ctau0_1cm") != std::string::npos) BIN_CATEGORY = 0;
+else if (sigModelName.find("Ctau10cm") != std::string::npos) BIN_CATEGORY = 1;
+else BIN_CATEGORY = 2;
+}
+else
+{
+if (sigModelName.find("Ctau0_001cm") != std::string::npos || sigModelName.find("Ctau0_1cm") != std::string::npos) BIN_CATEGORY = 3;
+else if (sigModelName.find("Ctau10cm") != std::string::npos) BIN_CATEGORY = 4;
+else BIN_CATEGORY = 5;
+}
 
 TString _sigModelName (sigModelName.c_str());
 TString _sigModelTitle (sigModelTitle.c_str());
 
 float xsec = getXsecBR(sigModelName); //pb
+if (sigModelName.find("L100TeV") != std::string::npos || sigModelName.find("L150TeV") != std::string::npos) xsec = xsec * 0.01; // for L100TeV models, give smaller xsec to reduce signal yield and stablize fit
+
 std::string treeName = "DelayedPhoton";
 
 std::string cut, cut_JESUp, cut_JESDown;
@@ -277,11 +288,51 @@ tree_signal = (TTree*)file_signal->Get(treeName.c_str());
 
 TH1F *h1_NEvents_sig = (TH1F*) file_signal->Get("NEvents");
 NEvents_sig = h1_NEvents_sig->GetBinContent(1);
-///////////////////////////Binning optimization
-std::vector <float> rate_Data_inBins;
-std::vector <float> rate_Sig_inBins;
+TH1F *h1_rate_Data_Time_inBins = new TH1F("h2_rate_Data_Time_inBins","; #gamma time bin; Events", Nbins_time, 0, 1.0*Nbins_time);
+TH1F *h1_rate_Data_MET_inBins = new TH1F("h2_rate_Data_MET_inBins","; #slash{E}_{T} bin; Events", Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_rate_Data_inBins = new TH2F("h2_rate_Data_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_rate_Sig_inBins = new TH2F("h2_rate_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_rate_MCBkg_inBins = new TH2F("h2_rate_MCBkg_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_rate_SoverSqrtB_inBins = new TH2F("h2_rate_SoverSqrtB_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
 
-if(binningAlgorithm == "significance")
+///////////////////////////////////////////////////
+
+std::cout<<"reading background MC file......"<<endl;
+std::vector <std::string> sample_MCBkg;
+std::vector <float> xsec_MCBkg;
+std::vector <TTree*> trees_MCBkg;
+std::vector <float> NEvents_MCBkg;
+
+ifstream is_MCBkg_list("data/all_bkg.list");
+std::string prefix_filename_MCBkg;
+is_MCBkg_list>>prefix_filename_MCBkg;
+
+while(!is_MCBkg_list.eof())
+{
+        std::string sample_name_MCBkg_thisline;
+        std::string xsec_MCBkg_thisline;
+        is_MCBkg_list>>sample_name_MCBkg_thisline;
+        is_MCBkg_list>>xsec_MCBkg_thisline;
+	if(sample_name_MCBkg_thisline != "")
+        {
+                sample_MCBkg.push_back(sample_name_MCBkg_thisline);
+                xsec_MCBkg.push_back(strtof(xsec_MCBkg_thisline.c_str(), 0));
+                TFile * file_MCBkg_this = new TFile((prefix_filename_MCBkg+sample_name_MCBkg_thisline+".root").c_str(), "READ");
+                trees_MCBkg.push_back((TTree*)file_MCBkg_this->Get(treeName.c_str()));
+                TH1F * h1_MCBkg_NEvents_this =  (TH1F*)file_MCBkg_this->Get("NEvents");
+                NEvents_MCBkg.push_back(h1_MCBkg_NEvents_this->GetBinContent(1));
+        }
+
+}
+
+///////////////////////////Binning optimization
+cout<<"Reading MCBkg list.... sample - xsec - NEvents - NEntries : "<<endl;
+for(int i=0; i<xsec_MCBkg.size(); i++)
+{
+        cout<<sample_MCBkg[i]<<"   "<<xsec_MCBkg[i]<<"   "<<NEvents_MCBkg[i]<<"   "<<trees_MCBkg[i]->GetEntries()<<endl;
+}
+
+if(binningAlgorithm == "significance" && fitMode == "binAndDatacard")
 {
 	float time_Low = -15.0;
 	float time_High = 15.0;
@@ -302,9 +353,28 @@ if(binningAlgorithm == "significance")
 
 	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
 	TH2F *h2finebinSig = new TH2F("h2finebinSig","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+	TH2F *h2finebinMCBkg = new TH2F("h2finebinMCBkg","; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
 
 	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", cut.c_str());
 	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", (weight_cut + "( "+cut+" )").c_str());
+	
+	for(int i=0; i<xsec_MCBkg.size(); i++)
+	{
+		TH2F *h2finebinMCBkg_this = new TH2F(("h2finebinMCBkg_"+std::to_string(i)).c_str(),"; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, time_Low, time_High, met_N_fine, met_Low, met_High);
+		trees_MCBkg[i]->Draw(("t1MET:pho1ClusterTime_SmearToData>>h2finebinMCBkg_"+std::to_string(i)).c_str(), (weight_cut + "( "+cut+" )").c_str());
+		float int_MCBkg_this = h2finebinMCBkg_this->Integral();
+		h2finebinMCBkg_this->Scale(1.0*lumi*xsec_MCBkg[i]/NEvents_MCBkg[i]);
+
+		cout<<"total number of events in MCBkg background "<<i<<": before cut => after cut => scaled ... "<<trees_MCBkg[i]->GetEntries()<<"   "<<trees_MCBkg[i]->GetEntries((weight_cut + "( "+cut+" )").c_str())<<"   "<<h2finebinMCBkg_this->Integral()<<" (  lumi*xsec*int/Norm = "<<lumi<<" * "<<xsec_MCBkg[i]<<" * "<<int_MCBkg_this<<" / "<<NEvents_MCBkg[i]<<" = "<<lumi*xsec_MCBkg[i]*int_MCBkg_this/NEvents_MCBkg[i]<<" )"<<endl;
+
+		h2finebinMCBkg->Add(h2finebinMCBkg_this);
+	}
+
+	cout<<"Bkg MC Integral total = "<<h2finebinMCBkg->Integral()<<endl;
+	cout<<"Data Integral total = "<<h2finebinData->Integral()<<endl;
+	cout<<"applying k-factors..."<<endl;
+	h2finebinMCBkg->Scale(h2finebinData->Integral()/h2finebinMCBkg->Integral());	
+	
 
 	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
 	h2finebinSig->Scale((1.0*N_sig_expected)/(1.0*h2finebinSig->Integral()));
@@ -349,14 +419,14 @@ if(binningAlgorithm == "significance")
 	{
 		for(int iM=1;iM<= metBin.size()-1; iM++)
 		{
-			rate_Data_inBins.push_back(h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
-			rate_Sig_inBins.push_back(h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
+			h2_rate_Data_inBins->SetBinContent(iT, iM, h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));	
+			h2_rate_Sig_inBins->SetBinContent(iT, iM, h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));	
 		}
 	}
 
 }
 
-if(binningAlgorithm == "limit")
+if(binningAlgorithm == "limit" && fitMode == "binAndDatacard")
 {
 
 	//pre-defined bins:
@@ -376,12 +446,39 @@ if(binningAlgorithm == "limit")
 	metBin.push_back(met_N_fine);
 
 	TH2F *h2finebinData = new TH2F("h2finebinData","; #gamma time bin; #slash{E}_{T} bin; Events", time_N_fine, Time_finebins, met_N_fine, MET_finebins);
+	TH1F *h1finebinData_Time = new TH1F("h1finebinData_Time", "; #gamma time bin; Events", time_N_fine, Time_finebins);
+	TH1F *h1finebinData_MET = new TH1F("h1finebinData_MET", "; #slash{E}_{T} bin; Events", met_N_fine, MET_finebins);
+
 	TH2F *h2finebinSig = new TH2F("h2finebinSig","; #gamma time bin; #slash{E}_{T} bin; Events", time_N_fine, Time_finebins, met_N_fine, MET_finebins);
+	TH2F *h2finebinMCBkg = new TH2F("h2finebinMCBkg","; #gamma time bin; #slash{E}_{T} bin; Events", time_N_fine, Time_finebins, met_N_fine, MET_finebins);
 
 	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", cut.c_str());
+	tree_data->Draw("pho1ClusterTime_SmearToData>>h1finebinData_Time", (cut+" && t1MET < 100.0").c_str());
+	tree_data->Draw("t1MET>>h1finebinData_MET", (cut+" && pho1ClusterTime_SmearToData < 1.0").c_str());
 	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinSig", (weight_cut + "( "+cut+" )").c_str());
 	//tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2finebinData", (weight_cut + "( "+cut+" )").c_str());
 
+	h1finebinData_Time->Scale(1.0/h1finebinData_Time->Integral());	
+	h1finebinData_MET->Scale(1.0/h1finebinData_MET->Integral());	
+
+	for(int i=0; i<xsec_MCBkg.size(); i++)
+	{
+		TH2F *h2finebinMCBkg_this = new TH2F(("h2finebinMCBkg_"+std::to_string(i)).c_str(),"; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", time_N_fine, Time_finebins, met_N_fine, MET_finebins);
+		trees_MCBkg[i]->Draw(("t1MET:pho1ClusterTime_SmearToData>>h2finebinMCBkg_"+std::to_string(i)).c_str(), (weight_cut + "( "+cut+" )").c_str());
+		float int_MCBkg_this = h2finebinMCBkg_this->Integral();
+		h2finebinMCBkg_this->Scale(1.0*lumi*xsec_MCBkg[i]/NEvents_MCBkg[i]);
+
+		cout<<"total number of events in MCBkg background "<<i<<": before cut => after cut => scaled ... "<<trees_MCBkg[i]->GetEntries()<<"   "<<trees_MCBkg[i]->GetEntries((weight_cut + "( "+cut+" )").c_str())<<"   "<<h2finebinMCBkg_this->Integral()<<" (  lumi*xsec*int/Norm = "<<lumi<<" * "<<xsec_MCBkg[i]<<" * "<<int_MCBkg_this<<" / "<<NEvents_MCBkg[i]<<" = "<<lumi*xsec_MCBkg[i]*int_MCBkg_this/NEvents_MCBkg[i]<<" )"<<endl;
+
+		h2finebinMCBkg->Add(h2finebinMCBkg_this);
+	}
+
+	cout<<"Bkg MC Integral total = "<<h2finebinMCBkg->Integral()<<endl;
+	cout<<"Data Integral total = "<<h2finebinData->Integral()<<endl;
+	cout<<"applying k-factors... = "<<h2finebinData->Integral()/h2finebinMCBkg->Integral()<<endl;
+	h2finebinMCBkg->Scale(h2finebinData->Integral()/h2finebinMCBkg->Integral());	
+
+		
 	float N_sig_expected = 1.0*lumi*xsec*h2finebinSig->Integral()/(1.0*NEvents_sig);
 	h2finebinSig->Scale((1.0*N_sig_expected)/(1.0*h2finebinSig->Integral()));
 	
@@ -397,7 +494,7 @@ if(binningAlgorithm == "limit")
 	
 	cout<<"binning optimization with data.int = "<<h2finebinData->Integral()<<", sig.Int = "<<h2finebinSig->Integral()<<endl;	
 	
-	OptimizeBinningABCDLimits(Nbins_MET, Nbins_time, timeBin, metBin, h2finebinData, h2finebinSig, _sigModelName, outBinningDir);
+	OptimizeBinningABCDLimits(Nbins_MET, Nbins_time, timeBin, metBin, h2finebinData, h2finebinSig, h2finebinMCBkg, h1finebinData_Time, h1finebinData_MET, _sigModelName, outBinningDir, true);
 	
 	cout<<"optimized met and time bin:-----------"<<endl;
 	cout<<"time: ";
@@ -435,13 +532,78 @@ if(binningAlgorithm == "limit")
 	{
 		for(int iM=1;iM<= metBin.size()-1; iM++)
 		{
-			rate_Data_inBins.push_back(h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
-			rate_Sig_inBins.push_back(h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));
+			h2_rate_Data_inBins->SetBinContent(iT, iM, h2finebinData->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));	
+			h2_rate_Sig_inBins->SetBinContent(iT, iM, h2finebinSig->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));	
+			h2_rate_MCBkg_inBins->SetBinContent(iT, iM, h2finebinMCBkg->Integral(timeBin[iT-1]+1, timeBin[iT], metBin[iM-1]+1, metBin[iM]));	
+			if(iT==1) h1_rate_Data_MET_inBins->SetBinContent(iM, h1finebinData_MET->Integral(metBin[iM-1]+1, metBin[iM]));
 		}
+		h1_rate_Data_Time_inBins->SetBinContent(iT, h1finebinData_Time->Integral(timeBin[iT-1]+1, timeBin[iT]));
 	}
 
 }
 
+
+if(fitMode == "datacard")
+{
+	xbins_MET.push_back(met_split_by_CAT[BIN_CATEGORY]);
+	xbins_time.push_back(time_split_by_CAT[BIN_CATEGORY]);
+	
+	float time_2x2_bins[3] = {-2.0, time_split_by_CAT[BIN_CATEGORY], 25.0};
+	float met_2x2_bins[3] = {0.0, met_split_by_CAT[BIN_CATEGORY], 3000.0};
+
+	TH2F *h2_2x2binData = new TH2F("h2_2x2binData","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	TH1F *h1_2x2binData_Time = new TH1F("h1_2x2binData_Time", "; #gamma time bin; Events", 2, time_2x2_bins);
+	TH1F *h1_2x2binData_MET = new TH1F("h1_2x2binData_MET", "; #slash{E}_{T} bin; Events", 2, met_2x2_bins);
+
+	TH2F *h2_2x2binSig = new TH2F("h2_2x2binSig","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	TH2F *h2_2x2binMCBkg = new TH2F("h2_2x2binMCBkg","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+
+	tree_data->Draw("t1MET:pho1ClusterTime_SmearToData>>h2_2x2binData", cut.c_str());
+	tree_data->Draw("pho1ClusterTime_SmearToData>>h1_2x2binData_Time", (cut+" && t1MET < 100.0").c_str());
+	tree_data->Draw("t1MET>>h1_2x2binData_MET", (cut+" && pho1ClusterTime_SmearToData < 1.0").c_str());
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2_2x2binSig", (weight_cut + "( "+cut+" )").c_str());
+
+	h1_2x2binData_Time->Scale(1.0/h1_2x2binData_Time->Integral());	
+	h1_2x2binData_MET->Scale(1.0/h1_2x2binData_MET->Integral());	
+
+	for(int i=0; i<xsec_MCBkg.size(); i++)
+	{
+		TH2F *h2_2x2binMCBkg_this = new TH2F(("h2_2x2binMCBkg_"+std::to_string(i)).c_str(),"; #gamma cluster time (ns); #slash{E}_{T} (GeV); Events", 2, time_2x2_bins, 2, met_2x2_bins);
+		trees_MCBkg[i]->Draw(("t1MET:pho1ClusterTime_SmearToData>>h2_2x2binMCBkg_"+std::to_string(i)).c_str(), (weight_cut + "( "+cut+" )").c_str());
+		float int_MCBkg_this = h2_2x2binMCBkg_this->Integral();
+		h2_2x2binMCBkg_this->Scale(1.0*lumi*xsec_MCBkg[i]/NEvents_MCBkg[i]);
+
+		cout<<"total number of events in MCBkg background "<<i<<": before cut => after cut => scaled ... "<<trees_MCBkg[i]->GetEntries()<<"   "<<trees_MCBkg[i]->GetEntries((weight_cut + "( "+cut+" )").c_str())<<"   "<<h2_2x2binMCBkg_this->Integral()<<" (  lumi*xsec*int/Norm = "<<lumi<<" * "<<xsec_MCBkg[i]<<" * "<<int_MCBkg_this<<" / "<<NEvents_MCBkg[i]<<" = "<<lumi*xsec_MCBkg[i]*int_MCBkg_this/NEvents_MCBkg[i]<<" )"<<endl;
+
+		h2_2x2binMCBkg->Add(h2_2x2binMCBkg_this);
+	}
+
+	cout<<"Bkg MC Integral total = "<<h2_2x2binMCBkg->Integral()<<endl;
+	cout<<"Data Integral total = "<<h2_2x2binData->Integral()<<endl;
+	cout<<"applying k-factors... = "<<h2_2x2binData->Integral()/h2_2x2binMCBkg->Integral()<<endl;
+	h2_2x2binMCBkg->Scale(h2_2x2binData->Integral()/h2_2x2binMCBkg->Integral());	
+		
+	float N_sig_expected = 1.0*lumi*xsec*h2_2x2binSig->Integral()/(1.0*NEvents_sig);
+	h2_2x2binSig->Scale((1.0*N_sig_expected)/(1.0*h2_2x2binSig->Integral()));
+
+
+	for(int iT=1;iT<= 2; iT++)
+	{
+		for(int iM=1;iM<= 2; iM++)
+		{
+			h2_rate_Data_inBins->SetBinContent(iT, iM, h2_2x2binData->GetBinContent(iT, iM));
+			h2_rate_Sig_inBins->SetBinContent(iT, iM, h2_2x2binSig->GetBinContent(iT, iM));
+			h2_rate_MCBkg_inBins->SetBinContent(iT, iM, h2_2x2binMCBkg->GetBinContent(iT, iM));
+			if(iT==1) h1_rate_Data_MET_inBins->SetBinContent(iM, h1_2x2binData_MET->GetBinContent(iM));
+		}
+		h1_rate_Data_Time_inBins->SetBinContent(iT, h1_2x2binData_Time->GetBinContent(iT));
+	}
+
+}
+
+
+if(fitMode == "binAndDatacard")
+{
 if(xbins_MET.size() != Nbins_MET + 1) 
 {
 	std::cerr << "[ERROR]: binning procedure didn't manage to get the target number of MET bins..." << std::endl;
@@ -453,41 +615,34 @@ if(xbins_time.size() != Nbins_time + 1)
 	std::cerr << "[ERROR]: binning procedure didn't manage to get the target number of time bins..." << std::endl;
 	return -1;
 }
+}
 
 // B | C
 // -----
 // A | D
 //for last bin, use blind strategy: C = B*D/A
+	
 if(_useToy)
 {
-	rate_Data_inBins[Nbins_time*Nbins_MET-1] = rate_Data_inBins[Nbins_time*Nbins_MET-2]*rate_Data_inBins[(Nbins_time-1)*Nbins_MET-1]/rate_Data_inBins[(Nbins_time-1)*Nbins_MET-2];
-}
+	float A = h2_rate_Data_inBins->GetBinContent(Nbins_time-1, Nbins_MET-1);
+	float B = h2_rate_Data_inBins->GetBinContent(Nbins_time-1, Nbins_MET);
+	float D = h2_rate_Data_inBins->GetBinContent(Nbins_time, Nbins_MET-1);
+	if(A > 0.0)	h2_rate_Data_inBins->SetBinContent(Nbins_time, Nbins_MET, B*D/A);
+}			
 
-cout<<"in ABCD bins...."<<endl;
-float sum_rate_Data = 0.0;
-float sum_rate_Sig = 0.0;
 
-for(int i=0; i<rate_Data_inBins.size(); i++)
+for(int iT=1;iT<= Nbins_time; iT++)
 {
-	cout<<"bin "<<i<<": "<<rate_Data_inBins[i]<<", "<<rate_Sig_inBins[i]<<endl;
-	sum_rate_Data += rate_Data_inBins[i];
-	sum_rate_Sig += rate_Sig_inBins[i];
-}
-cout<<"ABCD sum = "<<sum_rate_Data<<", "<<sum_rate_Sig<<endl;
-
-//draw 2D binning
-TH2F *h2_rate_Data_inBins = new TH2F("h2_rate_Data_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
-TH2F *h2_rate_Sig_inBins = new TH2F("h2_rate_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
-TH2F *h2_rate_SoverSqrtB_inBins = new TH2F("h2_rate_SoverSqrtB_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
-for(int iT=1; iT<=Nbins_time; iT++)
-{
-	for(int iM=1; iM<=Nbins_MET; iM++)
+	for(int iM=1;iM<= Nbins_MET; iM++)
 	{
-		h2_rate_Data_inBins->SetBinContent(iT, iM, rate_Data_inBins[Nbins_time*(iM-1)+iT-1]);
-		h2_rate_Sig_inBins->SetBinContent(iT, iM, rate_Sig_inBins[Nbins_time*(iM-1)+iT-1]);
-		h2_rate_SoverSqrtB_inBins->SetBinContent(iT, iM, rate_Sig_inBins[Nbins_time*(iM-1)+iT-1]/sqrt(rate_Data_inBins[Nbins_time*(iM-1)+iT-1]));
+		if(h2_rate_Data_inBins->GetBinContent(iT, iM) > 0.0) h2_rate_SoverSqrtB_inBins->SetBinContent(iT, iM, h2_rate_Sig_inBins->GetBinContent(iT, iM) / sqrt(h2_rate_Data_inBins->GetBinContent(iT, iM)));
 	}
 }
+
+
+
+
+//draw 2D binning
 
 h2_rate_Data_inBins->GetXaxis()->SetNdivisions(100+Nbins_time);
 h2_rate_Data_inBins->GetYaxis()->SetNdivisions(100+Nbins_MET);
@@ -516,7 +671,7 @@ for(int iT=1; iT<=Nbins_time; iT++)
         }
 }
 
-MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins,Nbins_time, Nbins_MET, _sigModelName, outDataCardsDir);
+MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins, h2_rate_MCBkg_inBins, h1_rate_Data_Time_inBins, h1_rate_Data_MET_inBins, Nbins_time, Nbins_MET, _sigModelName, outDataCardsDir);
 //MakeDataCardABCD(h2_dummy, h2_dummy,Nbins_time, Nbins_MET, _sigModelName, outDataCardsDir);
 
 //add systematics

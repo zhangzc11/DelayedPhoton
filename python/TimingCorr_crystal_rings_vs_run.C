@@ -11,8 +11,8 @@ float axisTitleOffsetRatioX = 0.94;
 float axisTitleSizeRatioY   = 0.15;
 float axisLabelSizeRatioY   = 0.108;
 float axisTitleOffsetRatioY = 0.32;
-float leftMargin   = 0.15;
-float rightMargin  = 0.05;
+float leftMargin   = 0.12;
+float rightMargin  = 0.10;
 float topMargin    = 0.09;
 float bottomMargin = 0.12;
 
@@ -33,14 +33,14 @@ float * doubGausFit(TH1F *hist){
 	float x_stddev=hist->GetStdDev();
 	float x_min=x_mean - 3.5*x_stddev;
 	float x_max=x_mean + 3.5*x_stddev;
-	float sig_small = 0.7*x_stddev;
-	float sig_big = 1.11*x_stddev;
+	float sig_small = 0.6*x_stddev;
+	float sig_big = 1.1*x_stddev;
 	TF1 * tf1_doubGaus = new TF1("tf1_doubGaus","gaus(0)+gaus(3)", x_min,x_max);
 	tf1_doubGaus->SetParameters(0.6*hist->Integral(),0.5*(x_min+x_max),sig_small, 0.4*hist->Integral(),0.5*(x_min+x_max),sig_big);
-	tf1_doubGaus->SetParLimits(0,0.1,hist->Integral());
-	tf1_doubGaus->SetParLimits(3,0.1,hist->Integral());
-	tf1_doubGaus->SetParLimits(2,0.0520,0.500);
-	tf1_doubGaus->SetParLimits(5,0.0520,0.500);
+	tf1_doubGaus->SetParLimits(0,0.01,hist->Integral());
+	tf1_doubGaus->SetParLimits(3,0.01,hist->Integral());
+	tf1_doubGaus->SetParLimits(2,0.0520,0.50);
+	tf1_doubGaus->SetParLimits(5,0.0520,0.50);
 	hist->Fit("tf1_doubGaus","B","",x_min,x_max);
 	float N1 = tf1_doubGaus->GetParameter(0);
 	float u1 = tf1_doubGaus->GetParameter(1);
@@ -67,6 +67,34 @@ float * doubGausFit(TH1F *hist){
 	float * pointer = new float[4];
 	for(int i=0; i<4; i++) pointer[i] = result[i];
 	delete tf1_doubGaus;
+	return pointer;
+}
+
+float * singGausFit(TH1F *hist){
+	if(hist->Integral() < 100.0){
+		float result[4] = {0};
+		float * pointer = new float[4];
+		for(int i=0; i<4; i++) pointer[i] = result[i];
+		return pointer;
+	}
+
+	float x_mean=hist->GetMean();
+	float x_stddev=hist->GetStdDev();
+	float x_min=x_mean - 0.5*x_stddev;
+	float x_max=x_mean + 0.5*x_stddev;
+	TF1 * tf1_singGaus = new TF1("tf1_singGaus","gaus(0)", x_min,x_max);
+	tf1_singGaus->SetParameters(hist->Integral(),0.5*(x_min+x_max),x_stddev);
+	hist->Fit("tf1_singGaus","B","",x_min,x_max);
+	float meanEff = tf1_singGaus->GetParameter(1);
+	float emeanEff = tf1_singGaus->GetParError(1);
+	float sigEff = abs(tf1_singGaus->GetParameter(2));
+	float esigEff = tf1_singGaus->GetParError(2);
+	
+	float result[4] = {meanEff,emeanEff,sigEff,esigEff};
+
+	float * pointer = new float[4];
+	for(int i=0; i<4; i++) pointer[i] = result[i];
+	delete tf1_singGaus;
 	return pointer;
 }
 
@@ -267,15 +295,15 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".png");
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".C");
 	
+	TFile *file_plot = new TFile(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".root", "RECREATE");
+	gr_Eeff_sigma_dt_data->Write("gr_data");
+        gr_Eeff_sigma_dt_MC->Write("gr_mc");
+        file_plot->Close();
+	
 	myC->SetLogy(1);
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.pdf");
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.png");
 	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.C");
-	
-	TFile *file_plot = new TFile((outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".root"), "RECREATE");
-	gr_Eeff_sigma_dt_data->Write("gr_data");
-	gr_Eeff_sigma_dt_MC->Write("gr_mc");
-	file_plot->Close();
 	
 	delete myC;
 	delete gr_Eeff_sigma_dt_data;
@@ -283,6 +311,107 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	delete tf1_dt_vs_Eeff_MC;
 
 }
+
+
+void drawTimeResoVsRun(TTree * tree_data, TString label){
+	cout<<"draw time resolution vs Run plots for "<<label<<endl;
+	cout<<"data sampel size  = "<<tree_data->GetEntries()<<endl;	
+
+	gStyle->SetOptFit(1);
+	gStyle->SetOptStat(0);
+
+	TCanvas * myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
+	myC->SetHighLightColor(2);
+	myC->SetFillColor(0);
+	myC->SetBorderMode(0);
+	myC->SetBorderSize(2);
+	myC->SetLeftMargin( leftMargin );
+	myC->SetRightMargin( rightMargin );
+	myC->SetTopMargin( topMargin );
+	myC->SetBottomMargin( bottomMargin );
+	myC->SetFrameBorderMode(0);
+	myC->SetFrameBorderMode(0);
+	
+	//const int N_Run_points = 10;	
+	//float Run_divide[11] = {200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0, 700.0, 900.0, 2000.0};	
+	const int N_Run_points = 100;	
+	float start_run = 273000;
+	float end_run = 284000;
+
+	float Run_divide[101] = {0};
+	for(int irun = 0; irun<=N_Run_points; irun++) Run_divide[irun] = start_run + irun*(end_run-start_run)/N_Run_points;
+	
+	float x_Run[N_Run_points] = {0};
+	float ex_Run[N_Run_points] = {0};
+	float y_Run_mean_data[N_Run_points] = {0};
+	float y_Run_sigma_dt_data[N_Run_points] = {0};
+	float ey_Run_mean_data[N_Run_points] = {0};
+	float ey_Run_sigma_dt_data[N_Run_points] = {0};
+	
+	for(int i=0; i< N_Run_points; i++){
+		x_Run[i] = 0.5*(Run_divide[i+1]+Run_divide[i]);
+		ex_Run[i] = 0.5*(Run_divide[i+1]-Run_divide[i]);
+		float Run_low_this = Run_divide[i];
+		float Run_high_this = Run_divide[i+1];
+		TString cut_2e_this = ("E2>1.0 && run > "+std::to_string(Run_low_this)+" && run < "+std::to_string(Run_high_this)).c_str();
+;
+		TH1F * hist_2e_this_data = new TH1F(("hist_2e_this_data_"+std::to_string(i)).c_str(),("hist_2e_this_data_"+std::to_string(i)).c_str(), 60, -1.5, 1.5);
+		tree_data->Draw(("t1-t2>>hist_2e_this_data_"+std::to_string(i)).c_str(), cut_2e_this);
+		hist_2e_this_data->Draw();
+		float * result_2e_this_data = singGausFit(hist_2e_this_data);
+		myC->SaveAs(outputDir+"/ZeeTiming/fits/iRunFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+".png");		
+		if(result_2e_this_data[3]<0.05){	
+		y_Run_sigma_dt_data[i] = (result_2e_this_data[2]);
+		ey_Run_sigma_dt_data[i] = (result_2e_this_data[3]);
+		}
+		else{
+		y_Run_sigma_dt_data[i] = 0.0;
+		ey_Run_sigma_dt_data[i] = 0.0;
+		}
+		delete result_2e_this_data;
+		delete hist_2e_this_data;
+		cout<<"===bin "<<i<<"  "<<y_Run_sigma_dt_data[i]<<"   "<<ey_Run_sigma_dt_data[i]<<endl;
+	}
+
+	gStyle->SetOptFit(0);
+	myC->SetGridy(1);
+	myC->SetGridx(1);
+	//myC->SetLogx(1);
+	//myC->SetLogy(1);
+
+	TGraphErrors *gr_Run_sigma_dt_data  =  new TGraphErrors(N_Run_points, x_Run, y_Run_sigma_dt_data, ex_Run, ey_Run_sigma_dt_data);
+	gr_Run_sigma_dt_data->Draw("AP");
+	gr_Run_sigma_dt_data->SetMarkerColor(kBlue);
+	gr_Run_sigma_dt_data->SetMarkerStyle(20);
+	gr_Run_sigma_dt_data->SetLineColor(kBlue);
+	gr_Run_sigma_dt_data->SetLineWidth(2);
+	gr_Run_sigma_dt_data->SetTitle("");
+	gr_Run_sigma_dt_data->GetXaxis()->SetTitle("Run Number");
+	gr_Run_sigma_dt_data->GetYaxis()->SetTitle("#sigma_{t1-t2} [ns]");
+	gr_Run_sigma_dt_data->GetXaxis()->SetTitleSize( axisTitleSize - 0.02 );
+	gr_Run_sigma_dt_data->GetXaxis()->SetTitleOffset( axisTitleOffset  + 0.6);
+	gr_Run_sigma_dt_data->GetYaxis()->SetTitleSize( axisTitleSize );
+	gr_Run_sigma_dt_data->GetYaxis()->SetTitleOffset( axisTitleOffset +0.18 );
+	gr_Run_sigma_dt_data->GetYaxis()->SetRangeUser(0.01,1.0);
+	gr_Run_sigma_dt_data->GetXaxis()->SetRangeUser(start_run,end_run);
+	gr_Run_sigma_dt_data->GetXaxis()->SetMoreLogLabels();
+	gr_Run_sigma_dt_data->GetYaxis()->SetMoreLogLabels();
+
+		
+	DrawCMS(myC, 13, 35922.0);
+
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Run_sigma_Data_2016_select_CLK_"+label+".pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Run_sigma_Data_2016_select_CLK_"+label+".png");
+	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Run_sigma_Data_2016_select_CLK_"+label+".C");
+
+	TFile *file_plot = new TFile(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Run_sigma_Data_2016_select_CLK_"+label+".root", "RECREATE");
+        gr_Run_sigma_dt_data->Write("gr_data");
+        file_plot->Close();
+	
+	delete myC;
+	delete gr_Run_sigma_dt_data;
+}
+
 
 bool isNeighboringXtal(int iEta1, int iPhi1, int iEta2, int iPhi2){
 	int distance = (iEta1-iEta2)*(iEta1-iEta2) + (iPhi1-iPhi2)*(iPhi1-iPhi2);
@@ -331,7 +460,7 @@ void properScale(TH1F * hist){
 	}
 }
 
-void TimingCorr_crystal_rings_vs_Eeff()
+void TimingCorr_crystal_rings_vs_run()
 {
 
 	TString cut = "ele1IsEB && ele1seedE<120.0";
@@ -345,8 +474,8 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	tree_MC->SetCacheSize(3000000000);//3GB
 
 	TFile * file_out;
-	if(!drawOnly) file_out = new TFile("temp_TimingCorr_crystal_rings_vs_Eeff.root","RECREATE");
-	else file_out = new TFile("temp_TimingCorr_crystal_rings_vs_Eeff.root","READ");
+	if(!drawOnly) file_out = new TFile("temp_TimingCorr_crystal_rings_vs_run.root","RECREATE");
+	else file_out = new TFile("temp_TimingCorr_crystal_rings_vs_run.root","READ");
 	file_out->cd();
 	//TTree * tree_data_skim = tree_data->CopyTree(cut);
 	//TTree * tree_MC_skim = tree_MC->CopyTree(cut);
@@ -354,6 +483,8 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	int N_entries_data = tree_data->GetEntries();	
 	int N_entries_MC = tree_MC->GetEntries();	
 	//import input variables
+	unsigned int run, lumi, event;
+	unsigned int NPU, nPV;
 	float ele1seedE;
 	float seed1_pedestal;
 	bool ele1IsEB;
@@ -382,6 +513,11 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	std::vector<float> *ele2Rechit_IEtaIX = 0;
 	std::vector<float> *ele2Rechit_IPhiIY = 0;
 
+	tree_data->SetBranchStatus("run",1);	
+	tree_data->SetBranchStatus("lumi",1);	
+	tree_data->SetBranchStatus("event",1);	
+	tree_data->SetBranchStatus("NPU",1);	
+	tree_data->SetBranchStatus("nPV",1);	
 	tree_data->SetBranchStatus("ele1seedE",1);	
 	tree_data->SetBranchStatus("seed1_pedestal",1);	
 	tree_data->SetBranchStatus("ele1IsEB",1);	
@@ -396,6 +532,11 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	tree_data->SetBranchStatus("ele1Rechit_IEtaIX",1);	
 	tree_data->SetBranchStatus("ele1Rechit_IPhiIY",1);	
 	
+	tree_data->SetBranchAddress("run", & run);
+	tree_data->SetBranchAddress("lumi", & lumi);
+	tree_data->SetBranchAddress("event", & event);
+	tree_data->SetBranchAddress("NPU", & NPU);
+	tree_data->SetBranchAddress("nPV", & nPV);
 	tree_data->SetBranchAddress("ele1seedE", & ele1seedE);
 	tree_data->SetBranchAddress("seed1_pedestal", & seed1_pedestal);
 	tree_data->SetBranchAddress("ele1IsEB", & ele1IsEB);
@@ -438,6 +579,11 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	tree_data->SetBranchAddress("ele2Rechit_IEtaIX", & ele2Rechit_IEtaIX);
 	tree_data->SetBranchAddress("ele2Rechit_IPhiIY", & ele2Rechit_IPhiIY);
 
+	tree_MC->SetBranchStatus("run",1);	
+	tree_MC->SetBranchStatus("lumi",1);	
+	tree_MC->SetBranchStatus("event",1);	
+	tree_MC->SetBranchStatus("NPU",1);	
+	tree_MC->SetBranchStatus("nPV",1);	
 
 	tree_MC->SetBranchStatus("ele1seedE",1);	
 	tree_MC->SetBranchStatus("seed1_pedestal",1);	
@@ -452,7 +598,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	tree_MC->SetBranchStatus("ele1Rechit_t",1);	
 	tree_MC->SetBranchStatus("ele1Rechit_IEtaIX",1);	
 	tree_MC->SetBranchStatus("ele1Rechit_IPhiIY",1);	
-	
+		
+	tree_MC->SetBranchAddress("run", & run);
+	tree_MC->SetBranchAddress("lumi", & lumi);
+	tree_MC->SetBranchAddress("event", & event);
+	tree_MC->SetBranchAddress("NPU", & NPU);
+	tree_MC->SetBranchAddress("nPV", & nPV);
+
 	tree_MC->SetBranchAddress("ele1seedE", & ele1seedE);
 	tree_MC->SetBranchAddress("seed1_pedestal", & seed1_pedestal);
 	tree_MC->SetBranchAddress("ele1IsEB", & ele1IsEB);
@@ -553,11 +705,16 @@ void TimingCorr_crystal_rings_vs_Eeff()
 	float pedestal1_diffTrigTowerNeighbor=0.042, pedestal2_diffTrigTowerNeighbor=0.042;
 	TTree * tree_out_diffTrigTowerNeighbor_data;
 	TTree * tree_out_diffTrigTowerNeighbor_MC;
-
+	
 
 	if(!drawOnly){
 
 		tree_out_neighboring_data = new TTree("ZeeTiming_neighboring_data","second crystal from neighboring crystals");
+		tree_out_neighboring_data->Branch("run", &run, "run/i");	
+		tree_out_neighboring_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_neighboring_data->Branch("event", &event, "event/i");	
+		tree_out_neighboring_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_neighboring_data->Branch("nPV", &nPV, "nPV/i");	
 		tree_out_neighboring_data->Branch("E1", &E1_neighboring, "E1/F");	
 		tree_out_neighboring_data->Branch("E2", &E2_neighboring, "E2/F");	
 		tree_out_neighboring_data->Branch("t1", &t1_neighboring, "t1/F");	
@@ -568,8 +725,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_neighboring_data->Branch("iEta2", &iEta2_neighboring, "iEta2/I");	
 		tree_out_neighboring_data->Branch("iPhi1", &iPhi1_neighboring, "iPhi1/I");	
 		tree_out_neighboring_data->Branch("iPhi2", &iPhi2_neighboring, "iPhi2/I");	
-
+		
 		tree_out_ring1_data = new TTree("ZeeTiming_ring1_data","second crystal from ring1 crystals");
+		tree_out_ring1_data->Branch("run", &run, "run/i");	
+		tree_out_ring1_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_ring1_data->Branch("event", &event, "event/i");	
+		tree_out_ring1_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_ring1_data->Branch("nPV", &nPV, "nPV/i");	
 		tree_out_ring1_data->Branch("E1", &E1_ring1, "E1/F");	
 		tree_out_ring1_data->Branch("E2", &E2_ring1, "E2/F");	
 		tree_out_ring1_data->Branch("t1", &t1_ring1, "t1/F");	
@@ -582,8 +744,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_ring1_data->Branch("iPhi2", &iPhi2_ring1, "iPhi2/I");	
 
 
-
 		tree_out_ring2_data = new TTree("ZeeTiming_ring2_data","second crystal from ring2 crystals");
+		tree_out_ring2_data->Branch("run", &run, "run/i");	
+		tree_out_ring2_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_ring2_data->Branch("event", &event, "event/i");	
+		tree_out_ring2_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_ring2_data->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_ring2_data->Branch("E1", &E1_ring2, "E1/F");	
 		tree_out_ring2_data->Branch("E2", &E2_ring2, "E2/F");	
 		tree_out_ring2_data->Branch("t1", &t1_ring2, "t1/F");	
@@ -596,8 +763,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_ring2_data->Branch("iPhi2", &iPhi2_ring2, "iPhi2/I");	
 
 
-
 		tree_out_sameTrigTower_data = new TTree("ZeeTiming_sameTrigTower_data","second crystal from sameTrigTower crystals");
+		tree_out_sameTrigTower_data->Branch("run", &run, "run/i");	
+		tree_out_sameTrigTower_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_sameTrigTower_data->Branch("event", &event, "event/i");	
+		tree_out_sameTrigTower_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_sameTrigTower_data->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_sameTrigTower_data->Branch("E1", &E1_sameTrigTower, "E1/F");	
 		tree_out_sameTrigTower_data->Branch("E2", &E2_sameTrigTower, "E2/F");	
 		tree_out_sameTrigTower_data->Branch("t1", &t1_sameTrigTower, "t1/F");	
@@ -609,8 +781,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_sameTrigTower_data->Branch("iPhi1", &iPhi1_sameTrigTower, "iPhi1/I");	
 		tree_out_sameTrigTower_data->Branch("iPhi2", &iPhi2_sameTrigTower, "iPhi2/I");	
 
-
 		tree_out_diffTrigTower_data = new TTree("ZeeTiming_diffTrigTower_data","second crystal from diffTrigTower crystals");
+		tree_out_diffTrigTower_data->Branch("run", &run, "run/i");	
+		tree_out_diffTrigTower_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_diffTrigTower_data->Branch("event", &event, "event/i");	
+		tree_out_diffTrigTower_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_diffTrigTower_data->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_diffTrigTower_data->Branch("E1", &E1_diffTrigTower, "E1/F");	
 		tree_out_diffTrigTower_data->Branch("E2", &E2_diffTrigTower, "E2/F");	
 		tree_out_diffTrigTower_data->Branch("t1", &t1_diffTrigTower, "t1/F");	
@@ -622,8 +799,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_diffTrigTower_data->Branch("iPhi1", &iPhi1_diffTrigTower, "iPhi1/I");	
 		tree_out_diffTrigTower_data->Branch("iPhi2", &iPhi2_diffTrigTower, "iPhi2/I");	
 
-
 		tree_out_sameTrigTowerNeighbor_data = new TTree("ZeeTiming_sameTrigTowerNeighbor_data","second crystal from sameTrigTowerNeighbor crystals");
+		tree_out_sameTrigTowerNeighbor_data->Branch("run", &run, "run/i");	
+		tree_out_sameTrigTowerNeighbor_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_sameTrigTowerNeighbor_data->Branch("event", &event, "event/i");	
+		tree_out_sameTrigTowerNeighbor_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_sameTrigTowerNeighbor_data->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_sameTrigTowerNeighbor_data->Branch("E1", &E1_sameTrigTowerNeighbor, "E1/F");	
 		tree_out_sameTrigTowerNeighbor_data->Branch("E2", &E2_sameTrigTowerNeighbor, "E2/F");	
 		tree_out_sameTrigTowerNeighbor_data->Branch("t1", &t1_sameTrigTowerNeighbor, "t1/F");	
@@ -635,8 +817,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_sameTrigTowerNeighbor_data->Branch("iPhi1", &iPhi1_sameTrigTowerNeighbor, "iPhi1/I");	
 		tree_out_sameTrigTowerNeighbor_data->Branch("iPhi2", &iPhi2_sameTrigTowerNeighbor, "iPhi2/I");	
 
-
 		tree_out_diffTrigTowerNeighbor_data = new TTree("ZeeTiming_diffTrigTowerNeighbor_data","second crystal from diffTrigTowerNeighbor crystals");
+		tree_out_diffTrigTowerNeighbor_data->Branch("run", &run, "run/i");	
+		tree_out_diffTrigTowerNeighbor_data->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_diffTrigTowerNeighbor_data->Branch("event", &event, "event/i");	
+		tree_out_diffTrigTowerNeighbor_data->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_diffTrigTowerNeighbor_data->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_diffTrigTowerNeighbor_data->Branch("E1", &E1_diffTrigTowerNeighbor, "E1/F");	
 		tree_out_diffTrigTowerNeighbor_data->Branch("E2", &E2_diffTrigTowerNeighbor, "E2/F");	
 		tree_out_diffTrigTowerNeighbor_data->Branch("t1", &t1_diffTrigTowerNeighbor, "t1/F");	
@@ -654,6 +841,7 @@ void TimingCorr_crystal_rings_vs_Eeff()
 			if(ientry%100000 ==0) cout<<"reading original tree entry "<<ientry<<"  out of "<<N_entries_data<<endl;
 			tree_data->GetEntry(ientry);
 			
+
 			float maxE_neighboring = -999.0;
 			bool pass_neighboring_all = false;
 			bool pass_ring1_all = false;
@@ -999,7 +1187,15 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_sameTrigTowerNeighbor_data->Write();
 		tree_out_diffTrigTowerNeighbor_data->Write();
 
+
+
+
 		tree_out_neighboring_MC = new TTree("ZeeTiming_neighboring_MC","second crystal from neighboring crystals");
+		tree_out_neighboring_MC->Branch("run", &run, "run/i");	
+		tree_out_neighboring_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_neighboring_MC->Branch("event", &event, "event/i");	
+		tree_out_neighboring_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_neighboring_MC->Branch("nPV", &nPV, "nPV/i");	
 		tree_out_neighboring_MC->Branch("E1", &E1_neighboring, "E1/F");	
 		tree_out_neighboring_MC->Branch("E2", &E2_neighboring, "E2/F");	
 		tree_out_neighboring_MC->Branch("t1", &t1_neighboring, "t1/F");	
@@ -1012,6 +1208,11 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_neighboring_MC->Branch("iPhi2", &iPhi2_neighboring, "iPhi2/I");	
 
 		tree_out_ring1_MC = new TTree("ZeeTiming_ring1_MC","second crystal from ring1 crystals");
+		tree_out_ring1_MC->Branch("run", &run, "run/i");	
+		tree_out_ring1_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_ring1_MC->Branch("event", &event, "event/i");	
+		tree_out_ring1_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_ring1_MC->Branch("nPV", &nPV, "nPV/i");	
 		tree_out_ring1_MC->Branch("E1", &E1_ring1, "E1/F");	
 		tree_out_ring1_MC->Branch("E2", &E2_ring1, "E2/F");	
 		tree_out_ring1_MC->Branch("t1", &t1_ring1, "t1/F");	
@@ -1024,8 +1225,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_ring1_MC->Branch("iPhi2", &iPhi2_ring1, "iPhi2/I");	
 
 
-
 		tree_out_ring2_MC = new TTree("ZeeTiming_ring2_MC","second crystal from ring2 crystals");
+		tree_out_ring2_MC->Branch("run", &run, "run/i");	
+		tree_out_ring2_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_ring2_MC->Branch("event", &event, "event/i");	
+		tree_out_ring2_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_ring2_MC->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_ring2_MC->Branch("E1", &E1_ring2, "E1/F");	
 		tree_out_ring2_MC->Branch("E2", &E2_ring2, "E2/F");	
 		tree_out_ring2_MC->Branch("t1", &t1_ring2, "t1/F");	
@@ -1038,8 +1244,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_ring2_MC->Branch("iPhi2", &iPhi2_ring2, "iPhi2/I");	
 
 
-
 		tree_out_sameTrigTower_MC = new TTree("ZeeTiming_sameTrigTower_MC","second crystal from sameTrigTower crystals");
+		tree_out_sameTrigTower_MC->Branch("run", &run, "run/i");	
+		tree_out_sameTrigTower_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_sameTrigTower_MC->Branch("event", &event, "event/i");	
+		tree_out_sameTrigTower_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_sameTrigTower_MC->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_sameTrigTower_MC->Branch("E1", &E1_sameTrigTower, "E1/F");	
 		tree_out_sameTrigTower_MC->Branch("E2", &E2_sameTrigTower, "E2/F");	
 		tree_out_sameTrigTower_MC->Branch("t1", &t1_sameTrigTower, "t1/F");	
@@ -1051,8 +1262,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_sameTrigTower_MC->Branch("iPhi1", &iPhi1_sameTrigTower, "iPhi1/I");	
 		tree_out_sameTrigTower_MC->Branch("iPhi2", &iPhi2_sameTrigTower, "iPhi2/I");	
 
-
 		tree_out_diffTrigTower_MC = new TTree("ZeeTiming_diffTrigTower_MC","second crystal from diffTrigTower crystals");
+		tree_out_diffTrigTower_MC->Branch("run", &run, "run/i");	
+		tree_out_diffTrigTower_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_diffTrigTower_MC->Branch("event", &event, "event/i");	
+		tree_out_diffTrigTower_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_diffTrigTower_MC->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_diffTrigTower_MC->Branch("E1", &E1_diffTrigTower, "E1/F");	
 		tree_out_diffTrigTower_MC->Branch("E2", &E2_diffTrigTower, "E2/F");	
 		tree_out_diffTrigTower_MC->Branch("t1", &t1_diffTrigTower, "t1/F");	
@@ -1064,8 +1280,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_diffTrigTower_MC->Branch("iPhi1", &iPhi1_diffTrigTower, "iPhi1/I");	
 		tree_out_diffTrigTower_MC->Branch("iPhi2", &iPhi2_diffTrigTower, "iPhi2/I");	
 
-
 		tree_out_sameTrigTowerNeighbor_MC = new TTree("ZeeTiming_sameTrigTowerNeighbor_MC","second crystal from sameTrigTowerNeighbor crystals");
+		tree_out_sameTrigTowerNeighbor_MC->Branch("run", &run, "run/i");	
+		tree_out_sameTrigTowerNeighbor_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_sameTrigTowerNeighbor_MC->Branch("event", &event, "event/i");	
+		tree_out_sameTrigTowerNeighbor_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_sameTrigTowerNeighbor_MC->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_sameTrigTowerNeighbor_MC->Branch("E1", &E1_sameTrigTowerNeighbor, "E1/F");	
 		tree_out_sameTrigTowerNeighbor_MC->Branch("E2", &E2_sameTrigTowerNeighbor, "E2/F");	
 		tree_out_sameTrigTowerNeighbor_MC->Branch("t1", &t1_sameTrigTowerNeighbor, "t1/F");	
@@ -1077,8 +1298,13 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_sameTrigTowerNeighbor_MC->Branch("iPhi1", &iPhi1_sameTrigTowerNeighbor, "iPhi1/I");	
 		tree_out_sameTrigTowerNeighbor_MC->Branch("iPhi2", &iPhi2_sameTrigTowerNeighbor, "iPhi2/I");	
 
-
 		tree_out_diffTrigTowerNeighbor_MC = new TTree("ZeeTiming_diffTrigTowerNeighbor_MC","second crystal from diffTrigTowerNeighbor crystals");
+		tree_out_diffTrigTowerNeighbor_MC->Branch("run", &run, "run/i");	
+		tree_out_diffTrigTowerNeighbor_MC->Branch("lumi", &lumi, "lumi/i");	
+		tree_out_diffTrigTowerNeighbor_MC->Branch("event", &event, "event/i");	
+		tree_out_diffTrigTowerNeighbor_MC->Branch("NPU", &NPU, "NPU/i");	
+		tree_out_diffTrigTowerNeighbor_MC->Branch("nPV", &nPV, "nPV/i");	
+
 		tree_out_diffTrigTowerNeighbor_MC->Branch("E1", &E1_diffTrigTowerNeighbor, "E1/F");	
 		tree_out_diffTrigTowerNeighbor_MC->Branch("E2", &E2_diffTrigTowerNeighbor, "E2/F");	
 		tree_out_diffTrigTowerNeighbor_MC->Branch("t1", &t1_diffTrigTowerNeighbor, "t1/F");	
@@ -1089,7 +1315,6 @@ void TimingCorr_crystal_rings_vs_Eeff()
 		tree_out_diffTrigTowerNeighbor_MC->Branch("iEta2", &iEta2_diffTrigTowerNeighbor, "iEta2/I");	
 		tree_out_diffTrigTowerNeighbor_MC->Branch("iPhi1", &iPhi1_diffTrigTowerNeighbor, "iPhi1/I");	
 		tree_out_diffTrigTowerNeighbor_MC->Branch("iPhi2", &iPhi2_diffTrigTowerNeighbor, "iPhi2/I");	
-
 
 
 		for(int ientry=0;ientry<N_entries_MC; ientry++){
@@ -1459,15 +1684,21 @@ void TimingCorr_crystal_rings_vs_Eeff()
 
 	}
 	//draw time resolution vs. effective amplitude
-	drawTimeResoVsAeff(tree_out_neighboring_data, tree_out_neighboring_MC, "neighboring");
+	//drawTimeResoVsAeff(tree_out_neighboring_data, tree_out_neighboring_MC, "neighboring");
 	
-	drawTimeResoVsAeff(tree_out_ring1_data, tree_out_ring1_MC, "ring1");
-	drawTimeResoVsAeff(tree_out_ring2_data, tree_out_ring2_MC, "ring2");
-	drawTimeResoVsAeff(tree_out_sameTrigTower_data, tree_out_sameTrigTower_MC, "sameTrigTower");
-	drawTimeResoVsAeff(tree_out_diffTrigTower_data, tree_out_diffTrigTower_MC, "diffTrigTower");
-	drawTimeResoVsAeff(tree_out_sameTrigTowerNeighbor_data, tree_out_sameTrigTowerNeighbor_MC, "sameTrigTowerNeighbor");
-	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighbor_data, tree_out_diffTrigTowerNeighbor_MC, "diffTrigTowerNeighbor");
-	
+	//drawTimeResoVsAeff(tree_out_ring1_data, tree_out_ring1_MC, "ring1");
+	//drawTimeResoVsAeff(tree_out_ring2_data, tree_out_ring2_MC, "ring2");
+	//drawTimeResoVsAeff(tree_out_sameTrigTower_data, tree_out_sameTrigTower_MC, "sameTrigTower");
+	//drawTimeResoVsAeff(tree_out_diffTrigTower_data, tree_out_diffTrigTower_MC, "diffTrigTower");
+	//drawTimeResoVsAeff(tree_out_sameTrigTowerNeighbor_data, tree_out_sameTrigTowerNeighbor_MC, "sameTrigTowerNeighbor");
+	//drawTimeResoVsAeff(tree_out_diffTrigTowerNeighbor_data, tree_out_diffTrigTowerNeighbor_MC, "diffTrigTowerNeighbor");
+	drawTimeResoVsRun(tree_out_neighboring_data, "neighboring");
+	drawTimeResoVsRun(tree_out_ring1_data, "ring1");
+	drawTimeResoVsRun(tree_out_ring2_data, "ring2");
+	drawTimeResoVsRun(tree_out_sameTrigTower_data, "sameTrigTower");
+	drawTimeResoVsRun(tree_out_diffTrigTower_data, "diffTrigTower");
+	drawTimeResoVsRun(tree_out_sameTrigTowerNeighbor_data, "sameTrigTowerNeighbor");
+	drawTimeResoVsRun(tree_out_diffTrigTowerNeighbor_data, "diffTrigTowerNeighbor");
 
 	file_out->Close();
 }
