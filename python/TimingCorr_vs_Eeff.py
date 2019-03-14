@@ -328,6 +328,11 @@ myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Eeff_sigma_Data_vs_MC_2016
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Eeff_sigma_Data_vs_MC_2016.png")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Eeff_sigma_Data_vs_MC_2016.C")
 
+file_plot = TFile(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Eeff_sigma_Data_vs_MC_2016.root","RECREATE")
+gr_Eeff_sigma_dt_data.Write("gr_data")
+gr_Eeff_sigma_dt_MC.Write("gr_MC")
+file_plot.Close()
+
 myC.SetLogy(1)
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Eeff_sigma_Data_vs_MC_2016_logY.pdf")
 myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_Eeff_sigma_Data_vs_MC_2016_logY.png")

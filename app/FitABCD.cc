@@ -108,7 +108,7 @@ TString _sigModelName (sigModelName.c_str());
 TString _sigModelTitle (sigModelTitle.c_str());
 
 float xsec = getXsecBR(sigModelName); //pb
-if (sigModelName.find("L100TeV") != std::string::npos || sigModelName.find("L150TeV") != std::string::npos) xsec = xsec * 0.01; // for L100TeV models, give smaller xsec to reduce signal yield and stablize fit
+if (sigModelName.find("L100TeV") != std::string::npos) xsec = xsec * 0.01; // for L100TeV models, give smaller xsec to reduce signal yield and stablize fit
 
 std::string treeName = "DelayedPhoton";
 
@@ -118,7 +118,8 @@ std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF*tri
 
 std::string cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
-std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994";
+//std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994";
+std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor<0.4 && pho1SigmaIetaIeta < 0.00994 && pho1R9 > 0.9";
 std::string cut_pho1Tight_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3";
 std::string cut_pho1Loose = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.7 && pho1SigmaIetaIeta < 0.01031";
 std::string cut_pho1Loose_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.7";

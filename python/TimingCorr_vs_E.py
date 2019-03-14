@@ -505,10 +505,10 @@ gr_E_sigma_time_data.GetYaxis().SetTitleSize( axisTitleSize )
 gr_E_sigma_time_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
 gr_E_sigma_time_data.GetYaxis().SetRangeUser(100,500)
 
-tf1_time_vs_E_data = TF1("tf1_time_vs_E_data","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
+tf1_time_vs_E_data = TF1("tf1_time_vs_E_data","sqrt([0]/(x*x)+[1])", 90.0, 700.0)
 tf1_time_vs_E_data.SetLineColor(kBlue)
 tf1_time_vs_E_data.SetParameters(200.0, 300.0*300.0)
-gr_E_sigma_time_data.Fit("tf1_time_vs_E_data","","",59.0, 700.0)
+gr_E_sigma_time_data.Fit("tf1_time_vs_E_data","","",90.0, 700.0)
 fit_time_a_data = tf1_time_vs_E_data.GetParameter(0)
 fit_time_b_data = tf1_time_vs_E_data.GetParameter(1)
 

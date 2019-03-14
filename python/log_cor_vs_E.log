@@ -1273,12 +1273,12 @@ ey_E_sigma_time_diff:
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
    1  p0           3.81537e+07   5.16982e+06   1.81931e+01   2.60569e-11
    2  p1           2.01662e+04   8.85268e+02   3.62003e-01   5.47163e-07
- FCN=3.88168 FROM MIGRAD    STATUS=CONVERGED      85 CALLS          86 TOTAL
-                     EDM=3.02114e-09    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   1.9 per cent
+ FCN=1.55232 FROM HESSE     STATUS=OK             14 CALLS         125 TOTAL
+                     EDM=8.07676e-12    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  p0          -1.65015e+07   1.18354e+07  -2.48928e+03  -8.46453e-12
-   2  p1           1.67222e+05   2.31938e+03   8.19191e+00  -8.15173e-08
+   1  p0          -4.10716e+07   6.45874e+07   1.01878e+05   9.43192e-14
+   2  p1           1.67105e+05   4.00927e+03   3.13441e-01   6.96241e-10
  FCN=0.702937 FROM MIGRAD    STATUS=CONVERGED      73 CALLS          74 TOTAL
                      EDM=1.33636e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
