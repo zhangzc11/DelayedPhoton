@@ -1265,7 +1265,7 @@ void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, TH2F * h2MCBkg, T
 	fclose(m_outfile);	
 };
 
-void AddSystematics_Norm_ABCD(TH2F * h2_sys_Sig, int Nbins_time, int Nbins_MET, TString sysName, TString distType, TString modelName, TString outDataCardsDir)
+void AddSystematics_Norm_ABCD(TH2F * h2_sys, int Nbins_time, int Nbins_MET, TString sysName, TString distType, TString modelName, TString outDataCardsDir, bool sysOnSig)
 {
         std::string _modelName ((const char*) modelName);
         std::string _sysName ((const char*) sysName);
@@ -1281,7 +1281,12 @@ void AddSystematics_Norm_ABCD(TH2F * h2_sys_Sig, int Nbins_time, int Nbins_MET, 
 	{
 		for(int iT=1; iT<=Nbins_time; iT++)
 		{
-			fprintf(m_outfile, "%10.6f   -   ", h2_sys_Sig->GetBinContent(iT, iM));
+			if(abs(h2_sys->GetBinContent(iT, iM)-1.0)<0.000001) fprintf(m_outfile, "-         -   ");
+			else
+			{
+				if(sysOnSig) fprintf(m_outfile, "%10.6f   -   ", h2_sys->GetBinContent(iT, iM));
+				else fprintf(m_outfile, "-  %10.6f  ", h2_sys->GetBinContent(iT, iM));
+			}
 		}
 	}
 	fprintf(m_outfile, "\n");

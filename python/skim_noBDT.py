@@ -38,8 +38,9 @@ TFile.GetClassNames = GetClassNames
 
 #fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameDataSkim
 #fileName_all = fileNameSigSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameEWKSkim
-fileName_all = fileNameEWKSkim
-#fileName_all = fileNameSigSkim + fileNameDataSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameEWKSkim
+#fileName_all = fileNameEWKSkim
+#fileName_all = fileNameSigSkim  + fileNameDataSkim + fileNameQCDSkim + fileNameGJetsSkim + fileNameEWKSkim
+fileName_all = fileNameSigSkim
 
 print "files to be skimmed:"
 print fileName_all

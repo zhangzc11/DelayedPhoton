@@ -112,32 +112,34 @@ if (sigModelName.find("L100TeV") != std::string::npos) xsec = xsec * 0.01; // fo
 
 std::string treeName = "DelayedPhoton";
 
-std::string cut, cut_JESUp, cut_JESDown;
+std::string cut, cut_JESUp, cut_JESDown, cut_phoScaleUp, cut_phoScaleDown;
 
-std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight*";
+std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF* ";
 
 std::string cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
-//std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994";
-std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor<0.4 && pho1SigmaIetaIeta < 0.00994 && pho1R9 > 0.9";
-std::string cut_pho1Tight_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3";
-std::string cut_pho1Loose = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.7 && pho1SigmaIetaIeta < 0.01031";
-std::string cut_pho1Loose_noSigmaIetaIeta = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoLoose_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.7";
+std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho1Tight_scaleUp = " && pho1Pt_scaleUp > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho1Tight_scaleDown = " && pho1Pt_scaleDown > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
 
 
 if(category == "2J")
 {
 	if(!useBDT)
 	{
-		cut = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
-		cut_JESUp = "n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
-		cut_JESDown = "n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESUp = "n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESDown = "n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight;
+		cut_phoScaleUp = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight_scaleUp;
+		cut_phoScaleDown = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight_scaleDown;
 	}
 	else
 	{
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_phoScaleUp = "pho1Pt_scaleUp > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_phoScaleDown = "pho1Pt_scaleDown > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
 	}
 }
 
@@ -145,15 +147,19 @@ else if(category == "3J")
 {
 	if(!useBDT)
 	{
-		cut = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
-		cut_JESUp = "n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
-		cut_JESDown = "n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter + cut_pho1Tight;
+		cut = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESUp = "n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight;
+		cut_JESDown = "n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight;
+		cut_phoScaleUp = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight_scaleUp;
+		cut_phoScaleDown = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + cut_pho1Tight_scaleDown;
 	}
 	else
 	{
-		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
-		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 " + cut_MET_filter;
+		cut = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_JESUp = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_JESDown = "pho1Pt > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_phoScaleUp = "pho1Pt_scaleUp > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
+		cut_phoScaleDown = "pho1Pt_scaleDown > 70 && abs(pho1Eta)<1.44 && disc > 0.10 && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter;
 	}
 }
 
@@ -279,16 +285,104 @@ TFile *file_signal;
 TTree *tree_data;
 TTree *tree_signal;
 
-std::cout<<"reading data file......"<<endl;
-file_data = new TFile(inputFileName_data.c_str(), "READ");
-tree_data = (TTree*)file_data->Get(treeName.c_str());
 
 std::cout<<"reading signal file......"<<endl;
 file_signal = new TFile(inputFileName_signal.c_str(), "READ");
 tree_signal = (TTree*)file_signal->Get(treeName.c_str());
-
 TH1F *h1_NEvents_sig = (TH1F*) file_signal->Get("NEvents");
 NEvents_sig = h1_NEvents_sig->GetBinContent(1);
+
+if(fitMode == "scaleSys")
+{
+	float time_2x2_bins[3] = {-2.0, time_split_by_CAT[BIN_CATEGORY], 25.0};
+	float met_2x2_bins[3] = {0.0, met_split_by_CAT[BIN_CATEGORY], 9000.0};
+
+	TH2F *h2_2x2binsig0 = new TH2F("h2_2x2binsig0","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2_2x2binsig0", (weight_cut + "( "+cut+" )").c_str());
+	float N_sig0_expected = 1.0*lumi*xsec*h2_2x2binsig0->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig0->Scale((1.0*N_sig0_expected)/(1.0*h2_2x2binsig0->Integral()));
+
+
+	TH2F *h2_2x2binsig_phoScaleUp = new TH2F("h2_2x2binsig_phoScaleUp","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2_2x2binsig_phoScaleUp", (weight_cut + "( "+cut_phoScaleUp+" )").c_str());
+	float N_sig_phoScaleUp_expected = 1.0*lumi*xsec*h2_2x2binsig_phoScaleUp->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig_phoScaleUp->Scale((1.0*N_sig_phoScaleUp_expected)/(1.0*h2_2x2binsig_phoScaleUp->Integral()));
+
+	TH2F *h2_2x2binsig_phoScaleDown = new TH2F("h2_2x2binsig_phoScaleDown","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET:pho1ClusterTime_SmearToData>>h2_2x2binsig_phoScaleDown", (weight_cut + "( "+cut_phoScaleDown+" )").c_str());
+	float N_sig_phoScaleDown_expected = 1.0*lumi*xsec*h2_2x2binsig_phoScaleDown->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig_phoScaleDown->Scale((1.0*N_sig_phoScaleDown_expected)/(1.0*h2_2x2binsig_phoScaleDown->Integral()));
+
+
+	TH2F *h2_2x2binsig_JESUp = new TH2F("h2_2x2binsig_JESUp","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET_JESUp:pho1ClusterTime_SmearToData>>h2_2x2binsig_JESUp", (weight_cut + "( "+cut_JESUp+" )").c_str());
+	float N_sig_JESUp_expected = 1.0*lumi*xsec*h2_2x2binsig_JESUp->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig_JESUp->Scale((1.0*N_sig_JESUp_expected)/(1.0*h2_2x2binsig_JESUp->Integral()));
+
+
+	TH2F *h2_2x2binsig_JESDown = new TH2F("h2_2x2binsig_JESDown","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET_JESDown:pho1ClusterTime_SmearToData>>h2_2x2binsig_JESDown", (weight_cut + "( "+cut_JESDown+" )").c_str());
+	float N_sig_JESDown_expected = 1.0*lumi*xsec*h2_2x2binsig_JESDown->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig_JESDown->Scale((1.0*N_sig_JESDown_expected)/(1.0*h2_2x2binsig_JESDown->Integral()));
+
+	TH2F *h2_2x2binsig_timeCorrUp = new TH2F("h2_2x2binsig_timeCorrUp","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData+0.03)>>h2_2x2binsig_timeCorrUp", (weight_cut + "( "+cut+" )").c_str());
+	float N_sig_timeCorrUp_expected = 1.0*lumi*xsec*h2_2x2binsig_timeCorrUp->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig_timeCorrUp->Scale((1.0*N_sig_timeCorrUp_expected)/(1.0*h2_2x2binsig_timeCorrUp->Integral()));
+
+
+	TH2F *h2_2x2binsig_timeCorrDown = new TH2F("h2_2x2binsig_timeCorrDown","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
+	tree_signal->Draw("t1MET:(pho1ClusterTime_SmearToData-0.03)>>h2_2x2binsig_timeCorrDown", (weight_cut + "( "+cut+" )").c_str());
+	float N_sig_timeCorrDown_expected = 1.0*lumi*xsec*h2_2x2binsig_timeCorrDown->Integral()/(1.0*NEvents_sig);
+	h2_2x2binsig_timeCorrDown->Scale((1.0*N_sig_timeCorrDown_expected)/(1.0*h2_2x2binsig_timeCorrDown->Integral()));
+
+	FILE * m_outfile = fopen(("fit_results/2016ABCD/"+_outDataCardsDir+"/scaleSys_"+sigModelName+".txt").c_str(), "w");
+
+	for(int iT=1;iT<= 2; iT++)
+	{
+		for(int iM=1;iM<= 2; iM++)
+		{
+			float Nsig0 = h2_2x2binsig0->GetBinContent(iT, iM);
+			float Nsig_phoScaleUp = h2_2x2binsig_phoScaleUp->GetBinContent(iT, iM);
+			float Nsig_phoScaleDown = h2_2x2binsig_phoScaleDown->GetBinContent(iT, iM);
+			float Nsig_JESUp = h2_2x2binsig_JESUp->GetBinContent(iT, iM);
+			float Nsig_JESDown = h2_2x2binsig_JESDown->GetBinContent(iT, iM);
+			float Nsig_timeCorrUp = h2_2x2binsig_timeCorrUp->GetBinContent(iT, iM);
+			float Nsig_timeCorrDown = h2_2x2binsig_timeCorrDown->GetBinContent(iT, iM);
+			
+			float errNsig0 = h2_2x2binsig0->GetBinError(iT, iM);
+			float errNsig_phoScaleUp = h2_2x2binsig_phoScaleUp->GetBinError(iT, iM);
+			float errNsig_phoScaleDown = h2_2x2binsig_phoScaleDown->GetBinError(iT, iM);
+			float errNsig_JESUp = h2_2x2binsig_JESUp->GetBinError(iT, iM);
+			float errNsig_JESDown = h2_2x2binsig_JESDown->GetBinError(iT, iM);
+			float errNsig_timeCorrUp = h2_2x2binsig_timeCorrUp->GetBinError(iT, iM);
+			float errNsig_timeCorrDown = h2_2x2binsig_timeCorrDown->GetBinError(iT, iM);
+			
+			float r_phoScaleUp = 100.0*(Nsig_phoScaleUp/Nsig0 - 1.0);
+			float r_phoScaleUp_err = 100.0*(Nsig_phoScaleUp/Nsig0 * sqrt(errNsig_phoScaleUp*errNsig_phoScaleUp/(Nsig_phoScaleUp*Nsig_phoScaleUp) + errNsig0*errNsig0/(Nsig0*Nsig0)));
+			float r_phoScaleDown = 100.0*(Nsig_phoScaleDown/Nsig0 - 1.0);
+			float r_phoScaleDown_err = 100.0*(Nsig_phoScaleDown/Nsig0 * sqrt(errNsig_phoScaleDown*errNsig_phoScaleDown/(Nsig_phoScaleDown*Nsig_phoScaleDown) + errNsig0*errNsig0/(Nsig0*Nsig0)));
+			float r_JESUp = 100.0*(Nsig_JESUp/Nsig0 - 1.0);
+			float r_JESUp_err = 100.0*(Nsig_JESUp/Nsig0 * sqrt(errNsig_JESUp*errNsig_JESUp/(Nsig_JESUp*Nsig_JESUp) + errNsig0*errNsig0/(Nsig0*Nsig0)));\
+			float r_JESDown = 100.0*(Nsig_JESDown/Nsig0 - 1.0);
+			float r_JESDown_err = 100.0*(Nsig_JESDown/Nsig0 * sqrt(errNsig_JESDown*errNsig_JESDown/(Nsig_JESDown*Nsig_JESDown) + errNsig0*errNsig0/(Nsig0*Nsig0)));
+			float r_timeCorrUp = 100.0*(Nsig_timeCorrUp/Nsig0 - 1.0);
+			float r_timeCorrUp_err = 100.0*(Nsig_timeCorrUp/Nsig0 * sqrt(errNsig_timeCorrUp*errNsig_timeCorrUp/(Nsig_timeCorrUp*Nsig_timeCorrUp) + errNsig0*errNsig0/(Nsig0*Nsig0)));
+			float r_timeCorrDown = 100.0*(Nsig_timeCorrDown/Nsig0 - 1.0);
+			float r_timeCorrDown_err = 100.0*(Nsig_timeCorrDown/Nsig0 * sqrt(errNsig_timeCorrDown*errNsig_timeCorrDown/(Nsig_timeCorrDown*Nsig_timeCorrDown) + errNsig0*errNsig0/(Nsig0*Nsig0)));
+
+			fprintf(m_outfile, "ch%d%d  %5.3f pm %5.3f %5.3f pm %5.3f %5.3f pm %5.3f  %5.3f pm %5.3f %5.3f pm %5.3f %5.3f pm %5.3f \n", iT-1, iM-1, r_phoScaleUp, r_phoScaleUp_err, r_phoScaleDown, r_phoScaleDown_err, r_JESUp, r_JESUp_err, r_JESDown, r_JESDown_err, r_timeCorrUp, r_timeCorrUp_err, r_timeCorrDown, r_timeCorrDown_err);
+		}
+	}
+
+	return 1;
+}
+
+
+std::cout<<"reading data file......"<<endl;
+file_data = new TFile(inputFileName_data.c_str(), "READ");
+tree_data = (TTree*)file_data->Get(treeName.c_str());
+
 TH1F *h1_rate_Data_Time_inBins = new TH1F("h2_rate_Data_Time_inBins","; #gamma time bin; Events", Nbins_time, 0, 1.0*Nbins_time);
 TH1F *h1_rate_Data_MET_inBins = new TH1F("h2_rate_Data_MET_inBins","; #slash{E}_{T} bin; Events", Nbins_MET, 0, 1.0*Nbins_MET);
 TH2F *h2_rate_Data_inBins = new TH2F("h2_rate_Data_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
@@ -433,7 +527,7 @@ if(binningAlgorithm == "limit" && fitMode == "binAndDatacard")
 	//pre-defined bins:
 
 	const int met_N_fine = 8;
-	double MET_finebins[9] = {0.0, 50.0, 100.0, 150.0, 200.0, 300.0, 500.0, 1000.0, 3000.0};
+	double MET_finebins[9] = {0.0, 50.0, 100.0, 150.0, 200.0, 300.0, 500.0, 1000.0, 9000.0};
 	const int time_N_fine = 8;
 	double Time_finebins[9]= {-2.0, 0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 25.0};
 
@@ -550,7 +644,7 @@ if(fitMode == "datacard")
 	xbins_time.push_back(time_split_by_CAT[BIN_CATEGORY]);
 	
 	float time_2x2_bins[3] = {-2.0, time_split_by_CAT[BIN_CATEGORY], 25.0};
-	float met_2x2_bins[3] = {0.0, met_split_by_CAT[BIN_CATEGORY], 3000.0};
+	float met_2x2_bins[3] = {0.0, met_split_by_CAT[BIN_CATEGORY], 9000.0};
 
 	TH2F *h2_2x2binData = new TH2F("h2_2x2binData","; #gamma time bin; #slash{E}_{T} bin; Events", 2, time_2x2_bins, 2, met_2x2_bins);
 	TH1F *h1_2x2binData_Time = new TH1F("h1_2x2binData_Time", "; #gamma time bin; Events", 2, time_2x2_bins);
@@ -678,7 +772,9 @@ MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins, h2_rate_MCBkg_inBins, h
 //add systematics
 TH2F *h2_lumi_sys_Sig_inBins = new TH2F("h2_lumi_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
 TH2F *h2_Photon_sys_Sig_inBins = new TH2F("h2_Photon_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
-TH2F *h2_Trigger_sys_Sig_inBins = new TH2F("h2_Trigger_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_JES_sys_Sig_inBins = new TH2F("h2_JES_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_TimeCorr_sys_Sig_inBins = new TH2F("h2_TimeCorr_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
+TH2F *h2_TimeMETCorrelation_sys_Sig_inBins = new TH2F("h2_TimeMETCorrelation_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_time, 0, 1.0*Nbins_time, Nbins_MET, 0, 1.0*Nbins_MET);
 
 for(int iT=1; iT<=Nbins_time; iT++)
 {
@@ -686,13 +782,19 @@ for(int iT=1; iT<=Nbins_time; iT++)
         {
                 h2_lumi_sys_Sig_inBins->SetBinContent(iT, iM, 1.025);
                 h2_Photon_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
-                h2_Trigger_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
+                h2_JES_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
+                h2_TimeCorr_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
+                h2_TimeMETCorrelation_sys_Sig_inBins->SetBinContent(iT, iM, 1.00);
         }
 }
 
-AddSystematics_Norm_ABCD(h2_lumi_sys_Sig_inBins, Nbins_time, Nbins_MET, "lumi", "lnN", _sigModelName, outDataCardsDir);
-AddSystematics_Norm_ABCD(h2_Photon_sys_Sig_inBins, Nbins_time, Nbins_MET, "Photon", "lnN", _sigModelName, outDataCardsDir);
-AddSystematics_Norm_ABCD(h2_Trigger_sys_Sig_inBins, Nbins_time, Nbins_MET, "Trigger", "lnN", _sigModelName, outDataCardsDir);
+h2_TimeMETCorrelation_sys_Sig_inBins->SetBinContent(2, 2, 1.01);
+
+AddSystematics_Norm_ABCD(h2_lumi_sys_Sig_inBins, Nbins_time, Nbins_MET, "lumi2016", "lnN", _sigModelName, outDataCardsDir, true);
+AddSystematics_Norm_ABCD(h2_Photon_sys_Sig_inBins, Nbins_time, Nbins_MET, "phoScale2016", "lnN", _sigModelName, outDataCardsDir, true);
+AddSystematics_Norm_ABCD(h2_JES_sys_Sig_inBins, Nbins_time, Nbins_MET, "JES2016", "lnN", _sigModelName, outDataCardsDir, true);
+AddSystematics_Norm_ABCD(h2_TimeCorr_sys_Sig_inBins, Nbins_time, Nbins_MET, "TimeCorr2016", "lnN", _sigModelName, outDataCardsDir, true);
+AddSystematics_Norm_ABCD(h2_TimeMETCorrelation_sys_Sig_inBins, Nbins_time, Nbins_MET, "TimeMETCorrelation2016", "lnN", _sigModelName, outDataCardsDir, true);
 
 //int N_obs_total = tree_data->CopyTree( cut.c_str() )->GetEntries();
 //TFile *f_Out = new TFile(("fit_results/2016ABCD/"+_outPlotsDir+"/fit_ws_"+sigModelName+".root").c_str(),"recreate");

@@ -59,7 +59,7 @@ double CalculateMETTimeSignificance(TH1F * h1Bkg,  TH1F * h1Sig);
 void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_bkg, float N_sig, TString outDataCardsDir = "datacards_3J");
 void MakeDataCard(TString modelName, RooWorkspace *ws, float N_obs, float N_QCDGJets, float N_EWK, float N_sig, TString outDataCardsDir = "datacards_3J");
 void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, TH2F * h2MCBkg, TH1F *h1DataShape_Time, TH1F *h1DataShape_MET, int Nbins_time, int Nbins_MET, TString modelName, TString outDataCardsDir = "datacards_3J", bool blindABD = false);
-void AddSystematics_Norm_ABCD(TH2F * h2_sys_Sig, int Nbins_time, int Nbins_MET, TString sysName, TString distType, TString modelName, TString outDataCardsDir = "datacards_3J");
+void AddSystematics_Norm_ABCD(TH2F * h2_sys, int Nbins_time, int Nbins_MET, TString sysName, TString distType, TString modelName, TString outDataCardsDir = "datacards_3J", bool sysOnSig = true);
 
 void AddSystematics_Norm(TString modelName, float N_bkg, float N_sig, TString outDataCardsDir, TString sysName, TString distType);
 void AddSystematics_Norm(TString modelName, float N_QCDGJets, float N_EWK, float N_sig, TString outDataCardsDir, TString sysName, TString distType);
