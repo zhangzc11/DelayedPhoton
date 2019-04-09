@@ -11,6 +11,7 @@ gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 
 os.system("mkdir -p "+outputDir+"/ZeeTiming")
+os.system("mkdir -p "+outputDir+"/ZeeTiming/fits")
 os.system("cp Timing*.py "+outputDir+"/ZeeTiming/")
 #################plot settings###########################
 axisTitleSize = 0.06
@@ -146,45 +147,51 @@ myC.SetBottomMargin( bottomMargin )
 myC.SetFrameBorderMode(0)
 myC.SetFrameBorderMode(0)
 
-########correction vs. pt##########
+########correction vs. E##########
 N_E_points = 19
 E_divide = [40.0, 43.0, 46.0, 49.0, 52.0, 55.0, 58.0, 61.0, 64.0, 67.0, 70.0, 73.0, 78.0, 84.0, 91.0, 100.0, 115.0, 140.0, 190.0, 1000.0]
 
-x_pt = np.zeros(N_E_points)
-ex_pt = np.zeros(N_E_points)
+x_E = np.zeros(N_E_points)
+ex_E = np.zeros(N_E_points)
 y_E_mean_data = np.zeros(N_E_points)
 y_E_mean_MC = np.zeros(N_E_points)
 y_E_mean_MC_corr = np.zeros(N_E_points)
 y_E_mean_diff = np.zeros(N_E_points)
+y_E_mean_diff_corr = np.zeros(N_E_points)
 y_E_sigma_dt_data = np.zeros(N_E_points)
 y_E_sigma_dt_MC = np.zeros(N_E_points)
 y_E_sigma_dt_MC_corr= np.zeros(N_E_points)
 y_E_sigma_dt_diff = np.zeros(N_E_points)
+y_E_sigma_dt_diff_corr = np.zeros(N_E_points)
 
 y_E_sigma_time_data = np.zeros(N_E_points)
 y_E_sigma_time_MC = np.zeros(N_E_points)
 y_E_sigma_time_MC_corr= np.zeros(N_E_points)
 y_E_sigma_time_diff = np.zeros(N_E_points)
+y_E_sigma_time_diff_corr = np.zeros(N_E_points)
 
 ey_E_mean_data = np.zeros(N_E_points)
 ey_E_mean_MC = np.zeros(N_E_points)
 ey_E_mean_MC_corr = np.zeros(N_E_points)
 ey_E_mean_diff = np.zeros(N_E_points)
+ey_E_mean_diff_corr = np.zeros(N_E_points)
 
 ey_E_sigma_dt_data = np.zeros(N_E_points)
 ey_E_sigma_dt_MC = np.zeros(N_E_points)
 ey_E_sigma_dt_MC_corr = np.zeros(N_E_points)
 ey_E_sigma_dt_diff = np.zeros(N_E_points)
+ey_E_sigma_dt_diff_corr = np.zeros(N_E_points)
 
 ey_E_sigma_time_data = np.zeros(N_E_points)
 ey_E_sigma_time_MC = np.zeros(N_E_points)
 ey_E_sigma_time_MC_corr = np.zeros(N_E_points)
 ey_E_sigma_time_diff = np.zeros(N_E_points)
+ey_E_sigma_time_diff_corr = np.zeros(N_E_points)
 
 
 for i in range(0, N_E_points):
-	x_pt[i] = 0.5*(E_divide[i+1]+E_divide[i])
-	ex_pt[i] = 0.5*(E_divide[i+1]-E_divide[i])
+	x_E[i] = 0.5*(E_divide[i+1]+E_divide[i])
+	ex_E[i] = 0.5*(E_divide[i+1]-E_divide[i])
 	E_low_this = E_divide[i]
 	E_high_this = E_divide[i+1]
 	cut_1e_this = cut+" && ele1E > "+str(E_low_this)+" && ele1E < "+str(E_high_this)
@@ -232,6 +239,8 @@ for i in range(0, N_E_points):
 	ey_E_sigma_dt_diff[i] = np.sqrt(4.0*y_E_sigma_dt_data[i]*y_E_sigma_dt_data[i]*ey_E_sigma_dt_data[i]*ey_E_sigma_dt_data[i]+4.0*y_E_sigma_dt_MC[i]*y_E_sigma_dt_MC[i]*ey_E_sigma_dt_MC[i]*ey_E_sigma_dt_MC[i])/(2.0*y_E_sigma_dt_diff[i])
 	ey_E_sigma_time_diff[i] = np.sqrt(4.0*y_E_sigma_time_data[i]*y_E_sigma_time_data[i]*ey_E_sigma_time_data[i]*ey_E_sigma_time_data[i]+4.0*y_E_sigma_time_MC[i]*y_E_sigma_time_MC[i]*ey_E_sigma_time_MC[i]*ey_E_sigma_time_MC[i])/(2.0*y_E_sigma_time_diff[i])
 
+
+
 	hist_1e_this_MC_corr = TH1F("hist_1e_this_MC_corr_"+str(i),"hist_1e_this_MC_corr_"+str(i), 60, -1.5, 1.5)
 	hist_2e_this_MC_corr = TH1F("hist_2e_this_MC_corr_"+str(i),"hist_2e_this_MC_corr_"+str(i), 60, -1.5, 1.5)
 	tree_MC.Draw("t1_SmearToData>>hist_1e_this_MC_corr_"+str(i),  "(weight*pileupWeight) * " + cut_1e_this)
@@ -245,9 +254,17 @@ for i in range(0, N_E_points):
 	y_E_mean_MC_corr[i] = result_1e_this_MC_corr[0]
 	ey_E_mean_MC_corr[i] = result_1e_this_MC_corr[1]
 	y_E_sigma_dt_MC_corr[i] = result_2e_this_MC_corr[2]
-	y_E_sigma_time_MC_corr[i] = result_2e_this_MC_corr[2]
+	y_E_sigma_time_MC_corr[i] = result_1e_this_MC_corr[2]
 	ey_E_sigma_dt_MC_corr[i] = result_2e_this_MC_corr[3]
-	ey_E_sigma_time_MC_corr[i] = result_2e_this_MC_corr[3]
+	ey_E_sigma_time_MC_corr[i] = result_1e_this_MC_corr[3]
+
+
+	y_E_mean_diff_corr[i] = y_E_mean_data[i] -  y_E_mean_MC_corr[i]
+	ey_E_mean_diff_corr[i] = np.sqrt(ey_E_mean_data[i]*ey_E_mean_data[i] + ey_E_mean_MC_corr[i]*ey_E_mean_MC_corr[i])
+	y_E_sigma_dt_diff_corr[i] = np.sqrt(abs(y_E_sigma_dt_data[i]*y_E_sigma_dt_data[i] -  y_E_sigma_dt_MC_corr[i]*y_E_sigma_dt_MC_corr[i]))
+	y_E_sigma_time_diff_corr[i] = np.sqrt(abs(y_E_sigma_time_data[i]*y_E_sigma_time_data[i] -  y_E_sigma_time_MC_corr[i]*y_E_sigma_time_MC_corr[i]))
+	ey_E_sigma_dt_diff_corr[i] = np.sqrt(4.0*y_E_sigma_dt_data[i]*y_E_sigma_dt_data[i]*ey_E_sigma_dt_data[i]*ey_E_sigma_dt_data[i]+4.0*y_E_sigma_dt_MC_corr[i]*y_E_sigma_dt_MC_corr[i]*ey_E_sigma_dt_MC_corr[i]*ey_E_sigma_dt_MC_corr[i])/(2.0*y_E_sigma_dt_diff_corr[i])
+	ey_E_sigma_time_diff_corr[i] = np.sqrt(4.0*y_E_sigma_time_data[i]*y_E_sigma_time_data[i]*ey_E_sigma_time_data[i]*ey_E_sigma_time_data[i]+4.0*y_E_sigma_time_MC_corr[i]*y_E_sigma_time_MC_corr[i]*ey_E_sigma_time_MC_corr[i]*ey_E_sigma_time_MC_corr[i])/(2.0*y_E_sigma_time_diff_corr[i])
 
 
 
@@ -273,6 +290,12 @@ print y_E_mean_diff
 print "ey_E_mean_diff:"
 print ey_E_mean_diff
 
+print "y_E_mean_diff_corr:"
+print y_E_mean_diff_corr
+print "ey_E_mean_diff_corr:"
+print ey_E_mean_diff_corr
+
+
 print "y_E_sigma_dt_data:"
 print y_E_sigma_dt_data
 print "ey_E_sigma_dt_data:"
@@ -294,6 +317,10 @@ print y_E_sigma_dt_diff
 print "ey_E_sigma_dt_diff:"
 print ey_E_sigma_dt_diff
 
+print "y_E_sigma_dt_diff_corr:"
+print y_E_sigma_dt_diff_corr
+print "ey_E_sigma_dt_diff_corr:"
+print ey_E_sigma_dt_diff_corr
 
 print "y_E_sigma_time_data:"
 print y_E_sigma_time_data
@@ -317,12 +344,16 @@ print "ey_E_sigma_time_diff:"
 print ey_E_sigma_time_diff
 
 
+print "y_E_sigma_time_diff_corr:"
+print y_E_sigma_time_diff_corr
+print "ey_E_sigma_time_diff_corr:"
+print ey_E_sigma_time_diff_corr
 
 gStyle.SetOptFit(0)
 myC.SetGridy(1)
 myC.SetLogx(1)
 
-gr_E_mean_data  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_mean_data), np.array(ex_pt), np.array(ey_E_mean_data))
+gr_E_mean_data  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_data), np.array(ex_E), np.array(ey_E_mean_data))
 gr_E_mean_data.Draw("AP")
 gr_E_mean_data.SetMarkerColor(kBlue)
 gr_E_mean_data.SetLineColor(kBlue)
@@ -335,26 +366,32 @@ gr_E_mean_data.GetXaxis().SetTitleOffset( axisTitleOffset )
 gr_E_mean_data.GetYaxis().SetTitleSize( axisTitleSize )
 gr_E_mean_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
 gr_E_mean_data.GetYaxis().SetRangeUser(-350,600)
+gr_E_mean_data.GetXaxis().SetRangeUser(70,1000)
 
-gr_E_mean_MC  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_mean_MC), np.array(ex_pt), np.array(ey_E_mean_MC))
+gr_E_mean_MC  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_MC), np.array(ex_E), np.array(ey_E_mean_MC))
 gr_E_mean_MC.SetMarkerColor(kRed)
 gr_E_mean_MC.SetLineColor(kRed)
 gr_E_mean_MC.SetLineWidth(2)
 gr_E_mean_MC.Draw("Psame")
 
-gr_E_mean_MC_corr  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_mean_MC_corr), np.array(ex_pt), np.array(ey_E_mean_MC_corr))
-gr_E_mean_MC_corr.SetMarkerColor(kViolet)
-gr_E_mean_MC_corr.SetLineColor(kViolet)
+gr_E_mean_MC_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_MC_corr), np.array(ex_E), np.array(ey_E_mean_MC_corr))
+gr_E_mean_MC_corr.SetMarkerColor(kRed)
+gr_E_mean_MC_corr.SetLineColor(kRed)
 gr_E_mean_MC_corr.SetLineWidth(2)
-gr_E_mean_MC_corr.Draw("Psame")
+#gr_E_mean_MC_corr.Draw("Psame")
 
 
-gr_E_mean_diff  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_mean_diff), np.array(ex_pt), np.array(ey_E_mean_diff))
+gr_E_mean_diff  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_diff), np.array(ex_E), np.array(ey_E_mean_diff))
 gr_E_mean_diff.SetMarkerColor(kBlack)
 gr_E_mean_diff.SetLineColor(kBlack)
 gr_E_mean_diff.SetLineWidth(2)
 gr_E_mean_diff.Draw("Psame")
 
+gr_E_mean_diff_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_mean_diff_corr), np.array(ex_E), np.array(ey_E_mean_diff_corr))
+gr_E_mean_diff_corr.SetMarkerColor(kBlack)
+gr_E_mean_diff_corr.SetLineColor(kBlack)
+gr_E_mean_diff_corr.SetLineWidth(2)
+#gr_E_mean_diff_corr.Draw("Psame")
 
 leg_mean = TLegend(0.18,0.75,0.93,0.89)
 leg_mean.SetNColumns(3)
@@ -368,14 +405,25 @@ leg_mean.SetFillStyle(1001)
 leg_mean.AddEntry(gr_E_mean_data, "data", "lep")
 leg_mean.AddEntry(gr_E_mean_MC, "MC", "lep")
 leg_mean.AddEntry(gr_E_mean_diff, "#Delta(data, MC)", "lep")
-leg_mean.AddEntry(gr_E_mean_MC_corr, "MC corr.", "lep")
+#leg_mean.AddEntry(gr_E_mean_MC_corr, "MC corr.", "lep")
 leg_mean.Draw()
 
 drawCMS(myC, 13, lumi)
 
-myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.pdf")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.png")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.C")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016_noCorr.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016_noCorr.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016_noCorr.C")
+gr_E_mean_data.Draw("AP")
+gr_E_mean_data.GetYaxis().SetRangeUser(-50,200)
+gr_E_mean_MC_corr.Draw("Psame")
+gr_E_mean_diff_corr.Draw("Psame")
+leg_mean.Draw()
+drawCMS(myC, 13, lumi)
+
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016_Corr.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016_Corr.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016_Corr.C")
+
 file_plot_shift = TFile(outputDir+"/ZeeTiming/TimingShift_Zee_vs_E_Data_vs_MC_2016.root","RECREATE")
 gr_E_mean_data.Write("gr_data")
 gr_E_mean_MC.Write("gr_MC")
@@ -383,8 +431,7 @@ gr_E_mean_MC_corr.Write("gr_MC_corr")
 gr_E_mean_diff.Write("gr_diff")
 file_plot_shift.Close()
 
-
-gr_E_sigma_dt_data  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_dt_data), np.array(ex_pt), np.array(ey_E_sigma_dt_data))
+gr_E_sigma_dt_data  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_dt_data), np.array(ex_E), np.array(ey_E_sigma_dt_data))
 gr_E_sigma_dt_data.Draw("AP")
 gr_E_sigma_dt_data.SetMarkerColor(kBlue)
 gr_E_sigma_dt_data.SetLineColor(kBlue)
@@ -396,7 +443,7 @@ gr_E_sigma_dt_data.GetXaxis().SetTitleSize( axisTitleSize )
 gr_E_sigma_dt_data.GetXaxis().SetTitleOffset( axisTitleOffset )
 gr_E_sigma_dt_data.GetYaxis().SetTitleSize( axisTitleSize )
 gr_E_sigma_dt_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
-gr_E_sigma_dt_data.GetYaxis().SetRangeUser(100,500)
+gr_E_sigma_dt_data.GetYaxis().SetRangeUser(100,700)
 
 tf1_dt_vs_E_data = TF1("tf1_dt_vs_E_data","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
 tf1_dt_vs_E_data.SetLineColor(kBlue)
@@ -405,18 +452,18 @@ gr_E_sigma_dt_data.Fit("tf1_dt_vs_E_data","","",59.0, 700.0)
 fit_dt_a_data = tf1_dt_vs_E_data.GetParameter(0)
 fit_dt_b_data = tf1_dt_vs_E_data.GetParameter(1)
 
-gr_E_sigma_dt_MC  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_dt_MC), np.array(ex_pt), np.array(ey_E_sigma_dt_MC))
+gr_E_sigma_dt_MC  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_dt_MC), np.array(ex_E), np.array(ey_E_sigma_dt_MC))
 gr_E_sigma_dt_MC.SetMarkerColor(kRed)
 gr_E_sigma_dt_MC.SetLineColor(kRed)
 gr_E_sigma_dt_MC.SetLineWidth(2)
 gr_E_sigma_dt_MC.Draw("Psame")
 
 
-gr_E_sigma_dt_MC_corr  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_dt_MC_corr), np.array(ex_pt), np.array(ey_E_sigma_dt_MC_corr))
-gr_E_sigma_dt_MC_corr.SetMarkerColor(kViolet)
-gr_E_sigma_dt_MC_corr.SetLineColor(kViolet)
+gr_E_sigma_dt_MC_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_dt_MC_corr), np.array(ex_E), np.array(ey_E_sigma_dt_MC_corr))
+gr_E_sigma_dt_MC_corr.SetMarkerColor(kRed)
+gr_E_sigma_dt_MC_corr.SetLineColor(kRed)
 gr_E_sigma_dt_MC_corr.SetLineWidth(2)
-gr_E_sigma_dt_MC_corr.Draw("Psame")
+#gr_E_sigma_dt_MC_corr.Draw("Psame")
 
 
 tf1_dt_vs_E_MC = TF1("tf1_dt_vs_E_MC","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
@@ -427,12 +474,17 @@ fit_dt_a_MC = tf1_dt_vs_E_MC.GetParameter(0)
 fit_dt_b_MC = tf1_dt_vs_E_MC.GetParameter(1)
 
 
-gr_E_sigma_dt_diff  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_dt_diff), np.array(ex_pt), np.array(ey_E_sigma_dt_diff))
+gr_E_sigma_dt_diff  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_dt_diff), np.array(ex_E), np.array(ey_E_sigma_dt_diff))
 gr_E_sigma_dt_diff.SetMarkerColor(kBlack)
 gr_E_sigma_dt_diff.SetLineColor(kBlack)
 gr_E_sigma_dt_diff.SetLineWidth(2)
 gr_E_sigma_dt_diff.Draw("Psame")
 
+gr_E_sigma_dt_diff_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_dt_diff_corr), np.array(ex_E), np.array(ey_E_sigma_dt_diff_corr))
+gr_E_sigma_dt_diff_corr.SetMarkerColor(kBlack)
+gr_E_sigma_dt_diff_corr.SetLineColor(kBlack)
+gr_E_sigma_dt_diff_corr.SetLineWidth(2)
+#gr_E_sigma_dt_diff_corr.Draw("Psame")
 
 leg_sigma_dt = TLegend(0.18,0.75,0.93,0.89)
 leg_sigma_dt.SetNColumns(3)
@@ -446,7 +498,7 @@ leg_sigma_dt.SetFillStyle(1001)
 leg_sigma_dt.AddEntry(gr_E_sigma_dt_data, "data", "lep")
 leg_sigma_dt.AddEntry(gr_E_sigma_dt_MC, "MC", "lep")
 leg_sigma_dt.AddEntry(gr_E_sigma_dt_diff, "#Delta(data, MC)", "lep")
-leg_sigma_dt.AddEntry(gr_E_sigma_dt_MC_corr, "MC corr.", "lep")
+#leg_sigma_dt.AddEntry(gr_E_sigma_dt_MC_corr, "MC corr.", "lep")
 leg_sigma_dt.Draw()
 
 
@@ -480,18 +532,30 @@ leg_fit_dt_MC.Draw()
 
 drawCMS(myC, 13, lumi)
 
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.pdf")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.png")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.C")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016_noCorr.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016_noCorr.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016_noCorr.C")
+gr_E_sigma_dt_data.Draw("AP")
+gr_E_sigma_dt_MC_corr.Draw("Psame")
+gr_E_sigma_dt_diff_corr.Draw("Psame")
+leg_sigma_dt.Draw()
+drawCMS(myC, 13, lumi)
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016_Corr.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016_Corr.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016_Corr.C")
+
+
+
 file_plot_dt = TFile(outputDir+"/ZeeTiming/TimingReso_Zee_dt_vs_E_Data_vs_MC_2016.root", "RECREATE")
 gr_E_sigma_dt_data.Write("gr_data")
 gr_E_sigma_dt_MC.Write("gr_MC")
 gr_E_sigma_dt_MC_corr.Write("gr_MC_corr")
 gr_E_sigma_dt_diff.Write("gr_diff")
+gr_E_sigma_dt_diff_corr.Write("gr_diff_corr")
 file_plot_dt.Close()
 
 
-gr_E_sigma_time_data  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_time_data), np.array(ex_pt), np.array(ey_E_sigma_time_data))
+gr_E_sigma_time_data  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_time_data), np.array(ex_E), np.array(ey_E_sigma_time_data))
 gr_E_sigma_time_data.Draw("AP")
 gr_E_sigma_time_data.SetMarkerColor(kBlue)
 gr_E_sigma_time_data.SetLineColor(kBlue)
@@ -504,6 +568,7 @@ gr_E_sigma_time_data.GetXaxis().SetTitleOffset( axisTitleOffset )
 gr_E_sigma_time_data.GetYaxis().SetTitleSize( axisTitleSize )
 gr_E_sigma_time_data.GetYaxis().SetTitleOffset( axisTitleOffset +0.18 )
 gr_E_sigma_time_data.GetYaxis().SetRangeUser(100,500)
+gr_E_sigma_time_data.GetXaxis().SetRangeUser(70,1000)
 
 tf1_time_vs_E_data = TF1("tf1_time_vs_E_data","sqrt([0]/(x*x)+[1])", 90.0, 700.0)
 tf1_time_vs_E_data.SetLineColor(kBlue)
@@ -512,18 +577,18 @@ gr_E_sigma_time_data.Fit("tf1_time_vs_E_data","","",90.0, 700.0)
 fit_time_a_data = tf1_time_vs_E_data.GetParameter(0)
 fit_time_b_data = tf1_time_vs_E_data.GetParameter(1)
 
-gr_E_sigma_time_MC  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_time_MC), np.array(ex_pt), np.array(ey_E_sigma_time_MC))
+gr_E_sigma_time_MC  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_time_MC), np.array(ex_E), np.array(ey_E_sigma_time_MC))
 gr_E_sigma_time_MC.SetMarkerColor(kRed)
 gr_E_sigma_time_MC.SetLineColor(kRed)
 gr_E_sigma_time_MC.SetLineWidth(2)
 gr_E_sigma_time_MC.Draw("Psame")
 
 
-gr_E_sigma_time_MC_corr  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_time_MC_corr), np.array(ex_pt), np.array(ey_E_sigma_time_MC_corr))
+gr_E_sigma_time_MC_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_time_MC_corr), np.array(ex_E), np.array(ey_E_sigma_time_MC_corr))
 gr_E_sigma_time_MC_corr.SetMarkerColor(kViolet)
 gr_E_sigma_time_MC_corr.SetLineColor(kViolet)
 gr_E_sigma_time_MC_corr.SetLineWidth(2)
-gr_E_sigma_time_MC_corr.Draw("Psame")
+#gr_E_sigma_time_MC_corr.Draw("Psame")
 
 
 tf1_time_vs_E_MC = TF1("tf1_time_vs_E_MC","sqrt([0]/(x*x)+[1])", 59.0, 700.0)
@@ -534,12 +599,17 @@ fit_time_a_MC = tf1_time_vs_E_MC.GetParameter(0)
 fit_time_b_MC = tf1_time_vs_E_MC.GetParameter(1)
 
 
-gr_E_sigma_time_diff  =  TGraphErrors(N_E_points, np.array(x_pt), np.array(y_E_sigma_time_diff), np.array(ex_pt), np.array(ey_E_sigma_time_diff))
+gr_E_sigma_time_diff  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_time_diff), np.array(ex_E), np.array(ey_E_sigma_time_diff))
 gr_E_sigma_time_diff.SetMarkerColor(kBlack)
 gr_E_sigma_time_diff.SetLineColor(kBlack)
 gr_E_sigma_time_diff.SetLineWidth(2)
 gr_E_sigma_time_diff.Draw("Psame")
 
+gr_E_sigma_time_diff_corr  =  TGraphErrors(N_E_points, np.array(x_E), np.array(y_E_sigma_time_diff_corr), np.array(ex_E), np.array(ey_E_sigma_time_diff_corr))
+gr_E_sigma_time_diff_corr.SetMarkerColor(kBlack)
+gr_E_sigma_time_diff_corr.SetLineColor(kBlack)
+gr_E_sigma_time_diff_corr.SetLineWidth(2)
+#gr_E_sigma_time_diff_corr.Draw("Psame")
 
 leg_sigma_time = TLegend(0.18,0.75,0.93,0.89)
 leg_sigma_time.SetNColumns(3)
@@ -569,7 +639,7 @@ leg_fit_time_data.SetLineWidth(1)
 leg_fit_time_data.SetFillStyle(0)
 fit_ab_data = "data:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_time_a_data))+"}{E^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_time_b_data)/2.0)
 leg_fit_time_data.AddEntry(gr_E_sigma_time_data, fit_ab_data , "")
-leg_fit_time_data.Draw()
+#leg_fit_time_data.Draw()
 
 leg_fit_time_MC = TLegend(0.42,0.315,0.93,0.415)
 leg_fit_time_MC.SetNColumns(3)
@@ -583,12 +653,20 @@ leg_fit_time_MC.SetLineWidth(1)
 leg_fit_time_MC.SetFillStyle(0)
 fit_ab_MC = "MC:  #sigma = #frac{"+ "%.1f" % np.sqrt(np.abs(fit_time_a_MC))+"}{E^{e}} #oplus #sqrt{2} #times "+"%.1f" % np.sqrt(np.abs(fit_time_b_MC)/2.0)
 leg_fit_time_MC.AddEntry(gr_E_sigma_time_MC, fit_ab_MC , "")
-leg_fit_time_MC.Draw()
+#leg_fit_time_MC.Draw()
 
 drawCMS(myC, 13, lumi)
 
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016.pdf")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016.png")
-myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016.C")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016_noCorr.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016_noCorr.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016_noCorr.C")
 
-
+gr_E_sigma_time_data.Draw("AP")
+gr_E_sigma_time_data.GetYaxis().SetRangeUser(0,600)
+gr_E_sigma_time_MC_corr.Draw("Psame")
+gr_E_sigma_time_diff_corr.Draw("Psame")
+leg_sigma_time.Draw()
+drawCMS(myC, 13, lumi)
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016_Corr.pdf")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016_Corr.png")
+myC.SaveAs(outputDir+"/ZeeTiming/TimingReso_Zee_time_vs_E_Data_vs_MC_2016_Corr.C")

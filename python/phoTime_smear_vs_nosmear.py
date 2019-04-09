@@ -1,8 +1,8 @@
-from ROOT import *
+from ROOT import gROOT, gStyle, TFile, TTree, TCanvas, TH1F, TH1, TLegend, TLatex, TColor, TF1, TGraphErrors, kBlue, kRed, kViolet, kBlack, kOrange, kAzure
 import os, sys
 from Aux import *
 from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD
-from config_noBDT import fractionGJets, fractionQCD, useFraction, scaleBkg, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend, timeShift, weight_cut
+from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, cut_QCD_CR, xbins_MET, xbins_time, sigLegend, timeShift, weight_cut
 import numpy as np
 import array
 
@@ -44,7 +44,7 @@ print fileNameQCD
 
 print "NTotal before cut: "
 
-fileData = TFile(fileNameData.replace('.root','_noreweight.root'))
+fileData = TFile(fileNameData)
 treeData = fileData.Get("DelayedPhoton")
 hNEventsData = fileData.Get("NEvents")
 NEventsData = hNEventsData.GetBinContent(1)
@@ -61,35 +61,6 @@ treeSig_t2 = fileSig_t2.Get("DelayedPhoton")
 hNEventsSig_t2 = fileSig_t2.Get("NEvents")
 NEventsSig_t2 = hNEventsSig_t2.GetBinContent(1)
 print "Sig_t2: " + str(NEventsSig_t2)
-
-
-
-'''
-treeGJets = {}
-NEventsGJets = [0 for i in range(len(fileNameGJets))]
-treeQCD = {}
-NEventsQCD = [0 for i in range(len(fileNameQCD))]
-
-for i in range(0,len(fileNameGJets)):
-	treeGJets[i] = TChain("DelayedPhoton")
-	treeGJets[i].AddFile(fileNameGJets[i])
-	SetOwnership( treeGJets[i], True)
-	fileThis = TFile(fileNameGJets[i])
-	hNEventsGJets_ = fileThis.Get("NEvents")
-	#NEventsGJets_.append(hNEventsGJets_.GetBinContent(1))
-	NEventsGJets[i]=hNEventsGJets_.GetBinContent(1)
-	print "GJets - " + str(i) + "  " +str(hNEventsGJets_.GetBinContent(1))
-
-for i in range(0,len(fileNameQCD)):
-	treeQCD[i] = TChain("DelayedPhoton")
-	treeQCD[i].AddFile(fileNameQCD[i])
-	SetOwnership( treeQCD[i], True)
-	fileThis = TFile(fileNameQCD[i])
-	hNEventsQCD_ = fileThis.Get("NEvents")
-	#NEventsQCD_.append(hNEventsQCD_.GetBinContent(1))
-	NEventsQCD[i]=hNEventsQCD_.GetBinContent(1)
-	print "QCD - " + str(i) + "  "+ str(hNEventsQCD_.GetBinContent(1))
-'''
 
 
 
@@ -120,7 +91,7 @@ plot_Smear = ["pho1ClusterTime_SmearToData", "phoTimeCluster_Smear_log", "#gamma
 	
 #data
 histData = TH1F(plot_noSmear[1]+"_histData","",plot_noSmear[3],plot_noSmear[4],plot_noSmear[5])	
-treeData.Draw(plot_noSmear[0]+">>"+plot_noSmear[1]+"_histData",cut)
+treeData.Draw(plot_noSmear[0]+">>"+plot_noSmear[1]+"_histData",cut_GJets)
 histData.SetMarkerStyle( 20 )
 histData.SetMarkerColor( kBlack )
 histData.SetLineColor( kBlack )
@@ -160,18 +131,6 @@ histSig_Ctau2_Smear.SetLineStyle( 7 )
 histQCD_noSmear = TH1F(plot_noSmear[1]+"_histQCD_noSmear","",plot_noSmear[3],plot_noSmear[4],plot_noSmear[5])	
 treeQCD.Draw(plot_noSmear[0]+">>"+plot_noSmear[1]+"_histQCD_noSmear",weightedcut)
 
-'''
-for i in range(0, len(treeQCD)):
-	print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut))
-	normQCD = NEventsQCD[i] 
-	histThis = TH1F(plot_noSmear[1]+"_histQCD_noSmear"+str(i),"",plot_noSmear[3],plot_noSmear[4],plot_noSmear[5])	
-	treeQCD[i].Draw(plot_noSmear[0]+">>"+plot_noSmear[1]+"_histQCD_noSmear"+str(i),weightedcut)
-	if histThis.Integral()>10:
-		histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
-	histQCD_noSmear.Add(histThis)
-	print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
-'''
-
 histQCD_noSmear.Scale(histData.Integral()/histQCD_noSmear.Integral())
 histQCD_noSmear.SetLineColor(kOrange)
 histQCD_noSmear.SetLineWidth( 2 )
@@ -179,17 +138,6 @@ histQCD_noSmear.SetLineWidth( 2 )
 #QCD
 histQCD_Smear = TH1F(plot_Smear[1]+"_histQCD_Smear","",plot_Smear[3],plot_Smear[4],plot_Smear[5])	
 treeQCD.Draw(plot_Smear[0]+">>"+plot_Smear[1]+"_histQCD_Smear",weightedcut)
-'''
-for i in range(0, len(treeQCD)):
-	print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut))
-	normQCD = NEventsQCD[i] 
-	histThis = TH1F(plot_Smear[1]+"_histQCD_Smear"+str(i),"",plot_Smear[3],plot_Smear[4],plot_Smear[5])	
-	treeQCD[i].Draw(plot_Smear[0]+"+"+str(timeShift)+">>"+plot_Smear[1]+"_histQCD_Smear"+str(i),weightedcut)
-	if histThis.Integral()>10:
-		histThis.Scale(lumi*scaleBkg*xsecQCD[i]/(normQCD))
-	histQCD_Smear.Add(histThis)
-	print "#QCD - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
-'''
 
 histQCD_Smear.Scale(histData.Integral()/histQCD_Smear.Integral())
 histQCD_Smear.SetLineColor(kOrange - 9)
@@ -203,22 +151,9 @@ print NEventsGJets
 print NEventsQCD
 treeGJets.Draw(plot_noSmear[0]+">>"+plot_noSmear[1]+"_histGJets_noSmear",weightedcut)
 
-'''
-for i in range(0, len(treeGJets)):
-	print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut))
-	normGJets = NEventsGJets[i] 
-	histThis = TH1F(plot_noSmear[1]+"_histGJets_noSmear"+str(i),"",plot_noSmear[3],plot_noSmear[4],plot_noSmear[5])	
-	treeGJets[i].Draw(plot_noSmear[0]+">>"+plot_noSmear[1]+"_histGJets_noSmear"+str(i),weightedcut)
-	if histThis.Integral()>10:
-		histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
-	histGJets_noSmear.Add(histThis)
-	print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
-'''
-
 histGJets_noSmear.Scale(histData.Integral()/histGJets_noSmear.Integral())
 histGJets_noSmear.SetLineColor(kAzure )
 histGJets_noSmear.SetLineWidth( 2 )
-
 
 	
 #GJets
@@ -226,19 +161,6 @@ histGJets_Smear = TH1F(plot_Smear[1]+"_histGJets_Smear","",plot_Smear[3],plot_Sm
 print NEventsGJets
 print NEventsQCD
 treeGJets.Draw(plot_Smear[0]+">>"+plot_Smear[1]+"_histGJets_Smear",weightedcut)
-
-'''
-for i in range(0, len(treeGJets)):
-	print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut))
-	normGJets = NEventsGJets[i] 
-	histThis = TH1F(plot_Smear[1]+"_histGJets_Smear"+str(i),"",plot_Smear[3],plot_Smear[4],plot_Smear[5])	
-	treeGJets[i].Draw(plot_Smear[0]+"+"+str(timeShift)+">>"+plot_Smear[1]+"_histGJets_Smear"+str(i),weightedcut)
-	if histThis.Integral()>10:
-		histThis.Scale(lumi*scaleBkg*xsecGJets[i]/(normGJets))
-	histGJets_Smear.Add(histThis)
-	print "#GJets - "+str(i)+" xsec * lumi * cut " + str(histThis.Integral())
-'''
-
 histGJets_Smear.Scale(histData.Integral()/histGJets_Smear.Integral())
 histGJets_Smear.SetLineColor(kAzure + 7)
 histGJets_Smear.SetLineWidth( 2 )
@@ -254,7 +176,7 @@ leg.SetLineStyle(1)
 leg.SetLineWidth(1)
 leg.SetFillColor(0)
 leg.SetFillStyle(1001)
-leg.AddEntry(histData, "data","lep")
+leg.AddEntry(histData, "data - #gamma + jets CR","lep")
 leg.AddEntry(histSig_noSmear, "signal(Ctau 200cm) - no corr.")
 leg.AddEntry(histSig_Smear, "signal(Ctau 200cm) - after corr.")
 leg.AddEntry(histSig_Ctau2_noSmear, "signal(Ctau 0.1cm) - no corr.")

@@ -72,68 +72,40 @@ timeShift = 0.297
 cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
 #cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
 
-cut_3J = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_3J_blindMET = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && t1MET < 300.0)"
-cut_3J_blindTime = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1ClusterTime_SmearToData < 3.0)"
-cut_3J_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_3J_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter +"&& pho1passHoverETight)"
-cut_2J = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_2J_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_2J_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + "&& pho1passHoverETight)"
+cut = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_blindMET = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && t1MET < 300.0)"
+cut_blindTime = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1ClusterTime_SmearToData < 3.0)"
+cut_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter +"&& pho1passHoverETight)"
 
 
-cut_QCD_shape_3J = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && (!pho1isPromptPhoton)' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_QCD_shape_3J_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && (!pho1isPromptPhoton)' + cut_MET_filter + "&& pho1passHoverETight)"
-cut_QCD_shape_2J = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && (!pho1isPromptPhoton)' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_QCD_shape_2J_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && (!pho1isPromptPhoton)' + cut_MET_filter + "&& pho1passHoverETight)"
+cut_QCD_shape = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && (!pho1isPromptPhoton)' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_QCD_shape_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && (!pho1isPromptPhoton)' + cut_MET_filter + "&& pho1passHoverETight)"
 
-cut_GJets_shape_3J = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && pho1isPromptPhoton' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_shape_3J_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && pho1isPromptPhoton' + cut_MET_filter + "&& pho1passHoverETight)"
-cut_GJets_shape_2J = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && pho1isPromptPhoton' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_shape_2J_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && pho1isPromptPhoton' + cut_MET_filter + "&& pho1passHoverETight)"
+cut_GJets_shape = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && pho1isPromptPhoton' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_GJets_shape_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && pho1isPromptPhoton' + cut_MET_filter + "&& pho1passHoverETight)"
 
 
-cut_loose_3J = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + " && pho1passSigmaIetaIetaLoose && pho1passHoverELoose)"
-cut_loose_3J_noSminor = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + " && pho1passSigmaIetaIetaLoose && pho1passHoverELoose)"
-cut_loose_3J_noSigmaIetaIeta = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + "&& pho1passHoverELoose)"
-cut_loose_2J = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + " && pho1passSigmaIetaIetaLoose && pho1passHoverELoose)"
-cut_loose_2J_noSminor = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + " && pho1passSigmaIetaIetaLoose && pho1passHoverELoose)"
-cut_loose_2J_noSigmaIetaIeta = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.7 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 " + cut_MET_filter + "&& pho1passHoverELoose)"
+cut_QCD_CR = '1.0*(pho1Pt > 70 && pho1R9 > 0.5 &&  abs(pho1Eta)<1.4442 && (!pho1passIsoTight_comboIso) && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaLoose && pho1passHoverELoose)"
+cut_QCD_CR_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.5 &&  abs(pho1Eta)<1.4442 && (!pho1passIsoTight_comboIso) && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaLoose && pho1passHoverELoose)"
+cut_QCD_CR_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.5 &&  abs(pho1Eta)<1.4442 && (!pho1passIsoTight_comboIso) && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passHoverELoose)"
 
 
-cut_GJets_3J = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_3J_noSminor = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_3J_noSigmaIetaIeta = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter + "&& pho1passHoverETight)"
-cut_GJets_2J = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 1  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_2J_noSminor = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 1 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_2J_noSigmaIetaIeta = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 1  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (jet1Pt/pho1Pt > 0.6) && (jet1Pt/pho1Pt < 1.4) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter + "&& pho1passHoverETight)"
+cut_GJets = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_GJets_noSminor = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_GJets_noSigmaIetaIeta = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passHoverETight)"
 
 cut_EWKCR = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons >= 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
 
 weight_cut = "(weight*pileupWeight*triggerEffSFWeight*photonEffSF) * "
 
-cut = cut_3J
-cut_blindMET = cut_3J_blindMET
-cut_blindTime = cut_3J_blindTime
-cut_noSminor = cut_3J_noSminor
-cut_noSigmaIetaIeta = cut_3J_noSigmaIetaIeta
-cut_noDisc = cut_3J
-cut_QCD_shape = cut_QCD_shape_3J
-cut_QCD_shape_noSigmaIetaIeta = cut_QCD_shape_3J_noSigmaIetaIeta
-cut_GJets_shape = cut_GJets_shape_3J
-cut_GJets_shape_noSigmaIetaIeta = cut_GJets_shape_3J_noSigmaIetaIeta
-cut_loose = cut_loose_3J
-cut_loose_noSminor = cut_loose_3J_noSminor
-cut_loose_noSigmaIetaIeta = cut_loose_3J_noSigmaIetaIeta
-cut_GJets = cut_GJets_3J
-cut_GJets_noSminor = cut_GJets_3J_noSminor
-cut_GJets_noSigmaIetaIeta = cut_GJets_3J_noSigmaIetaIeta
+cut_noDisc = cut
 
 
 cut_skim = "pho1Pt > 40 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 cut_skim_bkg = "pho1Pt > 40 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && (HLTDecision[81] == 1 || HLTDecision[100] == 1 || HLTDecision[102]==1 || HLTDecision[92] == 1 || HLTDecision[93] == 1)"
 
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/26Mar2019/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/PreApp_Apr2019/orderByPt/'
 
 ############define the plot you want to make##########
 ##for stack plots

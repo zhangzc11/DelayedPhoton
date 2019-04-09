@@ -7,6 +7,9 @@ import array
 from config_noBDT import weight_cut
 from config_noBDT import outputDir
 
+		
+os.system("mkdir -p "+outputDir+"/stack/")
+	
 
 gROOT.SetBatch(True)
 
@@ -29,35 +32,38 @@ topMargin    = 0.07
 bottomMargin = 0.12
 
 
-pho1passSigmaIetaIetaTight = "pho1SigmaIetaIeta < (0.015 - 4.0e-5*pho1ClusterTime_SmearToData + 4.2e-5*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 1.3e-4*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData - 4.0e-5*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 3.1e-6*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData +5.2e-5*pho1Eta + 2.5e-4*pho1Eta*pho1Eta -3.3e-5*pho1Eta*pho1Eta*pho1Eta -2.7e-4*pho1Eta*pho1Eta*pho1Eta*pho1Eta)"
-pho1passSigmaIetaIetaLoose = "pho1SigmaIetaIeta < (0.020 - 4.0e-5*pho1ClusterTime_SmearToData + 4.2e-5*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 1.3e-4*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData - 4.0e-5*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 3.1e-6*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData +5.2e-5*pho1Eta + 2.5e-4*pho1Eta*pho1Eta -3.3e-5*pho1Eta*pho1Eta*pho1Eta -2.7e-4*pho1Eta*pho1Eta*pho1Eta*pho1Eta)"
+pho1passSigmaIetaIetaTight = "pho1passSigmaIetaIetaTight"
+pho1passSigmaIetaIetaLoose = "pho1passSigmaIetaIetaLoose"
 
-pho1passSmajorTight = "pho1Smajor < (0.8 + 0.3755*exp(-0.01203*pho1Pt)-0.01468*pho1ClusterTime_SmearToData + 0.042*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 0.033*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData - 0.015*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 0.0015*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData +0.0064*pho1Eta - 0.039*pho1Eta*pho1Eta - 0.0087*pho1Eta*pho1Eta*pho1Eta + 0.071*pho1Eta*pho1Eta*pho1Eta*pho1Eta)"
-pho1passSmajorLoose = "pho1Smajor < (1.3 + 0.3755*exp(-0.01203*pho1Pt)-0.01468*pho1ClusterTime_SmearToData + 0.042*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 0.033*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData - 0.015*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData + 0.0015*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData*pho1ClusterTime_SmearToData +0.0064*pho1Eta - 0.039*pho1Eta*pho1Eta - 0.0087*pho1Eta*pho1Eta*pho1Eta + 0.071*pho1Eta*pho1Eta*pho1Eta*pho1Eta)"
+pho1passSmajorTight = "pho1passSmajorTight"
+pho1passSmajorLoose = "pho1passSmajorLoose"
+
+ph1passHoverETight = "pho1passHoverETight"
+ph1passHoverELoose = "pho1passHoverELoose"
 
 cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
 
-cut_lepVeto = " & nTightMuons == 0"
+cut_lepVeto = " && nTightMuons < 1"
 
-cut_tight_3J_2G_looseG2 = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  && pho2passIsoLoose_comboIso && pho2passEleVeto' + cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_tight_3J_2G_looseG2 = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  && pho2passIsoLoose_comboIso && pho2passEleVeto' + cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_tight_3J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2 '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_tight_3J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2 '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_loose_3J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_loose_3J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_tight_3J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_tight_3J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_loose_3J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_loose_3J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_tight_2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_tight_2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_tight_e2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_tight_e2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_loose_2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_loose_2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_tight_2J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_tight_2J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
-cut_loose_2J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + cut_lepVeto
+cut_loose_2J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
 
 inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
 
@@ -182,7 +188,9 @@ f2=open(tableFileName, 'a')
 print >> f2, "------------------------------------------------"
 print >> f2, "cut_tight_3J_2G"
 print >> f2, "------------------------------------------------"
-print_eff_table(cut_tight_3J_2G, "3J2G")
+#print_eff_table(cut_tight_3J_2G, "3J2G")
+
+print cut_tight_3J_2G
 
 '''
 f2=open(tableFileName, 'a') 

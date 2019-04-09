@@ -1232,21 +1232,21 @@ void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, TH2F * h2MCBkg, T
 	//rate parameters
 	
 	//fprintf(m_outfile, "NA      rateParam   ch00   bkg   %6.2f\n", h2_rate_Data->GetBinContent(1, 1));
-	fprintf(m_outfile, "NA      rateParam   ch00   bkg   %6.2f\n", h2MCBkg->GetBinContent(1, 1));
+	fprintf(m_outfile, "NA_2016      rateParam   ch00   bkg   %6.2f\n", h2MCBkg->GetBinContent(1, 1));
 	for(int iT=1;iT<Nbins_time; iT++)
 	{
 		//fprintf(m_outfile, "NA      rateParam   ch%d0   bkg   %6.2f\n", iT,h2_rate_Data->GetBinContent(1, 1));
-		fprintf(m_outfile, "NA      rateParam   ch%d0   bkg   %6.2f\n", iT,h2MCBkg->GetBinContent(1, 1));
+		fprintf(m_outfile, "NA_2016      rateParam   ch%d0   bkg   %6.2f\n", iT,h2MCBkg->GetBinContent(1, 1));
 		//fprintf(m_outfile, "x%d      rateParam   ch%d0   bkg   %e\n", iT, iT, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
-		fprintf(m_outfile, "x%d      rateParam   ch%d0   bkg   %e\n", iT, iT, h1DataShape_Time->GetBinContent(iT+1)/h1DataShape_Time->GetBinContent(1));
+		fprintf(m_outfile, "x%d_2016      rateParam   ch%d0   bkg   %e\n", iT, iT, h1DataShape_Time->GetBinContent(iT+1)/h1DataShape_Time->GetBinContent(1));
 	}
 
 	for(int iM=1;iM<Nbins_MET; iM++)
 	{
 		//fprintf(m_outfile, "NA      rateParam   ch0%d   bkg   %6.2f\n", iM, h2_rate_Data->GetBinContent(1, 1));
-		fprintf(m_outfile, "NA      rateParam   ch0%d   bkg   %6.2f\n", iM, h2MCBkg->GetBinContent(1, 1));
+		fprintf(m_outfile, "NA_2016      rateParam   ch0%d   bkg   %6.2f\n", iM, h2MCBkg->GetBinContent(1, 1));
 		//fprintf(m_outfile, "y%d      rateParam   ch0%d   bkg   %e\n", iM, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
-		fprintf(m_outfile, "y%d      rateParam   ch0%d   bkg   %e\n", iM, iM, h1DataShape_MET->GetBinContent(iM+1)/h1DataShape_MET->GetBinContent(1));
+		fprintf(m_outfile, "y%d_2016      rateParam   ch0%d   bkg   %e\n", iM, iM, h1DataShape_MET->GetBinContent(iM+1)/h1DataShape_MET->GetBinContent(1));
 	}
 	
 	for(int iM=1;iM<Nbins_MET;iM++)
@@ -1254,11 +1254,11 @@ void MakeDataCardABCD(TH2F * h2_rate_Data, TH2F * h2_rate_Sig, TH2F * h2MCBkg, T
 		for(int iT=1; iT<Nbins_time; iT++)
 		{
 			//fprintf(m_outfile, "NA      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2_rate_Data->GetBinContent(1, 1));
-			fprintf(m_outfile, "NA      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2MCBkg->GetBinContent(1, 1));
+			fprintf(m_outfile, "NA_2016      rateParam   ch%d%d   bkg   %6.2f\n", iT, iM, h2MCBkg->GetBinContent(1, 1));
 			//fprintf(m_outfile, "x%d      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h2_rate_Data->GetBinContent(iT+1, 1)/h2_rate_Data->GetBinContent(1, 1));
-			fprintf(m_outfile, "x%d      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h1DataShape_Time->GetBinContent(iT+1)/h1DataShape_Time->GetBinContent(1));
+			fprintf(m_outfile, "x%d_2016      rateParam   ch%d%d   bkg   %e\n", iT, iT, iM, h1DataShape_Time->GetBinContent(iT+1)/h1DataShape_Time->GetBinContent(1));
 			//fprintf(m_outfile, "y%d      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h2_rate_Data->GetBinContent(1, iM+1)/h2_rate_Data->GetBinContent(1, 1));
-			fprintf(m_outfile, "y%d      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h1DataShape_MET->GetBinContent(iM+1)/h1DataShape_MET->GetBinContent(1));
+			fprintf(m_outfile, "y%d_2016      rateParam   ch%d%d   bkg   %e\n", iM, iT, iM, h1DataShape_MET->GetBinContent(iM+1)/h1DataShape_MET->GetBinContent(1));
 		}
 	}
 
@@ -1273,7 +1273,7 @@ void AddSystematics_Norm_ABCD(TH2F * h2_sys, int Nbins_time, int Nbins_MET, TStr
         std::string _outDataCardsDir ((const char*) outDataCardsDir);
 
         FILE * m_outfile = fopen(("fit_results/2016ABCD/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str(), "a");
-	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/2016/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
+	cout<<"Adding Systematic "<<sysName<<" to datacard: "<<("fit_results/2016ABCD/"+_outDataCardsDir+"/DelayedPhotonCard_"+_modelName+".txt").c_str()<<endl;
 	
 	
 	fprintf(m_outfile, "%s  %s   ", _sysName.c_str(), _distType.c_str());

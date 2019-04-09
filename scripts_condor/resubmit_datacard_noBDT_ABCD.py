@@ -14,8 +14,8 @@ if __name__ == "__main__":
 			env_jdl_n = pwd + "/submit_noBDT_ABCD/" + sig_array[0]+"_datacard.jdl"
 			minsize = 1000
 			actualsize = 0
-			if os.path.isfile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root"):
-				actualsize =os.path.getsize("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD/datacards_3J_noBDT/higgsCombine"+sig_array[0]+".Asymptotic.mH120.root")
+			if os.path.isfile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/fitABCD_"+sig_array[0]+".tar"):
+				actualsize =os.path.getsize("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/fitABCD_"+sig_array[0]+".tar")
 			if actualsize < minsize:
 				print "job "+ sig_array[0]+"  failed, resubmitting now"
 				os.system("rm "+ pwd + "/log_noBDT_ABCD/"+sig_array[0]+"*")

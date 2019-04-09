@@ -6,18 +6,20 @@ inputData = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonA
 
 inputSigDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
 
-outputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/"
+outputDir = "/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/"
 
-os.system("rm -rf "+outputDir+"/2016ABCD/*noBDT \n")
-os.system("mkdir -p "+outputDir+" \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/datacards_3J_noBDT/ \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/datacards_2J_noBDT/ \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/plots_2J_noBDT/ \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/plots_3J_noBDT/ \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/binning_2J_noBDT/ \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/binning_3J_noBDT/ \n")
-os.system("mkdir -p "+outputDir+"/2016ABCD/datacards_noBDT/ \n")
+outputDir_mnt = "/mnt/hadoop"+outputDir
+
+os.system("rm -rf "+outputDir_mnt+"/2016ABCD/*noBDT \n")
+os.system("mkdir -p "+outputDir_mnt+" \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/datacards_3J_noBDT/ \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/datacards_2J_noBDT/ \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/plots_2J_noBDT/ \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/plots_3J_noBDT/ \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/binning_2J_noBDT/ \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/binning_3J_noBDT/ \n")
+os.system("mkdir -p "+outputDir_mnt+"/2016ABCD/datacards_noBDT/ \n")
 
 
 if __name__ == "__main__":
@@ -56,30 +58,33 @@ if __name__ == "__main__":
 
 	
 			env_script_f.write("cd ${currentDir} \n")
-			env_script_f.write("cp fit_results/2016ABCD/plots_3J_noBDT/* "+outputDir+"/2016ABCD/plots_3J_noBDT/ \n")
-			env_script_f.write("cp fit_results/2016ABCD/binning_3J_noBDT/* "+outputDir+"/2016ABCD/binning_3J_noBDT/ \n")
-			env_script_f.write("cp fit_results/2016ABCD/datacards_3J_noBDT/* "+outputDir+"/2016ABCD/datacards_3J_noBDT/ \n")
+			#env_script_f.write("cp fit_results/2016ABCD/plots_3J_noBDT/* "+outputDir_mnt+"/2016ABCD/plots_3J_noBDT/ \n")
+			#env_script_f.write("cp fit_results/2016ABCD/binning_3J_noBDT/* "+outputDir_mnt+"/2016ABCD/binning_3J_noBDT/ \n")
+			#env_script_f.write("cp fit_results/2016ABCD/datacards_3J_noBDT/* "+outputDir_mnt+"/2016ABCD/datacards_3J_noBDT/ \n")
 
-			env_script_f.write('echo "running on category 2J ======= " \n')
-			env_script_f.write("./FitABCD "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" 2J datacard no \n')
+			#env_script_f.write('echo "running on category 2J ======= " \n')
+			#env_script_f.write("./FitABCD "+inputData+" "+inputSigDir+"GMSB_"+sig_array[0]+"_13TeV-pythia8.root "+'"'+sig_array[0]+'" '+'"'+sig_array[1]+'" 2J datacard no \n')
 	
-			env_script_f.write("cd fit_results/2016ABCD/datacards_2J_noBDT \n")
-			env_script_f.write('echo "L100TeV_Ctau1000cm limits below (2J):" \n')
-			env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
+			#env_script_f.write("cd fit_results/2016ABCD/datacards_2J_noBDT \n")
+			#env_script_f.write('echo "L100TeV_Ctau1000cm limits below (2J):" \n')
+			#env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
 			
-			env_script_f.write("cd ${currentDir} \n")
-			env_script_f.write("cp fit_results/2016ABCD/datacards_2J_noBDT/* "+outputDir+"/2016ABCD/datacards_2J_noBDT/ \n")
-			env_script_f.write("cp fit_results/2016ABCD/plots_2J_noBDT/* "+outputDir+"/2016ABCD/plots_2J_noBDT/ \n")
-			env_script_f.write("cp fit_results/2016ABCD/binning_2J_noBDT/* "+outputDir+"/2016ABCD/binning_2J_noBDT/ \n")
-			env_script_f.write('echo "combining 2J and 3J datacards:" \n')
-			env_script_f.write("mkdir -p fit_results/2016ABCD/datacards_noBDT \n")
-			env_script_f.write("cd fit_results/2016ABCD/datacards_noBDT \n")
-			env_script_f.write("combineCards.py ch2J=../datacards_2J_noBDT/DelayedPhotonCard_"+sig_array[0]+".txt ch3J=../datacards_3J_noBDT/DelayedPhotonCard_"+sig_array[0]+".txt > DelayedPhotonCard_"+sig_array[0]+".txt \n")	
-			env_script_f.write('echo "L100TeV_Ctau1000cm limits below (2J+3J):" \n')
-			env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
+			#env_script_f.write("cd ${currentDir} \n")
+			#env_script_f.write("cp fit_results/2016ABCD/datacards_2J_noBDT/* "+outputDir_mnt+"/2016ABCD/datacards_2J_noBDT/ \n")
+			#env_script_f.write("cp fit_results/2016ABCD/plots_2J_noBDT/* "+outputDir_mnt+"/2016ABCD/plots_2J_noBDT/ \n")
+			#env_script_f.write("cp fit_results/2016ABCD/binning_2J_noBDT/* "+outputDir_mnt+"/2016ABCD/binning_2J_noBDT/ \n")
+			#env_script_f.write('echo "combining 2J and 3J datacards:" \n')
+			#env_script_f.write("mkdir -p fit_results/2016ABCD/datacards_noBDT \n")
+			#env_script_f.write("cd fit_results/2016ABCD/datacards_noBDT \n")
+			#env_script_f.write("combineCards.py ch2J=../datacards_2J_noBDT/DelayedPhotonCard_"+sig_array[0]+".txt ch3J=../datacards_3J_noBDT/DelayedPhotonCard_"+sig_array[0]+".txt > DelayedPhotonCard_"+sig_array[0]+".txt \n")	
+			#env_script_f.write('echo "L100TeV_Ctau1000cm limits below (2J+3J):" \n')
+			#env_script_f.write("combine DelayedPhotonCard_"+sig_array[0]+".txt -M Asymptotic -n "+sig_array[0]+"\n")
 
-			env_script_f.write("cd ${currentDir} \n")
-			env_script_f.write("cp fit_results/2016ABCD/datacards_noBDT/* "+outputDir+"/2016ABCD/datacards_noBDT/ \n")
+			#env_script_f.write("cd ${currentDir} \n")
+			#env_script_f.write("cp fit_results/2016ABCD/datacards_noBDT/* "+outputDir_mnt+"/2016ABCD/datacards_noBDT/ \n")
+			env_script_f.write("tar -zcvf fitABCD_"+sig_array[0]+".tar fit_results/2016ABCD/\n")
+			env_script_f.write("x509loc=${X509_USER_PROXY}")
+			env_script_f.write("env -i X509_USER_PROXY=${x509loc} gfal-copy -f --checksum-mode=bothfitABCD_"+sig_array[0]+" gsiftp://transfer.ultralight.org/"+outputDir+sig_array[0]+" \n")
 
 
 			env_script_f.write("date\n")
@@ -96,10 +101,12 @@ if __name__ == "__main__":
                         env_jdl_f.write("should_transfer_files = YES\n")		
                         env_jdl_f.write("RequestMemory = 2000\n")		
                         env_jdl_f.write("RequestCpus = 1\n")		
+                        env_jdl_f.write("x509userproxy = $ENV(X509_USER_PROXY)\n")		
                         env_jdl_f.write("+RunAsOwner = True\n")		
                         env_jdl_f.write("+InteractiveUser = true\n")		
-                        env_jdl_f.write("+SingularityImage = '/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel7'\n")		
+                        env_jdl_f.write('+SingularityImage = "/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel7"\n')		
                         env_jdl_f.write("+SingularityBindCVMFS = True\n")		
+                        env_jdl_f.write("run_as_owner = True\n")		
                         env_jdl_f.write("when_to_transfer_output = ON_EXIT\n")		
                         env_jdl_f.write("Queue 1\n")		
 			env_jdl_f.close()
