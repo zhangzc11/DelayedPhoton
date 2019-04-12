@@ -1,8 +1,8 @@
 from ROOT import gStyle, gROOT, TFile, TTree, TH1, TH1F, THStack, kRed, kBlue, kBlack, kViolet, kOrange, kAzure, TChain, SetOwnership, TCanvas, TLegend, TPad
 import os, sys
 from Aux import *
-from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_loose_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, cut_noSminor, cut_loose_noSminor, cut_GJets_noSminor, cut_blindMET, cut_blindTime
-from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend, weight_cut
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_QCD_CR_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, cut_noSminor, cut_QCD_CR_noSminor, cut_GJets_noSminor, cut_blindMET, cut_blindTime
+from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, cut_QCD_CR, xbins_MET, xbins_time, sigLegend, weight_cut
 from config_noBDT import fileNameTTJets, fileNameWJets, xsecTTJets, xsecWJets, cut_EWKCR, fileNameEWKG, xsecEWKG
 import numpy as np
 import array
@@ -115,9 +115,7 @@ for i in range(0,len(fileNameEWKG)):
 	#NEventsEWKG_.append(hNEventsEWKG_.GetBinContent(1))
 	NEventsEWKG[i]=hNEventsEWKG_.GetBinContent(1)
 	print "EWKG - " + str(i) + "  "+ str(hNEventsEWKG_.GetBinContent(1))
-
-
-
+	
 print NEventsGJets
 print NEventsQCD
 print NEventsWJets
@@ -157,10 +155,10 @@ for plot in splots:
 	#NEventsGJets_ = NEventsGJets[:]
 	#NEventsQCD_ = NEventsQCD[:]
 	weightedcut = weightedcut_noBlind
-	if "pho1ClusterTime" in plot[0]:
-		weightedcut =  weightedcut_blindMET
-	if "t1MET" in plot[0]:
-		weightedcut =  weightedcut_blindTime
+	#if "pho1ClusterTime" in plot[0]:
+	#	weightedcut =  weightedcut_blindMET
+	#if "t1MET" in plot[0]:
+	#	weightedcut =  weightedcut_blindTime
 			
 	print "\n plotting stack plots for " + plot[1]
 	print "weighted cut  ==>  "+weightedcut
@@ -416,10 +414,12 @@ for plot in splots:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
 	if useFraction:
 		#histGJets_CR.Scale(histData.Integral()*fractionGJets/histGJets_CR.Integral())
-		properScale(histGJets_CR, histData.Integral()*fractionGJets/histGJets_CR.Integral())
+		if histGJets_CR.Integral() > 0.0:
+			properScale(histGJets_CR, histData.Integral()*fractionGJets/histGJets_CR.Integral())
 	else:
 		#histGJets_CR.Scale(histGJets.Integral()/histGJets_CR.Integral())
-		properScale(histGJets_CR, histGJets.Integral()/histGJets_CR.Integral())
+		if histGJets_CR.Integral() > 0.0:
+			properScale(histGJets_CR, histGJets.Integral()/histGJets_CR.Integral())
 	histGJets_CR.SetFillColor(kAzure + 7)
 	histGJets_CR.SetLineColor(kAzure + 7)
 		
@@ -440,10 +440,12 @@ for plot in splots:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets+")")
 	if useFraction:
 		#histGJets_CR_reweight.Scale(histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
-		properScale(histGJets_CR_reweight, histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
+		if histGJets_CR_reweight.Integral() > 0.0:
+			properScale(histGJets_CR_reweight, histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
 	else:
 		#histGJets_CR_reweight.Scale(histGJets.Integral()/histGJets_CR_reweight.Integral())
-		properScale(histGJets_CR_reweight, histGJets.Integral()/histGJets_CR_reweight.Integral())
+		if histGJets_CR_reweight.Integral() > 0.0:
+			properScale(histGJets_CR_reweight, histGJets.Integral()/histGJets_CR_reweight.Integral())
 	histGJets_CR_reweight.SetFillColor(kAzure + 7)
 	histGJets_CR_reweight.SetLineColor(kAzure + 7)
 	
@@ -457,17 +459,19 @@ for plot in splots:
 	'''
 
 	if plot[0] == "pho1SigmaIetaIeta":
-		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose_noSigmaIetaIeta + " && !( " + cut_noSigmaIetaIeta +")")
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_QCD_CR_noSigmaIetaIeta)
 	if plot[0] == "pho1Sminor":
-		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose_noSminor + " && !( " + cut_noSminor +")")
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_QCD_CR_noSminor)
 	else:
-		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_loose + " && !( " + cut +")")
+		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_QCD_CR + " && !( " + cut +")")
 	if useFraction:
 		#histQCD_CR.Scale(histData.Integral()*fractionQCD/histQCD_CR.Integral())
-		properScale(histQCD_CR, histData.Integral()*fractionQCD/histQCD_CR.Integral())
+		if histQCD_CR.Integral() > 0.0:
+			properScale(histQCD_CR, histData.Integral()*fractionQCD/histQCD_CR.Integral())
 	else:
 		#histQCD_CR.Scale(histQCD.Integral()/histQCD_CR.Integral())
-		properScale(histQCD_CR, histQCD.Integral()/histQCD_CR.Integral())
+		if histQCD_CR.Integral() > 0.0:
+			properScale(histQCD_CR, histQCD.Integral()/histQCD_CR.Integral())
 
 	histQCD_CR.SetFillColor(kOrange - 9)
 	histQCD_CR.SetLineColor(kOrange - 9)
@@ -476,7 +480,8 @@ for plot in splots:
 	histEWK_CR = TH1F(plot[1]+"_histEWK_CR","",plot[3],plot[4],plot[5])	
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histEWK_CR", cut_EWKCR)
 	#histEWK_CR.Scale(histEWK.Integral()/histEWK_CR.Integral())
-	properScale(histEWK_CR, histEWK.Integral()/histEWK_CR.Integral())
+	if histEWK_CR.Integral() > 0.0:
+		properScale(histEWK_CR, histEWK.Integral()/histEWK_CR.Integral())
 
 	histEWK_CR.SetFillColor(7)
 	histEWK_CR.SetLineColor(7)
@@ -493,7 +498,27 @@ for plot in splots:
 		histMC_CR.Add(histEWK)
 		histMC_CR_reweight.Add(histEWK)
 
+	histMC.Add(histEWK)
+	histMC.Add(histGJets)
+	histMC.Add(histQCD)
 
+
+	print "#GJets all - xsec * lumi * cut " + str(histGJets.Integral())
+	print "#GJets all CR - xsec * lumi * cut " + str(histGJets_CR.Integral())
+	print "#QCD all - xsec * lumi * cut " + str(histQCD.Integral())
+	print "#QCD all CR - xsec * lumi * cut " + str(histQCD_CR.Integral())
+	print "#EWK all - xsec * lumi * cut " + str(histEWK.Integral())
+	print "#EWK all CR - xsec * lumi * cut " + str(histEWK_CR.Integral())
+	print "#MC all - xsec * lumi * cut " + str(histMC.Integral())
+	
+	#scale MC
+	kFactor_this = histData.Integral()/histMC.Integral()
+	properScale(histGJets, kFactor_this)
+	properScale(histQCD, kFactor_this)
+	properScale(histEWK, kFactor_this)
+	properScale(histMC, kFactor_this)
+
+	###
 	thisStack.Add(histGJets, "histo")
 	thisStack_GJets.Add(histGJets, "histo")
 	thisStack.Add(histQCD,"histo")
@@ -510,10 +535,6 @@ for plot in splots:
 	thisStack_QCD_CR.Add(histQCD_CR,"histo")
 	thisStack_EWK_CR.Add(histEWK_CR,"histo")
 
-	histMC.Add(histEWK)
-	histMC.Add(histGJets)
-	histMC.Add(histQCD)
-
 	histMC_CR_reweight.Add(histGJets_CR_reweight)
 	histMC_CR.Add(histGJets_CR)
 	histMC_CR_reweight.Add(histQCD_CR)
@@ -529,7 +550,7 @@ for plot in splots:
 	leg.SetFillColor(0)
 	leg.SetFillStyle(1001)
 	leg.AddEntry(histData, "data","lep")
-	leg.AddEntry(histDataOOT, "data - OOT photon","lep")
+	#leg.AddEntry(histDataOOT, "data - OOT photon","lep")
 	if plot[6]:
 		leg.AddEntry(histSig, sigLegend)
 	else:
@@ -540,13 +561,6 @@ for plot in splots:
 	leg.AddEntry(histQCD, "QCD (MC)", "f")
 
 
-	print "#GJets all - xsec * lumi * cut " + str(histGJets.Integral())
-	print "#GJets all CR - xsec * lumi * cut " + str(histGJets_CR.Integral())
-	print "#QCD all - xsec * lumi * cut " + str(histQCD.Integral())
-	print "#QCD all CR - xsec * lumi * cut " + str(histQCD_CR.Integral())
-	print "#EWK all - xsec * lumi * cut " + str(histEWK.Integral())
-	print "#EWK all CR - xsec * lumi * cut " + str(histEWK_CR.Integral())
-	print "#MC all - xsec * lumi * cut " + str(histMC.Integral())
 		
 	myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
 	myC.SetHighLightColor(2)
@@ -595,7 +609,7 @@ for plot in splots:
 	pad1.Update()
 	histSig.Draw("samehisto")
 	histData.Draw("sameE")	
-	histDataOOT.Draw("sameE")	
+	#histDataOOT.Draw("sameE")	
 	leg.Draw()
 		
 	pad2.cd()
@@ -647,7 +661,7 @@ for plot in splots:
 	leg_CR.SetFillColor(0)
 	leg_CR.SetFillStyle(1001)
 	leg_CR.AddEntry(histData, "data","lep")
-	leg_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
+	#leg_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
 	if plot[6]:
 		leg_CR.AddEntry(histSig, sigLegend)
 	else:
@@ -684,7 +698,7 @@ for plot in splots:
 	pad1.Update()
 	histSig.Draw("samehisto")
 	histData.Draw("sameE")	
-	histDataOOT.Draw("sameE")	
+	#histDataOOT.Draw("sameE")	
 	leg_CR.Draw()
 		
 	pad2.cd()
@@ -734,7 +748,7 @@ for plot in splots:
 	leg_CR_reweight.SetFillColor(0)
 	leg_CR_reweight.SetFillStyle(1001)
 	leg_CR_reweight.AddEntry(histData, "data","lep")
-	leg_CR_reweight.AddEntry(histDataOOT, "data - OOT photon","lep")
+	#leg_CR_reweight.AddEntry(histDataOOT, "data - OOT photon","lep")
 	if plot[6]:
 		leg_CR_reweight.AddEntry(histSig, sigLegend)
 	else:
@@ -772,7 +786,7 @@ for plot in splots:
 	pad1.Update()
 	histSig.Draw("samehisto")
 	histData.Draw("sameE")	
-	histDataOOT.Draw("sameE")	
+	#histDataOOT.Draw("sameE")	
 	leg_CR_reweight.Draw()
 		
 	pad2.cd()
@@ -823,7 +837,7 @@ for plot in splots:
 	leg_GJets_CR.SetFillColor(0)
 	leg_GJets_CR.SetFillStyle(1001)
 	leg_GJets_CR.AddEntry(histData, "data","lep")
-	leg_GJets_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
+	#leg_GJets_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
 	leg_GJets_CR.AddEntry(histGJets_CR, "#gamma + jets (control)", "f")
 	leg_GJets_CR.AddEntry(histGJets, "#gamma + jets (MC)", "f")
 
@@ -851,7 +865,7 @@ for plot in splots:
 	pad1.Update()
 	thisStack_GJets.Draw("same")	
 	histData.Draw("sameE")	
-	histDataOOT.Draw("sameE")	
+	#histDataOOT.Draw("sameE")	
 	leg_GJets_CR.Draw()
 		
 	pad2.cd()
@@ -901,7 +915,7 @@ for plot in splots:
 	leg_QCD_CR.SetFillColor(0)
 	leg_QCD_CR.SetFillStyle(1001)
 	leg_QCD_CR.AddEntry(histData, "data","lep")
-	leg_QCD_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
+	#leg_QCD_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
 	leg_QCD_CR.AddEntry(histQCD_CR, "QCD (control)", "f")
 	leg_QCD_CR.AddEntry(histQCD, "QCD (MC)", "f")
 
@@ -929,7 +943,7 @@ for plot in splots:
 	pad1.Update()
 	thisStack_QCD.Draw("same")	
 	histData.Draw("sameE")	
-	histDataOOT.Draw("sameE")	
+	#histDataOOT.Draw("sameE")	
 	leg_QCD_CR.Draw()
 		
 	pad2.cd()

@@ -36,6 +36,8 @@ cut_MET_filter = "Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Fl
 
 print "final cut ===> "+weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_lepVeto + "&&"+cut_nPhotons+"&&"+cut_MET_filter+")"
 
+
+'''
 inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
 
 tableFileName = "./cut_flow_Table.txt"
@@ -287,3 +289,5 @@ print >> f1,  "+ nJets cut& "+"%.0f" % n_nJetsData+"("+"%.1f"%float(100.0*n_nJet
 print >> f1,  "+ lepton Veto cut& "+"%.0f" % n_lepVetoData+"("+"%.1f"%float(100.0*n_lepVetoData/n_blindData)+"\\%)  & "+"%.2f"%n_lepVetoSig1 + "("+"%.1f"%float(100.0*n_lepVetoSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_lepVetoSig2 + "("+"%.1f"%float(100.0*n_lepVetoSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_lepVetoSig3 + "("+"%.1f"%float(100.0*n_lepVetoSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
 print >> f1,  "+ nPhotons cut& "+"%.0f" % n_nPhotonsData+"("+"%.1f"%float(100.0*n_nPhotonsData/n_blindData)+"\\%)  & "+"%.2f"%n_nPhotonsSig1 + "("+"%.1f"%float(100.0*n_nPhotonsSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_nPhotonsSig2 + "("+"%.1f"%float(100.0*n_nPhotonsSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_nPhotonsSig3 + "("+"%.1f"%float(100.0*n_nPhotonsSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
 print >> f1,  "+ MET filters & "+"%.0f" % n_MET_filterData+"("+"%.1f"%float(100.0*n_MET_filterData/n_blindData)+"\\%)  & "+"%.2f"%n_MET_filterSig1 + "("+"%.1f"%float(100.0*n_MET_filterSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_MET_filterSig2 + "("+"%.1f"%float(100.0*n_MET_filterSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_MET_filterSig3 + "("+"%.1f"%float(100.0*n_MET_filterSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
+
+'''

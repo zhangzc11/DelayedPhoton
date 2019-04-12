@@ -29,12 +29,13 @@ topMargin    = 0.07
 bottomMargin = 0.12
 ########################################################
 
-inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/"
+inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/back_before04Apr2019_forOOTID/withcut/"
 
 def drawIDeff_ptetatime_OOTGED(cut_deno, cut_nume, filename, label):
 	fileThis = TFile(inputDir+filename, "READ")
 	treeThis = fileThis.Get("DelayedPhoton")
-	
+	print "cut_deno: "+cut_deno	
+	print "cut_nume: "+cut_nume
 	pt_binning = np.array([25.0, 35.0, 45.0, 60.0, 80.0, 100.0, 125.0, 150.0, 180.0, 210.0, 250.0, 300.0, 350.0, 400.0, 500.0, 600.0, 700.0, 800.0, 1000.0])
 	eta_binning = np.array([-1.5, -1.2, -1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.5, 0.8, 1.0, 1.2, 1.5])
 	time_binning = np.array([-2.0, -1.0, -0.5, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 1.8, 2.1, 2.4, 2.8, 3.2, 4.0, 5.0, 6.0, 7.0])
@@ -181,6 +182,9 @@ def drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume, filename, label, label_cuts, va
 	fileThis = TFile(inputDir+filename, "READ")
 	treeThis = fileThis.Get("DelayedPhoton")
 	
+	#print "cut_deno: "+cut_deno
+        #print "cuts_nume: "
+	#print cuts_nume
 	
 	myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
         myC.SetHighLightColor(2)
@@ -218,7 +222,7 @@ def drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume, filename, label, label_cuts, va
 	graph.SetMinimum(0.0)
 	graph.SetMaximum(1.0)
 	gPad.Update()	
-	leg = TLegend(0.3, 0.2, 0.93, 0.4)
+	leg = TLegend(0.3, 0.4, 0.93, 0.6)
         leg.SetNColumns(1)
         leg.SetBorderSize(0)
         leg.SetTextSize(0.035)
@@ -464,6 +468,8 @@ def draw_varA_vs_varB(filename, label, cut, cut_invert_match, varAName, varBName
 		tf1_fit.SetParameters(hist_quantile.GetMinimum(), hist_quantile.GetMaximum()-hist_quantile.GetMinimum(), -2.0/(fitRangeR - fitRangeL))
 
 	hist_quantile.Fit("tf1_fit", "", "", fitRangeL,fitRangeR)
+	if varBName =="fixedGridRhoFastjetAll":
+		hist_quantile.GetXaxis().SetRangeUser(0,25.0)
 	myC.SaveAs(outputDir+"/stack/photon_"+varAName+"_vs_"+varBName+"_"+label+"_quantile"+str(quantile)+".pdf")
 	myC.SaveAs(outputDir+"/stack/photon_"+varAName+"_vs_"+varBName+"_"+label+"_quantile"+str(quantile)+".png")
 	myC.SaveAs(outputDir+"/stack/photon_"+varAName+"_vs_"+varBName+"_"+label+"_quantile"+str(quantile)+".C")
@@ -485,14 +491,18 @@ def draw_varA_vs_varB(filename, label, cut, cut_invert_match, varAName, varBName
 weights = "(weight*pileupWeight*triggerEffSFWeight*triggerEffWeight) * "
 	
 cut_match = "abs(deltaR_pho1)<0.3  && deltaPt_pho1/pho1GenPt < 0.3 && abs(pho1Eta)<1.4442"
-cut_invert_match = "!(abs(deltaR_pho1)<0.3  && deltaPt_pho1/pho1GenPt < 0.3) && abs(pho1Eta)<1.4442"
+cut_invert_match = "(abs(deltaR_pho1)>0.5  && deltaPt_pho1/pho1GenPt > 0.5) && abs(pho1Eta)<1.4442"
+cut_invert_QCD = "pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passEleVeto && pho1Sminor<1.4 && n_Jets > 2 "
+cut_invert_GJets = "(!pho1isPromptPhoton)"
 
 
 pho1passSigmaIetaIetaTight = "pho1SigmaIetaIeta < 0.017"# + 0.001549*pho1SeedTimeRaw*(std::copysign(0.5, pho1SeedTimeRaw)+0.5)*(std::copysign(0.5, 3.5-pho1SeedTimeRaw)+0.5) + (0.0004942*(pho1SeedTimeRaw-3.5) + 0.005422)*(std::copysign(0.5, pho1SeedTimeRaw-3.5)+0.5)"
+pho1passSigmaIetaIetaTight_GED = "pho1SigmaIetaIeta < 0.017"# + 0.001549*pho1SeedTimeRaw*(std::copysign(0.5, pho1SeedTimeRaw)+0.5)*(std::copysign(0.5, 3.5-pho1SeedTimeRaw)+0.5) + (0.0004942*(pho1SeedTimeRaw-3.5) + 0.005422)*(std::copysign(0.5, pho1SeedTimeRaw-3.5)+0.5)"
 pho1passSigmaIetaIetaLoose = "pho1SigmaIetaIeta < 0.019"# + 0.001549*pho1SeedTimeRaw*(std::copysign(0.5, pho1SeedTimeRaw)+0.5)*(std::copysign(0.5, 3.5-pho1SeedTimeRaw)+0.5) + (0.0004942*(pho1SeedTimeRaw-3.5) + 0.005422)*(std::copysign(0.5, pho1SeedTimeRaw-3.5)+0.5)"
 
 #pho1passSmajorTight = "pho1Smajor < 0.40 - 0.2816*abs(pho1Eta) + 0.3865*pho1Eta*pho1Eta + 1.179*exp(-0.009499*pho1Pt) - 0.193*pho1SeedTimeRaw*(std::copysign(0.5, 0.0 - pho1SeedTimeRaw)+0.5) + 0.2268*pho1SeedTimeRaw*(std::copysign(0.5, pho1SeedTimeRaw)+0.5)*(std::copysign(0.5, 3.5-pho1SeedTimeRaw)+0.5)+(0.02828*(pho1SeedTimeRaw-3.5) + 0.7938)*(std::copysign(0.5, pho1SeedTimeRaw-3.5)+0.5)"
 pho1passSmajorTight = "pho1Smajor < 1.30"
+pho1passHoverETight_GED = "pho1HoverE < 0.0269"
 #pho1passSmajorLoose = "pho1Smajor < 0.80 - 0.2816*abs(pho1Eta) + 0.3865*pho1Eta*pho1Eta + 1.179*exp(-0.009499*pho1Pt) - 0.193*pho1SeedTimeRaw*(std::copysign(0.5, 0.0 - pho1SeedTimeRaw)+0.5) + 0.2268*pho1SeedTimeRaw*(std::copysign(0.5, pho1SeedTimeRaw)+0.5)*(std::copysign(0.5, 3.5-pho1SeedTimeRaw)+0.5)+(0.02828*(pho1SeedTimeRaw-3.5) + 0.7938)*(std::copysign(0.5, pho1SeedTimeRaw-3.5)+0.5)"
 pho1passSmajorLoose = "pho1Smajor < 1.80"
 
@@ -503,7 +513,13 @@ pho1passIsoLoose_hcal = "pho1sumNeutralHadronEt < 10.0 - 0.0008001*pho1Pt + 2.93
 pho1passIsoTight_tracker = "pho1trkSumPtHollowConeDR03 < 2.0 + 0.005996*pho1Pt + 0.2304*fixedGridRhoFastjetAll*(std::copysign(0.5, 0.8-abs(pho1Eta))+0.5)*(std::copysign(0.5, 20.0-fixedGridRhoFastjetAll) + 0.5) + (0.3723*(fixedGridRhoFastjetAll-20.0)+4.6080)*(std::copysign(0.5, 0.8-abs(pho1Eta))+0.5)*(std::copysign(0.5, fixedGridRhoFastjetAll-20.0) + 0.5 ) + (0.1969*fixedGridRhoFastjetAll-0.4)*(std::copysign(0.5, abs(pho1Eta)-0.8)+0.5)*(std::copysign(0.5, 14.0-fixedGridRhoFastjetAll) + 0.5) + (0.5029*(fixedGridRhoFastjetAll-14.0)+2.7566-0.4)*(std::copysign(0.5, abs(pho1Eta)-0.8)+0.5)*(std::copysign(0.5, fixedGridRhoFastjetAll-14.0) + 0.5)"
 pho1passIsoLoose_tracker = "pho1trkSumPtHollowConeDR03 < 5.0 + 0.005996*pho1Pt + 0.2304*fixedGridRhoFastjetAll*(std::copysign(0.5, 0.8-abs(pho1Eta))+0.5)*(std::copysign(0.5, 20.0-fixedGridRhoFastjetAll) + 0.5) + (0.3723*(fixedGridRhoFastjetAll-20.0)+4.6080)*(std::copysign(0.5, 0.8-abs(pho1Eta))+0.5)*(std::copysign(0.5, fixedGridRhoFastjetAll-20.0) + 0.5 ) + (0.1969*fixedGridRhoFastjetAll-0.4)*(std::copysign(0.5, abs(pho1Eta)-0.8)+0.5)*(std::copysign(0.5, 14.0-fixedGridRhoFastjetAll) + 0.5) + (0.5029*(fixedGridRhoFastjetAll-14.0)+2.7566-0.4)*(std::copysign(0.5, abs(pho1Eta)-0.8)+0.5)*(std::copysign(0.5, fixedGridRhoFastjetAll-14.0) + 0.5)"
 
+pho1passIsoTight_ecal_GED = "pho1PFsumPhotonEt < 2.362 + 0.0047*pho1Pt + 0.1210*fixedGridRhoFastjetAll*(std::copysign(0.5, 1.0-abs(pho1Eta))+0.5) + (0.1107*fixedGridRhoFastjetAll)*(std::copysign(0.5, abs(pho1Eta)-1.0)+0.5)"
+pho1passIsoTight_hcal_GED = "pho1PFsumNeutralHadronEt < 0.264 + 0.0148*pho1Pt + 1.7e-5*pho1Pt*pho1Pt+ 0.0597*fixedGridRhoFastjetAll*(std::copysign(0.5, 1.0-abs(pho1Eta))+0.5) + (0.0807*fixedGridRhoFastjetAll)*(std::copysign(0.5, abs(pho1Eta)-1.0)+0.5)"
+pho1passIsoTight_tracker_GED = "pho1PFsumChargedHadronPt < 0.202 + 0.0360*fixedGridRhoFastjetAll*(std::copysign(0.5, 1.0-abs(pho1Eta))+0.5) + (0.0377*fixedGridRhoFastjetAll)*(std::copysign(0.5, abs(pho1Eta)-1.0)+0.5)"
+
+
 pho1passIsoTight = pho1passIsoTight_ecal + "&& "+ pho1passIsoTight_hcal + " && " + pho1passIsoTight_tracker
+pho1passIsoTight_GED = pho1passIsoTight_ecal_GED + "&& "+ pho1passIsoTight_hcal_GED + " && " + pho1passIsoTight_tracker_GED
 pho1passIsoLoose = pho1passIsoTight_ecal + "&& "+ pho1passIsoTight_hcal + " && " + pho1passIsoTight_tracker
 
 '''
@@ -515,37 +531,62 @@ photonID_cuts_OOT_Loose_all = "pho1passIsoLoose_PFClusterIso && pho1passSigmaIet
 '''
 #photonID_cuts_OOT_Tight = [pho1passIsoTight, pho1passSigmaIetaIetaTight, pho1passSmajorTight]	
 photonID_cuts_OOT_Tight = [pho1passIsoTight_ecal, pho1passIsoTight_hcal, pho1passIsoTight_tracker, pho1passSigmaIetaIetaTight, pho1passSmajorTight]	
+photonID_cuts_GED_Tight = [pho1passIsoTight_ecal_GED, pho1passIsoTight_hcal_GED, pho1passIsoTight_tracker_GED, pho1passSigmaIetaIetaTight_GED, pho1passHoverETight_GED]	
 photonID_cuts_OOT_Tight_all = pho1passIsoTight+"&&"+ pho1passSigmaIetaIetaTight +"&&" + pho1passSmajorTight
+photonID_cuts_GED_Tight_all = pho1passIsoTight_GED+"&&"+ pho1passSigmaIetaIetaTight_GED +"&&" + pho1passHoverETight_GED
 #photonID_cuts_OOT_Loose = [pho1passIsoLoose, pho1passSigmaIetaIetaLoose, pho1passSmajorLoose]	
 photonID_cuts_OOT_Loose = [pho1passIsoLoose_ecal, pho1passIsoLoose_hcal, pho1passIsoLoose_tracker, pho1passSigmaIetaIetaLoose, pho1passSmajorLoose]	
 photonID_cuts_OOT_Loose_all = pho1passIsoLoose+" &&"+ pho1passSigmaIetaIetaLoose +"&&" + pho1passSmajorLoose
 photonID_cuts_label = ["Isolation", "SigmaIetaIeta", "Smajor"]
+photonID_cuts_label_GED = ["Isolation", "SigmaIetaIeta", "HoverE"]
 #photonID_cuts_label_Nm1 = ["Isolation", "Isolation + #sigma_{i#eta i#eta}", "Isolation + #sigma_{i#eta i#eta} + Smajor"]
 photonID_cuts_label_Nm1 = ["ecal iso", "ecal+PFNH iso", "ecal+PFNH+tracker iso", "Isolation + #sigma_{i#eta i#eta}", "Isolation + #sigma_{i#eta i#eta} + Smajor"]
+photonID_cuts_label_Nm1_GED = ["PF Photon iso", "PF Photon+NH iso", "PF Photon+NH+CH iso", "Isolation + #sigma_{i#eta i#eta}", "Isolation + #sigma_{i#eta i#eta} + H/E"]
 
 cut_deno = weights + cut_match 
+cut_deno_GED = weights + cut_match + "&& pho1isStandardPhoton"
 cut_deno_bkg = weights + cut_invert_match 
+cut_deno_bkgQCD = weights + cut_invert_QCD
+cut_deno_GED_bkgQCD = weights + cut_invert_QCD
+cut_deno_bkgGJets = weights + cut_invert_GJets
 cut_nume_OOT_Tight = weights + cut_match + " && "+photonID_cuts_OOT_Tight_all
+cut_nume_GED_Tight = weights + cut_match + " && pho1isStandardPhoton && "+photonID_cuts_GED_Tight_all
 cut_nume_OOT_Tight_bkg = weights + cut_invert_match + " && "+photonID_cuts_OOT_Tight_all
 cut_nume_OOT_Loose = weights + cut_match + " && "+photonID_cuts_OOT_Loose_all
 cut_nume_OOT_Loose_bkg = weights + cut_invert_match + " && "+photonID_cuts_OOT_Loose_all
 
 cuts_nume_OOT_Tight = []
+cuts_nume_GED_Tight = []
 cuts_nume_OOT_Tight_bkg = []
+cuts_nume_OOT_Tight_bkgQCD = []
+cuts_nume_GED_Tight_bkgQCD = []
+cuts_nume_OOT_Tight_bkgGJets = []
 cuts_nume_OOT_Loose = []
 cuts_nume_OOT_Loose_bkg = []
 for idx in range(len(photonID_cuts_OOT_Tight)):
 	cut_this_Tight = weights + cut_match
+	cut_this_Tight_GED = weights + cut_match + "&& pho1isStandardPhoton"
 	cut_this_Tight_bkg = weights + cut_invert_match
+	cut_this_Tight_bkgQCD = weights + cut_invert_QCD
+	cut_this_Tight_GED_bkgQCD = weights + cut_invert_QCD
+	cut_this_Tight_bkgGJets = weights + cut_invert_GJets
 	cut_this_Loose = weights + cut_match
 	cut_this_Loose_bkg = weights + cut_invert_match
 	for idx2 in range(idx+1):
 		cut_this_Tight = cut_this_Tight + "&& " + photonID_cuts_OOT_Tight[idx2]
+		cut_this_Tight_GED = cut_this_Tight_GED + "&& " + photonID_cuts_GED_Tight[idx2]
 		cut_this_Tight_bkg = cut_this_Tight_bkg + "&& " + photonID_cuts_OOT_Tight[idx2]
+		cut_this_Tight_bkgQCD = cut_this_Tight_bkgQCD + "&& " + photonID_cuts_OOT_Tight[idx2]
+		cut_this_Tight_GED_bkgQCD = cut_this_Tight_GED_bkgQCD + "&& " + photonID_cuts_GED_Tight[idx2]
+		cut_this_Tight_bkgGJets = cut_this_Tight_bkgGJets + "&& " + photonID_cuts_OOT_Tight[idx2]
 		cut_this_Loose = cut_this_Loose + "&& "+ photonID_cuts_OOT_Loose[idx2]
 		cut_this_Loose_bkg = cut_this_Loose_bkg + "&& "+ photonID_cuts_OOT_Loose[idx2]
 	cuts_nume_OOT_Tight.append(cut_this_Tight)
+	cuts_nume_GED_Tight.append(cut_this_Tight_GED)
 	cuts_nume_OOT_Tight_bkg.append(cut_this_Tight_bkg)
+	cuts_nume_OOT_Tight_bkgQCD.append(cut_this_Tight_bkgQCD)
+	cuts_nume_GED_Tight_bkgQCD.append(cut_this_Tight_GED_bkgQCD)
+	cuts_nume_OOT_Tight_bkgGJets.append(cut_this_Tight_bkgGJets)
 	cuts_nume_OOT_Loose.append(cut_this_Loose)
 	cuts_nume_OOT_Loose_bkg.append(cut_this_Loose_bkg)
 	
@@ -555,7 +596,7 @@ eta_binning = np.array([-1.5, -1.4, -1.3, -1.2, -1.1, -1.0, -0.9, -0.8, -0.7, -0
 abs_eta_binning = np.array([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5])
 time_binning = np.array([-2.0, -1.0, -0.5, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 1.8, 2.1, 2.4, 2.8, 3.2, 4.0, 5.0, 6.0, 7.0])
 rho_binning = np.array([0.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0, 35.0, 40.0, 50.0, 60.0])
-nPV_binning = np.array([0.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0, 35.0, 40.0, 50.0, 60.0])
+nPV_binning = np.array([0.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0, 35.0])
 
 print len(pt_binning)
 print len(eta_binning)
@@ -564,30 +605,74 @@ print len(rho_binning)
 quantiles_ = 0.90
 
 
-#drawIDeff_ptetatime(cut_deno, cut_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_allIDcuts")
-drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
-drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1Eta", "#gamma #eta", eta_binning)
-drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1SeedTimeRaw", "#gamma time (ns)", time_binning)
-drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "fixedGridRhoFastjetAll", "#rho", rho_binning)
-drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "nPV", "nPV", nPV_binning)
+#drawIDeff_ptetatime(cut_deno_GED, cut_nume_GED_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "GED_Tight_L200TeV_CtauAll_allIDcuts")
+#drawIDeff_ptetatime_Nm1(cut_deno_GED, cuts_nume_GED_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1_GED, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_GED, cuts_nume_GED_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1_GED, "pho1Eta", "#gamma #eta", eta_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_GED, cuts_nume_GED_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1_GED, "pho1ClusterTime_SmearToData", "#gamma cluster time time (ns)", time_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_GED, cuts_nume_GED_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1_GED, "fixedGridRhoFastjetAll", "#rho", rho_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_GED, cuts_nume_GED_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1_GED, "nPV", "nPV", nPV_binning)
 
-drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
-drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "pho1Eta", "#gamma #eta", eta_binning)
-drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "pho1SeedTimeRaw", "#gamma time (ns)", time_binning)
-drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "fixedGridRhoFastjetAll", "#rho", rho_binning)
-drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "nPV", "nPV", nPV_binning)
+drawIDeff_ptetatime_Nm1(cut_deno_GED_bkgQCD, cuts_nume_GED_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1_GED, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
+drawIDeff_ptetatime_Nm1(cut_deno_GED_bkgQCD, cuts_nume_GED_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1_GED, "pho1Eta", "#gamma #eta", eta_binning)
+drawIDeff_ptetatime_Nm1(cut_deno_GED_bkgQCD, cuts_nume_GED_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1_GED, "pho1ClusterTime_SmearToData", "#gamma time (ns)", time_binning)
+drawIDeff_ptetatime_Nm1(cut_deno_GED_bkgQCD, cuts_nume_GED_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1_GED, "fixedGridRhoFastjetAll", "#rho", rho_binning)
+drawIDeff_ptetatime_Nm1(cut_deno_GED_bkgQCD, cuts_nume_GED_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "GED_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1_GED, "nPV", "nPV", nPV_binning)
+
+
+
+#drawIDeff_ptetatime(cut_deno, cut_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_allIDcuts")
+#drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1Eta", "#gamma #eta", eta_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1ClusterTime_SmearToData", "#gamma cluster time time (ns)", time_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "fixedGridRhoFastjetAll", "#rho", rho_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Tight, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "nPV", "nPV", nPV_binning)
+
+#drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "pho1Eta", "#gamma #eta", eta_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "pho1ClusterTime_SmearToData", "#gamma time (ns)", time_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "fixedGridRhoFastjetAll", "#rho", rho_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkg, cuts_nume_OOT_Tight_bkg, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkg", photonID_cuts_label_Nm1, "nPV", "nPV", nPV_binning)
+
+
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgQCD, cuts_nume_OOT_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgQCD, cuts_nume_OOT_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1, "pho1Eta", "#gamma #eta", eta_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgQCD, cuts_nume_OOT_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1, "pho1ClusterTime_SmearToData", "#gamma time (ns)", time_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgQCD, cuts_nume_OOT_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1, "fixedGridRhoFastjetAll", "#rho", rho_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgQCD, cuts_nume_OOT_Tight_bkgQCD, "DelayedPhoton_QCD_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgQCD", photonID_cuts_label_Nm1, "nPV", "nPV", nPV_binning)
+
+#print cut_deno_bkgGJets
+#print cuts_nume_OOT_Tight_bkgGJets[-1]
+
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgGJets, cuts_nume_OOT_Tight_bkgGJets, "DelayedPhoton_GJets_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgGJets", photonID_cuts_label_Nm1, "pho1Pt", "#gamma p^{T} (GeV)", pt_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgGJets, cuts_nume_OOT_Tight_bkgGJets, "DelayedPhoton_GJets_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgGJets", photonID_cuts_label_Nm1, "pho1Eta", "#gamma #eta", eta_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgGJets, cuts_nume_OOT_Tight_bkgGJets, "DelayedPhoton_GJets_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgGJets", photonID_cuts_label_Nm1, "pho1ClusterTime_SmearToData", "#gamma time (ns)", time_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgGJets, cuts_nume_OOT_Tight_bkgGJets, "DelayedPhoton_GJets_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgGJets", photonID_cuts_label_Nm1, "fixedGridRhoFastjetAll", "#rho", rho_binning)
+#drawIDeff_ptetatime_Nm1(cut_deno_bkgGJets, cuts_nume_OOT_Tight_bkgGJets, "DelayedPhoton_GJets_HTAll_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root", "OOT_Tight_L200TeV_CtauAll_Nm1Cuts_bkgGJets", photonID_cuts_label_Nm1, "nPV", "nPV", nPV_binning)
+
 
 
 #drawIDeff_ptetatime_Nm1(cut_deno, cuts_nume_OOT_Loose, "GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "OOT_Loose_L200TeV_CtauAll_Nm1Cuts", photonID_cuts_label_Nm1, "pho1SeedTimeRaw", "#gamma time (ns)", time_binning)
 
-#draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1Smajor", "fixedGridRhoFastjetAll", "Smajor", " #rho", 0.0, 2.0, rho_binning, quantiles_, 1, 2.0, 30.0)
-#draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1ecalPFClusterIso", "pho1Eta", "ecalPFClusterIso", " #eta", 0.0, 50.0, eta_binning, quantiles_, 1, -1.4, 1.4)
-#draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1sumNeutralHadronEt", "pho1Eta", "sumNeutralHadronEt", " #eta", 0.0, 50.0, eta_binning, quantiles_, 1, -1.4, 1.4)
-#draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1trkSumPtHollowConeDR03", "pho1Eta", "trkSumPtHollowConeDR03", " #eta", 0.0, 50.0, eta_binning, quantiles_, 1, -1.4, 1.4)
 
-#draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1Smajor", "pho1Pt", "Smajor", " #gamma p^{T} (GeV)", 0.0, 2.0, pt_binning, quantiles_, 6, 30.0, 500.0)
-#draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1SigmaIetaIeta", "abs(pho1Eta)", "SigmaIetaIeta", " |#eta|", 0.0, 0.02, abs_eta_binning, quantiles_, 1, 0.1, 1.45)
 '''
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1ecalPFClusterIso", "fixedGridRhoFastjetAll", "ecalPFClusterIso", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1ecalPFClusterIso", "fixedGridRhoFastjetAll", "ecalPFClusterIso", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1sumNeutralHadronEt", "fixedGridRhoFastjetAll", "sumNeutralHadronEt", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1sumNeutralHadronEt", "fixedGridRhoFastjetAll", "sumNeutralHadronEt", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1trkSumPtHollowConeDR03", "pho1Pt", "trkSumPtHollowConeDR03", " #gamma p^{T} (GeV)", 0.0, 50.0, pt_binning, quantiles_, 1, 30.0, 800.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1_rho1", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 20.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1_rho2", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 20.0, 35.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2_rho1", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 14.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2_rho2", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 14.0, 35.0)
+
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1Smajor", "fixedGridRhoFastjetAll", "Smajor", " #rho", 0.0, 2.0, rho_binning, quantiles_, 1, 2.0, 30.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1ecalPFClusterIso", "pho1Eta", "ecalPFClusterIso", " #eta", 0.0, 50.0, eta_binning, quantiles_, 1, -1.4, 1.4)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1sumNeutralHadronEt", "pho1Eta", "sumNeutralHadronEt", " #eta", 0.0, 50.0, eta_binning, quantiles_, 1, -1.4, 1.4)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1trkSumPtHollowConeDR03", "pho1Eta", "trkSumPtHollowConeDR03", " #eta", 0.0, 50.0, eta_binning, quantiles_, 1, -1.4, 1.4)
+
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1Smajor", "pho1Pt", "Smajor", " #gamma p^{T} (GeV)", 0.0, 2.0, pt_binning, quantiles_, 6, 30.0, 500.0)
+draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1SigmaIetaIeta", "abs(pho1Eta)", "SigmaIetaIeta", " |#eta|", 0.0, 0.02, abs_eta_binning, quantiles_, 1, 0.1, 1.45)
+
 draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_negativeTime", cut_match, cut_invert_match, "pho1Smajor", "pho1SeedTimeRaw", "Smajor", " #gamma seed time (ns)", 0.0, 2.0, time_binning, quantiles_, 1, -1.7, -0.1)
 draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_positiveTime", cut_match, cut_invert_match, "pho1Smajor", "pho1SeedTimeRaw", "Smajor", " #gamma seed time (ns)", 0.0, 2.0, time_binning, quantiles_, 1, 0.0, 3.5)
 draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_positive2Time", cut_match, cut_invert_match, "pho1Smajor", "pho1SeedTimeRaw", "Smajor", " #gamma seed time (ns)", 0.0, 2.0, time_binning, quantiles_, 1, 3.5, 6.5)
@@ -602,14 +687,5 @@ draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", 
 
 draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1SigmaIetaIeta", "pho1Pt", "SigmaIetaIeta", " #gamma p^{T} (GeV)", 0.0, 0.02, pt_binning, quantiles_, 1, 30.0, 500.0)
 draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1ecalPFClusterIso", "pho1Pt", "ecalPFClusterIso", " #gamma p^{T} (GeV)", 0.0, 50.0, pt_binning, quantiles_, 1, 160.0, 800.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1ecalPFClusterIso", "fixedGridRhoFastjetAll", "ecalPFClusterIso", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1ecalPFClusterIso", "fixedGridRhoFastjetAll", "ecalPFClusterIso", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1sumNeutralHadronEt", "fixedGridRhoFastjetAll", "sumNeutralHadronEt", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1sumNeutralHadronEt", "fixedGridRhoFastjetAll", "sumNeutralHadronEt", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 50.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1trkSumPtHollowConeDR03", "pho1Pt", "trkSumPtHollowConeDR03", " #gamma p^{T} (GeV)", 0.0, 50.0, pt_binning, quantiles_, 1, 30.0, 800.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1_rho1", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 20.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin1_rho2", cut_match+" && abs(pho1Eta) < 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 20.0, 35.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2_rho1", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 2.0, 14.0)
-draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll_etabin2_rho2", cut_match+" && abs(pho1Eta) > 0.8 ", cut_invert_match, "pho1trkSumPtHollowConeDR03", "fixedGridRhoFastjetAll", "trkSumPtHollowConeDR03", " #rho", 0.0, 50.0, rho_binning, quantiles_, 1, 14.0, 35.0)
 draw_varA_vs_varB("GMSB_L200TeV_CtauAll_13TeV-pythia8.root", "L200TeV_CtauAll", cut_match, cut_invert_match, "pho1sumNeutralHadronEt", "pho1Pt", "sumNeutralHadronEt", " #gamma p^{T} (GeV)", 0.0, 50.0, pt_binning, quantiles_, 2, 30.0, 500.0)
 '''

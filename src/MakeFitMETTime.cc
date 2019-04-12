@@ -2061,6 +2061,43 @@ void OptimizeBinningABCDLimits(int Nbins_MET, int Nbins_Time, std::vector<int> &
 
 			cout<<"in resized 2D histograms, nData = "<<h2_rate_Data_inBins->Integral()<<",  nSig = "<<h2_rate_Sig_inBins->Integral()<<endl;
 			MakeDataCardABCD(h2_rate_Data_inBins,h2_rate_Sig_inBins, h2_rate_MCBkg_inBins, h1_rate_DataShape_Time_inBins, h1_rate_DataShape_MET_inBins, Nbins_Time, Nbins_MET, (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", blindABD);	
+			//add systematics
+			TH2F *h2_lumi_sys_Sig_inBins = new TH2F("h2_lumi_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_PhotonScale_sys_Sig_inBins = new TH2F("h2_PhotonScale_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_PhotonSmear_sys_Sig_inBins = new TH2F("h2_PhotonSmear_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_JetEScale_sys_Sig_inBins = new TH2F("h2_JetEScale_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_JetESmear_sys_Sig_inBins = new TH2F("h2_JetESmear_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_TimeScale_sys_Sig_inBins = new TH2F("h2_TimeScale_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_TimeSmear_sys_Sig_inBins = new TH2F("h2_TimeSmear_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+			TH2F *h2_TimeMETCorrelation_sys_Sig_inBins = new TH2F("h2_TimeMETCorrelation_sys_Sig_inBins","; #gamma time bin; #slash{E}_{T} bin; Events", Nbins_Time, 0, 1.0*Nbins_Time, Nbins_MET, 0, 1.0*Nbins_MET);
+
+			for(int iT=1; iT<=Nbins_Time; iT++)
+			{
+				for(int iM=1; iM<=Nbins_MET; iM++)
+				{
+					h2_lumi_sys_Sig_inBins->SetBinContent(iT, iM, 1.025);
+					h2_PhotonScale_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
+					h2_PhotonSmear_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
+					h2_JetEScale_sys_Sig_inBins->SetBinContent(iT, iM, 1.015);
+					h2_JetESmear_sys_Sig_inBins->SetBinContent(iT, iM, 1.015);
+					h2_TimeScale_sys_Sig_inBins->SetBinContent(iT, iM, 1.015);
+					h2_TimeSmear_sys_Sig_inBins->SetBinContent(iT, iM, 1.005);
+					h2_TimeMETCorrelation_sys_Sig_inBins->SetBinContent(iT, iM, 1.00);
+				}
+			}
+
+			h2_TimeMETCorrelation_sys_Sig_inBins->SetBinContent(2, 2, 1.02);
+
+			AddSystematics_Norm_ABCD(h2_lumi_sys_Sig_inBins, Nbins_Time, Nbins_MET, "lumi_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_PhotonScale_sys_Sig_inBins, Nbins_Time, Nbins_MET, "photonEScale_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_PhotonSmear_sys_Sig_inBins, Nbins_Time, Nbins_MET, "photonESmear_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_JetEScale_sys_Sig_inBins, Nbins_Time, Nbins_MET, "JetEScale_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_JetESmear_sys_Sig_inBins, Nbins_Time, Nbins_MET, "JetESmear_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_TimeScale_sys_Sig_inBins, Nbins_Time, Nbins_MET, "TimeScale_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_TimeSmear_sys_Sig_inBins, Nbins_Time, Nbins_MET, "TimeSmear_2016", "lnN", (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", true);
+			AddSystematics_Norm_ABCD(h2_TimeMETCorrelation_sys_Sig_inBins, Nbins_Time, Nbins_MET, "TimeMETCorrelation_2016", "lnN",  (_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str(), "datacards_temp", false);
+
+
 			//run combine to get the limits...
 			cout<<"running combine tool on the fly now...."<<endl;
 			system(("combine -M Asymptotic fit_results/2016ABCD/datacards_temp/DelayedPhotonCard_"+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)+".txt -v -1 -n "+_modelName+"_iT"+to_string(icomb_Time)+"_iM"+to_string(icomb_MET)).c_str());	

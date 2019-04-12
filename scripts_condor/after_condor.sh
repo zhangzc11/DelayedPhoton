@@ -8,7 +8,8 @@ cd ../
 appDir=`pwd`
 cd ${currentDir}
 
-mkdir temp
+rm -rf temp
+mkdir -p temp
 cd temp
 
 for lambda in 100 150 200 250 300 350 400

@@ -35,15 +35,15 @@ fileNameWJets = [
 
 
 fileNameEWKG = [
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_TGGJets_leptonDecays_13TeV_MadGraph_madspin_pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_ZGGJets_ZToHadOrNu_5f_LO_madgraph_pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WZG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_TGGJets_leptonDecays_13TeV_MadGraph_madspin_pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_ZGGJets_ZToHadOrNu_5f_LO_madgraph_pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WZG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root',
 	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WGGJets_TuneCUETP8M1_13TeV_madgraphMLM_pythia8.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WWG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_WWG_TuneCUETP8M1_13TeV-amcatnlo-pythia8.root',
 	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DiPhotonJetsBox_M40_80-Sherpa.root',
-	'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root',
+	#'/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root',
         '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root'	
 ]	
 
@@ -61,7 +61,8 @@ xsecGJets = [20790.0, 9238.0, 2305, 274.4, 93.46] #pb, see: https://twiki.cern.c
 xsecQCD = [1712000, 347700, 32100, 6831, 1207, 119.9, 25.24] #pb, see: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#QCD
 xsecTTJets = 831.76
 xsecWJets = [1345.0, 359.7, 48.91, 12.05, 5.501, 1.329, 0.03216]
-xsecEWKG = [2.967, 0.007793, 3.795, 0.3570, 0.04123, 1.715, 0.2147, 308.3, 87.54, 5349.0]
+#xsecEWKG = [2.967, 0.007793, 3.795, 0.3570, 0.04123, 1.715, 0.2147, 308.3, 87.54, 5349.0]
+xsecEWKG = [1.715, 308.3, 5349.0]
 fractionGJets = 0.5271*0.92 # from fit to SigmaIetaIeta
 fractionQCD = 0.4729*0.92 # from fit fo SigmaIetaIeta
 useFraction = True
@@ -73,7 +74,7 @@ cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 &
 #cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
 
 cut = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_blindMET = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && t1MET < 300.0)"
+cut_blindMET = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && t1MET < 200.0)"
 cut_blindTime = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1ClusterTime_SmearToData < 3.0)"
 cut_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
 cut_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter +"&& pho1passHoverETight)"
@@ -91,11 +92,12 @@ cut_QCD_CR_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.5 &&  abs(pho1Eta)<1.4442 
 cut_QCD_CR_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.5 &&  abs(pho1Eta)<1.4442 && (!pho1passIsoTight_comboIso) && n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passHoverELoose)"
 
 
-cut_GJets = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_noSminor = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
-cut_GJets_noSigmaIetaIeta = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passHoverETight)"
+#cut_GJets = "1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && (n_Jets == 1 || (n_Jets == 2 && jet2Pt/pho1Pt < 0.2)) && (abs(jet1Phi - pho1Phi) > 2.09) && (abs(jet1Phi - pho1Phi) < 4.18)" + cut_MET_filter+ " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_GJets = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_GJets_noSminor = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_GJets_noSigmaIetaIeta = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets < 3  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1 ' + cut_MET_filter + " && pho1passHoverETight)"
 
-cut_EWKCR = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons >= 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
+cut_EWKCR = '1.0*(pho1Pt > 70 && pho1R9 > 0.9 &&  abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && pho1passSmajorTight && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons >= 1 ' + cut_MET_filter + " && pho1passSigmaIetaIetaTight && pho1passHoverETight)"
 
 weight_cut = "(weight*pileupWeight*triggerEffSFWeight*photonEffSF) * "
 
@@ -110,20 +112,20 @@ outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/PreApp_Apr2019/orderByPt/'
 ############define the plot you want to make##########
 ##for stack plots
 xbins_MET = [0.0, 10.0, 20.0, 40.0, 60.0, 80, 100.0, 125.0, 150.0, 175.0, 200.0, 250.0, 300.0, 400.0, 500.0, 1000.0]
-xbins_time = [-15, -10, -5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15]
+xbins_time = [-5, -4, -3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3, 4, 5, 10, 15, 25]
 
 splots = []
 #variable name in the tree, output plot file name, description/title, Nbins, lowX, upX, useLogy
+cut = cut_EWKCR
+splots.append(["t1MET", "MET_log_EWKCR", "#slash{E}_{T} [GeV]", 100,0,800, True])
+splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_log_EWKCR", "#gamma cluster time [ns]", 100,-5.0,25.0, True])
 
-splots.append(["t1MET", "MET_log", "#slash{E}_{T} [GeV]", 100,0,800, True])
-splots.append(["t1MET", "MET_linear", "#slash{E}_{T} [GeV]", 100,0,800, False])
+splots.append(["t1MET", "MET_linear_EWKCR", "#slash{E}_{T} [GeV]", 100,0,800, False])
+splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_linear_EWKCR", "#gamma cluster time [ns]", 100,-5.0,25.0, False])
 
-splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_log", "#gamma cluster time [ns]", 100,-15,15, True])
-splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_linear", "#gamma cluster time [ns]", 100,-15,15, False])
-
+'''
 splots.append(["pho1ClusterTime", "phoTimeCluster_noSmear_log", "#gamma cluster time [ns]", 100,-15,15, True])
 splots.append(["pho1ClusterTime", "phoTimeCluster_noSmear_linear", "#gamma cluster time [ns]", 100,-15,15, False])
-
 
 splots.append(["pho1Sminor", "Sminor_linear", "S_{minor}", 50,0,1.0, False])
 splots.append(["pho1Sminor", "Sminor_log", "S_{minor}", 50,0,1.0, True])
@@ -170,6 +172,7 @@ splots.append(["pho1SeedTimeCalib", "phoTimeSeedCalib_linear", "#gamma seed cali
 splots.append(["pho1SeedTimeCalib", "phoTimeSeedCalib_log", "#gamma seed calibrated time [ns]", 100,-15,15, True])
 splots.append(["pho1SeedTimeCalibTOF", "phoTimeSeedCalibTOF_linear", "#gamma seed calibrated time & TOF [ns]", 100,-15,15, False])
 splots.append(["pho1SeedTimeCalibTOF", "phoTimeSeedCalibTOF_log", "#gamma seed calibrated time & TOF [ns]", 100,-15,15, True])
+'''
 
 ############define the variables for which you want to save the bkg shape##########
 shapes = []

@@ -39,7 +39,9 @@ bool doAllBkgFracFit = false;
 
 int BIN_CATEGORY = 0;
 float time_split_by_CAT[6] = {1.5, 0.0, 1.5, 1.5, 0.0, 1.5};
+//float time_split_by_CAT[6] = {1.5, 0.25, 1.5, 1.5, 0.5, 1.5};
 float met_split_by_CAT[6] = {300.0, 200.0, 100.0, 300.0, 300.0, 150.0};
+//float met_split_by_CAT[6] = {300.0, 200.0, 100.0, 300.0, 300.0, 125.0};
 
 
 int main( int argc, char* argv[])
@@ -91,7 +93,7 @@ float SoverB = 0.0;
 int nToys = 1000;
 
 //assign binning category:
-if (sigModelName.find("L100TeV") != std::string::npos || sigModelName.find("L150TeV") != std::string::npos || sigModelName.find("L200TeV") != std::string::npos)
+if (sigModelName.find("L100TeV") != std::string::npos || sigModelName.find("L150TeV") != std::string::npos || sigModelName.find("L200TeV") != std::string::npos || sigModelName.find("L250TeV") != std::string::npos)
 {
 if (sigModelName.find("Ctau0_001cm") != std::string::npos || sigModelName.find("Ctau0_1cm") != std::string::npos) BIN_CATEGORY = 0;
 else if (sigModelName.find("Ctau10cm") != std::string::npos) BIN_CATEGORY = 1;
@@ -118,7 +120,7 @@ std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF* ";
 
 std::string cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
-std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho1Tight = " && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight && pho2SigmaIetaIeta<0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso<30.0 && pho2sumNeutralHadronEt<30.0 && pho2trkSumPtHollowConeDR03 < 30.0";
 std::string cut_pho1Tight_scaleUp = " && pho1Pt_scaleUp > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
 std::string cut_pho1Tight_scaleDown = " && pho1Pt_scaleDown > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
 std::string cut_pho1Tight_smearUp = " && pho1Pt_smearUp > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
@@ -774,10 +776,23 @@ if(xbins_time.size() != Nbins_time + 1)
 	
 if(_useToy)
 {
+	/*
 	float A = h2_rate_Data_inBins->GetBinContent(Nbins_time-1, Nbins_MET-1);
 	float B = h2_rate_Data_inBins->GetBinContent(Nbins_time-1, Nbins_MET);
 	float D = h2_rate_Data_inBins->GetBinContent(Nbins_time, Nbins_MET-1);
 	if(A > 0.0)	h2_rate_Data_inBins->SetBinContent(Nbins_time, Nbins_MET, B*D/A);
+	*/
+	float A = h2_rate_Data_inBins->GetBinContent(Nbins_time-1, Nbins_MET-1);
+	//float A = h2_rate_MCBkg_inBins->GetBinContent(Nbins_time-1, Nbins_MET-1);
+	float B = A*h1_rate_Data_MET_inBins->GetBinContent(2)/h1_rate_Data_MET_inBins->GetBinContent(1);
+	float D = A*h1_rate_Data_Time_inBins->GetBinContent(2)/h1_rate_Data_Time_inBins->GetBinContent(1);
+	if(A>0.0)
+	{
+		h2_rate_Data_inBins->SetBinContent(1, 1, A);
+		h2_rate_Data_inBins->SetBinContent(1, 2, B);
+		h2_rate_Data_inBins->SetBinContent(2, 1, D);
+		h2_rate_Data_inBins->SetBinContent(2, 2, B*D/A);
+	}
 }			
 
 
