@@ -75,6 +75,16 @@ r_exp_p1sig_2d_grid_2017 = np.zeros((N_ctau, N_lambda))
 r_exp_m1sig_2d_grid_2017 = np.zeros((N_ctau, N_lambda))
 r_obs_2d_grid_2017 = np.zeros((N_ctau, N_lambda))
 
+r_exp_2d_grid_2017CAT1 = np.zeros((N_ctau, N_lambda))
+r_exp_p1sig_2d_grid_2017CAT1 = np.zeros((N_ctau, N_lambda))
+r_exp_m1sig_2d_grid_2017CAT1 = np.zeros((N_ctau, N_lambda))
+r_obs_2d_grid_2017CAT1 = np.zeros((N_ctau, N_lambda))
+
+r_exp_2d_grid_2017CAT2 = np.zeros((N_ctau, N_lambda))
+r_exp_p1sig_2d_grid_2017CAT2 = np.zeros((N_ctau, N_lambda))
+r_exp_m1sig_2d_grid_2017CAT2 = np.zeros((N_ctau, N_lambda))
+r_obs_2d_grid_2017CAT2 = np.zeros((N_ctau, N_lambda))
+
 r_exp_2d_grid_2016And2017 = np.zeros((N_ctau, N_lambda))
 r_exp_p1sig_2d_grid_2016And2017 = np.zeros((N_ctau, N_lambda))
 r_exp_m1sig_2d_grid_2016And2017 = np.zeros((N_ctau, N_lambda))
@@ -114,6 +124,22 @@ for ctau_this in ctau_points:
 	limit_this_2017_exp97p5 = []
 	limit_this_2017_obs = []
 
+	limit_this_2017CAT1_exp2p5 = []
+	limit_this_2017CAT1_exp16p0 = []
+	limit_this_2017CAT1_exp50p0 = []
+	limit_this_2017CAT1_exp84p0 = []
+	limit_this_2017CAT1_exp97p5 = []
+	limit_this_2017CAT1_obs = []
+
+
+	limit_this_2017CAT2_exp2p5 = []
+	limit_this_2017CAT2_exp16p0 = []
+	limit_this_2017CAT2_exp50p0 = []
+	limit_this_2017CAT2_exp84p0 = []
+	limit_this_2017CAT2_exp97p5 = []
+	limit_this_2017CAT2_obs = []
+
+
 	limit_this_2016And2017_exp2p5 = []
 	limit_this_2016And2017_exp16p0 = []
 	limit_this_2016And2017_exp50p0 = []
@@ -130,6 +156,16 @@ for ctau_this in ctau_points:
 	yValue_limit_this_2017_obs = []
 	yValue_limit_this_2017_exp1sigma = []
 	yValue_limit_this_2017_exp2sigma = []
+
+	yValue_limit_this_2017CAT1_exp = []
+	yValue_limit_this_2017CAT1_obs = []
+	yValue_limit_this_2017CAT1_exp1sigma = []
+	yValue_limit_this_2017CAT1_exp2sigma = []
+
+	yValue_limit_this_2017CAT2_exp = []
+	yValue_limit_this_2017CAT2_obs = []
+	yValue_limit_this_2017CAT2_exp1sigma = []
+	yValue_limit_this_2017CAT2_exp2sigma = []
 		
 	yValue_limit_this_2016And2017_exp = []
 	yValue_limit_this_2016And2017_obs = []
@@ -184,6 +220,22 @@ for ctau_this in ctau_points:
 			print "2017 limits:"
 			print limits_2017
 
+			file_limit_2017CAT1 = TFile(tree_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017CAT1.Asymptotic.mH120.root")
+			limits_2017CAT1 = []
+			limitTree_2017CAT1 = file_limit_2017CAT1.Get("limit")
+			for entry in limitTree_2017CAT1:
+				limits_2017CAT1.append(entry.limit)
+			print "2017CAT1 limits:"
+			print limits_2017CAT1
+
+			file_limit_2017CAT2 = TFile(tree_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2017CAT2.Asymptotic.mH120.root")
+			limits_2017CAT2 = []
+			limitTree_2017CAT2 = file_limit_2017CAT2.Get("limit")
+			for entry in limitTree_2017CAT2:
+				limits_2017CAT2.append(entry.limit)
+			print "2017CAT2 limits:"
+			print limits_2017CAT2
+
 			file_limit_2016And2017 = TFile(tree_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")
 			limits_2016And2017 = []
 			limitTree_2016And2017 = file_limit_2016And2017.Get("limit")
@@ -198,6 +250,8 @@ for ctau_this in ctau_points:
 			for idx in range(len(limits_2016)):
 				limits_2016[idx] = limits_2016[idx]*limits_SF
 				limits_2017[idx] = limits_2017[idx]*limits_SF
+				limits_2017CAT1[idx] = limits_2017CAT1[idx]*limits_SF
+				limits_2017CAT2[idx] = limits_2017CAT2[idx]*limits_SF
 				limits_2016And2017[idx] = limits_2016And2017[idx]*limits_SF
 
 			xValue_lambda.append(lambda_this)
@@ -210,6 +264,20 @@ for ctau_this in ctau_points:
 			limit_this_2017_exp84p0.append(limits_2017[3]*th_xsec_this)	
 			limit_this_2017_exp97p5.append(limits_2017[4]*th_xsec_this)	
 			limit_this_2017_obs.append(limits_2017[5]*th_xsec_this)	
+
+			limit_this_2017CAT1_exp2p5.append(limits_2017CAT1[0]*th_xsec_this)	
+			limit_this_2017CAT1_exp16p0.append(limits_2017CAT1[1]*th_xsec_this)	
+			limit_this_2017CAT1_exp50p0.append(limits_2017CAT1[2]*th_xsec_this)	
+			limit_this_2017CAT1_exp84p0.append(limits_2017CAT1[3]*th_xsec_this)	
+			limit_this_2017CAT1_exp97p5.append(limits_2017CAT1[4]*th_xsec_this)	
+			limit_this_2017CAT1_obs.append(limits_2017CAT1[5]*th_xsec_this)	
+
+			limit_this_2017CAT2_exp2p5.append(limits_2017CAT2[0]*th_xsec_this)	
+			limit_this_2017CAT2_exp16p0.append(limits_2017CAT2[1]*th_xsec_this)	
+			limit_this_2017CAT2_exp50p0.append(limits_2017CAT2[2]*th_xsec_this)	
+			limit_this_2017CAT2_exp84p0.append(limits_2017CAT2[3]*th_xsec_this)	
+			limit_this_2017CAT2_exp97p5.append(limits_2017CAT2[4]*th_xsec_this)	
+			limit_this_2017CAT2_obs.append(limits_2017CAT2[5]*th_xsec_this)	
 
 			limit_this_2016_exp2p5.append(limits_2016[0]*th_xsec_this)	
 			limit_this_2016_exp16p0.append(limits_2016[1]*th_xsec_this)	
@@ -227,6 +295,16 @@ for ctau_this in ctau_points:
 			r_exp_p1sig_2d_grid_2017[index_ctau][index_lambda] = limits_2017[3]
 			r_exp_m1sig_2d_grid_2017[index_ctau][index_lambda] = limits_2017[1]
 			r_obs_2d_grid_2017[index_ctau][index_lambda] = limits_2017[5]
+
+			r_exp_2d_grid_2017CAT1[index_ctau][index_lambda] = limits_2017CAT1[2]
+			r_exp_p1sig_2d_grid_2017CAT1[index_ctau][index_lambda] = limits_2017CAT1[3]
+			r_exp_m1sig_2d_grid_2017CAT1[index_ctau][index_lambda] = limits_2017CAT1[1]
+			r_obs_2d_grid_2017CAT1[index_ctau][index_lambda] = limits_2017CAT1[5]
+
+			r_exp_2d_grid_2017CAT2[index_ctau][index_lambda] = limits_2017CAT2[2]
+			r_exp_p1sig_2d_grid_2017CAT2[index_ctau][index_lambda] = limits_2017CAT2[3]
+			r_exp_m1sig_2d_grid_2017CAT2[index_ctau][index_lambda] = limits_2017CAT2[1]
+			r_obs_2d_grid_2017CAT2[index_ctau][index_lambda] = limits_2017CAT2[5]
 
 			limit_this_2016And2017_exp2p5.append(limits_2016And2017[0]*th_xsec_this)	
 			limit_this_2016And2017_exp16p0.append(limits_2016And2017[1]*th_xsec_this)	
@@ -256,6 +334,17 @@ for ctau_this in ctau_points:
 		yValue_limit_this_2017_exp.append(limit_this_2017_exp50p0[i])
 		yValue_limit_this_2017_exp1sigma.append(limit_this_2017_exp16p0[i])
 		yValue_limit_this_2017_exp2sigma.append(limit_this_2017_exp2p5[i])
+
+		yValue_limit_this_2017CAT1_obs.append(limit_this_2017CAT1_obs[i])
+		yValue_limit_this_2017CAT1_exp.append(limit_this_2017CAT1_exp50p0[i])
+		yValue_limit_this_2017CAT1_exp1sigma.append(limit_this_2017CAT1_exp16p0[i])
+		yValue_limit_this_2017CAT1_exp2sigma.append(limit_this_2017CAT1_exp2p5[i])
+
+
+		yValue_limit_this_2017CAT2_obs.append(limit_this_2017CAT2_obs[i])
+		yValue_limit_this_2017CAT2_exp.append(limit_this_2017CAT2_exp50p0[i])
+		yValue_limit_this_2017CAT2_exp1sigma.append(limit_this_2017CAT2_exp16p0[i])
+		yValue_limit_this_2017CAT2_exp2sigma.append(limit_this_2017CAT2_exp2p5[i])
 			
 		yValue_limit_this_2016And2017_obs.append(limit_this_2016And2017_obs[i])
 		yValue_limit_this_2016And2017_exp.append(limit_this_2016And2017_exp50p0[i])
@@ -272,6 +361,12 @@ for ctau_this in ctau_points:
 
 		yValue_limit_this_2017_exp1sigma.append(limit_this_2017_exp84p0[NPoints_mass-i-1])
 		yValue_limit_this_2017_exp2sigma.append(limit_this_2017_exp97p5[NPoints_mass-i-1])
+
+		yValue_limit_this_2017CAT1_exp1sigma.append(limit_this_2017CAT1_exp84p0[NPoints_mass-i-1])
+		yValue_limit_this_2017CAT1_exp2sigma.append(limit_this_2017CAT1_exp97p5[NPoints_mass-i-1])
+
+		yValue_limit_this_2017CAT2_exp1sigma.append(limit_this_2017CAT2_exp84p0[NPoints_mass-i-1])
+		yValue_limit_this_2017CAT2_exp2sigma.append(limit_this_2017CAT2_exp97p5[NPoints_mass-i-1])
 		
 		yValue_limit_this_2016And2017_exp1sigma.append(limit_this_2016And2017_exp84p0[NPoints_mass-i-1])
 		yValue_limit_this_2016And2017_exp2sigma.append(limit_this_2016And2017_exp97p5[NPoints_mass-i-1])
@@ -350,7 +445,151 @@ for ctau_this in ctau_points:
 	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+plot_tag+".png")
 	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+plot_tag+".C")
 
-	#2017
+	#2017CAT1
+	graph_limit_vs_mass_2017CAT1_obs_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_2017CAT1_obs))
+	graph_limit_vs_mass_2017CAT1_Th_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_Th))
+	graph_limit_vs_mass_2017CAT1_exp_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_2017CAT1_exp))
+	graph_limit_vs_mass_2017CAT1_exp1sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_mass_exp1sigma), np.array(yValue_limit_this_2017CAT1_exp1sigma))
+	graph_limit_vs_mass_2017CAT1_exp2sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_mass_exp2sigma), np.array(yValue_limit_this_2017CAT1_exp2sigma))
+
+	graph_limit_vs_mass_2017CAT1_obs_limit.SetMarkerStyle(22)
+	graph_limit_vs_mass_2017CAT1_obs_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT1_obs_limit.SetLineColor(kBlack)
+	graph_limit_vs_mass_2017CAT1_obs_limit.SetLineWidth(3)
+
+	graph_limit_vs_mass_2017CAT1_Th_limit.SetMarkerStyle(22)
+	graph_limit_vs_mass_2017CAT1_Th_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT1_Th_limit.SetLineColor(kRed)
+	graph_limit_vs_mass_2017CAT1_Th_limit.SetLineWidth(2)
+
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetMarkerStyle(19)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetLineColor(kBlack)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetLineWidth(3)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetLineStyle(kDashed)
+
+	graph_limit_vs_mass_2017CAT1_exp1sigma_limit.SetFillColor(kGreen)
+	graph_limit_vs_mass_2017CAT1_exp2sigma_limit.SetFillColor(kYellow)
+
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetXaxis().SetLimits(100.0,600.0)
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetYaxis().SetTitle("95% CL limit on #sigma x BR [pb]")
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetYaxis().SetRangeUser(1e-4,1e4)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetTitle("")
+
+	graph_limit_vs_mass_2017CAT1_exp_limit.Draw("LA")
+
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
+	graph_limit_vs_mass_2017CAT1_exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
+
+	graph_limit_vs_mass_2017CAT1_exp2sigma_limit.Draw("Fsame")
+	graph_limit_vs_mass_2017CAT1_exp1sigma_limit.Draw("Fsame")
+	if drawObs:
+		graph_limit_vs_mass_2017CAT1_obs_limit.Draw("Lsame")
+	graph_limit_vs_mass_2017CAT1_exp_limit.Draw("Lsame")
+	graph_limit_vs_mass_2017CAT1_Th_limit.Draw("Lsame")
+
+	drawCMS2(myC, 13, lumi_2017)
+
+	leg_limit_vs_mass_2017CAT1 = TLegend(0.25,0.62,0.9,0.89)
+
+	leg_limit_vs_mass_2017CAT1.SetHeader("c#tau_{#tilde{#chi}_{1}^{0}} = "+str(ctau_this)+" cm,  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
+	leg_limit_vs_mass_2017CAT1.SetBorderSize(0)
+	leg_limit_vs_mass_2017CAT1.SetTextSize(0.03)
+	leg_limit_vs_mass_2017CAT1.SetLineColor(1)
+	leg_limit_vs_mass_2017CAT1.SetLineStyle(1)
+	leg_limit_vs_mass_2017CAT1.SetLineWidth(1)
+	leg_limit_vs_mass_2017CAT1.SetFillColor(0)
+	leg_limit_vs_mass_2017CAT1.SetFillStyle(1001)
+
+	leg_limit_vs_mass_2017CAT1.AddEntry(graph_limit_vs_mass_2017CAT1_Th_limit, "Theoretical cross-section", "L")
+	if drawObs:
+		leg_limit_vs_mass_2017CAT1.AddEntry(graph_limit_vs_mass_2017CAT1_obs_limit, "Observed  95% CL upper limit", "L")
+	leg_limit_vs_mass_2017CAT1.AddEntry(graph_limit_vs_mass_2017CAT1_exp_limit, "Expected  95% CL upper limit", "L")
+	leg_limit_vs_mass_2017CAT1.AddEntry(graph_limit_vs_mass_2017CAT1_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
+	leg_limit_vs_mass_2017CAT1.AddEntry(graph_limit_vs_mass_2017CAT1_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
+	leg_limit_vs_mass_2017CAT1.Draw()
+
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2017CAT1_ctau"+ctau_this_str+plot_tag+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2017CAT1_ctau"+ctau_this_str+plot_tag+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2017CAT1_ctau"+ctau_this_str+plot_tag+".C")
+
+	#2017CAT2
+	graph_limit_vs_mass_2017CAT2_obs_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_2017CAT2_obs))
+	graph_limit_vs_mass_2017CAT2_Th_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_Th))
+	graph_limit_vs_mass_2017CAT2_exp_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_2017CAT2_exp))
+	graph_limit_vs_mass_2017CAT2_exp1sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_mass_exp1sigma), np.array(yValue_limit_this_2017CAT2_exp1sigma))
+	graph_limit_vs_mass_2017CAT2_exp2sigma_limit = TGraph(2*NPoints_mass, np.array(xValue_mass_exp2sigma), np.array(yValue_limit_this_2017CAT2_exp2sigma))
+
+	graph_limit_vs_mass_2017CAT2_obs_limit.SetMarkerStyle(22)
+	graph_limit_vs_mass_2017CAT2_obs_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT2_obs_limit.SetLineColor(kBlack)
+	graph_limit_vs_mass_2017CAT2_obs_limit.SetLineWidth(3)
+
+	graph_limit_vs_mass_2017CAT2_Th_limit.SetMarkerStyle(22)
+	graph_limit_vs_mass_2017CAT2_Th_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT2_Th_limit.SetLineColor(kRed)
+	graph_limit_vs_mass_2017CAT2_Th_limit.SetLineWidth(2)
+
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetMarkerStyle(19)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetLineColor(kBlack)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetLineWidth(3)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetLineStyle(kDashed)
+
+	graph_limit_vs_mass_2017CAT2_exp1sigma_limit.SetFillColor(kGreen)
+	graph_limit_vs_mass_2017CAT2_exp2sigma_limit.SetFillColor(kYellow)
+
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetXaxis().SetLimits(100.0,600.0)
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetYaxis().SetTitle("95% CL limit on #sigma x BR [pb]")
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetYaxis().SetRangeUser(1e-4,1e4)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetTitle("")
+
+	graph_limit_vs_mass_2017CAT2_exp_limit.Draw("LA")
+
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
+	graph_limit_vs_mass_2017CAT2_exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
+
+	graph_limit_vs_mass_2017CAT2_exp2sigma_limit.Draw("Fsame")
+	graph_limit_vs_mass_2017CAT2_exp1sigma_limit.Draw("Fsame")
+	if drawObs:
+		graph_limit_vs_mass_2017CAT2_obs_limit.Draw("Lsame")
+	graph_limit_vs_mass_2017CAT2_exp_limit.Draw("Lsame")
+	graph_limit_vs_mass_2017CAT2_Th_limit.Draw("Lsame")
+
+	drawCMS2(myC, 13, lumi_2017)
+
+	leg_limit_vs_mass_2017CAT2 = TLegend(0.25,0.62,0.9,0.89)
+
+	leg_limit_vs_mass_2017CAT2.SetHeader("c#tau_{#tilde{#chi}_{1}^{0}} = "+str(ctau_this)+" cm,  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
+	leg_limit_vs_mass_2017CAT2.SetBorderSize(0)
+	leg_limit_vs_mass_2017CAT2.SetTextSize(0.03)
+	leg_limit_vs_mass_2017CAT2.SetLineColor(1)
+	leg_limit_vs_mass_2017CAT2.SetLineStyle(1)
+	leg_limit_vs_mass_2017CAT2.SetLineWidth(1)
+	leg_limit_vs_mass_2017CAT2.SetFillColor(0)
+	leg_limit_vs_mass_2017CAT2.SetFillStyle(1001)
+
+	leg_limit_vs_mass_2017CAT2.AddEntry(graph_limit_vs_mass_2017CAT2_Th_limit, "Theoretical cross-section", "L")
+	if drawObs:
+		leg_limit_vs_mass_2017CAT2.AddEntry(graph_limit_vs_mass_2017CAT2_obs_limit, "Observed  95% CL upper limit", "L")
+	leg_limit_vs_mass_2017CAT2.AddEntry(graph_limit_vs_mass_2017CAT2_exp_limit, "Expected  95% CL upper limit", "L")
+	leg_limit_vs_mass_2017CAT2.AddEntry(graph_limit_vs_mass_2017CAT2_exp1sigma_limit, "#pm 1 #sigma Expected", "F")
+	leg_limit_vs_mass_2017CAT2.AddEntry(graph_limit_vs_mass_2017CAT2_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
+	leg_limit_vs_mass_2017CAT2.Draw()
+
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2017CAT2_ctau"+ctau_this_str+plot_tag+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2017CAT2_ctau"+ctau_this_str+plot_tag+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2017CAT2_ctau"+ctau_this_str+plot_tag+".C")
+
+
+
+	#2017, all
 	graph_limit_vs_mass_2017_obs_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_2017_obs))
 	graph_limit_vs_mass_2017_Th_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_Th))
 	graph_limit_vs_mass_2017_exp_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_2017_exp))
@@ -504,6 +743,16 @@ for ctau_this in ctau_points:
 	graph_limit_vs_mass_2017_exp_limit.SetLineColor(7)
 	graph_limit_vs_mass_2017_exp_limit.SetLineWidth(3)
 
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetMarkerStyle(19)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetLineColor(5)
+	graph_limit_vs_mass_2017CAT1_exp_limit.SetLineWidth(3)
+
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetMarkerStyle(19)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetMarkerSize(1.5)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetLineColor(6)
+	graph_limit_vs_mass_2017CAT2_exp_limit.SetLineWidth(3)
+
 	graph_limit_vs_mass_2016And2017_exp_limit.SetMarkerStyle(19)
 	graph_limit_vs_mass_2016And2017_exp_limit.SetMarkerSize(1.5)
 	graph_limit_vs_mass_2016And2017_exp_limit.SetLineColor(6)
@@ -511,18 +760,22 @@ for ctau_this in ctau_points:
 
 	graph_limit_vs_mass_2016_exp_limit.Draw("LA")
 	graph_limit_vs_mass_2017_exp_limit.Draw("Lsame")
+	graph_limit_vs_mass_2017CAT1_exp_limit.Draw("Lsame")
+	graph_limit_vs_mass_2017CAT2_exp_limit.Draw("Lsame")
 	graph_limit_vs_mass_2016And2017_exp_limit.Draw("Lsame")
 
 	if drawObs:
 		graph_limit_vs_mass_2016_obs_limit.Draw("Lsame")
 		graph_limit_vs_mass_2017_obs_limit.Draw("Lsame")
+		graph_limit_vs_mass_2017CAT1_obs_limit.Draw("Lsame")
+		graph_limit_vs_mass_2017CAT1_obs_limit.Draw("Lsame")
 		graph_limit_vs_mass_2016And2017_obs_limit.Draw("Lsame")
 
 	graph_limit_vs_mass_2016_Th_limit.Draw("Lsame")
 
 	drawCMS2(myC, 13, lumi)
 
-	leg_limit_vs_mass = TLegend(0.25,0.62,0.9,0.89)
+	leg_limit_vs_mass = TLegend(0.25,0.60,0.9,0.89)
 
 	leg_limit_vs_mass.SetHeader("c#tau_{#tilde{#chi}_{1}^{0}} = "+str(ctau_this)+" cm,  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
 	leg_limit_vs_mass.SetBorderSize(0)
@@ -538,7 +791,9 @@ for ctau_this in ctau_points:
 		leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016_obs_limit, "Observed  95% CL upper limit, 2016", "L")
 		leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017_obs_limit, "Observed  95% CL upper limit, 2017", "L")
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016_exp_limit, "Expected  95% CL upper limit, 2016", "L")
-	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017_exp_limit, "Expected  95% CL upper limit, 2017", "L")
+	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017CAT1_exp_limit, "Expected  95% CL upper limit, 2017 1#gamma", "L")
+	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017CAT2_exp_limit, "Expected  95% CL upper limit, 2017 2#gamma", "L")
+	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2017_exp_limit, "Expected  95% CL upper limit, 2017 1+2#gamma", "L")
 	leg_limit_vs_mass.AddEntry(graph_limit_vs_mass_2016And2017_exp_limit, "Expected  95% CL upper limit, 2016+2017", "L")
 	leg_limit_vs_mass.Draw()
 
@@ -560,6 +815,18 @@ print r_exp_2d_grid_2017
 print "value of the 2D r grid (obs, 2017) provided from samples: "
 print r_obs_2d_grid_2017
 
+
+print "value of the 2D r grid (exp, 2017CAT1) provided from samples: "
+print r_exp_2d_grid_2017CAT1
+print "value of the 2D r grid (obs, 2017CAT1) provided from samples: "
+print r_obs_2d_grid_2017CAT1
+
+
+print "value of the 2D r grid (exp, 2017CAT2) provided from samples: "
+print r_exp_2d_grid_2017CAT2
+print "value of the 2D r grid (obs, 2017CAT2) provided from samples: "
+print r_obs_2d_grid_2017CAT2
+
 print "value of the 2D r grid (exp, 2016And2017) provided from samples: "
 print r_exp_2d_grid_2016And2017
 print "value of the 2D r grid (obs, 2016And2017) provided from samples: "
@@ -576,6 +843,16 @@ lambda_point_boundary_exp_2017 = np.zeros(N_ctau)
 lambda_point_boundary_exp_p1sig_2017 = np.zeros(N_ctau)
 lambda_point_boundary_exp_m1sig_2017 = np.zeros(N_ctau)
 lambda_point_boundary_obs_2017 = np.zeros(N_ctau)
+
+lambda_point_boundary_exp_2017CAT1 = np.zeros(N_ctau)
+lambda_point_boundary_exp_p1sig_2017CAT1 = np.zeros(N_ctau)
+lambda_point_boundary_exp_m1sig_2017CAT1 = np.zeros(N_ctau)
+lambda_point_boundary_obs_2017CAT1 = np.zeros(N_ctau)
+
+lambda_point_boundary_exp_2017CAT2 = np.zeros(N_ctau)
+lambda_point_boundary_exp_p1sig_2017CAT2 = np.zeros(N_ctau)
+lambda_point_boundary_exp_m1sig_2017CAT2 = np.zeros(N_ctau)
+lambda_point_boundary_obs_2017CAT2 = np.zeros(N_ctau)
 
 lambda_point_boundary_exp_2016And2017 = np.zeros(N_ctau)
 lambda_point_boundary_exp_p1sig_2016And2017 = np.zeros(N_ctau)
@@ -630,6 +907,53 @@ for i in range(0, N_ctau):
 	graph_lambda_vs_r_obs_2017 =  TGraph(len(lambda_interp_2017), np.array(r_obs_interp_2017), np.array(lambda_interp_2017))
 	lambda_point_boundary_obs_2017[i] = graph_lambda_vs_r_obs_2017.Eval(1.0)
 
+
+	lambda_interp_2017CAT1 = []
+	r_exp_interp_2017CAT1 = []
+	r_exp_p1sig_interp_2017CAT1 = []
+	r_exp_m1sig_interp_2017CAT1 = []
+	r_obs_interp_2017CAT1 = []
+	
+	for j in range(0, N_lambda):
+		if r_exp_2d_grid_2017CAT1[i][j] > 0.00000001:
+			lambda_interp_2017CAT1.append(lambda_points[j]*1.0)
+			r_exp_interp_2017CAT1.append(r_exp_2d_grid_2017CAT1[i][j]*1.0)
+			r_exp_p1sig_interp_2017CAT1.append(r_exp_p1sig_2d_grid_2017CAT1[i][j]*1.0)
+			r_exp_m1sig_interp_2017CAT1.append(r_exp_m1sig_2d_grid_2017CAT1[i][j]*1.0)
+			r_obs_interp_2017CAT1.append(r_obs_2d_grid_2017CAT1[i][j]*1.0)
+	graph_lambda_vs_r_exp_2017CAT1 =  TGraph(len(lambda_interp_2017CAT1), np.array(r_exp_interp_2017CAT1), np.array(lambda_interp_2017CAT1))
+	graph_lambda_vs_r_exp_p1sig_2017CAT1 =  TGraph(len(lambda_interp_2017CAT1), np.array(r_exp_p1sig_interp_2017CAT1), np.array(lambda_interp_2017CAT1))
+	graph_lambda_vs_r_exp_m1sig_2017CAT1 =  TGraph(len(lambda_interp_2017CAT1), np.array(r_exp_m1sig_interp_2017CAT1), np.array(lambda_interp_2017CAT1))
+	lambda_point_boundary_exp_2017CAT1[i] = graph_lambda_vs_r_exp_2017CAT1.Eval(1.0)
+	lambda_point_boundary_exp_p1sig_2017CAT1[i] = graph_lambda_vs_r_exp_p1sig_2017CAT1.Eval(1.0)
+	lambda_point_boundary_exp_m1sig_2017CAT1[i] = graph_lambda_vs_r_exp_m1sig_2017CAT1.Eval(1.0)
+	graph_lambda_vs_r_obs_2017CAT1 =  TGraph(len(lambda_interp_2017CAT1), np.array(r_obs_interp_2017CAT1), np.array(lambda_interp_2017CAT1))
+	lambda_point_boundary_obs_2017CAT1[i] = graph_lambda_vs_r_obs_2017CAT1.Eval(1.0)
+
+
+	lambda_interp_2017CAT2 = []
+	r_exp_interp_2017CAT2 = []
+	r_exp_p1sig_interp_2017CAT2 = []
+	r_exp_m1sig_interp_2017CAT2 = []
+	r_obs_interp_2017CAT2 = []
+	
+	for j in range(0, N_lambda):
+		if r_exp_2d_grid_2017CAT2[i][j] > 0.00000001:
+			lambda_interp_2017CAT2.append(lambda_points[j]*1.0)
+			r_exp_interp_2017CAT2.append(r_exp_2d_grid_2017CAT2[i][j]*1.0)
+			r_exp_p1sig_interp_2017CAT2.append(r_exp_p1sig_2d_grid_2017CAT2[i][j]*1.0)
+			r_exp_m1sig_interp_2017CAT2.append(r_exp_m1sig_2d_grid_2017CAT2[i][j]*1.0)
+			r_obs_interp_2017CAT2.append(r_obs_2d_grid_2017CAT2[i][j]*1.0)
+	graph_lambda_vs_r_exp_2017CAT2 =  TGraph(len(lambda_interp_2017CAT2), np.array(r_exp_interp_2017CAT2), np.array(lambda_interp_2017CAT2))
+	graph_lambda_vs_r_exp_p1sig_2017CAT2 =  TGraph(len(lambda_interp_2017CAT2), np.array(r_exp_p1sig_interp_2017CAT2), np.array(lambda_interp_2017CAT2))
+	graph_lambda_vs_r_exp_m1sig_2017CAT2 =  TGraph(len(lambda_interp_2017CAT2), np.array(r_exp_m1sig_interp_2017CAT2), np.array(lambda_interp_2017CAT2))
+	lambda_point_boundary_exp_2017CAT2[i] = graph_lambda_vs_r_exp_2017CAT2.Eval(1.0)
+	lambda_point_boundary_exp_p1sig_2017CAT2[i] = graph_lambda_vs_r_exp_p1sig_2017CAT2.Eval(1.0)
+	lambda_point_boundary_exp_m1sig_2017CAT2[i] = graph_lambda_vs_r_exp_m1sig_2017CAT2.Eval(1.0)
+	graph_lambda_vs_r_obs_2017CAT2 =  TGraph(len(lambda_interp_2017CAT2), np.array(r_obs_interp_2017CAT2), np.array(lambda_interp_2017CAT2))
+	lambda_point_boundary_obs_2017CAT2[i] = graph_lambda_vs_r_obs_2017CAT2.Eval(1.0)
+
+
 	lambda_interp_2016And2017 = []
 	r_exp_interp_2016And2017 = []
 	r_exp_p1sig_interp_2016And2017 = []
@@ -674,6 +998,24 @@ print lambda_point_boundary_exp_m1sig_2017
 print "obs (2017) exclusion lambda boundary for different ctau:"
 print lambda_point_boundary_obs_2017
 
+print "exp (2017CAT1) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_exp_2017CAT1
+print "exp p1sig (2017CAT1) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_exp_p1sig_2017CAT1
+print "exp m1sig (2017CAT1) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_exp_m1sig_2017CAT1
+print "obs (2017CAT1) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_obs_2017CAT1
+
+print "exp (2017CAT2) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_exp_2017CAT2
+print "exp p1sig (2017CAT2) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_exp_p1sig_2017CAT2
+print "exp m1sig (2017CAT2) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_exp_m1sig_2017CAT2
+print "obs (2017CAT2) exclusion lambda boundary for different ctau:"
+print lambda_point_boundary_obs_2017CAT2
+
 print "exp (2016And2017) exclusion lambda boundary for different ctau:"
 print lambda_point_boundary_exp_2016And2017
 print "exp p1sig (2016And2017) exclusion lambda boundary for different ctau:"
@@ -701,6 +1043,8 @@ myC2D.SetLogx(0)
 
 lambda_point_boundary_exp_pm1sig_2016 = []
 lambda_point_boundary_exp_pm1sig_2017 = []
+lambda_point_boundary_exp_pm1sig_2017CAT1 = []
+lambda_point_boundary_exp_pm1sig_2017CAT2 = []
 lambda_point_boundary_exp_pm1sig_2016And2017 = []
 ctau_points_loop = []
 
@@ -708,12 +1052,16 @@ for i in range(0,len(ctau_points)):
 	ctau_points_loop.append(ctau_points[i])
 	lambda_point_boundary_exp_pm1sig_2016.append(lambda_point_boundary_exp_p1sig_2016[i]*1.0)
 	lambda_point_boundary_exp_pm1sig_2017.append(lambda_point_boundary_exp_p1sig_2017[i]*1.0)
+	lambda_point_boundary_exp_pm1sig_2017CAT1.append(lambda_point_boundary_exp_p1sig_2017CAT1[i]*1.0)
+	lambda_point_boundary_exp_pm1sig_2017CAT2.append(lambda_point_boundary_exp_p1sig_2017CAT2[i]*1.0)
 	lambda_point_boundary_exp_pm1sig_2016And2017.append(lambda_point_boundary_exp_p1sig_2016And2017[i]*1.0)
 
 for i in range(0, len(ctau_points)):
 	ctau_points_loop.append(ctau_points[len(ctau_points)-i-1]*1.0) 
 	lambda_point_boundary_exp_pm1sig_2016.append(lambda_point_boundary_exp_m1sig_2016[len(ctau_points)-i-1]*1.0)
 	lambda_point_boundary_exp_pm1sig_2017.append(lambda_point_boundary_exp_m1sig_2017[len(ctau_points)-i-1]*1.0)
+	lambda_point_boundary_exp_pm1sig_2017CAT1.append(lambda_point_boundary_exp_m1sig_2017CAT1[len(ctau_points)-i-1]*1.0)
+	lambda_point_boundary_exp_pm1sig_2017CAT2.append(lambda_point_boundary_exp_m1sig_2017CAT2[len(ctau_points)-i-1]*1.0)
 	lambda_point_boundary_exp_pm1sig_2016And2017.append(lambda_point_boundary_exp_m1sig_2016And2017[len(ctau_points)-i-1]*1.0)
 
 graph_exclusion_exp_2016 = TGraph(len(lambda_point_boundary_exp_2016), np.array(1.454*lambda_point_boundary_exp_2016-6.0), np.array(ctau_points))
@@ -846,6 +1194,186 @@ myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016"+plot_tag+".pd
 myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016"+plot_tag+".png")
 myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016"+plot_tag+".C")
 
+###2017CAT1 only
+graph_exclusion_exp_2017CAT1 = TGraph(len(lambda_point_boundary_exp_2017CAT1), np.array(1.454*lambda_point_boundary_exp_2017CAT1-6.0), np.array(ctau_points))
+graph_exclusion_exp_p1sig_2017CAT1 = TGraph(len(lambda_point_boundary_exp_p1sig_2017CAT1), np.array(1.454*lambda_point_boundary_exp_p1sig_2017CAT1-6.0), np.array(ctau_points))
+graph_exclusion_exp_m1sig_2017CAT1 = TGraph(len(lambda_point_boundary_exp_m1sig_2017CAT1), np.array(1.454*lambda_point_boundary_exp_m1sig_2017CAT1-6.0), np.array(ctau_points))
+graph_exclusion_exp_pm1sig_2017CAT1 = TGraph(len(lambda_point_boundary_exp_pm1sig_2017CAT1), np.array(1.454*np.array(lambda_point_boundary_exp_pm1sig_2017CAT1)-6.0), np.array(ctau_points_loop))
+graph_exclusion_obs_2017CAT1 = TGraph(len(lambda_point_boundary_obs_2017CAT1), np.array(1.454*lambda_point_boundary_obs_2017CAT1-6.0), np.array(ctau_points))
+
+graph_exclusion_exp_2017CAT1.GetXaxis().SetTitleSize( axisTitleSize )
+graph_exclusion_exp_2017CAT1.GetXaxis().SetTitleOffset( axisTitleOffset )
+graph_exclusion_exp_2017CAT1.GetYaxis().SetTitleSize( axisTitleSize )
+graph_exclusion_exp_2017CAT1.GetYaxis().SetTitleOffset( axisTitleOffset )
+graph_exclusion_exp_2017CAT1.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
+graph_exclusion_exp_2017CAT1.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2017CAT1.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
+graph_exclusion_exp_2017CAT1.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2017CAT1.SetTitle("")
+
+graph_exclusion_exp_2017CAT1.SetMarkerStyle(19)
+graph_exclusion_exp_2017CAT1.SetMarkerSize(0.0)
+graph_exclusion_exp_2017CAT1.SetLineColor(kGreen+3)
+graph_exclusion_exp_2017CAT1.SetLineWidth(3)
+graph_exclusion_exp_2017CAT1.SetFillColorAlpha(kGreen+3, 0.65)
+graph_exclusion_exp_2017CAT1.SetFillStyle(3353)
+#graph_exclusion_exp_2017CAT1.SetLineStyle(kDashed)
+
+graph_exclusion_exp_p1sig_2017CAT1.SetMarkerStyle(19)
+graph_exclusion_exp_p1sig_2017CAT1.SetMarkerSize(0.0)
+graph_exclusion_exp_p1sig_2017CAT1.SetLineColor(kOrange - 9)
+graph_exclusion_exp_p1sig_2017CAT1.SetLineWidth(2)
+graph_exclusion_exp_p1sig_2017CAT1.SetLineStyle(kDashed)
+
+graph_exclusion_exp_m1sig_2017CAT1.SetMarkerStyle(19)
+graph_exclusion_exp_m1sig_2017CAT1.SetMarkerSize(0.0)
+graph_exclusion_exp_m1sig_2017CAT1.SetLineColor(kOrange - 9)
+graph_exclusion_exp_m1sig_2017CAT1.SetLineWidth(2)
+graph_exclusion_exp_m1sig_2017CAT1.SetLineStyle(kDashed)
+
+graph_exclusion_exp_pm1sig_2017CAT1.SetFillColorAlpha(kOrange - 9, 0.65)
+graph_exclusion_exp_pm1sig_2017CAT1.SetFillStyle(3353)
+
+graph_exclusion_obs_2017CAT1.SetMarkerStyle(19)
+graph_exclusion_obs_2017CAT1.SetMarkerSize(0.0)
+graph_exclusion_obs_2017CAT1.SetLineColor(kBlack)
+graph_exclusion_obs_2017CAT1.SetLineWidth(3)
+graph_exclusion_obs_2017CAT1.SetLineStyle(kDashed)
+
+#graph_exclusion_exp_2017CAT1.SetFillColor(kAzure + 7)
+#graph_exclusion_exp_2017CAT1.SetFillColorAlpha(kOrange - 9, 0.65)
+
+graph_exclusion_exp_2017CAT1.Draw("AL")
+#graph_exclusion_exp_pm1sig_2017CAT1.Draw("Fsame")
+#graph_exclusion_exp_p1sig_2017CAT1.Draw("Lsame")
+#graph_exclusion_exp_m1sig_2017CAT1.Draw("Lsame")
+if drawObs:
+	graph_exclusion_obs_2017CAT1.Draw("Lsames")
+
+graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
+graph_exclusion_cms_7TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_2g.Draw("Fsames")
+
+####legend
+leg_2d_exclusion_2017CAT1 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2017CAT1.SetBorderSize(0)
+leg_2d_exclusion_2017CAT1.SetTextSize(0.03)
+leg_2d_exclusion_2017CAT1.SetLineColor(1)
+leg_2d_exclusion_2017CAT1.SetLineStyle(1)
+leg_2d_exclusion_2017CAT1.SetLineWidth(1)
+leg_2d_exclusion_2017CAT1.SetFillColor(0)
+leg_2d_exclusion_2017CAT1.SetFillStyle(1001)
+
+leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_exp_2017CAT1, "CMS Exp 13 TeV #gamma (2017CAT1)", "L")
+if drawObs:
+	leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_obs_2017CAT1, "CMS Obs 13 TeV #gamma (2017CAT1)", "L")
+leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
+
+leg_2d_exclusion_2017CAT1.Draw()
+
+drawCMS2(myC2D, 13, lumi_2017)
+
+A1_lambda.Draw()
+
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017CAT1"+plot_tag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017CAT1"+plot_tag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017CAT1"+plot_tag+".C")
+
+
+###2017CAT2 only
+graph_exclusion_exp_2017CAT2 = TGraph(len(lambda_point_boundary_exp_2017CAT2), np.array(1.454*lambda_point_boundary_exp_2017CAT2-6.0), np.array(ctau_points))
+graph_exclusion_exp_p1sig_2017CAT2 = TGraph(len(lambda_point_boundary_exp_p1sig_2017CAT2), np.array(1.454*lambda_point_boundary_exp_p1sig_2017CAT2-6.0), np.array(ctau_points))
+graph_exclusion_exp_m1sig_2017CAT2 = TGraph(len(lambda_point_boundary_exp_m1sig_2017CAT2), np.array(1.454*lambda_point_boundary_exp_m1sig_2017CAT2-6.0), np.array(ctau_points))
+graph_exclusion_exp_pm1sig_2017CAT2 = TGraph(len(lambda_point_boundary_exp_pm1sig_2017CAT2), np.array(1.454*np.array(lambda_point_boundary_exp_pm1sig_2017CAT2)-6.0), np.array(ctau_points_loop))
+graph_exclusion_obs_2017CAT2 = TGraph(len(lambda_point_boundary_obs_2017CAT2), np.array(1.454*lambda_point_boundary_obs_2017CAT2-6.0), np.array(ctau_points))
+
+graph_exclusion_exp_2017CAT2.GetXaxis().SetTitleSize( axisTitleSize )
+graph_exclusion_exp_2017CAT2.GetXaxis().SetTitleOffset( axisTitleOffset )
+graph_exclusion_exp_2017CAT2.GetYaxis().SetTitleSize( axisTitleSize )
+graph_exclusion_exp_2017CAT2.GetYaxis().SetTitleOffset( axisTitleOffset )
+graph_exclusion_exp_2017CAT2.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
+graph_exclusion_exp_2017CAT2.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2017CAT2.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
+graph_exclusion_exp_2017CAT2.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2017CAT2.SetTitle("")
+
+graph_exclusion_exp_2017CAT2.SetMarkerStyle(19)
+graph_exclusion_exp_2017CAT2.SetMarkerSize(0.0)
+graph_exclusion_exp_2017CAT2.SetLineColor(kGreen+3)
+graph_exclusion_exp_2017CAT2.SetLineWidth(3)
+graph_exclusion_exp_2017CAT2.SetFillColorAlpha(kGreen+3, 0.65)
+graph_exclusion_exp_2017CAT2.SetFillStyle(3353)
+#graph_exclusion_exp_2017CAT2.SetLineStyle(kDashed)
+
+graph_exclusion_exp_p1sig_2017CAT2.SetMarkerStyle(19)
+graph_exclusion_exp_p1sig_2017CAT2.SetMarkerSize(0.0)
+graph_exclusion_exp_p1sig_2017CAT2.SetLineColor(kOrange - 9)
+graph_exclusion_exp_p1sig_2017CAT2.SetLineWidth(2)
+graph_exclusion_exp_p1sig_2017CAT2.SetLineStyle(kDashed)
+
+graph_exclusion_exp_m1sig_2017CAT2.SetMarkerStyle(19)
+graph_exclusion_exp_m1sig_2017CAT2.SetMarkerSize(0.0)
+graph_exclusion_exp_m1sig_2017CAT2.SetLineColor(kOrange - 9)
+graph_exclusion_exp_m1sig_2017CAT2.SetLineWidth(2)
+graph_exclusion_exp_m1sig_2017CAT2.SetLineStyle(kDashed)
+
+graph_exclusion_exp_pm1sig_2017CAT2.SetFillColorAlpha(kOrange - 9, 0.65)
+graph_exclusion_exp_pm1sig_2017CAT2.SetFillStyle(3353)
+
+graph_exclusion_obs_2017CAT2.SetMarkerStyle(19)
+graph_exclusion_obs_2017CAT2.SetMarkerSize(0.0)
+graph_exclusion_obs_2017CAT2.SetLineColor(kBlack)
+graph_exclusion_obs_2017CAT2.SetLineWidth(3)
+graph_exclusion_obs_2017CAT2.SetLineStyle(kDashed)
+
+#graph_exclusion_exp_2017CAT2.SetFillColor(kAzure + 7)
+#graph_exclusion_exp_2017CAT2.SetFillColorAlpha(kOrange - 9, 0.65)
+
+graph_exclusion_exp_2017CAT2.Draw("AL")
+#graph_exclusion_exp_pm1sig_2017CAT2.Draw("Fsame")
+#graph_exclusion_exp_p1sig_2017CAT2.Draw("Lsame")
+#graph_exclusion_exp_m1sig_2017CAT2.Draw("Lsame")
+if drawObs:
+	graph_exclusion_obs_2017CAT2.Draw("Lsames")
+
+graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
+graph_exclusion_cms_7TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_2g.Draw("Fsames")
+
+####legend
+leg_2d_exclusion_2017CAT2 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2017CAT2.SetBorderSize(0)
+leg_2d_exclusion_2017CAT2.SetTextSize(0.03)
+leg_2d_exclusion_2017CAT2.SetLineColor(1)
+leg_2d_exclusion_2017CAT2.SetLineStyle(1)
+leg_2d_exclusion_2017CAT2.SetLineWidth(1)
+leg_2d_exclusion_2017CAT2.SetFillColor(0)
+leg_2d_exclusion_2017CAT2.SetFillStyle(1001)
+
+leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_exp_2017CAT2, "CMS Exp 13 TeV #gamma (2017CAT2)", "L")
+if drawObs:
+	leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_obs_2017CAT2, "CMS Obs 13 TeV #gamma (2017CAT2)", "L")
+leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
+
+leg_2d_exclusion_2017CAT2.Draw()
+
+drawCMS2(myC2D, 13, lumi_2017)
+
+A1_lambda.Draw()
+
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017CAT2"+plot_tag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017CAT2"+plot_tag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017CAT2"+plot_tag+".C")
+
+
 ###2017 only
 graph_exclusion_exp_2017 = TGraph(len(lambda_point_boundary_exp_2017), np.array(1.454*lambda_point_boundary_exp_2017-6.0), np.array(ctau_points))
 graph_exclusion_exp_p1sig_2017 = TGraph(len(lambda_point_boundary_exp_p1sig_2017), np.array(1.454*lambda_point_boundary_exp_p1sig_2017-6.0), np.array(ctau_points))
@@ -917,9 +1445,9 @@ leg_2d_exclusion_2017.SetLineWidth(1)
 leg_2d_exclusion_2017.SetFillColor(0)
 leg_2d_exclusion_2017.SetFillStyle(1001)
 
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13 TeV #gamma(#gamma) (2017)", "L")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13 TeV #gamma (2017)", "L")
 if drawObs:
-	leg_2d_exclusion_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13 TeV #gamma(#gamma) (2017)", "L")
+	leg_2d_exclusion_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13 TeV #gamma (2017)", "L")
 leg_2d_exclusion_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
 leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
@@ -1098,7 +1626,7 @@ leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13TeV #ga
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp 13TeV #gamma(#gamma) (2016+2017)", "L")
 if drawObs:
 	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13TeV #gamma#gamma (2016)", "L")
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma(#gamma) (2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma (2017)", "L")
 	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13TeV #gamma(#gamma) (2016+2017)", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
@@ -1114,4 +1642,122 @@ A1_lambda.Draw()
 myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+".pdf")
 myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+".png")
 myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+".C")
+
+
+
+
+###overlay 2017 and 2017, with individual categories
+
+graph_exclusion_exp_2016.SetMarkerStyle(19)
+graph_exclusion_exp_2016.SetLineColor(kBlue + 1)
+graph_exclusion_exp_2016.SetFillColorAlpha(kBlue + 1, 0.85)
+graph_exclusion_exp_2016.SetFillStyle(3356)
+graph_exclusion_exp_p1sig_2016.SetLineColor(kGray+1)
+graph_exclusion_exp_m1sig_2016.SetLineColor(kGray+1)
+graph_exclusion_exp_pm1sig_2016.SetFillColorAlpha(kGray+1, 0.85)
+graph_exclusion_exp_pm1sig_2016.SetFillStyle(3356)
+graph_exclusion_obs_2016.SetMarkerStyle(19)
+graph_exclusion_obs_2016.SetLineColor(kBlack)
+
+graph_exclusion_exp_2017.SetMarkerStyle(19)
+graph_exclusion_exp_2017.SetLineColor(kGreen+3)
+graph_exclusion_exp_2017.SetFillColorAlpha(kGreen+3, 0.65)
+graph_exclusion_exp_2017.SetFillStyle(3365)
+graph_exclusion_exp_p1sig_2017.SetLineColor(4)
+graph_exclusion_exp_m1sig_2017.SetLineColor(4)
+graph_exclusion_exp_pm1sig_2017.SetFillColorAlpha(4, 0.65)
+graph_exclusion_exp_pm1sig_2017.SetFillStyle(3365)
+graph_exclusion_obs_2017.SetMarkerStyle(19)
+graph_exclusion_obs_2017.SetLineColor(kBlack)
+
+graph_exclusion_exp_2017CAT1.SetMarkerStyle(19)
+graph_exclusion_exp_2017CAT1.SetLineColor(42)
+graph_exclusion_exp_2017CAT1.SetFillColorAlpha(42, 0.65)
+graph_exclusion_exp_2017CAT1.SetFillStyle(3365)
+graph_exclusion_exp_p1sig_2017CAT1.SetLineColor(42)
+graph_exclusion_exp_m1sig_2017CAT1.SetLineColor(42)
+graph_exclusion_exp_pm1sig_2017CAT1.SetFillColorAlpha(42, 0.65)
+graph_exclusion_exp_pm1sig_2017CAT1.SetFillStyle(3365)
+graph_exclusion_obs_2017CAT1.SetMarkerStyle(19)
+graph_exclusion_obs_2017CAT1.SetLineColor(kBlack)
+
+graph_exclusion_exp_2017CAT2.SetMarkerStyle(19)
+graph_exclusion_exp_2017CAT2.SetLineColor(39)
+graph_exclusion_exp_2017CAT2.SetFillColorAlpha(39, 0.65)
+graph_exclusion_exp_2017CAT2.SetFillStyle(3365)
+graph_exclusion_exp_p1sig_2017CAT2.SetLineColor(39)
+graph_exclusion_exp_m1sig_2017CAT2.SetLineColor(39)
+graph_exclusion_exp_pm1sig_2017CAT2.SetFillColorAlpha(39, 0.65)
+graph_exclusion_exp_pm1sig_2017CAT2.SetFillStyle(3365)
+graph_exclusion_obs_2017CAT2.SetMarkerStyle(19)
+graph_exclusion_obs_2017CAT2.SetLineColor(kBlack)
+
+graph_exclusion_exp_2016And2017.SetMarkerStyle(19)
+graph_exclusion_exp_2016And2017.SetLineColor(kRed+1)
+graph_exclusion_exp_2016And2017.SetFillColorAlpha(kRed+1, 0.65)
+graph_exclusion_exp_2016And2017.SetFillStyle(3344)
+graph_exclusion_exp_p1sig_2016And2017.SetLineColor(kRed+1)
+graph_exclusion_exp_m1sig_2016And2017.SetLineColor(kRed+1)
+graph_exclusion_exp_pm1sig_2016And2017.SetFillColorAlpha(kRed+1, 0.65)
+graph_exclusion_exp_pm1sig_2016And2017.SetFillStyle(3344)
+graph_exclusion_obs_2016And2017.SetMarkerStyle(19)
+graph_exclusion_obs_2016And2017.SetLineColor(kBlack)
+
+graph_exclusion_exp_2017.Draw("AL")
+graph_exclusion_exp_2017CAT1.Draw("Lsame")
+graph_exclusion_exp_2017CAT2.Draw("Lsame")
+#graph_exclusion_exp_p1sig_2017.Draw("Lsame")
+#graph_exclusion_exp_m1sig_2017.Draw("Lsame")
+#graph_exclusion_exp_pm1sig_2017.Draw("Fsame")
+graph_exclusion_exp_2016.Draw("Lsame")
+#graph_exclusion_exp_p1sig_2016.Draw("Lsame")
+#graph_exclusion_exp_m1sig_2016.Draw("Lsame")
+#graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
+graph_exclusion_exp_2016And2017.Draw("Lsame")
+#graph_exclusion_exp_p1sig_2016And2017.Draw("Lsame")
+#graph_exclusion_exp_m1sig_2016And2017.Draw("Lsame")
+#graph_exclusion_exp_pm1sig_2016And2017.Draw("Fsame")
+if drawObs:
+	graph_exclusion_obs_2016.Draw("Lsames")
+	graph_exclusion_obs_2017.Draw("Lsames")
+	graph_exclusion_obs_2016And2017.Draw("Lsames")
+
+graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
+graph_exclusion_cms_7TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_2g.Draw("Fsames")
+
+####legend
+leg_2d_exclusion_2016_2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016_2017.SetBorderSize(0)
+leg_2d_exclusion_2016_2017.SetTextSize(0.03)
+leg_2d_exclusion_2016_2017.SetLineColor(1)
+leg_2d_exclusion_2016_2017.SetLineStyle(1)
+leg_2d_exclusion_2016_2017.SetLineWidth(1)
+leg_2d_exclusion_2016_2017.SetFillColor(0)
+leg_2d_exclusion_2016_2017.SetFillStyle(1001)
+
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016, "CMS Exp 13TeV #gamma#gamma (2016)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017CAT1, "CMS Exp 13TeV #gamma (2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017CAT2, "CMS Exp 13TeV #gamma#gamma (2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13TeV #gamma(#gamma) (2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp 13TeV #gamma(#gamma) (2016+2017)", "L")
+if drawObs:
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13TeV #gamma#gamma (2016)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma (2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13TeV #gamma(#gamma) (2016+2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
+
+leg_2d_exclusion_2016_2017.Draw()
+
+drawCMS2(myC2D, 13, lumi)
+
+A1_lambda.Draw()
+
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+"_all.pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+"_all.png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+"_all.C")
 

@@ -5,6 +5,7 @@ import subprocess, time, sys, os, shlex
 
 if __name__ == "__main__":
 	sig_list_filename = sys.argv[1]
+	version = sys.argv[2]
 	pwd = os.getcwd()
 	work_directory = pwd.replace("scripts_condor","")
 	with open(sig_list_filename,"r") as sig_list_file:
@@ -14,8 +15,8 @@ if __name__ == "__main__":
 			env_jdl_n = pwd + "/submit_noBDT_ABCD/" + sig_array[0]+"_datacard.jdl"
 			minsize = 1000
 			actualsize = 0
-			if os.path.isfile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/fitABCD_"+sig_array[0]+".tar"):
-				actualsize =os.path.getsize("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/fitABCD_"+sig_array[0]+".tar")
+			if os.path.isfile("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/"+version+"/"+sig_array[0]+".tar"):
+				actualsize =os.path.getsize("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/"+version+"/"+sig_array[0]+".tar")
 			if actualsize < minsize:
 				print "job "+ sig_array[0]+"  failed, resubmitting now"
 				os.system("rm "+ pwd + "/log_noBDT_ABCD/"+sig_array[0]+"*")

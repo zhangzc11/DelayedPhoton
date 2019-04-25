@@ -6,6 +6,8 @@ def getXsecBR(Lambda, Ctau):
 	fxsecBR = 0.0
 	efxsecBR = 0.0
 	Ctau_this=str(Ctau)
+	if Ctau_this == "10.0":
+		Ctau_this = "10"
 	if Ctau_this == "0.1":
 		Ctau_this = "0_1"
 	if Ctau_this == "0.01":

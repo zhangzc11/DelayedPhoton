@@ -27,9 +27,9 @@ if __name__ == "__main__":
 	pwd = os.getcwd()
 	work_directory = pwd.replace("scripts_condor","")
 	os.system("mkdir -p "+pwd+"/submit_noBDT_ABCD_binAndDatacard")
-	os.system("rm "+pwd+"/submit_noBDT_ABCD_binAndDatacard/*")
+	#os.system("rm "+pwd+"/submit_noBDT_ABCD_binAndDatacard/*")
 	os.system("mkdir -p "+pwd+"/log_noBDT_ABCD_binAndDatacard")
-	os.system("rm "+pwd+"/log_noBDT_ABCD_binAndDatacard/*")
+	#os.system("rm "+pwd+"/log_noBDT_ABCD_binAndDatacard/*")
 	with open(sig_list_filename,"r") as sig_list_file:
 		for this_sig in sig_list_file:
 			sig_array = shlex.split(this_sig)
@@ -83,8 +83,8 @@ if __name__ == "__main__":
 			#env_script_f.write("cd ${currentDir} \n")
 			#env_script_f.write("cp fit_results/2016ABCD/datacards_noBDT/* "+outputDir_mnt+"/2016ABCD/datacards_noBDT/ \n")
 			env_script_f.write("tar -zcvf fitABCD_"+sig_array[0]+".tar fit_results/2016ABCD/\n")
-			env_script_f.write("x509loc=${X509_USER_PROXY}")
-			env_script_f.write("env -i X509_USER_PROXY=${x509loc} gfal-copy -f --checksum-mode=bothfitABCD_"+sig_array[0]+" gsiftp://transfer.ultralight.org/"+outputDir+sig_array[0]+" \n")
+			env_script_f.write("x509loc=${X509_USER_PROXY}\n")
+			env_script_f.write("env -i X509_USER_PROXY=${x509loc} gfal-copy -f --checksum-mode=both fitABCD_"+sig_array[0]+".tar gsiftp://transfer.ultralight.org/"+outputDir+sig_array[0]+".tar \n")
 
 
 			env_script_f.write("date\n")

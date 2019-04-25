@@ -5,19 +5,18 @@ import numpy as np
 import array
 
 lumi_2016 = 35922.0
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/06Mar2019/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/PreApp_Apr2019/orderByPt/'
 
-datacardsDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD/datacards_3J_noBDT"
-#datacardsDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/fit_results/2016ABCD_binAndDatacard/datacards_3J_noBDT"
 
-plotNameTag = "sixCategories"
-#plotNameTag = "individualBins"
+tree_dir = "limitTrees_v15"
+plot_tag = "v15"
+
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
-ctau_points = [0.001, 0.1, 10, 200, 400, 600, 800, 1000, 1200, 10000]
+ctau_points = [1, 10.0, 50, 100, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
-drawObs=True
+drawObs=False
 gROOT.SetBatch(True)
 
 gStyle.SetOptStat(0)
@@ -104,6 +103,8 @@ for ctau_this in ctau_points:
 		
 
 	ctau_this_str = str(ctau_this)
+	if ctau_this_str == "10.0":
+		ctau_this_str = "10"
 	if ctau_this_str == "0.1":
 		ctau_this_str = "0_1"
 	if ctau_this_str == "0.01":
@@ -117,14 +118,16 @@ for ctau_this in ctau_points:
 		limits_SF = 1.0
 		if lambda_this == 100:
 			limits_SF = 0.01
+		if lambda_this == 150 and ctau_this == 10:
+                        limits_SF = 0.01
 		minsize = 1000
 		actualsize_2016 = 0
-		if os.path.isfile(datacardsDir+"/higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root"):
-			actualsize_2016 = os.path.getsize(datacardsDir+"/higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root")	
+		if os.path.isfile(tree_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root"):
+                        actualsize_2016 = os.path.getsize(tree_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root")
 
 		if actualsize_2016 > minsize:
 			th_xsec_this, eth_xsec_this = getXsecBR(lambda_this, ctau_this)
-			file_limit_2016 = TFile(datacardsDir+"/higgsCombineL"+str(lambda_this)+"TeV_Ctau"+ctau_this_str+"cm.Asymptotic.mH120.root")
+			file_limit_2016 = TFile(tree_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016.Asymptotic.mH120.root")
 			limits_2016 = []
 			limitTree_2016 = file_limit_2016.Get("limit")
 			for entry in limitTree_2016:
@@ -240,10 +243,10 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass_2016.AddEntry(graph_limit_vs_mass_2016_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass_2016.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".C")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plotNameTag+".root")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plot_tag+".pdf")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plot_tag+".png")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plot_tag+".C")
+	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_2016_ctau"+ctau_this_str+"_2016Only_"+plot_tag+".root")
 
 
 ##################exclusion region of ctau and Lambda/mass #######################
@@ -344,14 +347,14 @@ graph_exclusion_exp_2016.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
 graph_exclusion_exp_2016.GetXaxis().SetLimits(100.0, 600.0)
 graph_exclusion_exp_2016.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.001,1.0e10)
+graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.5,1.0e7)
 graph_exclusion_exp_2016.SetTitle("")
 
 graph_exclusion_exp_2016.SetMarkerStyle(19)
 graph_exclusion_exp_2016.SetMarkerSize(0.0)
-graph_exclusion_exp_2016.SetLineColor(kOrange - 9)
+graph_exclusion_exp_2016.SetLineColor(kRed + 1)
 graph_exclusion_exp_2016.SetLineWidth(3)
-graph_exclusion_exp_2016.SetFillColorAlpha(kOrange - 9, 0.65)
+graph_exclusion_exp_2016.SetFillColorAlpha(kRed + 1, 0.65)
 graph_exclusion_exp_2016.SetFillStyle(3353)
 #graph_exclusion_exp_2016.SetLineStyle(kDashed)
 
@@ -382,7 +385,7 @@ graph_exclusion_obs_2016.SetLineStyle(kDashed)
 graph_exclusion_exp_2016.Draw("AL")
 #graph_exclusion_exp_p1sig_2016.Draw("Lsame")
 #graph_exclusion_exp_m1sig_2016.Draw("Lsame")
-graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
+#graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
 
 if drawObs:
 	graph_exclusion_obs_2016.Draw("Lsames")
@@ -400,28 +403,31 @@ graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
 
 ######CMS 7TeV
 mass_cms_7TeV_1g = np.array([100., 145., 157., 179., 192., 216., 221., 218., 218., 221., 216., 192., 179., 157., 145., 100.])
-ctau_cms_7TeV_1g  = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10., 25.0, 50.0, 100.0, 200.0, 400.0, 600.0, 600.0])
+ctau_cms_7TeV_1g  = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 10., 25.0, 50.0, 100.0, 200.0, 400.0, 600.0, 600.0])
 graph_exclusion_cms_7TeV_1g = TGraph(16, mass_cms_7TeV_1g, ctau_cms_7TeV_1g)
-graph_exclusion_cms_7TeV_1g.SetFillColorAlpha(kPink, 0.65)
+graph_exclusion_cms_7TeV_1g.SetFillColorAlpha(kYellow, 0.6)
+graph_exclusion_cms_7TeV_1g.SetLineColorAlpha(kYellow, 0.6)
 graph_exclusion_cms_7TeV_1g.Draw("Fsames")
 
 ######CMS 8TeV, single photon
-mass_cms_8TeV_1g = np.array([140.0,   169.0,   198.0,  227.0,   256.0,    314.,    314., 285.,    256.,     227.,     198.,     169.,     140.])
-ctau_cms_8TeV_1g  = np.array([92.39, 56.98, 51.43, 48.6, 70.59, 138.78, 212.92, 290, 702.16, 1063.61, 1298.93, 1243.29, 1349.28])
-graph_exclusion_cms_8TeV_1g = TGraph(13, mass_cms_8TeV_1g, ctau_cms_8TeV_1g)
-graph_exclusion_cms_8TeV_1g.SetFillColorAlpha(kBlue, 0.65)
+mass_cms_8TeV_1g = np.array([139.51,  168.16, 197.17, 226.17, 264.65, 283.83, 254.65, 226.17, 197.17, 171.36, 139.51])
+ctau_cms_8TeV_1g  = np.array([3.5164, 2.4777, 2.7902, 2.9517, 4.2685, 6.53,   15.188, 26.828, 38.797, 46.219, 43.147])*29.9792458
+graph_exclusion_cms_8TeV_1g = TGraph(11, mass_cms_8TeV_1g, ctau_cms_8TeV_1g)
+graph_exclusion_cms_8TeV_1g.SetFillColorAlpha(kAzure+10, 0.65)
+graph_exclusion_cms_8TeV_1g.SetLineColorAlpha(kAzure+10, 0.65)
 graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 
 ######CMS 8TeV, two photons
 mass_cms_8TeV_2g = np.array([198., 227., 256., 256., 227., 198.])
 ctau_cms_8TeV_2g  = np.array([0.4, 2, 9, 9, 25., 50.])
 graph_exclusion_cms_8TeV_2g = TGraph(6, mass_cms_8TeV_2g, ctau_cms_8TeV_2g)
-graph_exclusion_cms_8TeV_2g.SetFillColorAlpha(kGray+1, 0.65)
+graph_exclusion_cms_8TeV_2g.SetFillColorAlpha(kGray, 0.6)
+graph_exclusion_cms_8TeV_2g.SetLineColorAlpha(kGray, 0.6)
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 
 ####legend
-leg_2d_exclusion_2016 = TLegend(0.25,0.64,0.92,0.91)
+leg_2d_exclusion_2016 = TLegend(0.35,0.64,0.92,0.91)
 leg_2d_exclusion_2016.SetBorderSize(0)
 leg_2d_exclusion_2016.SetTextSize(0.03)
 leg_2d_exclusion_2016.SetLineColor(1)
@@ -430,7 +436,7 @@ leg_2d_exclusion_2016.SetLineWidth(1)
 leg_2d_exclusion_2016.SetFillColor(0)
 leg_2d_exclusion_2016.SetFillStyle(1001)
 
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_exp_2016, "CMS Exp (#pm 1#sigma) 13 TeV, #gamma#gamma + #slash{E}_{T}", "LF")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_exp_2016, "CMS Exp 13 TeV, #gamma#gamma + #slash{E}_{T}", "L")
 if drawObs:
 	leg_2d_exclusion_2016.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13 TeV, #gamma#gamma + #slash{E}_{T}", "L")
 leg_2d_exclusion_2016.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV, #gamma#gamma + #slash{E}_{T}", "L")
@@ -444,7 +450,7 @@ drawCMS2(myC2D, 13, lumi_2016)
 
 #Lambda axis
 f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-A1_lambda = TGaxis(100.0, 0.00001,600.0,0.00001,"f1",1010)
+A1_lambda = TGaxis(100.0, 0.05,600.0,0.05,"f1",1010)
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)
@@ -454,8 +460,8 @@ A1_lambda.SetTitleSize(0.04)
 A1_lambda.SetTitleOffset(0.9)
 A1_lambda.Draw()
 
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".pdf")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".png")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".C")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plotNameTag+".root")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plot_tag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plot_tag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plot_tag+".C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016Only_"+plot_tag+".root")
 
