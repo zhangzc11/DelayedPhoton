@@ -1,0 +1,38 @@
+Combination of ex1=input/exclusive_1pho/datacardABCD_GMSB_L400_CTau600.txt  in2=input/inclusive_2pho/datacardABCD_GMSB_L400_CTau600.txt
+imax 8 number of bins
+jmax 1 number of processes minus 1
+kmax 9 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ex1_Bin1    ex1_Bin2    ex1_Bin3    ex1_Bin4    in2_Bin1    in2_Bin2    in2_Bin3    in2_Bin4  
+observation  522229      321.339478  0.200613    326.028442  28527       187.724869  0.141802    21.548513 
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                    ex1_Bin1    ex1_Bin1    ex1_Bin2    ex1_Bin2    ex1_Bin3    ex1_Bin3    ex1_Bin4    ex1_Bin4    in2_Bin1    in2_Bin1    in2_Bin2    in2_Bin2    in2_Bin3    in2_Bin3    in2_Bin4    in2_Bin4  
+process                                sig         bkg         sig         bkg         sig         bkg         sig         bkg         sig         bkg         sig         bkg         sig         bkg         sig         bkg       
+process                                0           1           0           1           0           1           0           1           0           1           0           1           0           1           0           1         
+rate                                   0.238764    1           0.507637    1           0.383661    1           0.178302    1           0.089801    1           0.380437    1           0.260801    1           0.066129    1         
+----------------------------------------------------------------------------------------------------------------------------------
+CMSLumi_2017            lnN            1.023       -           1.023       -           1.023       -           1.023       -           1.023       -           1.023       -           1.023       -           1.023       -         
+ClosureC                lnN            -           -           -           -           -           1.035       -           -           -           -           -           -           -           1.035       -           -         
+EGMVID_SF               lnN            1.03        -           1.03        -           1.03        -           1.03        -           1.03        -           1.03        -           1.03        -           1.03        -         
+JetECorrection          lnN            1.02        -           1.02        -           1.02        -           1.02        -           1.02        -           1.02        -           1.02        -           1.02        -         
+JetEResolution_2017     lnN            1.015       -           1.015       -           1.015       -           1.015       -           1.015       -           1.015       -           1.015       -           1.015       -         
+PhoEScale               lnN            1.02        -           1.02        -           1.02        -           1.02        -           1.02        -           1.02        -           1.02        -           1.02        -         
+PhoESmear               lnN            1.01        -           1.01        -           1.01        -           1.01        -           1.01        -           1.01        -           1.01        -           1.01        -         
+PhotonTimeShift         lnN            1.01        -           1.01        -           1.01        -           1.01        -           1.01        -           1.01        -           1.01        -           1.01        -         
+PhotonTimeSmear         lnN            1.005       -           1.005       -           1.005       -           1.005       -           1.005       -           1.005       -           1.005       -           1.005       -         
+ex1_bkg1_2017  rateParam ex1_Bin4 bkg 522229.000000  
+ex1_c2_2017   rateParam ex1_Bin4 bkg 0.000624  
+ex1_bkg1_2017  rateParam ex1_Bin3 bkg 522229.000000  
+ex1_c2_2017   rateParam ex1_Bin3 bkg 0.000624  
+ex1_c1_2017   rateParam ex1_Bin3 bkg 0.000615  
+ex1_bkg1_2017  rateParam ex1_Bin2 bkg 522229.000000  
+ex1_c1_2017   rateParam ex1_Bin2 bkg 0.000615  
+ex1_bkg1_2017  rateParam ex1_Bin1 bkg 522229.000000  
+in2_bkg1_2017  rateParam in2_Bin1 bkg 28527.000000  
+in2_bkg1_2017  rateParam in2_Bin3 bkg 28527.000000  
+in2_c2_2017   rateParam in2_Bin3 bkg 0.000755  
+in2_c1_2017   rateParam in2_Bin3 bkg 0.006581  
+in2_bkg1_2017  rateParam in2_Bin2 bkg 28527.000000  
+in2_c1_2017   rateParam in2_Bin2 bkg 0.006581  
+in2_bkg1_2017  rateParam in2_Bin4 bkg 28527.000000  
+in2_c2_2017   rateParam in2_Bin4 bkg 0.000755  

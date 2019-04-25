@@ -1,0 +1,31 @@
+imax 4
+jmax 1
+kmax *
+---------------
+---------------
+bin     ch00     ch10     ch01     ch11     
+observation 16139.00 18898.18  48.05  56.26 
+------------------------------
+bin             ch00 ch00 ch10 ch10 ch01 ch01 ch11 ch11 
+process         sig  bkg  sig  bkg  sig  bkg  sig  bkg  
+process         0    1    0    1    0    1    0    1    
+rate            2.202303e+00  1.0  5.058223e+00  1.0  1.398770e+00  1.0  2.937078e+00  1.0  
+--------------------------------
+NA_2016      rateParam   ch00   bkg   13702.48
+NA_2016      rateParam   ch10   bkg   13702.48
+x1_2016      rateParam   ch10   bkg   1.170964e+00
+NA_2016      rateParam   ch01   bkg   13702.48
+y1_2016      rateParam   ch01   bkg   2.977137e-03
+NA_2016      rateParam   ch11   bkg   13702.48
+x1_2016      rateParam   ch11   bkg   1.170964e+00
+y1_2016      rateParam   ch11   bkg   2.977137e-03
+CMSLumi_2016  lnN     1.025000   -     1.025000   -     1.025000   -     1.025000   -   
+PhoEScale  lnN     1.010000   -     1.010000   -     1.010000   -     1.010000   -   
+PhoESmear  lnN     1.010000   -     1.010000   -     1.010000   -     1.010000   -   
+EGMVID_SF  lnN     1.020000   -     1.020000   -     1.020000   -     1.020000   -   
+TriggerEff_SF  lnN     1.020000   -     1.020000   -     1.020000   -     1.020000   -   
+JetECorrection  lnN     1.015000   -     1.015000   -     1.015000   -     1.015000   -   
+JetEResolution_2016  lnN     1.015000   -     1.015000   -     1.015000   -     1.015000   -   
+PhotonTimeShift  lnN     1.015000   -     1.015000   -     1.015000   -     1.015000   -   
+PhotonTimeSmear  lnN     1.005000   -     1.005000   -     1.005000   -     1.005000   -   
+ClosureC  lnN   -         -   -         -   -         -   -    1.020000  
