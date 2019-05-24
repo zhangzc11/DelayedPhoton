@@ -1,0 +1,30 @@
+imax 4 number of bins
+jmax 1 number of processes minus 1
+kmax 9 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin Bin1 Bin2 Bin3 Bin4 
+observation 522229.000000 321.339478 0.200613 326.028442 
+----------------------------------------------------------------------------------------------------------------------------------
+bin Bin1 Bin1 Bin2 Bin2 Bin3 Bin3 Bin4 Bin4 
+process sig bkg sig bkg sig bkg sig bkg 
+process 0 1 0 1 0 1 0 1 
+rate 0.238764 1 0.507637 1 0.383661 1 0.178302 1 
+----------------------------------------------------------------------------------------------------------------------------------
+CMSLumi_2017 lnN 1.023 - 1.023 - 1.023 - 1.023 - 
+PhoEScale lnN 1.02 - 1.02 - 1.02 - 1.02 -
+PhoESmear lnN 1.01 - 1.01 - 1.01 - 1.01 -
+EGMVID_SF lnN 1.03 - 1.03 - 1.03 - 1.03 -
+PhotonTimeShift lnN 1.01 - 1.01 - 1.01 - 1.01 -
+PhotonTimeSmear lnN 1.005 - 1.005 - 1.005 - 1.005 -
+JetECorrection lnN 1.02 - 1.02 - 1.02 - 1.02 -
+JetEResolution_2017 lnN 1.015 - 1.015 - 1.015 - 1.015 -
+ClosureC lnN - - - - - 1.035 - -
+----------------------------------------------------------------------------------------------------------------------------------
+ex1_bkg1_2017 rateParam Bin1 bkg 522229.000000
+ex1_bkg1_2017 rateParam Bin2 bkg 522229.000000
+ex1_c1_2017 rateParam Bin2 bkg 0.000615
+ex1_bkg1_2017 rateParam Bin3 bkg 522229.000000
+ex1_c2_2017 rateParam Bin3 bkg 0.000624
+ex1_c1_2017 rateParam Bin3 bkg 0.000615
+ex1_bkg1_2017 rateParam Bin4 bkg 522229.000000
+ex1_c2_2017 rateParam Bin4 bkg 0.000624

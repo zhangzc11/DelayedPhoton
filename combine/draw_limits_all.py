@@ -10,13 +10,13 @@ lumi = lumi_2016+lumi_2017
 outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/PreApp_Apr2019/orderByPt/'
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
-ctau_points = [10.0, 200, 400, 600, 800, 1000, 1200, 10000]
+ctau_points = [10.0, 50, 100, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
-tree_dir = "limitTrees_v15"
-plot_tag = "_v15"
+tree_dir = "limitTrees_v17"
+plot_tag = "_v17"
 
-drawObs=False
+drawObs=True
 gROOT.SetBatch(True)
 
 gStyle.SetOptStat(0)
@@ -33,7 +33,7 @@ os.system("cp draw_limits.py "+outputDir+"/limits")
 #################plot settings###########################
 
 axisTitleSize = 0.044
-axisTitleOffset = 0.9
+axisTitleOffset = 1.2
 axisTitleSizeRatioX   = 0.18
 axisLabelSizeRatioX   = 0.12
 axisTitleOffsetRatioX = 0.94
@@ -188,6 +188,12 @@ for ctau_this in ctau_points:
                 if lambda_this == 100:
                         limits_SF = 0.01
                 if lambda_this == 150 and ctau_this == 10:
+                        limits_SF = 0.01
+                if lambda_this == 150 and ctau_this == 50:
+                        limits_SF = 0.01
+                if lambda_this == 150 and ctau_this == 100:
+                        limits_SF = 0.01
+                if lambda_this == 150 and ctau_this == 200:
                         limits_SF = 0.01
 
 		minsize = 1000
@@ -1064,6 +1070,7 @@ for i in range(0, len(ctau_points)):
 	lambda_point_boundary_exp_pm1sig_2017CAT2.append(lambda_point_boundary_exp_m1sig_2017CAT2[len(ctau_points)-i-1]*1.0)
 	lambda_point_boundary_exp_pm1sig_2016And2017.append(lambda_point_boundary_exp_m1sig_2016And2017[len(ctau_points)-i-1]*1.0)
 
+###2016 only
 graph_exclusion_exp_2016 = TGraph(len(lambda_point_boundary_exp_2016), np.array(1.454*lambda_point_boundary_exp_2016-6.0), np.array(ctau_points))
 graph_exclusion_exp_p1sig_2016 = TGraph(len(lambda_point_boundary_exp_p1sig_2016), np.array(1.454*lambda_point_boundary_exp_p1sig_2016-6.0), np.array(ctau_points))
 graph_exclusion_exp_m1sig_2016 = TGraph(len(lambda_point_boundary_exp_m1sig_2016), np.array(1.454*lambda_point_boundary_exp_m1sig_2016-6.0), np.array(ctau_points))
@@ -1082,11 +1089,11 @@ graph_exclusion_exp_2016.SetTitle("")
 
 graph_exclusion_exp_2016.SetMarkerStyle(19)
 graph_exclusion_exp_2016.SetMarkerSize(0.0)
-graph_exclusion_exp_2016.SetLineColor(kBlue+1)
+graph_exclusion_exp_2016.SetLineColor(kRed+1)
 graph_exclusion_exp_2016.SetLineWidth(3)
-graph_exclusion_exp_2016.SetFillColorAlpha(kBlue+1, 0.65)
+graph_exclusion_exp_2016.SetFillColorAlpha(kOrange - 9, 0.65)
 graph_exclusion_exp_2016.SetFillStyle(3353)
-#graph_exclusion_exp_2016.SetLineStyle(kDashed)
+graph_exclusion_exp_2016.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_2016.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_2016.SetMarkerSize(0.0)
@@ -1107,15 +1114,11 @@ graph_exclusion_obs_2016.SetMarkerStyle(19)
 graph_exclusion_obs_2016.SetMarkerSize(0.0)
 graph_exclusion_obs_2016.SetLineColor(kBlack)
 graph_exclusion_obs_2016.SetLineWidth(3)
-graph_exclusion_obs_2016.SetLineStyle(kDashed)
-
-#graph_exclusion_exp_2016.SetFillColor(kAzure + 7)
-#graph_exclusion_exp_2016.SetFillColorAlpha(kOrange - 9, 0.65)
 
 graph_exclusion_exp_2016.Draw("AL")
-#graph_exclusion_exp_p1sig_2016.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2016.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
+graph_exclusion_exp_p1sig_2016.Draw("Lsame")
+graph_exclusion_exp_m1sig_2016.Draw("Lsame")
+graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
 
 if drawObs:
 	graph_exclusion_obs_2016.Draw("Lsames")
@@ -1157,7 +1160,7 @@ graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 
 ####legend
-leg_2d_exclusion_2016 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016 = TLegend(0.28,0.64,0.92,0.91)
 leg_2d_exclusion_2016.SetBorderSize(0)
 leg_2d_exclusion_2016.SetTextSize(0.03)
 leg_2d_exclusion_2016.SetLineColor(1)
@@ -1166,7 +1169,7 @@ leg_2d_exclusion_2016.SetLineWidth(1)
 leg_2d_exclusion_2016.SetFillColor(0)
 leg_2d_exclusion_2016.SetFillStyle(1001)
 
-leg_2d_exclusion_2016.AddEntry(graph_exclusion_exp_2016, "CMS Exp 13 TeV #gamma#gamma (2016)", "L")
+leg_2d_exclusion_2016.AddEntry(graph_exclusion_exp_2016, "CMS Exp (#pm 1#sigma) 13 TeV #gamma#gamma (2016)", "LF")
 if drawObs:
 	leg_2d_exclusion_2016.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13 TeV #gamma#gamma (2016)", "L")
 leg_2d_exclusion_2016.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
@@ -1180,7 +1183,7 @@ drawCMS2(myC2D, 13, lumi_2016)
 
 #Lambda axis
 f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-A1_lambda = TGaxis(100.0, 0.05,600.0,0.05,"f1",1010)
+A1_lambda = TGaxis(100.0, 0.02,600.0,0.02,"f1",1010)
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)
@@ -1213,11 +1216,11 @@ graph_exclusion_exp_2017CAT1.SetTitle("")
 
 graph_exclusion_exp_2017CAT1.SetMarkerStyle(19)
 graph_exclusion_exp_2017CAT1.SetMarkerSize(0.0)
-graph_exclusion_exp_2017CAT1.SetLineColor(kGreen+3)
+graph_exclusion_exp_2017CAT1.SetLineColor(kRed+1)
 graph_exclusion_exp_2017CAT1.SetLineWidth(3)
-graph_exclusion_exp_2017CAT1.SetFillColorAlpha(kGreen+3, 0.65)
+graph_exclusion_exp_2017CAT1.SetFillColorAlpha(kOrange - 9, 0.65)
 graph_exclusion_exp_2017CAT1.SetFillStyle(3353)
-#graph_exclusion_exp_2017CAT1.SetLineStyle(kDashed)
+graph_exclusion_exp_2017CAT1.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_2017CAT1.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_2017CAT1.SetMarkerSize(0.0)
@@ -1238,15 +1241,11 @@ graph_exclusion_obs_2017CAT1.SetMarkerStyle(19)
 graph_exclusion_obs_2017CAT1.SetMarkerSize(0.0)
 graph_exclusion_obs_2017CAT1.SetLineColor(kBlack)
 graph_exclusion_obs_2017CAT1.SetLineWidth(3)
-graph_exclusion_obs_2017CAT1.SetLineStyle(kDashed)
-
-#graph_exclusion_exp_2017CAT1.SetFillColor(kAzure + 7)
-#graph_exclusion_exp_2017CAT1.SetFillColorAlpha(kOrange - 9, 0.65)
 
 graph_exclusion_exp_2017CAT1.Draw("AL")
-#graph_exclusion_exp_pm1sig_2017CAT1.Draw("Fsame")
-#graph_exclusion_exp_p1sig_2017CAT1.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2017CAT1.Draw("Lsame")
+graph_exclusion_exp_pm1sig_2017CAT1.Draw("Fsame")
+graph_exclusion_exp_p1sig_2017CAT1.Draw("Lsame")
+graph_exclusion_exp_m1sig_2017CAT1.Draw("Lsame")
 if drawObs:
 	graph_exclusion_obs_2017CAT1.Draw("Lsames")
 
@@ -1256,7 +1255,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2017CAT1 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2017CAT1 = TLegend(0.28,0.64,0.92,0.91)
 leg_2d_exclusion_2017CAT1.SetBorderSize(0)
 leg_2d_exclusion_2017CAT1.SetTextSize(0.03)
 leg_2d_exclusion_2017CAT1.SetLineColor(1)
@@ -1265,9 +1264,9 @@ leg_2d_exclusion_2017CAT1.SetLineWidth(1)
 leg_2d_exclusion_2017CAT1.SetFillColor(0)
 leg_2d_exclusion_2017CAT1.SetFillStyle(1001)
 
-leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_exp_2017CAT1, "CMS Exp 13 TeV #gamma (2017CAT1)", "L")
+leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_exp_2017CAT1, "CMS Exp (#pm 1#sigma) 13 TeV #gamma (2017)", "LF")
 if drawObs:
-	leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_obs_2017CAT1, "CMS Obs 13 TeV #gamma (2017CAT1)", "L")
+	leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_obs_2017CAT1, "CMS Obs 13 TeV #gamma (2017)", "L")
 leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
 leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
@@ -1303,11 +1302,11 @@ graph_exclusion_exp_2017CAT2.SetTitle("")
 
 graph_exclusion_exp_2017CAT2.SetMarkerStyle(19)
 graph_exclusion_exp_2017CAT2.SetMarkerSize(0.0)
-graph_exclusion_exp_2017CAT2.SetLineColor(kGreen+3)
+graph_exclusion_exp_2017CAT2.SetLineColor(kRed+1)
 graph_exclusion_exp_2017CAT2.SetLineWidth(3)
-graph_exclusion_exp_2017CAT2.SetFillColorAlpha(kGreen+3, 0.65)
+graph_exclusion_exp_2017CAT2.SetFillColorAlpha(kOrange - 9, 0.65)
 graph_exclusion_exp_2017CAT2.SetFillStyle(3353)
-#graph_exclusion_exp_2017CAT2.SetLineStyle(kDashed)
+graph_exclusion_exp_2017CAT2.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_2017CAT2.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_2017CAT2.SetMarkerSize(0.0)
@@ -1328,15 +1327,12 @@ graph_exclusion_obs_2017CAT2.SetMarkerStyle(19)
 graph_exclusion_obs_2017CAT2.SetMarkerSize(0.0)
 graph_exclusion_obs_2017CAT2.SetLineColor(kBlack)
 graph_exclusion_obs_2017CAT2.SetLineWidth(3)
-graph_exclusion_obs_2017CAT2.SetLineStyle(kDashed)
 
-#graph_exclusion_exp_2017CAT2.SetFillColor(kAzure + 7)
-#graph_exclusion_exp_2017CAT2.SetFillColorAlpha(kOrange - 9, 0.65)
 
 graph_exclusion_exp_2017CAT2.Draw("AL")
-#graph_exclusion_exp_pm1sig_2017CAT2.Draw("Fsame")
-#graph_exclusion_exp_p1sig_2017CAT2.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2017CAT2.Draw("Lsame")
+graph_exclusion_exp_pm1sig_2017CAT2.Draw("Fsame")
+graph_exclusion_exp_p1sig_2017CAT2.Draw("Lsame")
+graph_exclusion_exp_m1sig_2017CAT2.Draw("Lsame")
 if drawObs:
 	graph_exclusion_obs_2017CAT2.Draw("Lsames")
 
@@ -1346,7 +1342,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2017CAT2 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2017CAT2 = TLegend(0.28,0.64,0.92,0.91)
 leg_2d_exclusion_2017CAT2.SetBorderSize(0)
 leg_2d_exclusion_2017CAT2.SetTextSize(0.03)
 leg_2d_exclusion_2017CAT2.SetLineColor(1)
@@ -1355,9 +1351,9 @@ leg_2d_exclusion_2017CAT2.SetLineWidth(1)
 leg_2d_exclusion_2017CAT2.SetFillColor(0)
 leg_2d_exclusion_2017CAT2.SetFillStyle(1001)
 
-leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_exp_2017CAT2, "CMS Exp 13 TeV #gamma (2017CAT2)", "L")
+leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_exp_2017CAT2, "CMS Exp (#pm 1#sigma) 13 TeV #gamma#gamma (2017)", "LF")
 if drawObs:
-	leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_obs_2017CAT2, "CMS Obs 13 TeV #gamma (2017CAT2)", "L")
+	leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_obs_2017CAT2, "CMS Obs 13 TeV #gamma#gamma (2017)", "L")
 leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
 leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
@@ -1393,11 +1389,11 @@ graph_exclusion_exp_2017.SetTitle("")
 
 graph_exclusion_exp_2017.SetMarkerStyle(19)
 graph_exclusion_exp_2017.SetMarkerSize(0.0)
-graph_exclusion_exp_2017.SetLineColor(kGreen+3)
+graph_exclusion_exp_2017.SetLineColor(kRed+1)
 graph_exclusion_exp_2017.SetLineWidth(3)
-graph_exclusion_exp_2017.SetFillColorAlpha(kGreen+3, 0.65)
+graph_exclusion_exp_2017.SetFillColorAlpha(kOrange - 9, 0.65)
 graph_exclusion_exp_2017.SetFillStyle(3353)
-#graph_exclusion_exp_2017.SetLineStyle(kDashed)
+graph_exclusion_exp_2017.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_2017.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_2017.SetMarkerSize(0.0)
@@ -1418,15 +1414,12 @@ graph_exclusion_obs_2017.SetMarkerStyle(19)
 graph_exclusion_obs_2017.SetMarkerSize(0.0)
 graph_exclusion_obs_2017.SetLineColor(kBlack)
 graph_exclusion_obs_2017.SetLineWidth(3)
-graph_exclusion_obs_2017.SetLineStyle(kDashed)
 
-#graph_exclusion_exp_2017.SetFillColor(kAzure + 7)
-#graph_exclusion_exp_2017.SetFillColorAlpha(kOrange - 9, 0.65)
 
 graph_exclusion_exp_2017.Draw("AL")
-#graph_exclusion_exp_pm1sig_2017.Draw("Fsame")
-#graph_exclusion_exp_p1sig_2017.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2017.Draw("Lsame")
+graph_exclusion_exp_pm1sig_2017.Draw("Fsame")
+graph_exclusion_exp_p1sig_2017.Draw("Lsame")
+graph_exclusion_exp_m1sig_2017.Draw("Lsame")
 if drawObs:
 	graph_exclusion_obs_2017.Draw("Lsames")
 
@@ -1436,7 +1429,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2017 = TLegend(0.28,0.64,0.92,0.91)
 leg_2d_exclusion_2017.SetBorderSize(0)
 leg_2d_exclusion_2017.SetTextSize(0.03)
 leg_2d_exclusion_2017.SetLineColor(1)
@@ -1445,9 +1438,9 @@ leg_2d_exclusion_2017.SetLineWidth(1)
 leg_2d_exclusion_2017.SetFillColor(0)
 leg_2d_exclusion_2017.SetFillStyle(1001)
 
-leg_2d_exclusion_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13 TeV #gamma (2017)", "L")
+leg_2d_exclusion_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp (#pm 1#sigma) 13 TeV #gamma(#gamma) (2017)", "LF")
 if drawObs:
-	leg_2d_exclusion_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13 TeV #gamma (2017)", "L")
+	leg_2d_exclusion_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13 TeV #gamma(#gamma) (2017)", "L")
 leg_2d_exclusion_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
 leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
@@ -1485,9 +1478,9 @@ graph_exclusion_exp_2016And2017.SetMarkerStyle(19)
 graph_exclusion_exp_2016And2017.SetMarkerSize(0.0)
 graph_exclusion_exp_2016And2017.SetLineColor(kRed + 1)
 graph_exclusion_exp_2016And2017.SetLineWidth(3)
-graph_exclusion_exp_2016And2017.SetFillColorAlpha(kRed + 1, 0.65)
+graph_exclusion_exp_2016And2017.SetFillColorAlpha(kOrange - 9, 0.65)
 graph_exclusion_exp_2016And2017.SetFillStyle(3353)
-#graph_exclusion_exp_2016And2017.SetLineStyle(kDashed)
+graph_exclusion_exp_2016And2017.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_2016And2017.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_2016And2017.SetMarkerSize(0.0)
@@ -1508,15 +1501,12 @@ graph_exclusion_obs_2016And2017.SetMarkerStyle(19)
 graph_exclusion_obs_2016And2017.SetMarkerSize(0.0)
 graph_exclusion_obs_2016And2017.SetLineColor(kBlack)
 graph_exclusion_obs_2016And2017.SetLineWidth(3)
-graph_exclusion_obs_2016And2017.SetLineStyle(kDashed)
 
-#graph_exclusion_exp_2016And2017.SetFillColor(kAzure + 7)
-#graph_exclusion_exp_2016And2017.SetFillColorAlpha(kOrange - 9, 0.65)
 
 graph_exclusion_exp_2016And2017.Draw("AL")
-#graph_exclusion_exp_pm1sig_2016And2017.Draw("Fsame")
-#graph_exclusion_exp_p1sig_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2016And2017.Draw("Lsame")
+graph_exclusion_exp_pm1sig_2016And2017.Draw("Fsame")
+graph_exclusion_exp_p1sig_2016And2017.Draw("Lsame")
+graph_exclusion_exp_m1sig_2016And2017.Draw("Lsame")
 if drawObs:
 	graph_exclusion_obs_2016And2017.Draw("Lsames")
 
@@ -1526,7 +1516,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2016And2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016And2017 = TLegend(0.28,0.64,0.92,0.91)
 leg_2d_exclusion_2016And2017.SetBorderSize(0)
 leg_2d_exclusion_2016And2017.SetTextSize(0.03)
 leg_2d_exclusion_2016And2017.SetLineColor(1)
@@ -1535,7 +1525,7 @@ leg_2d_exclusion_2016And2017.SetLineWidth(1)
 leg_2d_exclusion_2016And2017.SetFillColor(0)
 leg_2d_exclusion_2016And2017.SetFillStyle(1001)
 
-leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp 13 TeV #gamma(#gamma) (2016+2017)", "L")
+leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp (#pm 1#sigma) 13 TeV #gamma(#gamma) (2016+2017)", "LF")
 if drawObs:
 	leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13 TeV #gamma(#gamma) (2016+2017)", "L")
 leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
@@ -1554,53 +1544,23 @@ myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016And2017"+plot_t
 myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016And2017"+plot_tag+".C")
 
 
-###overlay 2017 and 2017
+###overlay: 2016, 2017, 2016And2017
 
-graph_exclusion_exp_2016.SetMarkerStyle(19)
 graph_exclusion_exp_2016.SetLineColor(kBlue + 1)
-graph_exclusion_exp_2016.SetFillColorAlpha(kBlue + 1, 0.85)
-graph_exclusion_exp_2016.SetFillStyle(3356)
-graph_exclusion_exp_p1sig_2016.SetLineColor(kGray+1)
-graph_exclusion_exp_m1sig_2016.SetLineColor(kGray+1)
-graph_exclusion_exp_pm1sig_2016.SetFillColorAlpha(kGray+1, 0.85)
-graph_exclusion_exp_pm1sig_2016.SetFillStyle(3356)
-graph_exclusion_obs_2016.SetMarkerStyle(19)
-graph_exclusion_obs_2016.SetLineColor(kBlack)
+graph_exclusion_exp_2017.SetLineColor(kGreen + 3)
+graph_exclusion_exp_2016And2017.SetLineColor(kRed + 1)
 
-graph_exclusion_exp_2017.SetMarkerStyle(19)
-graph_exclusion_exp_2017.SetLineColor(kGreen+3)
-graph_exclusion_exp_2017.SetFillColorAlpha(kGreen+3, 0.65)
-graph_exclusion_exp_2017.SetFillStyle(3365)
-graph_exclusion_exp_p1sig_2017.SetLineColor(4)
-graph_exclusion_exp_m1sig_2017.SetLineColor(4)
-graph_exclusion_exp_pm1sig_2017.SetFillColorAlpha(4, 0.65)
-graph_exclusion_exp_pm1sig_2017.SetFillStyle(3365)
-graph_exclusion_obs_2017.SetMarkerStyle(19)
-graph_exclusion_obs_2017.SetLineColor(kBlack)
+graph_exclusion_exp_2016.SetLineStyle(kDashed)
+graph_exclusion_exp_2017.SetLineStyle(kDashed)
+graph_exclusion_exp_2016And2017.SetLineStyle(kDashed)
 
-graph_exclusion_exp_2016And2017.SetMarkerStyle(19)
-graph_exclusion_exp_2016And2017.SetLineColor(kRed+1)
-graph_exclusion_exp_2016And2017.SetFillColorAlpha(kRed+1, 0.65)
-graph_exclusion_exp_2016And2017.SetFillStyle(3344)
-graph_exclusion_exp_p1sig_2016And2017.SetLineColor(kRed+1)
-graph_exclusion_exp_m1sig_2016And2017.SetLineColor(kRed+1)
-graph_exclusion_exp_pm1sig_2016And2017.SetFillColorAlpha(kRed+1, 0.65)
-graph_exclusion_exp_pm1sig_2016And2017.SetFillStyle(3344)
-graph_exclusion_obs_2016And2017.SetMarkerStyle(19)
-graph_exclusion_obs_2016And2017.SetLineColor(kBlack)
+graph_exclusion_obs_2016.SetLineColor(kBlue + 1)
+graph_exclusion_obs_2017.SetLineColor(kGreen + 3)
+graph_exclusion_obs_2016And2017.SetLineColor(kRed + 1)
 
 graph_exclusion_exp_2017.Draw("AL")
-#graph_exclusion_exp_p1sig_2017.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2017.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2017.Draw("Fsame")
 graph_exclusion_exp_2016.Draw("Lsame")
-#graph_exclusion_exp_p1sig_2016.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2016.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
 graph_exclusion_exp_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_p1sig_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2016And2017.Draw("Fsame")
 if drawObs:
 	graph_exclusion_obs_2016.Draw("Lsames")
 	graph_exclusion_obs_2017.Draw("Lsames")
@@ -1626,7 +1586,7 @@ leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13TeV #ga
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp 13TeV #gamma(#gamma) (2016+2017)", "L")
 if drawObs:
 	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13TeV #gamma#gamma (2016)", "L")
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma (2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma(#gamma) (2017)", "L")
 	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13TeV #gamma(#gamma) (2016+2017)", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
@@ -1645,82 +1605,82 @@ myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag
 
 
 
+###overlay: 2017CAT1, 2017CAT2, 2017Combo
 
-###overlay 2017 and 2017, with individual categories
+graph_exclusion_exp_2017CAT1.SetLineColor(kBlue + 1)
+graph_exclusion_exp_2017CAT2.SetLineColor(kGreen + 3)
+graph_exclusion_exp_2017.SetLineColor(kRed + 1)
 
-graph_exclusion_exp_2016.SetMarkerStyle(19)
-graph_exclusion_exp_2016.SetLineColor(kBlue + 1)
-graph_exclusion_exp_2016.SetFillColorAlpha(kBlue + 1, 0.85)
-graph_exclusion_exp_2016.SetFillStyle(3356)
-graph_exclusion_exp_p1sig_2016.SetLineColor(kGray+1)
-graph_exclusion_exp_m1sig_2016.SetLineColor(kGray+1)
-graph_exclusion_exp_pm1sig_2016.SetFillColorAlpha(kGray+1, 0.85)
-graph_exclusion_exp_pm1sig_2016.SetFillStyle(3356)
-graph_exclusion_obs_2016.SetMarkerStyle(19)
-graph_exclusion_obs_2016.SetLineColor(kBlack)
+graph_exclusion_exp_2017CAT1.SetLineStyle(kDashed)
+graph_exclusion_exp_2017CAT2.SetLineStyle(kDashed)
+graph_exclusion_exp_2017.SetLineStyle(kDashed)
 
-graph_exclusion_exp_2017.SetMarkerStyle(19)
-graph_exclusion_exp_2017.SetLineColor(kGreen+3)
-graph_exclusion_exp_2017.SetFillColorAlpha(kGreen+3, 0.65)
-graph_exclusion_exp_2017.SetFillStyle(3365)
-graph_exclusion_exp_p1sig_2017.SetLineColor(4)
-graph_exclusion_exp_m1sig_2017.SetLineColor(4)
-graph_exclusion_exp_pm1sig_2017.SetFillColorAlpha(4, 0.65)
-graph_exclusion_exp_pm1sig_2017.SetFillStyle(3365)
-graph_exclusion_obs_2017.SetMarkerStyle(19)
-graph_exclusion_obs_2017.SetLineColor(kBlack)
+graph_exclusion_obs_2017CAT1.SetLineColor(kBlue + 1)
+graph_exclusion_obs_2017CAT2.SetLineColor(kGreen + 3)
+graph_exclusion_obs_2017.SetLineColor(kRed + 1)
 
-graph_exclusion_exp_2017CAT1.SetMarkerStyle(19)
-graph_exclusion_exp_2017CAT1.SetLineColor(42)
-graph_exclusion_exp_2017CAT1.SetFillColorAlpha(42, 0.65)
-graph_exclusion_exp_2017CAT1.SetFillStyle(3365)
-graph_exclusion_exp_p1sig_2017CAT1.SetLineColor(42)
-graph_exclusion_exp_m1sig_2017CAT1.SetLineColor(42)
-graph_exclusion_exp_pm1sig_2017CAT1.SetFillColorAlpha(42, 0.65)
-graph_exclusion_exp_pm1sig_2017CAT1.SetFillStyle(3365)
-graph_exclusion_obs_2017CAT1.SetMarkerStyle(19)
-graph_exclusion_obs_2017CAT1.SetLineColor(kBlack)
-
-graph_exclusion_exp_2017CAT2.SetMarkerStyle(19)
-graph_exclusion_exp_2017CAT2.SetLineColor(39)
-graph_exclusion_exp_2017CAT2.SetFillColorAlpha(39, 0.65)
-graph_exclusion_exp_2017CAT2.SetFillStyle(3365)
-graph_exclusion_exp_p1sig_2017CAT2.SetLineColor(39)
-graph_exclusion_exp_m1sig_2017CAT2.SetLineColor(39)
-graph_exclusion_exp_pm1sig_2017CAT2.SetFillColorAlpha(39, 0.65)
-graph_exclusion_exp_pm1sig_2017CAT2.SetFillStyle(3365)
-graph_exclusion_obs_2017CAT2.SetMarkerStyle(19)
-graph_exclusion_obs_2017CAT2.SetLineColor(kBlack)
-
-graph_exclusion_exp_2016And2017.SetMarkerStyle(19)
-graph_exclusion_exp_2016And2017.SetLineColor(kRed+1)
-graph_exclusion_exp_2016And2017.SetFillColorAlpha(kRed+1, 0.65)
-graph_exclusion_exp_2016And2017.SetFillStyle(3344)
-graph_exclusion_exp_p1sig_2016And2017.SetLineColor(kRed+1)
-graph_exclusion_exp_m1sig_2016And2017.SetLineColor(kRed+1)
-graph_exclusion_exp_pm1sig_2016And2017.SetFillColorAlpha(kRed+1, 0.65)
-graph_exclusion_exp_pm1sig_2016And2017.SetFillStyle(3344)
-graph_exclusion_obs_2016And2017.SetMarkerStyle(19)
-graph_exclusion_obs_2016And2017.SetLineColor(kBlack)
 
 graph_exclusion_exp_2017.Draw("AL")
 graph_exclusion_exp_2017CAT1.Draw("Lsame")
 graph_exclusion_exp_2017CAT2.Draw("Lsame")
-#graph_exclusion_exp_p1sig_2017.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2017.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2017.Draw("Fsame")
-graph_exclusion_exp_2016.Draw("Lsame")
-#graph_exclusion_exp_p1sig_2016.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2016.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2016.Draw("Fsame")
-graph_exclusion_exp_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_p1sig_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_m1sig_2016And2017.Draw("Lsame")
-#graph_exclusion_exp_pm1sig_2016And2017.Draw("Fsame")
+if drawObs:
+	graph_exclusion_obs_2017.Draw("Lsames")
+	graph_exclusion_obs_2017CAT1.Draw("Lsames")
+	graph_exclusion_obs_2017CAT2.Draw("Lsames")
+
+graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
+graph_exclusion_cms_7TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_1g.Draw("Fsames")
+graph_exclusion_cms_8TeV_2g.Draw("Fsames")
+
+####legend
+leg_2d_exclusion_2016_2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016_2017.SetBorderSize(0)
+leg_2d_exclusion_2016_2017.SetTextSize(0.03)
+leg_2d_exclusion_2016_2017.SetLineColor(1)
+leg_2d_exclusion_2016_2017.SetLineStyle(1)
+leg_2d_exclusion_2016_2017.SetLineWidth(1)
+leg_2d_exclusion_2016_2017.SetFillColor(0)
+leg_2d_exclusion_2016_2017.SetFillStyle(1001)
+
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017CAT1, "CMS Exp 13TeV #gamma (2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017CAT2, "CMS Exp 13TeV #gamma#gamma (2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13TeV #gamma(#gamma) (2017)", "L")
+if drawObs:
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017CAT1, "CMS Obs 13TeV #gamma (2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017CAT2, "CMS Obs 13TeV #gamma#gamma (2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma(#gamma) (2017)", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
+
+leg_2d_exclusion_2016_2017.Draw()
+
+drawCMS2(myC2D, 13, lumi_2017)
+
+A1_lambda.Draw()
+
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017All"+plot_tag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017All"+plot_tag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2017All"+plot_tag+".C")
+
+###overlay: 2016, 2017CAT2
+
+graph_exclusion_exp_2016.SetLineColor(kBlue + 1)
+graph_exclusion_exp_2017CAT2.SetLineColor(kRed + 1)
+
+graph_exclusion_exp_2016.SetLineStyle(kDashed)
+graph_exclusion_exp_2017CAT2.SetLineStyle(kDashed)
+
+graph_exclusion_obs_2016.SetLineColor(kBlue + 1)
+graph_exclusion_obs_2017CAT2.SetLineColor(kRed + 1)
+
+graph_exclusion_exp_2016.Draw("AL")
+graph_exclusion_exp_2017CAT2.Draw("Lsame")
 if drawObs:
 	graph_exclusion_obs_2016.Draw("Lsames")
-	graph_exclusion_obs_2017.Draw("Lsames")
-	graph_exclusion_obs_2016And2017.Draw("Lsames")
+	graph_exclusion_obs_2017CAT2.Draw("Lsames")
 
 graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
 graph_exclusion_cms_7TeV_1g.Draw("Fsames")
@@ -1738,14 +1698,10 @@ leg_2d_exclusion_2016_2017.SetFillColor(0)
 leg_2d_exclusion_2016_2017.SetFillStyle(1001)
 
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016, "CMS Exp 13TeV #gamma#gamma (2016)", "L")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017CAT1, "CMS Exp 13TeV #gamma (2017)", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017CAT2, "CMS Exp 13TeV #gamma#gamma (2017)", "L")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2017, "CMS Exp 13TeV #gamma(#gamma) (2017)", "L")
-leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_exp_2016And2017, "CMS Exp 13TeV #gamma(#gamma) (2016+2017)", "L")
 if drawObs:
 	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016, "CMS Obs 13TeV #gamma#gamma (2016)", "L")
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017, "CMS Obs 13TeV #gamma (2017)", "L")
-	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2016And2017, "CMS Obs 13TeV #gamma(#gamma) (2016+2017)", "L")
+	leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_obs_2017CAT2, "CMS Obs 13TeV #gamma#gamma (2017)", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
 leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
@@ -1757,7 +1713,7 @@ drawCMS2(myC2D, 13, lumi)
 
 A1_lambda.Draw()
 
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+"_all.pdf")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+"_all.png")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017"+plot_tag+"_all.C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017CAT2"+plot_tag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017CAT2"+plot_tag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_2016_2017CAT2"+plot_tag+".C")
 
