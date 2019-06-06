@@ -1,0 +1,17 @@
+v2: used for PreApp documentation (AN v4, and paper v1)
+v4: loose pho2 cut
+v4_bin: re-optimize of binning with v4 cuts
+v5: with new binning 
+v5_bin: re-optimize with systematics
+v6_bin: reoptimize with less splits
+v6: with new binning
+v7: fix photon selection - add R9
+v8: remove lepton veto - PreApp
+v9: fix MET correction for 2016, without lepton veto
+v11: fix MET filters, without lepton veto, tighten 2nd photon ID
+v12: without lepton veto, normal 2nd photon ID
+v14: with new systematic names, two categories for 2017
+v15: new binning optimization, two categories for 2017
+v16: unblind
+v17: unblind with 2017 new private samples
+v18: fix eta selection for 2018

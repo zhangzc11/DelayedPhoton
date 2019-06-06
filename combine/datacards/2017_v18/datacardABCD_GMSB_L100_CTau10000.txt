@@ -1,0 +1,38 @@
+Combination of ex1=input/exclusive_1pho/datacardABCD_GMSB_L100_CTau10000.txt  in2=input/inclusive_2pho/datacardABCD_GMSB_L100_CTau10000.txt
+imax 8 number of bins
+jmax 1 number of processes minus 1
+kmax 9 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ex1_Bin1_2017  ex1_Bin2_2017  ex1_Bin3_2017  ex1_Bin4_2017  in2_Bin1_2017  in2_Bin2_2017  in2_Bin3_2017  in2_Bin4_2017
+observation  524652         1364           1              332            24824          418            0              17           
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                    ex1_Bin1_2017  ex1_Bin1_2017  ex1_Bin2_2017  ex1_Bin2_2017  ex1_Bin3_2017  ex1_Bin3_2017  ex1_Bin4_2017  ex1_Bin4_2017  in2_Bin1_2017  in2_Bin1_2017  in2_Bin2_2017  in2_Bin2_2017  in2_Bin3_2017  in2_Bin3_2017  in2_Bin4_2017  in2_Bin4_2017
+process                                sig            bkg            sig            bkg            sig            bkg            sig            bkg            sig            bkg            sig            bkg            sig            bkg            sig            bkg          
+process                                0              1              0              1              0              1              0              1              0              1              0              1              0              1              0              1            
+rate                                   0.654193       1              1.255845       1              0.056179       1              0.093289       1              0.224361       1              0.878943       1              0.114705       1              0.040411       1            
+----------------------------------------------------------------------------------------------------------------------------------
+CMSLumi_2017            lnN            1.023          -              1.023          -              1.023          -              1.023          -              1.023          -              1.023          -              1.023          -              1.023          -            
+ClosureC                lnN            -              -              -              -              -              1.035          -              -              -              -              -              -              -              1.035          -              -            
+EGMVID_SF               lnN            1.03           -              1.03           -              1.03           -              1.03           -              1.03           -              1.03           -              1.03           -              1.03           -            
+JetECorrection          lnN            1.02           -              1.02           -              1.02           -              1.02           -              1.02           -              1.02           -              1.02           -              1.02           -            
+JetEResolution_2017     lnN            1.015          -              1.015          -              1.015          -              1.015          -              1.015          -              1.015          -              1.015          -              1.015          -            
+PhoEScale               lnN            1.02           -              1.02           -              1.02           -              1.02           -              1.02           -              1.02           -              1.02           -              1.02           -            
+PhoESmear               lnN            1.01           -              1.01           -              1.01           -              1.01           -              1.01           -              1.01           -              1.01           -              1.01           -            
+PhotonTimeShift         lnN            1.01           -              1.01           -              1.01           -              1.01           -              1.01           -              1.01           -              1.01           -              1.01           -            
+PhotonTimeSmear         lnN            1.005          -              1.005          -              1.005          -              1.005          -              1.005          -              1.005          -              1.005          -              1.005          -            
+ex1_bkg1_2017  rateParam ex1_Bin3_2017 bkg 524652.000000  
+ex1_c2_2017   rateParam ex1_Bin3_2017 bkg 0.000624  
+ex1_c1_2017   rateParam ex1_Bin3_2017 bkg 0.002588  
+in2_bkg1_2017  rateParam in2_Bin1_2017 bkg 24824.000000  
+in2_bkg1_2017  rateParam in2_Bin4_2017 bkg 24824.000000  
+in2_c2_2017   rateParam in2_Bin4_2017 bkg 0.000624  
+in2_bkg1_2017  rateParam in2_Bin2_2017 bkg 24824.000000  
+in2_c1_2017   rateParam in2_Bin2_2017 bkg 0.008364  
+ex1_bkg1_2017  rateParam ex1_Bin1_2017 bkg 524652.000000  
+ex1_bkg1_2017  rateParam ex1_Bin2_2017 bkg 524652.000000  
+ex1_c1_2017   rateParam ex1_Bin2_2017 bkg 0.002588  
+in2_bkg1_2017  rateParam in2_Bin3_2017 bkg 24824.000000  
+in2_c2_2017   rateParam in2_Bin3_2017 bkg 0.000624  
+in2_c1_2017   rateParam in2_Bin3_2017 bkg 0.008364  
+ex1_bkg1_2017  rateParam ex1_Bin4_2017 bkg 524652.000000  
+ex1_c2_2017   rateParam ex1_Bin4_2017 bkg 0.000624  
