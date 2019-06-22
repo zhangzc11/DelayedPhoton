@@ -24,11 +24,11 @@ const Int_t Nbins_time = 2;
 std::vector <float> xbins_MET;
 std::vector <float> xbins_time;
 
-bool useBDT = true;
+bool useBDT = false;
 
 float lumi = 35922.0; //pb^-1
 float NEvents_sig = 1.0;
-bool _useToy = true;
+bool _useToy = false;
 
 std::string binningAlgorithm = "limit";//or "significance"
 
@@ -38,10 +38,10 @@ bool doAllBkgFracFit = false;
 //binning setup for 2x2 time and met, with 6 categories
 
 int BIN_CATEGORY = 0;
-float time_split_by_CAT[7] = {1.5, 0.0, 1.5, 1.5, 0.0, 1.5, 1.0};
-//float time_split_by_CAT[6] = {1.5, 0.25, 1.5, 1.5, 0.5, 1.5};
-float met_split_by_CAT[7] = {300.0, 250.0, 100.0, 300.0, 250.0, 150.0, 300.0};
-//float met_split_by_CAT[6] = {300.0, 200.0, 100.0, 300.0, 300.0, 125.0};
+float time_split_by_CAT[7] = {0.0, 0.0, 1.5, 0.0, 0.0, 1.5, 1.0};
+float met_split_by_CAT[7] = {250.0, 250.0, 100.0, 250.0, 250.0, 150.0, 300.0};
+//float time_split_by_CAT[7] = {1.5, 0.0, 1.5, 1.5, 0.0, 1.5, 1.5};
+//float met_split_by_CAT[7] = {300.0, 250.0, 150.0, 300.0, 250.0, 150.0, 100.0};
 
 
 int main( int argc, char* argv[])
@@ -122,24 +122,28 @@ std::string weight_cut = "weight*pileupWeight*triggerEffSFWeight*photonEffSF* ";
 
 std::string cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0" ;
 
-std::string cut_pho1Tight = " && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight && pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 30.0 && pho2sumNeutralHadronEt < 30.0 && pho2trkSumPtHollowConeDR03 < 30.0";
-std::string cut_pho1Tight_scaleUp = " && pho1Pt_scaleUp > 70 && pho1R9 > 0.9&& abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
-std::string cut_pho1Tight_scaleDown = " && pho1Pt_scaleDown > 70 && pho1R9 > 0.9&& abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
-std::string cut_pho1Tight_smearUp = " && pho1Pt_smearUp > 70 && pho1R9 > 0.9&& abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
-std::string cut_pho1Tight_smearDown = " && pho1Pt_smearDown > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho2 = "&& pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 30.0 && pho2sumNeutralHadronEt < 30.0 && pho2trkSumPtHollowConeDR03 < 30.0";
+
+//std::string cut_pho2 = "&& pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 6.0 && pho2hcalPFClusterIso < 6.0 && (pho2sumNeutralHadronEt*(1.0-pho2isStandardPhoton) < 30.0) && (pho2trkSumPtHollowConeDR03 < 6.0 )&& abs(pho2Eta) <2.0 && pho2R9 > 0.8";
+
+std::string cut_pho1 = " && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight";
+std::string cut_pho1_scaleUp = " && pho1Pt_scaleUp > 70 && pho1R9 > 0.9&& abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho1_scaleDown = " && pho1Pt_scaleDown > 70 && pho1R9 > 0.9&& abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho1_smearUp = " && pho1Pt_smearUp > 70 && pho1R9 > 0.9&& abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
+std::string cut_pho1_smearDown = " && pho1Pt_smearDown > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight ";
 
 
 if(category == "2J")
 {
 	if(!useBDT)
 	{
-		cut = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight;
-		cut_JESUp = "n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight;
-		cut_JESDown = "n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight;
-		cut_phoScaleUp = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_scaleUp;
-		cut_phoScaleDown = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_scaleDown;
-		cut_phoSmearUp = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_smearUp;
-		cut_phoSmearDown = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_smearDown;
+		cut = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1 + cut_pho2;
+		cut_JESUp = "n_Jets_JESUp == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1 + cut_pho2;
+		cut_JESDown = "n_Jets_JESDown == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1 + cut_pho2;
+		cut_phoScaleUp = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_scaleUp + cut_pho2;
+		cut_phoScaleDown = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_scaleDown + cut_pho2;
+		cut_phoSmearUp = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_smearUp + cut_pho2;
+		cut_phoSmearDown = "n_Jets == 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_smearDown + cut_pho2;
 	}
 	else
 	{
@@ -157,13 +161,13 @@ else if(category == "3J")
 {
 	if(!useBDT)
 	{
-		cut = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight;
-		cut_JESUp = "n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight;
-		cut_JESDown = "n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight;
-		cut_phoScaleUp = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_scaleUp;
-		cut_phoScaleDown = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_scaleDown;
-		cut_phoSmearUp = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_smearUp;
-		cut_phoSmearDown = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1Tight_smearDown;
+		cut = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1 + cut_pho2;
+		cut_JESUp = "n_Jets_JESUp > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1 + cut_pho2;
+		cut_JESDown = "n_Jets_JESDown > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1 + cut_pho2;
+		cut_phoScaleUp = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_scaleUp + cut_pho2;
+		cut_phoScaleDown = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_scaleDown + cut_pho2;
+		cut_phoSmearUp = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_smearUp + cut_pho2;
+		cut_phoSmearDown = "n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   " + cut_MET_filter + cut_pho1_smearDown + cut_pho2;
 	}
 	else
 	{
@@ -585,10 +589,10 @@ if(binningAlgorithm == "limit" && fitMode == "binAndDatacard")
 
 	//pre-defined bins:
 
-	const int met_N_fine = 8;
-	double MET_finebins[9] = {0.0, 50.0, 100.0, 150.0, 200.0, 300.0, 500.0, 1000.0, 9000.0};
-	const int time_N_fine = 8;
-	double Time_finebins[9]= {-2.0, 0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 25.0};
+	const int met_N_fine = 10;
+	double MET_finebins[11] = {0.0, 50.0, 75.0, 100.0, 125.0, 150.0, 200.0, 300.0, 500.0, 1000.0, 9000.0};
+	const int time_N_fine = 11;
+	double Time_finebins[12]= {-2.0, 0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0, 5.0, 25.0};
 
 	std::vector <int> timeBin;
 	std::vector <int> metBin;
