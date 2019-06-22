@@ -12,6 +12,7 @@ runToy = True
 if __name__ == "__main__":
 	sig_list_filename = sys.argv[1]
 	os.system("mkdir -p logs")
+	os.system("mkdir -p plots")
 	f1=open("results.tex","a")
 	with open(sig_list_filename,"r") as sig_list_file:
 		for this_sig_line in sig_list_file:
@@ -41,10 +42,10 @@ if __name__ == "__main__":
 			mean_r = int(limits_Asymptotic[5]*100.0)/100.0
 			if runToy:
 				print "generating toys for "+this_sig+" with r from "+str(mean_r-0.5)+" to "+str(mean_r+0.5) +" wiht step of 0.05"
-				for r in np.arange(mean_r-0.5, mean_r+0.5, 0.05):
+				for r in np.arange(mean_r-0.3, mean_r+0.7, 0.05):
 					print "generating toy for r = "+str(r)
-					os.system("echo combine "+datacard_dir+"/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 500 --clsAcc 0 -s -1 -n "+this_sig+" >> logs/"+this_sig+".log")
-					os.system("combine "+datacard_dir+"/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 500 --clsAcc 0 -s -1 -n "+this_sig+" >> logs/"+this_sig+".log")
+					os.system("echo combine "+datacard_dir+"/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 10000 --clsAcc 0 -s -1 -n "+this_sig+" >> logs/"+this_sig+".log")
+					os.system("combine "+datacard_dir+"/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 10000 --clsAcc 0 -s -1 -n "+this_sig+" >> logs/"+this_sig+".log")
 					
 				os.system("echo hadd higgsCombine"+this_sig+".HybridNew.mH120.merged.root higgsCombine"+this_sig+".HybridNew.mH120.*.root >> logs/"+this_sig+".log")		
 				os.system("hadd higgsCombine"+this_sig+".HybridNew.mH120.merged.root higgsCombine"+this_sig+".HybridNew.mH120.*.root")				
@@ -58,13 +59,15 @@ if __name__ == "__main__":
 			limitTree_obs = limitFile_obs.Get("limit")
 			limits_obs = []
 			for entry in limitTree_obs:
-				limits_obs.append(entry.limit)
+				limits_obs.append(entry.limit * limits_SF)
 
 			limitFile_exp = TFile("higgsCombine"+this_sig+"_Exp0p5.HybridNew.mH120.quant0.500.root")
 			limitTree_exp = limitFile_exp.Get("limit")
 			limits_exp = []
 			for entry in limitTree_exp:
-				limits_exp.append(entry.limit)
+				limits_exp.append(entry.limit * limits_SF)
+			for idx in range(len(limits_Asymptotic)):
+				limits_Asymptotic[idx] = limits_Asymptotic[idx] * limits_SF
 			diff_percent_exp = 100.0*(limits_exp[0]-limits_Asymptotic[2])/limits_Asymptotic[2]
 			diff_percent_obs = 100.0*(limits_obs[0]-limits_Asymptotic[5])/limits_Asymptotic[5]
 			print >> f1, this_sig+" & %.2f"%limits_Asymptotic[2]+" & %.2f"%limits_exp[0]+" (%.2f"%diff_percent_exp+"\\%%) & %.2f"%limits_Asymptotic[5]+" & %.2f"%limits_obs[0]+" (%.2f"%diff_percent_obs+"\\%) \\\\"
