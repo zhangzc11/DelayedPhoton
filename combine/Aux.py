@@ -33,6 +33,25 @@ def getXsecBR(Lambda, Ctau):
 	#print model_to_find
 	return fxsecBR,efxsecBR
 
+def getXsecBR2(Lambda, Ctau):
+	fxsecBR = 0.0
+	efxsecBR = 0.0
+	if Lambda == 100:
+		return 2.16, 0.02
+	if Lambda == 150:
+		return 0.228, 0.002
+	if Lambda == 200:
+		return 0.0445, 0.0003
+	if Lambda == 250:
+		return 0.0126, 0.0001
+	if Lambda == 300:
+		return 0.00445, 0.00003
+	if Lambda == 350:
+		return 0.00178, 0.00001
+	if Lambda == 400:
+		return 0.000778, 0.000005
+
+
 def drawCMS(myC, energy, lumi):
 
 	myC.cd()
@@ -93,12 +112,13 @@ def drawCMS3(myC, energy, lumi):
         tlatex.SetNDC()
         tlatex.SetTextAngle(0)
         tlatex.SetTextColor(1)
-        tlatex.SetTextFont(63)
+        tlatex.SetTextFont(61)
         tlatex.SetTextAlign(11)
-        tlatex.SetTextSize(25)
-        tlatex.DrawLatex(0.18, 0.96, "CMS")
-        tlatex.SetTextFont(53)
-        tlatex.DrawLatex(0.27, 0.96, "Preliminary")
+        tlatex.SetTextSize(0.0375)
+        tlatex.DrawLatex(0.215, 0.89, "CMS")
+        tlatex.SetTextFont(52)
+        tlatex.SetTextSize(0.0285)
+        tlatex.DrawLatex(0.215, 0.852, "Preliminary")
         tlatex.SetTextFont(43)
         tlatex.SetTextSize(23)
         lumiString = "%.1f" % lumi
@@ -109,6 +129,33 @@ def drawCMS3(myC, energy, lumi):
         tlatex.SetTextAlign(31)
         tlatex.DrawLatex(0.85, 0.96, Lumi)
         tlatex.SetTextAlign(11)
+
+def drawCMS3_supp(myC, energy, lumi):
+        myC.cd()
+
+        tlatex = TLatex()
+        baseSize = 25
+        tlatex.SetNDC()
+        tlatex.SetTextAngle(0)
+        tlatex.SetTextColor(1)
+        tlatex.SetTextFont(61)
+        tlatex.SetTextAlign(11)
+        tlatex.SetTextSize(0.0375)
+        tlatex.DrawLatex(0.18, 0.96, "CMS")
+        tlatex.SetTextFont(52)
+        tlatex.SetTextSize(0.0285)
+        tlatex.DrawLatex(0.26, 0.96, "Supplementary")
+        tlatex.SetTextFont(43)
+        tlatex.SetTextSize(23)
+        lumiString = "%.1f" % lumi
+        Lumi = "" + lumiString + " pb^{-1} ("+str(energy)+" TeV)"
+        if lumi > 1000:
+                lumiString = "%.1f" % (lumi/1000.0)
+                Lumi = "" + lumiString + " fb^{-1} ("+str(energy)+" TeV)"
+        tlatex.SetTextAlign(31)
+        tlatex.DrawLatex(0.85, 0.96, Lumi)
+        tlatex.SetTextAlign(11)
+
 
 def interpolate2D(hist,epsilon=1,smooth=0,multiplyNbinsX=3,multiplyNbinsY=30,diagonalOffset=0,fixLSP0=False,refHist=None):
     x = array('d',[])
@@ -129,13 +176,26 @@ def interpolate2D(hist,epsilon=1,smooth=0,multiplyNbinsX=3,multiplyNbinsY=30,dia
                     y.append(hist.GetYaxis().GetBinCenter(j))
                     z.append(rt.TMath.Log(hist.GetBinContent(i,j)))
 
-    mgMin = hist.GetXaxis().GetBinCenter(1)
-    mgMax = hist.GetXaxis().GetBinCenter(hist.GetNbinsX())
-    mchiMin = hist.GetYaxis().GetBinCenter(1)
+    mgMin = hist.GetXaxis().GetBinCenter(1) - 0.5*hist.GetXaxis().GetBinWidth(1)
+    mgMax = hist.GetXaxis().GetBinCenter(hist.GetNbinsX()) + 0.5*hist.GetXaxis().GetBinWidth(hist.GetNbinsX())
+    mchiMin = hist.GetYaxis().GetBinCenter(1) - 0.5*hist.GetYaxis().GetBinWidth(1)
     mchiMax = hist.GetYaxis().GetBinCenter(hist.GetNbinsY()-1) + 0.5*hist.GetYaxis().GetBinWidth(hist.GetNbinsY()-1)
     
     myX = np.linspace(mgMin, mgMax, multiplyNbinsX*hist.GetNbinsX())
-    myY = np.linspace(mchiMin, mchiMax, multiplyNbinsY*hist.GetNbinsY())
+    #myY = np.linspace(mchiMin, mchiMax, multiplyNbinsY*hist.GetNbinsY())
+    myY = np.zeros(multiplyNbinsY*(hist.GetNbinsY()-1))
+    for j in range(1, hist.GetNbinsY()):
+	for rep in range(multiplyNbinsY):
+		jj = (j-1)*multiplyNbinsY + rep
+		myY[jj] = hist.GetYaxis().GetBinCenter(j) + hist.GetYaxis().GetBinWidth(j)*(rep*1.0/multiplyNbinsY -  0.5)
+
+    #print "myX:===="
+    #print myX
+    #print "myY:===="
+    #print myY
+
+
+    #myY = np.zeros(
     myXI, myYI = np.meshgrid(myX,myY)
 
     rbf = Rbf(x, y, z,function='multiquadric', epsilon=epsilon,smooth=smooth)
@@ -151,13 +211,19 @@ def interpolate2D(hist,epsilon=1,smooth=0,multiplyNbinsX=3,multiplyNbinsY=30,dia
     xbins_th2.append(hist.GetXaxis().GetBinCenter(1)-0.5*hist.GetXaxis().GetBinWidth(1))
     ybins_th2.append(hist.GetYaxis().GetBinCenter(1)-0.5*hist.GetYaxis().GetBinWidth(1))
     for idx in range(len(myXI[0,:])-1):
-	xbins_th2.append(0.5*(myXI[0][idx]+myXI[0][idx+1]))
+	#xbins_th2.append(0.5*(myXI[0][idx]+myXI[0][idx+1]))
+	xbins_th2.append(myXI[0][idx+1])
     xbins_th2.append(hist.GetXaxis().GetBinCenter(hist.GetNbinsX())+0.5*hist.GetXaxis().GetBinWidth(hist.GetNbinsX()))
 	
     for idx in range(len(myYI[:,0])-1):
-	ybins_th2.append(0.5*(myYI[idx][0]+myYI[idx+1][0]))
+	#ybins_th2.append(0.5*(myYI[idx][0]+myYI[idx+1][0]))
+	ybins_th2.append(myYI[idx+1][0])
     ybins_th2.append(hist.GetYaxis().GetBinCenter(hist.GetNbinsY())+0.5*hist.GetYaxis().GetBinWidth(hist.GetNbinsY()))
-  
+ 
+    #print "xbins_th2: ==="
+    #print xbins_th2 
+    #print "ybins_th2: ==="
+    #print ybins_th2 
 
     hist2 = rt.TH2F("hist2","hist2", len(xbins_th2)-1, np.array(xbins_th2), len(ybins_th2)-1, np.array(ybins_th2))
 
