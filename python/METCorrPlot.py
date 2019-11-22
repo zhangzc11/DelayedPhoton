@@ -1,8 +1,8 @@
 from ROOT import gStyle, gROOT, TFile, TTree, TH1, TH1F, THStack, kRed, kBlue, kBlack, kViolet, kOrange, kAzure, TChain, SetOwnership, TCanvas, TLegend, TPad, TH2F
 import os, sys
 from Aux import *
-from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_loose_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, cut_noSminor, cut_loose_noSminor, cut_GJets_noSminor, cut_blindMET, cut_blindTime, cut_MET_filter
-from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, cut_loose, xbins_MET, xbins_time, sigLegend, weight_cut
+from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, cut_noSminor, cut_GJets_noSminor, cut_blindMET, cut_blindTime, cut_MET_filter
+from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, xbins_MET, xbins_time, sigLegend, weight_cut
 from config_noBDT import fileNameTTJets, fileNameWJets, xsecTTJets, xsecWJets, cut_EWKCR, fileNameEWKG, xsecEWKG
 import numpy as np
 import array
@@ -547,23 +547,26 @@ def make_METCorrPlots(fileName, label, cut_this):
 
 
 
-make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm", cut)
+#make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm", cut)
+make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCut_nOOTgt0", "nPhotons_overlap > 0")
+#make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_nOOTgt0", cut+"&& nPhotons_overlap > 0")
 
 #make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "data_SR", cut)
 #make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "data_CR_EWK", cut_EWKCR)
 #make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "data_CR_GJets", cut_GJets)
 #make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root", "data_CR_QCD", cut_loose + " && !( " + cut +")")
 
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCorrnoCut", "n_Photons == 2")
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCorrWithCut", cut)
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCorrnoCut", "n_Photons == 2")
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCorrWithCut", cut)
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_CtauAll_13TeV-pythia8.root", "Sig_L400CTauAll_noCorrnoCut", "n_Photons ==2")
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_CtauAll_13TeV-pythia8.root", "Sig_L400CTauAll_noCorrWithCut",cut)
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCut", "n_Photons == 2")
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCut", "n_Photons == 2")
-make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_CtauAll_13TeV-pythia8.root", "Sig_L400CTauAll_noCut", "n_Photons ==2")
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCorrnoCut", "n_Photons == 2")
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCorrWithCut", cut)
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCorrnoCut", "n_Photons == 2")
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCorrWithCut", cut)
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_CtauAll_13TeV-pythia8.root", "Sig_L400CTauAll_noCorrnoCut", "n_Photons ==2")
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/v1_before18Jan2019/withcut/GMSB_L400TeV_CtauAll_13TeV-pythia8.root", "Sig_L400CTauAll_noCorrWithCut",cut)
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCut", "n_Photons == 2")
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_noCut", "n_Photons == 2")
+#make_overlapPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_CtauAll_13TeV-pythia8.root", "Sig_L400CTauAll_noCut", "n_Photons ==2")
 
+'''
 make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_noCut", "")
 make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_1PCut", cut)
 make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm_2PCut", cut+"&& pho2passIsoLoose_PFClusterIso && pho2passEleVeto")
@@ -577,3 +580,4 @@ make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedP
 make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau200cm_13TeV-pythia8.root", "Sig_L400CTau200cm_nOOTgt0", cut+"&& nPhotons_overlap > 0")
 make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau0_1cm_13TeV-pythia8.root", "Sig_L400CTau0_1cm", cut)
 make_METCorrPlots("/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/GMSB_L400TeV_Ctau0_001cm_13TeV-pythia8.root", "Sig_L400CTau0_001cm", cut)
+'''

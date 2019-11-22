@@ -3,9 +3,10 @@ import os, sys
 from Aux import *
 from config_noBDT import fileNameData, fileNameSig, fileNameGJets, fileNameQCD, cut, cut_noDisc, cut_noSigmaIetaIeta, cut_QCD_CR_noSigmaIetaIeta, cut_GJets_noSigmaIetaIeta, splots, lumi, outputDir, xsecSig, xsecGJets, xsecQCD, cut_noSminor, cut_QCD_CR_noSminor, cut_GJets_noSminor, cut_blindMET, cut_blindTime
 from config_noBDT import fractionGJets, fractionQCD, useFraction, kFactor, cut_GJets, cut_QCD_CR, xbins_MET, xbins_time, sigLegend, weight_cut
-from config_noBDT import fileNameTTJets, fileNameWJets, xsecTTJets, xsecWJets, cut_EWKCR, fileNameEWKG, xsecEWKG
+from config_noBDT import cut_EWKCR, cut2
 import numpy as np
 import array
+import shlex
 
 gROOT.SetBatch(True)
 
@@ -42,6 +43,25 @@ print fileNameGJets
 print "QCD tree: "
 print fileNameQCD
 
+#load EWK file names and xsecs
+fileNameEWKall = []
+xsecEWKall = []
+dirEWKall = None
+with open("../data/EWK_bkg.list") as ewk_bkg_file:
+	for this_sample in ewk_bkg_file:
+		this_sample_array = shlex.split(this_sample)
+		if len(this_sample_array) == 1:
+			dirEWKall = this_sample_array[0]
+		else:
+			fileNameEWKall.append(dirEWKall+this_sample_array[0]+".root")
+			xsecEWKall.append(float(this_sample_array[1]))
+
+print "EWK tree:"
+print fileNameEWKall
+print "EWK xsec:"
+print xsecEWKall
+
+
 
 print "NTotal before cut: "
 
@@ -57,22 +77,12 @@ hNEventsSig = fileSig.Get("NEvents")
 NEventsSig = hNEventsSig.GetBinContent(1)
 print "Sig: " + str(NEventsSig)
 
-
-fileTTJets = TFile(fileNameTTJets)
-treeTTJets = fileTTJets.Get("DelayedPhoton")
-hNEventsTTJets = fileTTJets.Get("NEvents")
-NEventsTTJets = hNEventsTTJets.GetBinContent(1)
-print "TTJets: " + str(NEventsTTJets)
-
-
 treeGJets = {}
 NEventsGJets = [0 for i in range(len(fileNameGJets))]
 treeQCD = {}
-treeWJets = {}
-treeEWKG = {}
+treeEWKall = {}
 NEventsQCD = [0 for i in range(len(fileNameQCD))]
-NEventsWJets = [0 for i in range(len(fileNameWJets))]
-NEventsEWKG = [0 for i in range(len(fileNameEWKG))]
+NEventsEWKall = [0 for i in range(len(fileNameEWKall))]
 
 for i in range(0,len(fileNameGJets)):
 	treeGJets[i] = TChain("DelayedPhoton")
@@ -94,36 +104,23 @@ for i in range(0,len(fileNameQCD)):
 	NEventsQCD[i]=hNEventsQCD_.GetBinContent(1)
 	print "QCD - " + str(i) + "  "+ str(hNEventsQCD_.GetBinContent(1))
 
-
-for i in range(0,len(fileNameWJets)):
-	treeWJets[i] = TChain("DelayedPhoton")
-	treeWJets[i].AddFile(fileNameWJets[i])
-	SetOwnership( treeWJets[i], True)
-	fileThis = TFile(fileNameWJets[i])
-	hNEventsWJets_ = fileThis.Get("NEvents")
-	#NEventsWJets_.append(hNEventsWJets_.GetBinContent(1))
-	NEventsWJets[i]=hNEventsWJets_.GetBinContent(1)
-	print "WJets - " + str(i) + "  "+ str(hNEventsWJets_.GetBinContent(1))
-
-
-for i in range(0,len(fileNameEWKG)):
-	treeEWKG[i] = TChain("DelayedPhoton")
-	treeEWKG[i].AddFile(fileNameEWKG[i])
-	SetOwnership( treeEWKG[i], True)
-	fileThis = TFile(fileNameEWKG[i])
-	hNEventsEWKG_ = fileThis.Get("NEvents")
-	#NEventsEWKG_.append(hNEventsEWKG_.GetBinContent(1))
-	NEventsEWKG[i]=hNEventsEWKG_.GetBinContent(1)
-	print "EWKG - " + str(i) + "  "+ str(hNEventsEWKG_.GetBinContent(1))
+for i in range(0,len(fileNameEWKall)):
+	treeEWKall[i] = TChain("DelayedPhoton")
+	treeEWKall[i].AddFile(fileNameEWKall[i])
+	SetOwnership( treeEWKall[i], True)
+	fileThis = TFile(fileNameEWKall[i])
+	hNEventsEWKall_ = fileThis.Get("NEvents")
+	#NEventsEWKall_.append(hNEventsEWKall_.GetBinContent(1))
+	NEventsEWKall[i]=hNEventsEWKall_.GetBinContent(1)
+	print "EWKall - " + str(i) + "  "+ str(hNEventsEWKall_.GetBinContent(1))
 	
 print NEventsGJets
 print NEventsQCD
-print NEventsWJets
-print NEventsEWKG
+print NEventsEWKall
 
 print "\n cut = " + cut
 
-weightedcut_noBlind =  weight_cut + "(" +cut +")" 
+weightedcut_noBlind =  weight_cut + "(" +cut2 +")" 
 weightedcut_blindMET =  weight_cut + "(" +cut_blindMET +")" 
 weightedcut_blindTime =  weight_cut + "(" +cut_blindTime +")" 
 weightedcut_noDisc =  weight_cut + "("  +cut_noDisc+")" 
@@ -148,47 +145,27 @@ def properScale(hist, norm):
                         hist.SetBinError(i, 0.0)
 
 
-
 for plot in splots:
-	#print NEventsGJets
-	#print NEventsQCD
-	#NEventsGJets_ = NEventsGJets[:]
-	#NEventsQCD_ = NEventsQCD[:]
 	weightedcut = weightedcut_noBlind
-	#if "pho1ClusterTime" in plot[0]:
-	#	weightedcut =  weightedcut_blindMET
-	#if "t1MET" in plot[0]:
-	#	weightedcut =  weightedcut_blindTime
 			
 	print "\n plotting stack plots for " + plot[1]
 	print "weighted cut  ==>  "+weightedcut
 	thisStack = THStack(plot[1]+"_stack",plot[1]+"_stack")
-	thisStack_GJets = THStack(plot[1]+"_stack_GJets",plot[1]+"_stack_GJets")
-	thisStack_QCD = THStack(plot[1]+"_stack_QCD",plot[1]+"_stack_QCD")
-	thisStack_EWK = THStack(plot[1]+"_stack_EWK",plot[1]+"_stack_EWK")
 	thisStack_CR = THStack(plot[1]+"_stack_CR",plot[1]+"_stack_CR")
 	thisStack_CR_reweight = THStack(plot[1]+"_stack_CR_reweight",plot[1]+"_stack_CR_reweight")
-	thisStack_GJets_CR = THStack(plot[1]+"_stack_GJets_CR",plot[1]+"_stack_GJets_CR")
-	thisStack_GJets_CR_reweight = THStack(plot[1]+"_stack_GJets_CR_reweight",plot[1]+"_stack_GJets_CR_reweight")
-	thisStack_QCD_CR = THStack(plot[1]+"_stack_QCD_CR",plot[1]+"_stack_QCD_CR")
-	thisStack_EWK_CR = THStack(plot[1]+"_stack_EWK_CR",plot[1]+"_stack_EWK_CR")
 	#data
 	print "#data before/after cut: " + str(treeData.GetEntries()) + " => " + str(treeData.GetEntries(cut))
 	histData = TH1F(plot[1]+"_histData","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histData = TH1F(plot[1]+"_histData","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histData = TH1F(plot[1]+"_histData","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	
 	histDataOOT = TH1F(plot[1]+"_histDataOOT","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histDataOOT = TH1F(plot[1]+"_histDataOOT","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histDataOOT = TH1F(plot[1]+"_histDataOOT","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	if plot[0]=="disc":
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histData",cut_noDisc)
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histDataOOT",cut_noDisc+" && !pho1isStandardPhoton")
@@ -201,39 +178,40 @@ for plot in splots:
 	else:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histData",cut)
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histDataOOT",cut+" && !pho1isStandardPhoton")
-
+	
 	histData.SetMarkerStyle( 20 )
 	histDataOOT.SetMarkerStyle( 22 )
 	histData.SetMarkerColor( kBlack )
 	histDataOOT.SetMarkerColor( 6 )
 	histData.SetLineColor( kBlack )
 	histDataOOT.SetLineColor( 6 )
+	
+	nTotalData = histData.Integral()
+
+	histData.Scale(1.0, "width")
+	histDataOOT.Scale(1.0, "width")
 
 	histMC = TH1F(plot[1]+"_histMC","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histMC = TH1F(plot[1]+"_histMC","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histMC = TH1F(plot[1]+"_histMC","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
-	histMC_CR = TH1F(plot[1]+"_histMC_CR","",plot[3],plot[4],plot[5])
-	histMC_CR_reweight = TH1F(plot[1]+"_histMC_CR_reweight","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
-		histMC_CR = TH1F(plot[1]+"_histMC_CR","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
-		histMC_CR = TH1F(plot[1]+"_histMC_CR","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
+	hist_CR = TH1F(plot[1]+"_hist_CR","",plot[3],plot[4],plot[5])
+	hist_CR_reweight = TH1F(plot[1]+"_hist_CR_reweight","",plot[3],plot[4],plot[5])
+	if "pho1ClusterTime" in plot[0]:
+		hist_CR = TH1F(plot[1]+"_hist_CR","",len(xbins_time)-1, np.array(xbins_time))
+		hist_CR_reweight = TH1F(plot[1]+"_hist_CR_reweight","",len(xbins_time)-1, np.array(xbins_time))
+	if "MET" in plot[0]:
+		hist_CR = TH1F(plot[1]+"_hist_CR","",len(xbins_MET)-1, np.array(xbins_MET))
+		hist_CR_reweight = TH1F(plot[1]+"_hist_CR_reweight","",len(xbins_MET)-1, np.array(xbins_MET))
 
 	#sig
 	print "#signal before/after cut: " + str(treeSig.GetEntries()) + " => " + str(treeSig.GetEntries(cut))
 	histSig = TH1F(plot[1]+"_histSig","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histSig = TH1F(plot[1]+"_histSig","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histSig = TH1F(plot[1]+"_histSig","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	if plot[0]=="disc":
 		treeSig.Draw(plot[0]+">>"+plot[1]+"_histSig",weightedcut_noDisc)
 	elif plot[0] == "pho1SigmaIetaIeta":
@@ -254,22 +232,18 @@ for plot in splots:
 
 	#QCD MC
 	histQCD = TH1F(plot[1]+"_histQCD","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histQCD = TH1F(plot[1]+"_histQCD","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histQCD = TH1F(plot[1]+"_histQCD","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	for i in range(0, len(treeQCD)):
 		print "#QCD - "+str(i)+" - before/after cut: " + str(treeQCD[i].GetEntries()) + " => " + str(treeQCD[i].GetEntries(weightedcut)),
 		normQCD = NEventsQCD[i] 
 		histThis = TH1F(plot[1]+"_histQCD"+str(i),"",plot[3],plot[4],plot[5])	
-		'''
-		if plot[0]=="pho1ClusterTime":
+		if "pho1ClusterTime" in plot[0]:
 			histThis = TH1F(plot[1]+"_histQCD"+str(i),"",len(xbins_time)-1, np.array(xbins_time))
-		if plot[0]=="MET":
+		if "MET" in plot[0]:
 			histThis = TH1F(plot[1]+"_histQCD"+str(i),"",len(xbins_MET)-1, np.array(xbins_MET))
-		'''
 		if plot[0]=="disc":
 			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut_noDisc)
 		elif plot[0] == "pho1SigmaIetaIeta":
@@ -279,7 +253,6 @@ for plot in splots:
 		else:
 			treeQCD[i].Draw(plot[0]+">>"+plot[1]+"_histQCD"+str(i),weightedcut)
 		print " => " + str(histThis.Integral())
-		#print " lumi - " + str(lumi) + " kFactor - "+  str(kFactor)+ "  xsecQCD - "+ str(xsecQCD[i]) + "  normQCD - " +str(normQCD)
 		if histThis.Integral()>0:
 			properScale(histThis, lumi*kFactor*xsecQCD[i]/(normQCD))
 			#histThis.Scale(lumi*kFactor*xsecQCD[i]/(normQCD))
@@ -292,12 +265,10 @@ for plot in splots:
 
 	#GJets
 	histGJets = TH1F(plot[1]+"_histGJets","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histGJets = TH1F(plot[1]+"_histGJets","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histGJets = TH1F(plot[1]+"_histGJets","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	print NEventsGJets
 	print NEventsQCD
 
@@ -306,12 +277,10 @@ for plot in splots:
 		print "#GJets - "+str(i)+" - before/after cut: " + str(treeGJets[i].GetEntries()) + " => " + str(treeGJets[i].GetEntries(weightedcut)),
 		normGJets = NEventsGJets[i] 
 		histThis = TH1F(plot[1]+"_histGJets"+str(i),"",plot[3],plot[4],plot[5])	
-		'''
-		if plot[0]=="pho1ClusterTime":
+		if "pho1ClusterTime" in plot[0]:
 			histThis = TH1F(plot[1]+"_histGJets"+str(i),"",len(xbins_time)-1, np.array(xbins_time))
-		if plot[0]=="MET":
+		if "MET" in plot[0]:
 			histThis = TH1F(plot[1]+"_histGJets"+str(i),"",len(xbins_MET)-1, np.array(xbins_MET))
-		'''
 		if plot[0]=="disc":
 			treeGJets[i].Draw(plot[0]+">>"+plot[1]+"_histGJets"+str(i),weightedcut_noDisc)
 		elif plot[0] == "pho1SigmaIetaIeta":
@@ -333,65 +302,34 @@ for plot in splots:
 	
 	#EWK MC
 	histEWK = TH1F(plot[1]+"_histEWK","",plot[3],plot[4],plot[5])	
+	if "pho1ClusterTime" in plot[0]:
+		histEWK = TH1F(plot[1]+"_histEWK","",len(xbins_time)-1, np.array(xbins_time))
+	if "MET" in plot[0]:
+		histEWK = TH1F(plot[1]+"_histEWK","",len(xbins_MET)-1, np.array(xbins_MET))
 
-	histTTJets = TH1F(plot[1]+"_histTTJets","",plot[3],plot[4],plot[5])	
-	
-	if plot[0]=="disc":
-		treeTTJets.Draw(plot[0]+">>"+plot[1]+"_histTTJets",weightedcut_noDisc)
-	elif plot[0] == "pho1TTJetsmaIetaIeta":
-		treeTTJets.Draw(plot[0]+">>"+plot[1]+"_histTTJets",weightedcut_noTTJetsmaIetaIeta)
-	elif plot[0] == "pho1Sminor":
-		treeTTJets.Draw(plot[0]+">>"+plot[1]+"_histTTJets",weightedcut_noSminor)
-	else:
-		treeTTJets.Draw(plot[0]+">>"+plot[1]+"_histTTJets",weightedcut)
-	#histTTJets.Scale(lumi*xsecTTJets/NEventsTTJets)
-	print "#TTJets - before/after cut: " + str(treeTTJets.GetEntries()) + " => " + str(treeTTJets.GetEntries(weightedcut)) + " => " + str(histTTJets.Integral())
-	properScale(histTTJets, lumi*kFactor*xsecTTJets/NEventsTTJets)
-	histEWK.Add(histTTJets)
-	print "TTJets -  xsec * lumi * cut  " + str(histTTJets.Integral())
-	
-	for i in range(0, len(treeWJets)):
-		print "#WJets - "+str(i)+" - before/after cut: " + str(treeWJets[i].GetEntries()) + " => " + str(treeWJets[i].GetEntries(weightedcut)),
-		normWJets = NEventsWJets[i] 
-		histThis = TH1F(plot[1]+"_histWJets"+str(i),"",plot[3],plot[4],plot[5])	
+	for i in range(0, len(treeEWKall)):
+		print "#EWKall - "+str(i)+" - before/after cut: " + str(treeEWKall[i].GetEntries()) + " => " + str(treeEWKall[i].GetEntries(weightedcut)),
+		normEWKall = NEventsEWKall[i] 
+		histThis = TH1F(plot[1]+"_histEWKall"+str(i),"",plot[3],plot[4],plot[5])	
+		if "pho1ClusterTime" in plot[0]:
+			histThis = TH1F(plot[1]+"_histEWKall"+str(i),"",len(xbins_time)-1, np.array(xbins_time))
+		if "MET" in plot[0]:
+			histThis = TH1F(plot[1]+"_histEWKall"+str(i),"",len(xbins_MET)-1, np.array(xbins_MET))
 
 		if plot[0]=="disc":
-			treeWJets[i].Draw(plot[0]+">>"+plot[1]+"_histWJets"+str(i),weightedcut_noDisc)
+			treeEWKall[i].Draw(plot[0]+">>"+plot[1]+"_histEWKall"+str(i),weightedcut_noDisc)
 		elif plot[0] == "pho1SigmaIetaIeta":
-			treeWJets[i].Draw(plot[0]+">>"+plot[1]+"_histWJets"+str(i),weightedcut_noSigmaIetaIeta)
+			treeEWKall[i].Draw(plot[0]+">>"+plot[1]+"_histEWKall"+str(i),weightedcut_noSigmaIetaIeta)
 		elif plot[0] == "pho1Sminor":
-			treeWJets[i].Draw(plot[0]+">>"+plot[1]+"_histWJets"+str(i),weightedcut_noSminor)
+			treeEWKall[i].Draw(plot[0]+">>"+plot[1]+"_histEWKall"+str(i),weightedcut_noSminor)
 		else:
-			treeWJets[i].Draw(plot[0]+">>"+plot[1]+"_histWJets"+str(i),weightedcut)
+			treeEWKall[i].Draw(plot[0]+">>"+plot[1]+"_histEWKall"+str(i),weightedcut)
 		print " => " + str(histThis.Integral())
 		if histThis.Integral()>0:
-			properScale(histThis, lumi*kFactor*xsecWJets[i]/(normWJets))
-			#histThis.Scale(lumi*xsecWJets[i]/(normWJets))
+			properScale(histThis, lumi*kFactor*xsecEWKall[i]/(normEWKall))
+			#histThis.Scale(lumi*xsecEWKall[i]/(normEWKall))
 		histEWK.Add(histThis)
-		print "#WJets - "+str(i)+" xsec * lumi * cut  " + str(histThis.Integral())
-		print "#WJets - "+str(i)+" xsec * kf * lumi * cut = " +str(xsecWJets[i]) +" * " + str(kFactor) + " * " +str(lumi) + " * Int / "+ str(normWJets) + "   ===  "+ str(histThis.Integral())
-
-	
-	for i in range(0, len(treeEWKG)):
-		print "#EWKG - "+str(i)+" - before/after cut: " + str(treeEWKG[i].GetEntries()) + " => " + str(treeEWKG[i].GetEntries(weightedcut)),
-		normEWKG = NEventsEWKG[i] 
-		histThis = TH1F(plot[1]+"_histEWKG"+str(i),"",plot[3],plot[4],plot[5])	
-
-		if plot[0]=="disc":
-			treeEWKG[i].Draw(plot[0]+">>"+plot[1]+"_histEWKG"+str(i),weightedcut_noDisc)
-		elif plot[0] == "pho1SigmaIetaIeta":
-			treeEWKG[i].Draw(plot[0]+">>"+plot[1]+"_histEWKG"+str(i),weightedcut_noSigmaIetaIeta)
-		elif plot[0] == "pho1Sminor":
-			treeEWKG[i].Draw(plot[0]+">>"+plot[1]+"_histEWKG"+str(i),weightedcut_noSminor)
-		else:
-			treeEWKG[i].Draw(plot[0]+">>"+plot[1]+"_histEWKG"+str(i),weightedcut)
-		print " => " + str(histThis.Integral())
-		if histThis.Integral()>0:
-			properScale(histThis, lumi*kFactor*xsecEWKG[i]/(normEWKG))
-			#histThis.Scale(lumi*xsecEWKG[i]/(normEWKG))
-		histEWK.Add(histThis)
-		print "#EWKG - "+str(i)+" xsec * lumi * cut  " + str(histThis.Integral())
-		print "#EWKG - "+str(i)+" xsec * kf * lumi * cut = " +str(xsecEWKG[i]) +" * " + str(kFactor) + " * " +str(lumi) + " * Int / "+ str(normEWKG) + "   ===  "+ str(histThis.Integral())
+		print "#EWKall - "+str(i)+" xsec * kf * lumi * cut = " +str(xsecEWKall[i]) +" * " + str(kFactor) + " * " +str(lumi) + " * Int / "+ str(normEWKall) + "   ===  "+ str(histThis.Integral())
 
 	histEWK.SetFillColor(7)
 	histEWK.SetLineColor(7)
@@ -400,12 +338,10 @@ for plot in splots:
 	
 	#GJets, data-driven
 	histGJets_CR = TH1F(plot[1]+"_histGJets_CR","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histGJets_CR = TH1F(plot[1]+"_histGJets_CR","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histGJets_CR = TH1F(plot[1]+"_histGJets_CR","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	if plot[0] == "pho1SigmaIetaIeta":
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets_noSigmaIetaIeta)
 	if plot[0] == "pho1Sminor":
@@ -413,9 +349,9 @@ for plot in splots:
 	else:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR",cut_GJets)
 	if useFraction:
-		#histGJets_CR.Scale(histData.Integral()*fractionGJets/histGJets_CR.Integral())
+		#histGJets_CR.Scale(nTotalData*fractionGJets/histGJets_CR.Integral())
 		if histGJets_CR.Integral() > 0.0:
-			properScale(histGJets_CR, histData.Integral()*fractionGJets/histGJets_CR.Integral())
+			properScale(histGJets_CR, nTotalData*fractionGJets/histGJets_CR.Integral())
 	else:
 		#histGJets_CR.Scale(histGJets.Integral()/histGJets_CR.Integral())
 		if histGJets_CR.Integral() > 0.0:
@@ -426,12 +362,10 @@ for plot in splots:
 	
 	#GJets, data-driven, after sumET reweight
 	histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histGJets_CR_reweight = TH1F(plot[1]+"_histGJets_CR_reweight","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	if plot[0] == "pho1SigmaIetaIeta":
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets_noSigmaIetaIeta+")")
 	if plot[0] == "pho1Sminor":
@@ -439,9 +373,9 @@ for plot in splots:
 	else:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histGJets_CR_reweight","weight_sumET*("+cut_GJets+")")
 	if useFraction:
-		#histGJets_CR_reweight.Scale(histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
+		#histGJets_CR_reweight.Scale(nTotalData*fractionGJets/histGJets_CR_reweight.Integral())
 		if histGJets_CR_reweight.Integral() > 0.0:
-			properScale(histGJets_CR_reweight, histData.Integral()*fractionGJets/histGJets_CR_reweight.Integral())
+			properScale(histGJets_CR_reweight, nTotalData*fractionGJets/histGJets_CR_reweight.Integral())
 	else:
 		#histGJets_CR_reweight.Scale(histGJets.Integral()/histGJets_CR_reweight.Integral())
 		if histGJets_CR_reweight.Integral() > 0.0:
@@ -451,12 +385,10 @@ for plot in splots:
 	
 	#QCD, data-driven
 	histQCD_CR = TH1F(plot[1]+"_histQCD_CR","",plot[3],plot[4],plot[5])	
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		histQCD_CR = TH1F(plot[1]+"_histQCD_CR","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		histQCD_CR = TH1F(plot[1]+"_histQCD_CR","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 
 	if plot[0] == "pho1SigmaIetaIeta":
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_QCD_CR_noSigmaIetaIeta)
@@ -465,9 +397,9 @@ for plot in splots:
 	else:
 		treeData.Draw(plot[0]+">>"+plot[1]+"_histQCD_CR", cut_QCD_CR + " && !( " + cut +")")
 	if useFraction:
-		#histQCD_CR.Scale(histData.Integral()*fractionQCD/histQCD_CR.Integral())
+		#histQCD_CR.Scale(nTotalData*fractionQCD/histQCD_CR.Integral())
 		if histQCD_CR.Integral() > 0.0:
-			properScale(histQCD_CR, histData.Integral()*fractionQCD/histQCD_CR.Integral())
+			properScale(histQCD_CR, nTotalData*fractionQCD/histQCD_CR.Integral())
 	else:
 		#histQCD_CR.Scale(histQCD.Integral()/histQCD_CR.Integral())
 		if histQCD_CR.Integral() > 0.0:
@@ -478,6 +410,10 @@ for plot in splots:
 		
 	#EWK, data-driven
 	histEWK_CR = TH1F(plot[1]+"_histEWK_CR","",plot[3],plot[4],plot[5])	
+	if "pho1ClusterTime" in plot[0]:
+		histEWK_CR = TH1F(plot[1]+"_histEWK_CR","",len(xbins_time)-1, np.array(xbins_time))
+	if "MET" in plot[0]:
+		histEWK_CR = TH1F(plot[1]+"_histEWK_CR","",len(xbins_MET)-1, np.array(xbins_MET))
 	treeData.Draw(plot[0]+">>"+plot[1]+"_histEWK_CR", cut_EWKCR)
 	#histEWK_CR.Scale(histEWK.Integral()/histEWK_CR.Integral())
 	if histEWK_CR.Integral() > 0.0:
@@ -486,18 +422,7 @@ for plot in splots:
 	histEWK_CR.SetFillColor(7)
 	histEWK_CR.SetLineColor(7)
 
-	if "pho1ClusterTime" in plot[0]:
-		thisStack_CR.Add(histEWK_CR)
-		thisStack_CR_reweight.Add(histEWK_CR)
-		histMC_CR.Add(histEWK_CR)
-		histMC_CR_reweight.Add(histEWK_CR)
-		
-	else:
-		thisStack_CR.Add(histEWK)
-		thisStack_CR_reweight.Add(histEWK)
-		histMC_CR.Add(histEWK)
-		histMC_CR_reweight.Add(histEWK)
-
+	
 	histMC.Add(histEWK)
 	histMC.Add(histGJets)
 	histMC.Add(histQCD)
@@ -512,33 +437,39 @@ for plot in splots:
 	print "#MC all - xsec * lumi * cut " + str(histMC.Integral())
 	
 	#scale MC
-	kFactor_this = histData.Integral()/histMC.Integral()
+	kFactor_this = nTotalData/histMC.Integral()
 	properScale(histGJets, kFactor_this)
 	properScale(histQCD, kFactor_this)
 	properScale(histEWK, kFactor_this)
 	properScale(histMC, kFactor_this)
 
 	###
-	thisStack.Add(histGJets, "histo")
-	thisStack_GJets.Add(histGJets, "histo")
-	thisStack.Add(histQCD,"histo")
-	thisStack_QCD.Add(histQCD,"histo")
-	thisStack.Add(histEWK,"histo")
-	thisStack_EWK.Add(histEWK,"histo")
+	histMC.Scale(1.0, "width")
+	histEWK.Scale(1.0, "width")
+	histQCD.Scale(1.0, "width")
+	histGJets.Scale(1.0, "width")
+	histEWK_CR.Scale(1.0, "width")
+	histGJets_CR.Scale(1.0, "width")
+	histGJets_CR_reweight.Scale(1.0, "width")
+	histQCD_CR.Scale(1.0, "width")
 
-	thisStack_CR.Add(histGJets_CR, "histo")
-	thisStack_CR_reweight.Add(histGJets_CR_reweight, "histo")
-	thisStack_GJets_CR.Add(histGJets_CR, "histo")
-	thisStack_GJets_CR_reweight.Add(histGJets_CR_reweight, "histo")
+	thisStack_CR.Add(histEWK_CR)
+	thisStack_CR_reweight.Add(histEWK_CR)
 	thisStack_CR.Add(histQCD_CR,"histo")
 	thisStack_CR_reweight.Add(histQCD_CR,"histo")
-	thisStack_QCD_CR.Add(histQCD_CR,"histo")
-	thisStack_EWK_CR.Add(histEWK_CR,"histo")
+	thisStack_CR.Add(histGJets_CR, "histo")
+	thisStack_CR_reweight.Add(histGJets_CR_reweight, "histo")
 
-	histMC_CR_reweight.Add(histGJets_CR_reweight)
-	histMC_CR.Add(histGJets_CR)
-	histMC_CR_reweight.Add(histQCD_CR)
-	histMC_CR.Add(histQCD_CR)
+	hist_CR.Add(histEWK_CR)
+	hist_CR_reweight.Add(histEWK_CR)
+	hist_CR.Add(histQCD_CR)
+	hist_CR_reweight.Add(histQCD_CR)
+	hist_CR.Add(histGJets_CR)
+	hist_CR_reweight.Add(histGJets_CR_reweight)
+
+	thisStack.Add(histEWK,"histo")
+	thisStack.Add(histQCD,"histo")
+	thisStack.Add(histGJets, "histo")
 
 	leg = TLegend(0.18, 0.7, 0.93, 0.89)
 	leg.SetNColumns(3)
@@ -593,15 +524,17 @@ for plot in splots:
 		
 	pad1.cd()
 	thisStack.SetTitle("")
+	#thisStack.Scale(1.0, "width")
+	histSig.Scale(1.0,"width")
 	thisStack.Draw()
 	thisStack.GetXaxis().SetTitleSize( axisTitleSize )
   	thisStack.GetXaxis().SetTitleOffset( axisTitleOffset )
   	thisStack.GetYaxis().SetTitleSize( axisTitleSize )
   	thisStack.GetYaxis().SetTitleOffset( axisTitleOffset )
-	thisStack.GetYaxis().SetTitle("events")
+	thisStack.GetYaxis().SetTitle("Events/"+plot[7])
 	if plot[6]:
 		thisStack.SetMaximum(200*max(histData.GetMaximum(), thisStack.GetMaximum(),histSig.GetMaximum())  )
-		thisStack.SetMinimum(0.1)
+		thisStack.SetMinimum(0.001)
 	else:
 		thisStack.SetMaximum(1.5*max(histData.GetMaximum(), thisStack.GetMaximum(),histSig.GetMaximum())  )
 		thisStack.SetMinimum(0)
@@ -614,12 +547,10 @@ for plot in splots:
 		
 	pad2.cd()
 	ratio = TH1F(plot[1]+"_histRatio","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		ratio = TH1F(plot[1]+"_histRatio","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		ratio = TH1F(plot[1]+"_histRatio","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 
 	ratio.Add(histData)
 	ratio.Divide(histMC)
@@ -682,15 +613,16 @@ for plot in splots:
 		
 	pad1.cd()
 	thisStack_CR.SetTitle("")
+	#thisStack_CR.Scale(1.0, "width")
 	thisStack_CR.Draw("hist")
 	thisStack_CR.GetXaxis().SetTitleSize( axisTitleSize )
   	thisStack_CR.GetXaxis().SetTitleOffset( axisTitleOffset )
   	thisStack_CR.GetYaxis().SetTitleSize( axisTitleSize )
   	thisStack_CR.GetYaxis().SetTitleOffset( axisTitleOffset )
-	thisStack_CR.GetYaxis().SetTitle("events")
+	thisStack_CR.GetYaxis().SetTitle("Events/"+plot[7])
 	if plot[6]:
 		thisStack_CR.SetMaximum(200*max(histData.GetMaximum(), thisStack_CR.GetMaximum(),histSig.GetMaximum())  )
-		thisStack_CR.SetMinimum(0.1)
+		thisStack_CR.SetMinimum(0.001)
 	else:
 		thisStack_CR.SetMaximum(1.5*max(histData.GetMaximum(), thisStack_CR.GetMaximum(),histSig.GetMaximum())  )
 		thisStack_CR.SetMinimum(0)
@@ -703,14 +635,12 @@ for plot in splots:
 		
 	pad2.cd()
 	ratio_CR = TH1F(plot[1]+"_histRatio_CR","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		ratio_CR = TH1F(plot[1]+"_histRatio_CR","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		ratio_CR = TH1F(plot[1]+"_histRatio_CR","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	ratio_CR.Add(histData)
-	ratio_CR.Divide(histMC_CR)
+	ratio_CR.Divide(hist_CR)
 	ratio_CR.SetMarkerStyle( 20 )
 	ratio_CR.GetXaxis().SetTitleSize( axisTitleSizeRatioX )
 	ratio_CR.GetXaxis().SetLabelSize( axisLabelSizeRatioX )
@@ -770,15 +700,16 @@ for plot in splots:
 		
 	pad1.cd()
 	thisStack_CR_reweight.SetTitle("")
+	#thisStack_CR_reweight.Scale(1.0, "width")
 	thisStack_CR_reweight.Draw("hist")
 	thisStack_CR_reweight.GetXaxis().SetTitleSize( axisTitleSize )
   	thisStack_CR_reweight.GetXaxis().SetTitleOffset( axisTitleOffset )
   	thisStack_CR_reweight.GetYaxis().SetTitleSize( axisTitleSize )
   	thisStack_CR_reweight.GetYaxis().SetTitleOffset( axisTitleOffset )
-	thisStack_CR_reweight.GetYaxis().SetTitle("events")
+	thisStack_CR_reweight.GetYaxis().SetTitle("Events/"+plot[7])
 	if plot[6]:
 		thisStack_CR_reweight.SetMaximum(200*max(histData.GetMaximum(), thisStack_CR_reweight.GetMaximum(),histSig.GetMaximum())  )
-		thisStack_CR_reweight.SetMinimum(0.1)
+		thisStack_CR_reweight.SetMinimum(0.001)
 	else:
 		thisStack_CR_reweight.SetMaximum(1.5*max(histData.GetMaximum(), thisStack_CR_reweight.GetMaximum(),histSig.GetMaximum())  )
 		thisStack_CR_reweight.SetMinimum(0)
@@ -791,14 +722,12 @@ for plot in splots:
 		
 	pad2.cd()
 	ratio_CR_reweight = TH1F(plot[1]+"_histRatio_CR_reweight","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
+	if "pho1ClusterTime" in plot[0]:
 		ratio_CR_reweight = TH1F(plot[1]+"_histRatio_CR_reweight","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
+	if "MET" in plot[0]:
 		ratio_CR_reweight = TH1F(plot[1]+"_histRatio_CR_reweight","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
 	ratio_CR_reweight.Add(histData)
-	ratio_CR_reweight.Divide(histMC_CR_reweight)
+	ratio_CR_reweight.Divide(hist_CR_reweight)
 	ratio_CR_reweight.SetMarkerStyle( 20 )
 	ratio_CR_reweight.GetXaxis().SetTitleSize( axisTitleSizeRatioX )
 	ratio_CR_reweight.GetXaxis().SetLabelSize( axisLabelSizeRatioX )
@@ -824,163 +753,4 @@ for plot in splots:
 	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven_reweight.pdf")
 	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven_reweight.png")
 	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_dataDriven_reweight.C")
-
-
-	#closure test, GJets
-	leg_GJets_CR = TLegend(0.18, 0.7, 0.93, 0.89)
-	leg_GJets_CR.SetNColumns(2)
-	leg_GJets_CR.SetBorderSize(0)
-	leg_GJets_CR.SetTextSize(0.03)
-	leg_GJets_CR.SetLineColor(1)
-	leg_GJets_CR.SetLineStyle(1)
-	leg_GJets_CR.SetLineWidth(1)
-	leg_GJets_CR.SetFillColor(0)
-	leg_GJets_CR.SetFillStyle(1001)
-	leg_GJets_CR.AddEntry(histData, "data","lep")
-	#leg_GJets_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
-	leg_GJets_CR.AddEntry(histGJets_CR, "#gamma + jets (control)", "f")
-	leg_GJets_CR.AddEntry(histGJets, "#gamma + jets (MC)", "f")
-
-	pad1.SetLogy(plot[6])
-	pad1.Draw()
-
-	pad2.SetGridy()
-	pad2.Draw()
-		
-	pad1.cd()
-	thisStack_GJets_CR.SetTitle("")
-	thisStack_GJets_CR.Draw()
-	thisStack_GJets_CR.GetXaxis().SetTitleSize( axisTitleSize )
-  	thisStack_GJets_CR.GetXaxis().SetTitleOffset( axisTitleOffset )
-  	thisStack_GJets_CR.GetYaxis().SetTitleSize( axisTitleSize )
-  	thisStack_GJets_CR.GetYaxis().SetTitleOffset( axisTitleOffset )
-	thisStack_GJets_CR.GetYaxis().SetTitle("events")
-	if plot[6]:
-		thisStack_GJets_CR.SetMaximum(200*max(histData.GetMaximum(), thisStack_GJets_CR.GetMaximum(),histSig.GetMaximum())  )
-		thisStack_GJets_CR.SetMinimum(0.1)
-	else:
-		thisStack_GJets_CR.SetMaximum(1.5*max(histData.GetMaximum(), thisStack_GJets_CR.GetMaximum(),histSig.GetMaximum())  )
-		thisStack_GJets_CR.SetMinimum(0)
-		
-	pad1.Update()
-	thisStack_GJets.Draw("same")	
-	histData.Draw("sameE")	
-	#histDataOOT.Draw("sameE")	
-	leg_GJets_CR.Draw()
-		
-	pad2.cd()
-	ratio_GJets_CR = TH1F(plot[1]+"_histRatio_GJets_CR","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
-		ratio_GJets_CR = TH1F(plot[1]+"_histRatio_GJets_CR","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
-		ratio_GJets_CR = TH1F(plot[1]+"_histRatio_GJets_CR","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
-	ratio_GJets_CR.Add(histGJets_CR)
-	ratio_GJets_CR.Divide(histGJets)
-	ratio_GJets_CR.SetMarkerStyle( 20 )
-	ratio_GJets_CR.GetXaxis().SetTitleSize( axisTitleSizeRatioX )
-	ratio_GJets_CR.GetXaxis().SetLabelSize( axisLabelSizeRatioX )
-	ratio_GJets_CR.GetXaxis().SetTitleOffset( axisTitleOffsetRatioX )
-	ratio_GJets_CR.GetYaxis().SetTitleSize( axisTitleSizeRatioY )
-	ratio_GJets_CR.GetYaxis().SetLabelSize( axisLabelSizeRatioY )
-	ratio_GJets_CR.GetYaxis().SetTitleOffset( axisTitleOffsetRatioY )
-	ratio_GJets_CR.SetMarkerColor( kBlue )
-	ratio_GJets_CR.SetLineColor( kBlue )
-	ratio_GJets_CR.GetYaxis().SetRangeUser( 0.0, 2.5 )
-	ratio_GJets_CR.SetTitle("")
-	ratio_GJets_CR.GetYaxis().SetTitle("control / mc")
-	ratio_GJets_CR.GetYaxis().CenterTitle( True )
-	ratio_GJets_CR.GetYaxis().SetNdivisions( 5, False )
-	ratio_GJets_CR.SetStats( 0 )
-	ratio_GJets_CR.Draw("E")
-	ratio_GJets_CR.GetXaxis().SetTitle(plot[2])
-	pad1.Update()
-	pad2.Update()
-
-	drawCMS(myC, 13, lumi)	
-
-	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_GJets_test.pdf")
-	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_GJets_test.png")
-	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_GJets_test.C")
-
-	#closure test, GJets
-	leg_QCD_CR = TLegend(0.18, 0.7, 0.93, 0.89)
-	leg_QCD_CR.SetNColumns(2)
-	leg_QCD_CR.SetBorderSize(0)
-	leg_QCD_CR.SetTextSize(0.03)
-	leg_QCD_CR.SetLineColor(1)
-	leg_QCD_CR.SetLineStyle(1)
-	leg_QCD_CR.SetLineWidth(1)
-	leg_QCD_CR.SetFillColor(0)
-	leg_QCD_CR.SetFillStyle(1001)
-	leg_QCD_CR.AddEntry(histData, "data","lep")
-	#leg_QCD_CR.AddEntry(histDataOOT, "data - OOT photon","lep")
-	leg_QCD_CR.AddEntry(histQCD_CR, "QCD (control)", "f")
-	leg_QCD_CR.AddEntry(histQCD, "QCD (MC)", "f")
-
-	pad1.SetLogy(plot[6])
-	pad1.Draw()
-
-	pad2.SetGridy()
-	pad2.Draw()
-		
-	pad1.cd()
-	thisStack_QCD_CR.SetTitle("")
-	thisStack_QCD_CR.Draw()
-	thisStack_QCD_CR.GetXaxis().SetTitleSize( axisTitleSize )
-  	thisStack_QCD_CR.GetXaxis().SetTitleOffset( axisTitleOffset )
-  	thisStack_QCD_CR.GetYaxis().SetTitleSize( axisTitleSize )
-  	thisStack_QCD_CR.GetYaxis().SetTitleOffset( axisTitleOffset )
-	thisStack_QCD_CR.GetYaxis().SetTitle("events")
-	if plot[6]:
-		thisStack_QCD_CR.SetMaximum(200*max(histData.GetMaximum(), thisStack_QCD_CR.GetMaximum(),histSig.GetMaximum())  )
-		thisStack_QCD_CR.SetMinimum(0.1)
-	else:
-		thisStack_QCD_CR.SetMaximum(1.5*max(histData.GetMaximum(), thisStack_QCD_CR.GetMaximum(),histSig.GetMaximum())  )
-		thisStack_QCD_CR.SetMinimum(0)
-		
-	pad1.Update()
-	thisStack_QCD.Draw("same")	
-	histData.Draw("sameE")	
-	#histDataOOT.Draw("sameE")	
-	leg_QCD_CR.Draw()
-		
-	pad2.cd()
-	ratio_QCD_CR = TH1F(plot[1]+"_histRatio_QCD_CR","",plot[3],plot[4],plot[5])
-	'''
-	if plot[0]=="pho1ClusterTime":
-		ratio_QCD_CR = TH1F(plot[1]+"_histRatio_QCD_CR","",len(xbins_time)-1, np.array(xbins_time))
-	if plot[0]=="MET":
-		ratio_QCD_CR = TH1F(plot[1]+"_histRatio_QCD_CR","",len(xbins_MET)-1, np.array(xbins_MET))
-	'''
-
-	ratio_QCD_CR.Add(histQCD_CR)
-	ratio_QCD_CR.Divide(histQCD)
-	ratio_QCD_CR.SetMarkerStyle( 20 )
-	ratio_QCD_CR.GetXaxis().SetTitleSize( axisTitleSizeRatioX )
-	ratio_QCD_CR.GetXaxis().SetLabelSize( axisLabelSizeRatioX )
-	ratio_QCD_CR.GetXaxis().SetTitleOffset( axisTitleOffsetRatioX )
-	ratio_QCD_CR.GetYaxis().SetTitleSize( axisTitleSizeRatioY )
-	ratio_QCD_CR.GetYaxis().SetLabelSize( axisLabelSizeRatioY )
-	ratio_QCD_CR.GetYaxis().SetTitleOffset( axisTitleOffsetRatioY )
-	ratio_QCD_CR.SetMarkerColor( kBlue )
-	ratio_QCD_CR.SetLineColor( kBlue )
-	ratio_QCD_CR.GetYaxis().SetRangeUser( 0.0, 2.5 )
-	ratio_QCD_CR.SetTitle("")
-	ratio_QCD_CR.GetYaxis().SetTitle("control / mc")
-	ratio_QCD_CR.GetYaxis().CenterTitle( True )
-	ratio_QCD_CR.GetYaxis().SetNdivisions( 5, False )
-	ratio_QCD_CR.SetStats( 0 )
-	ratio_QCD_CR.Draw("E")
-	ratio_QCD_CR.GetXaxis().SetTitle(plot[2])
-	pad1.Update()
-	pad2.Update()
-
-	drawCMS(myC, 13, lumi)	
-
-	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_QCD_test.pdf")
-	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_QCD_test.png")
-	myC.SaveAs(outputDir+"/stack"+"/"+plot[1]+"_QCD_test.C")
-
 

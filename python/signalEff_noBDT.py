@@ -3,8 +3,9 @@ import os, sys
 from Aux import *
 import numpy as np
 import array
+import math
 
-from config_noBDT import weight_cut
+from config_noBDT import weight_cut, cut_GJets, cut_QCD_CR
 from config_noBDT import outputDir
 
 		
@@ -41,36 +42,17 @@ pho1passSmajorLoose = "pho1passSmajorLoose"
 ph1passHoverETight = "pho1passHoverETight"
 ph1passHoverELoose = "pho1passHoverELoose"
 
-cut_MET_filter = " && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
 
-cut_lepVeto = " && nTightMuons < 1"
-
-cut_tight_3J_2G_looseG2 = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  && pho2passIsoLoose_comboIso && pho2passEleVeto' + cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_tight_3J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2 '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_loose_3J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_tight_3J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_loose_3J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_tight_2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_tight_e2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets == 2  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_loose_2J_2G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1) && n_Photons == 2  '+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_tight_2J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
-
-cut_loose_2J_1G = 'pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoLoose_comboIso && pho1passEleVeto && n_Jets > 1  && pho1Sminor<0.4 && (HLTDecision[81] == 1)'+ cut_MET_filter + '&& '+pho1passSigmaIetaIetaTight+" && "+ pho1passSmajorTight + " && "+ ph1passHoverETight + cut_lepVeto
+cut_tight_3J_2G = 'n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2   && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight && pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 30.0 && pho2sumNeutralHadronEt < 30.0 && pho2trkSumPtHollowConeDR03 < 30.0'
+cut_tight_3J_2G_g2tight = "n_Jets > 2 &&n_Photons == 2   && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight && pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 6.0 && pho2hcalPFClusterIso < 6.0 && (pho2sumNeutralHadronEt*(1.0-pho2isStandardPhoton) < 30.0) && (pho2trkSumPtHollowConeDR03 < 6.0 )&& abs(pho2Eta) <2.0 && pho2R9 > 0.8 &&(HLTDecision[81] == 1)"
+cut_tight_3J_2G_g2trigger = "n_Jets > 2 &&n_Photons == 2   && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight && pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 8.0 && pho2hcalPFClusterIso < 8.0 && (pho2sumNeutralHadronEt*(1.0-pho2isStandardPhoton) < 30.0) && (pho2trkSumPtHollowConeDR03 < 8.0 )&& abs(pho2Eta) <2.0 && pho2R9 > 0.65 &&(HLTDecision[81] == 1)"
 
 inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
 
 tableFileName = "./effTable.txt"
 
 def print_eff_table(cut, label="test"):
-	list_ctau = ["0_001", "0_1","10","200","400","600","800","1000","1200","10000"]
+	list_ctau = ["10","50", "100", "200","400","600","800","1000","1200","10000"]
 	list_Lambda  = ["100","150","200","250","300","350","400"]
 	list_Lambda_value  = [100.0,150.0,200.0,250.0,300.0, 350.0,400.0]
 	list_Lambda_value_err  = [25.0,25.0,25.0, 25.0, 25.0, 25.0, 25.0]
@@ -130,23 +112,32 @@ def print_eff_table(cut, label="test"):
 				#print >> f1, "& "+str(N_total)+" -> "+str(N_pass),
 				#print >> f1, N_pass,
 	
-				effThis = 0.0
+				eff_this = 0.0
 				if N_total > 0:
-					effThis = 100.0*N_pass/N_total
-				effThis_err = 0.0
+					eff_this = 100.0*N_pass/N_total
+				Eeff_this = 0.0
 				if N_pass > 0  and N_total > 0:
-					effThis_err = effThis*np.sqrt(1.0/N_pass+1.0/N_total)
+					Eeff_this = eff_this*np.sqrt(1.0/N_pass+1.0/N_total)
 				
-				list_eff.append(effThis/100.0)
-				list_eff_err.append(effThis_err/100.0)
+				list_eff.append(eff_this/100.0)
+				list_eff_err.append(Eeff_this/100.0)
 
+				Eeff_thisint = int(pow(10,-1*int(math.log10(Eeff_this))+1)*Eeff_this)
+				Eeff_thisP = Eeff_thisint *1.0/pow(10,-1*int(math.log10(Eeff_this))+1)
+				eff_thisP = int(eff_this*pow(10,-1*int(math.log10(Eeff_this))+1))*1.0/pow(10,-1*int(math.log10(Eeff_this))+1)
+				if Eeff_thisint < 5:
+					Eeff_thisP = int(pow(10,-1*int(math.log10(Eeff_this))+2)*Eeff_this)*1.0/pow(10,-1*int(math.log10(Eeff_this))+2)
+					eff_thisP = int(eff_this*pow(10,-1*int(math.log10(Eeff_this))+2))*1.0/pow(10,-1*int(math.log10(Eeff_this))+2)
+				'''
 				if float(ctau_value) > 10.0:
-					effThis_err = 0.01*np.ceil(100.0*effThis_err)
-					print >> f1, "&"+"$ %.2f" % effThis + " \pm %.2f " % effThis_err + "$",
+					Eeff_this = 0.01*np.ceil(100.0*Eeff_this)
+					print >> f1, "&"+"$ %.2f" % eff_this + " \pm %.2f " % Eeff_this + "$",
 				else:
-					effThis_err = 0.1*np.ceil(10.0*effThis_err)
-					print >> f1, "&"+"$ %.1f" % effThis + " \pm %.1f " % effThis_err + "$",
-				
+					Eeff_this = 0.1*np.ceil(10.0*Eeff_this)
+					print >> f1, "&"+"$ %.1f" % eff_this + " \pm %.1f " % Eeff_this + "$",
+				'''
+
+				print >> f1, "& $"+str(eff_thisP)+" \\pm "+str(Eeff_thisP)+"$",
 			else:
 				print >> f1, "& -- ",
 		if len(list_eff) == len(list_Lambda_value):
@@ -163,7 +154,7 @@ def print_eff_table(cut, label="test"):
 		print >> f1, "\\\\"
 		#f1.close()
 	mg_eff_vs_lambda.Draw("AP")
-	mg_eff_vs_lambda.GetYaxis().SetRangeUser(0.001, 1.0)
+	mg_eff_vs_lambda.GetYaxis().SetRangeUser(0.0005, 1.5)
 	mg_eff_vs_lambda.GetYaxis().SetTitle("efficiency")
 	mg_eff_vs_lambda.GetXaxis().SetTitle("#Lambda (TeV)")
 	leg = TLegend(0.18, 0.75, 0.93, 0.92)
@@ -184,45 +175,58 @@ def print_eff_table(cut, label="test"):
 	myC.SaveAs(outputDir+"/stack/sigEff_vs_lambda_"+label+".C")
 	
 
+def print_2ndPhoton_triggerEff(fileName):
+	fileThis = TFile(fileName, "READ")			
+	treeThis = fileThis.Get("DelayedPhoton")
+	
+	cut_without_trigger_1stPhoton = "n_Jets > 2&& n_Photons == 2   && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight"
+
+	print "HoverE, Sieie, Isolation, N_withoutTriggerCut, N_withTriggerCut, eff"	
+	HoverE_cuts = [0.01, 0.02, 0.04, 0.06, 0.08, 0.1]
+	Sieie_cuts = [0.01, 0.015, 0.02, 0.025, 0.03]
+	Isolation_cuts = [1.0, 3.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
+	for HoverE_this in HoverE_cuts:
+		for Sieie_this in Sieie_cuts:
+			for Isolation_this in Isolation_cuts:
+				cut_without_trigger_this = cut_without_trigger_1stPhoton + " && pho2ecalPFClusterIso<"+str(Isolation_this)+" && pho2sumNeutralHadronEt < "+str(Isolation_this) + " && pho2trkSumPtHollowConeDR03 < "+str(Isolation_this) + " && pho2SigmaIetaIeta<"+str(Sieie_this) + " && pho2HoverE < "+str(HoverE_this)	
+				cut_with_trigger_this = cut_without_trigger_this + " && (HLTDecision[81] == 1)"
+				N_without_trigger = treeThis.GetEntries(cut_without_trigger_this)
+				N_with_trigger = treeThis.GetEntries(cut_with_trigger_this)
+				print str(HoverE_this)+", "+str(Sieie_this)+", "+str(Isolation_this)+", "+str(N_without_trigger)+", "+str(N_with_trigger)+", "+str(N_with_trigger*1.0/N_without_trigger)
+	
+
+
+
 f2=open(tableFileName, 'a') 
 print >> f2, "------------------------------------------------"
 print >> f2, "cut_tight_3J_2G"
 print >> f2, "------------------------------------------------"
+print cut_tight_3J_2G
 #print_eff_table(cut_tight_3J_2G, "3J2G")
 
-print cut_tight_3J_2G
-
 '''
 f2=open(tableFileName, 'a') 
 print >> f2, "------------------------------------------------"
-print >> f2, "cut_tight_3J_2G_looseG2"
+print >> f2, "cut_tight_3J_2G_g2tight"
 print >> f2, "------------------------------------------------"
-print_eff_table(cut_tight_3J_2G_looseG2)
-
-
-f2=open(tableFileName, 'a') 
-print >> f2, "------------------------------------------------"
-print >> f2, "cut_tight_3J_1G"
-print >> f2, "------------------------------------------------"
-print_eff_table(cut_tight_3J_1G)
-
+print cut_tight_3J_2G_g2tight
+print_eff_table(cut_tight_3J_2G_g2tight, "3J2G_g2tight")
 
 f2=open(tableFileName, 'a') 
 print >> f2, "------------------------------------------------"
-print >> f2, "cut_tight_2J_2G"
+print >> f2, "cut_tight_3J_2G_g2trigger"
 print >> f2, "------------------------------------------------"
-print_eff_table(cut_tight_2J_2G)
-
-
-f2=open(tableFileName, 'a') 
-print >> f2, "------------------------------------------------"
-print >> f2, "cut_tight_2J_1G"
-print >> f2, "------------------------------------------------"
-print_eff_table(cut_tight_2J_1G)
-
-f2=open(tableFileName, 'a') 
-print >> f2, "------------------------------------------------"
-print >> f2, "cut_tight_e2J_2G"
-print >> f2, "------------------------------------------------"
-print_eff_table(cut_tight_e2J_2G)
+print cut_tight_3J_2G_g2trigger
+print_eff_table(cut_tight_3J_2G_g2trigger, "3J2G_g2trigger")
 '''
+
+
+
+#print cut_GJets
+#print_eff_table(cut_GJets, "GJetsCR")
+
+#print cut_QCD_CR
+#print_eff_table(cut_QCD_CR, "QCDCR")
+
+
+

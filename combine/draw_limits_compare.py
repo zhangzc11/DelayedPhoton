@@ -4,23 +4,25 @@ from Aux import *
 import numpy as np
 import array
 
-lumi = 35922.0 + 41530.0
+lumi = 35922.0  + 41530.0
 
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/PreApp_Apr2019/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/ARCReview_June2019/orderByPt/'
 
-v1_tag = "v8"
-v2_tag = "v15"
-v1_label = "2016 + 2017 one category"
-v2_label = "2016 + 2017 two categories"
+v1_tag = "v18"
+v2_tag = "v20"
+v1_label = "Closure C: 2% - 3.5%"
+v2_label = "Closure C: 100%"
 
-v1_dir = "limitTrees_v8"
-v2_dir = "limitTrees_v15"
+v1_dir = "limitTrees_v18"
+v2_dir = "limitTrees_v20"
+year_to_plot = "2016And2017"
+
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
-ctau_points = [10.0, 200, 400, 600, 800, 1000, 1200, 10000]
+ctau_points = [10.0, 50, 100, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
-drawObs=False
+drawObs=True
 gROOT.SetBatch(True)
 
 gStyle.SetOptStat(0)
@@ -32,12 +34,12 @@ np.set_printoptions(linewidth=200)
 
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/limits")
-os.system("cp draw_limits.py "+outputDir+"/limits")
+os.system("cp draw_limits_compare.py "+outputDir+"/limits")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 
 axisTitleSize = 0.044
-axisTitleOffset = 0.9
+axisTitleOffset = 1.2
 axisTitleSizeRatioX   = 0.18
 axisLabelSizeRatioX   = 0.12
 axisTitleOffsetRatioX = 0.94
@@ -50,7 +52,6 @@ rightMargin  = 0.05
 topMargin    = 0.07
 bottomMargin = 0.12
 bottomMargin2 = 0.22
-
 
 myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
 myC.SetHighLightColor(2)
@@ -139,19 +140,25 @@ for ctau_this in ctau_points:
                         limits_SF = 0.01
                 if lambda_this == 150 and ctau_this == 10:
                         limits_SF = 0.01
+                if lambda_this == 150 and ctau_this == 50:
+                        limits_SF = 0.01
+                if lambda_this == 150 and ctau_this == 100:
+                        limits_SF = 0.01
+                if lambda_this == 150 and ctau_this == 200:
+                        limits_SF = 0.01
 
 		minsize = 1000
 		actualsize_v1 = 0
 		actualsize_v2 = 0
-		if os.path.isfile(v1_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root"):
-			actualsize_v1 = os.path.getsize(v1_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")	
-		if os.path.isfile(v2_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root"):
-			actualsize_v2 = os.path.getsize(v2_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")	
+		if os.path.isfile(v1_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_"+year_to_plot+".Asymptotic.mH120.root"):
+			actualsize_v1 = os.path.getsize(v1_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_"+year_to_plot+".Asymptotic.mH120.root")	
+		if os.path.isfile(v2_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_"+year_to_plot+".Asymptotic.mH120.root"):
+			actualsize_v2 = os.path.getsize(v2_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_"+year_to_plot+".Asymptotic.mH120.root")	
 
 		if actualsize_v1 > minsize and actualsize_v2 > minsize:
 			th_xsec_this, eth_xsec_this = getXsecBR(lambda_this, ctau_this)
 
-			file_limit_v1 = TFile(v1_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")
+			file_limit_v1 = TFile(v1_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_"+year_to_plot+".Asymptotic.mH120.root")
 			limits_v1 = []
 			limitTree_v1 = file_limit_v1.Get("limit")
 			for entry in limitTree_v1:
@@ -159,7 +166,7 @@ for ctau_this in ctau_points:
 			print "v1 limits:"
 			print limits_v1
 
-			file_limit_v2 = TFile(v2_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_2016And2017.Asymptotic.mH120.root")
+			file_limit_v2 = TFile(v2_dir+"/higgsCombineL"+str(lambda_this)+"TeV_CTau"+ctau_this_str+"cm_"+year_to_plot+".Asymptotic.mH120.root")
 			limits_v2 = []
 			limitTree_v2 = file_limit_v2.Get("limit")
 			for entry in limitTree_v2:
@@ -300,9 +307,9 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass_v1.AddEntry(graph_limit_vs_mass_v1_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass_v1.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v1_tag+"_ctau"+ctau_this_str+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v1_tag+"_ctau"+ctau_this_str+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v1_tag+"_ctau"+ctau_this_str+".C")
+	#myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v1_tag+"_ctau"+ctau_this_str+".pdf")
+	#myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v1_tag+"_ctau"+ctau_this_str+".png")
+	#myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v1_tag+"_ctau"+ctau_this_str+".C")
 
 	#v2
 	graph_limit_vs_mass_v2_obs_limit = TGraph(NPoints_mass, np.array(xValue_mass), np.array(yValue_limit_this_v2_obs))
@@ -371,9 +378,9 @@ for ctau_this in ctau_points:
 	leg_limit_vs_mass_v2.AddEntry(graph_limit_vs_mass_v2_exp2sigma_limit, "#pm 2 #sigma Expected", "F")
 	leg_limit_vs_mass_v2.Draw()
 
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v2_tag+"_ctau"+ctau_this_str+".pdf")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v2_tag+"_ctau"+ctau_this_str+".png")
-	myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v2_tag+"_ctau"+ctau_this_str+".C")
+	#myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v2_tag+"_ctau"+ctau_this_str+".pdf")
+	#myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v2_tag+"_ctau"+ctau_this_str+".png")
+	#myC.SaveAs(outputDir+"/limits"+"/limit_vs_mass_"+v2_tag+"_ctau"+ctau_this_str+".C")
 
 ##################exclusion region of ctau and Lambda/mass #######################
 
@@ -520,7 +527,7 @@ graph_exclusion_exp_v1.SetLineColor(kBlue+1)
 graph_exclusion_exp_v1.SetLineWidth(3)
 graph_exclusion_exp_v1.SetFillColorAlpha(kBlue+1, 0.65)
 graph_exclusion_exp_v1.SetFillStyle(3353)
-#graph_exclusion_exp_v1.SetLineStyle(kDashed)
+graph_exclusion_exp_v1.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_v1.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_v1.SetMarkerSize(0.0)
@@ -541,7 +548,7 @@ graph_exclusion_obs_v1.SetMarkerStyle(19)
 graph_exclusion_obs_v1.SetMarkerSize(0.0)
 graph_exclusion_obs_v1.SetLineColor(kBlack)
 graph_exclusion_obs_v1.SetLineWidth(3)
-graph_exclusion_obs_v1.SetLineStyle(kDashed)
+#graph_exclusion_obs_v1.SetLineStyle(kDashed)
 
 ###v2 only
 graph_exclusion_exp_v2 = TGraph(len(lambda_point_boundary_exp_v2), np.array(1.454*lambda_point_boundary_exp_v2-6.0), np.array(ctau_points))
@@ -566,7 +573,7 @@ graph_exclusion_exp_v2.SetLineColor(kGreen+3)
 graph_exclusion_exp_v2.SetLineWidth(3)
 graph_exclusion_exp_v2.SetFillColorAlpha(kGreen+3, 0.65)
 graph_exclusion_exp_v2.SetFillStyle(3353)
-#graph_exclusion_exp_v2.SetLineStyle(kDashed)
+graph_exclusion_exp_v2.SetLineStyle(kDashed)
 
 graph_exclusion_exp_p1sig_v2.SetMarkerStyle(19)
 graph_exclusion_exp_p1sig_v2.SetMarkerSize(0.0)
@@ -587,9 +594,9 @@ graph_exclusion_obs_v2.SetMarkerStyle(19)
 graph_exclusion_obs_v2.SetMarkerSize(0.0)
 graph_exclusion_obs_v2.SetLineColor(kBlack)
 graph_exclusion_obs_v2.SetLineWidth(3)
-graph_exclusion_obs_v2.SetLineStyle(kDashed)
+#graph_exclusion_obs_v2.SetLineStyle(kDashed)
 
-###overlay v2 and v2
+###overlay v1 and v2
 
 graph_exclusion_exp_v1.SetMarkerStyle(19)
 graph_exclusion_exp_v1.SetLineColor(kRed)
@@ -600,7 +607,7 @@ graph_exclusion_exp_m1sig_v1.SetLineColor(kGray+1)
 graph_exclusion_exp_pm1sig_v1.SetFillColorAlpha(kGray+1, 0.85)
 graph_exclusion_exp_pm1sig_v1.SetFillStyle(3356)
 graph_exclusion_obs_v1.SetMarkerStyle(19)
-graph_exclusion_obs_v1.SetLineColor(kBlack)
+graph_exclusion_obs_v1.SetLineColor(kRed)
 
 graph_exclusion_exp_v2.SetMarkerStyle(19)
 graph_exclusion_exp_v2.SetLineColor(kBlue)
@@ -611,7 +618,7 @@ graph_exclusion_exp_m1sig_v2.SetLineColor(4)
 graph_exclusion_exp_pm1sig_v2.SetFillColorAlpha(4, 0.65)
 graph_exclusion_exp_pm1sig_v2.SetFillStyle(3365)
 graph_exclusion_obs_v2.SetMarkerStyle(19)
-graph_exclusion_obs_v2.SetLineColor(kBlack)
+graph_exclusion_obs_v2.SetLineColor(kBlue)
 
 graph_exclusion_exp_v2.Draw("AL")
 #graph_exclusion_exp_p1sig_v2.Draw("Lsame")
@@ -635,15 +642,18 @@ leg_2d_exclusion_v1_v2.SetLineWidth(1)
 leg_2d_exclusion_v1_v2.SetFillColor(0)
 leg_2d_exclusion_v1_v2.SetFillStyle(1001)
 
-leg_2d_exclusion_v1_v2.AddEntry(graph_exclusion_exp_v1, v1_label, "L")
-leg_2d_exclusion_v1_v2.AddEntry(graph_exclusion_exp_v2, v2_label, "L")
+leg_2d_exclusion_v1_v2.AddEntry(graph_exclusion_exp_v1, v1_label+" Exp", "L")
+leg_2d_exclusion_v1_v2.AddEntry(graph_exclusion_exp_v2, v2_label+" Exp", "L")
+if drawObs:
+	leg_2d_exclusion_v1_v2.AddEntry(graph_exclusion_obs_v1, v1_label+" Obs", "L")
+	leg_2d_exclusion_v1_v2.AddEntry(graph_exclusion_obs_v2, v2_label+" Obs", "L")
 
 leg_2d_exclusion_v1_v2.Draw()
 
 drawCMS2(myC2D, 13, lumi)
 
 f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-A1_lambda = TGaxis(100.0, 0.05,600.0,0.05,"f1",1010)
+A1_lambda = TGaxis(100.0, 0.02,600.0,0.02,"f1",1010,"NI")
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)
@@ -651,10 +661,9 @@ A1_lambda.SetTextSize(1.2)
 A1_lambda.SetTitle("#Lambda [TeV]")
 A1_lambda.SetTitleSize(0.04)
 A1_lambda.SetTitleOffset(0.9)
-
 A1_lambda.Draw()
 
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_"+v1_tag+"_vs_"+v2_tag+".pdf")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_"+v1_tag+"_vs_"+v2_tag+".png")
-myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_"+v1_tag+"_vs_"+v2_tag+".C")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_"+year_to_plot+"_"+v1_tag+"_vs_"+v2_tag+".pdf")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_"+year_to_plot+"_"+v1_tag+"_vs_"+v2_tag+".png")
+myC2D.SaveAs(outputDir+"/limits"+"/limit_exclusion_region_2D_"+year_to_plot+"_"+v1_tag+"_vs_"+v2_tag+".C")
 

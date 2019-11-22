@@ -6,8 +6,31 @@ import array
 
 from config_noBDT import lumi
 from config_noBDT import kFactor
-from config_noBDT import splots
 from config_noBDT import outputDir
+
+splots = []
+
+time_binning = np.array([-5.0, -2.0, -1.0, 0.0, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 1.8, 2.1, 2.4, 3.0, 4.0, 5.0, 6.0, 8.0, 12.0, 20.0])
+#time_binning = np.arange(-5.0, 25.0, 1.0)
+#MET_binning = np.array([0.0, 60.0, 100.0, 140.0, 200.0, 300.0, 450.0, 650.0, 1000.0])
+MET_binning = np.arange(0.0, 1000.0, 20.0)
+nPV_binning = np.arange(-0.5, 49.5, 1.0)
+nJets_binning = np.arange(-0.5, 14.5, 1.0)
+
+
+splots.append(["t1MET", "MET_log", "#slash{E}_{T} [GeV]", MET_binning, True])
+splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_log", "#gamma cluster time [ns]", time_binning, True])
+splots.append(["pho1Pt", "phoPt_log", "p_{T}^{#gamma} [GeV]", np.arange(40.0, 1000.0, 20.0), True])
+splots.append(["pho1SigmaIetaIeta", "phoSigmaIetaIeta_log", "#sigma_{i#eta i#eta}", np.arange(0.005,0.025, 0.001), True])
+
+splots.append(["t1MET", "MET_linear", "#slash{E}_{T} [GeV]", MET_binning, False])
+splots.append(["pho1ClusterTime_SmearToData", "phoTimeCluster_linear", "#gamma cluster time [ns]", time_binning, False])
+
+splots.append(["n_Jets", "nJets_linear", "number of jets", nJets_binning, False])
+splots.append(["n_Jets", "nJets_log", "number of jets", nJets_binning, True])
+
+splots.append(["nPV", "nPV_linear", "number of vertices", nPV_binning, False])
+splots.append(["nPV", "nPV_log", "number of vertices", nPV_binning, True])
 
 gROOT.SetBatch(True)
 
@@ -34,17 +57,16 @@ topMargin    = 0.07
 bottomMargin = 0.12
 ##############load delayed photon input tree#############
 
-inputDir = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/'
+inputDir = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/'
 
 samples = [
-		['GMSB_L300TeV_Ctau0_1cm_13TeV-pythia8', 'L300TeV_Ctau0_1cm', 2.54941e-05],
-		['GMSB_L300TeV_Ctau1200cm_13TeV-pythia8', 'L300TeV_Ctau1200cm', 2.50444e-05]
+		['GMSB_L200TeV_Ctau200cm_13TeV-pythia8', 'L200TeV_Ctau200cm', 0.04445]
 	  ]
 
 
 os.system("mkdir -p "+outputDir+"/stack/")
 
-cut = "(weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight) * (n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2  && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1Pt > 70 && abs(pho1Eta)<1.44 && pho1passIsoTight_PFClusterIso && pho1passEleVeto && pho1Sminor>0.15 && pho1Sminor<0.3 && pho1SigmaIetaIeta < 0.00994)"
+cut = "(weight*pileupWeight*triggerEffSFWeight*photonEffSF*triggerEffWeight)" # * (n_Jets > 2 && (HLTDecision[81] == 1) && n_Photons == 2 && nTightMuons < 1  && Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho1Pt > 70 && pho1R9 > 0.9 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto && pho1Sminor<0.4 && pho1passSigmaIetaIetaTight && pho1passHoverETight && pho1passSmajorTight && pho2SigmaIetaIeta < 0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso < 30.0 && pho2sumNeutralHadronEt < 30.0 && pho2trkSumPtHollowConeDR03 < 30.0)"
 
 def properScale(hist, norm):
         #norm = 1.0/hist.Integral()
@@ -52,11 +74,9 @@ def properScale(hist, norm):
                 v0 = hist.GetBinContent(i)
                 hist.SetBinContent(i, norm*v0)
                 if v0 > 0.0000001:
-                        hist.SetBinError(i, norm*v0/np.sqrt(v0))
+                        hist.SetBinError(i, norm*v0/(np.sqrt(v0)))
                 else:
                         hist.SetBinError(i, 0.0)
-
-
 
 for sample in samples:
 	
@@ -87,7 +107,7 @@ for sample in samples:
 		pad1.SetBottomMargin(0)
 		pad1.SetRightMargin( 0.05 )
 		pad1.SetLeftMargin( leftMargin )
-		pad1.SetLogy(plot[6])
+		pad1.SetLogy(plot[4])
 		pad1.Draw()
 
 		pad2 = TPad("pad2","pad2", 0.05, 0.02, 0.95, 0.29)
@@ -100,15 +120,15 @@ for sample in samples:
 		pad2.Draw()
 
 		pad1.cd()
-		hist_official = TH1F("hist"+plot[1]+"_official","", plot[3], plot[4], plot[5])
-		hist_private = TH1F("hist"+plot[1]+"_private","", plot[3], plot[4], plot[5])
+		hist_official = TH1F("hist"+plot[1]+"_official","", len(plot[3])-1, plot[3])
+		hist_private = TH1F("hist"+plot[1]+"_private","", len(plot[3])-1, plot[3])
 		tree_in_official.Draw(plot[0]+">>hist"+plot[1]+"_official",cut)
 		tree_in_private.Draw(plot[0]+">>hist"+plot[1]+"_private",cut)
 
 		if hist_official.Integral() > 0.0:
-			properScale(hist_official, lumi*sample[2]*kFactor/NEvents_official)
+			properScale(hist_official, lumi*sample[2]/NEvents_official)
 		if hist_private.Integral() > 0.0:
-			properScale(hist_private, lumi*sample[2]*kFactor/NEvents_private)
+			properScale(hist_private, lumi*sample[2]/NEvents_private)
 
 		hist_official.SetTitle("")
 		hist_official.SetLineWidth(2)
@@ -118,10 +138,10 @@ for sample in samples:
 		hist_official.Draw("E")
 		hist_official.GetXaxis().SetTitleSize( axisTitleSize )
 		hist_official.GetXaxis().SetTitleOffset( axisTitleOffset )
-		hist_official.GetYaxis().SetTitle( "events" )
+		hist_official.GetYaxis().SetTitle( "Events" )
 		hist_official.GetYaxis().SetTitleSize( axisTitleSize )
 		hist_official.GetYaxis().SetTitleOffset( axisTitleOffset )
-		if plot[6]:
+		if plot[4]:
 			hist_official.GetYaxis().SetRangeUser(1e-4, max(hist_official.GetMaximum(), hist_private.GetMaximum())*100.0 )
 		else:
 			hist_official.GetYaxis().SetRangeUser(0, max(hist_official.GetMaximum(), hist_private.GetMaximum())*1.5 )
@@ -146,7 +166,7 @@ for sample in samples:
 
 		pad1.Update()
 		pad2.cd()
-		ratio = TH1F("ratio_"+plot[1],"", plot[3],plot[4],plot[5])
+		ratio = TH1F("ratio_"+plot[1],"", len(plot[3])-1, plot[3])
 		ratio.Add(hist_private)
 		ratio.Divide(hist_official)
 		ratio.SetMarkerStyle( 20 )
@@ -160,10 +180,10 @@ for sample in samples:
 		ratio.SetMarkerColor( kBlue )
 		ratio.SetLineColor( kBlue )
 		ratio.GetYaxis().SetTitle( "ratio" )
-		ratio.GetYaxis().SetRangeUser( 0.0, 2.5 )
+		ratio.GetYaxis().SetRangeUser( 0.6, 1.4 )
 		ratio.SetTitle("")
 		ratio.GetYaxis().CenterTitle( True )
-		ratio.GetYaxis().SetNdivisions( 5, False )
+		ratio.GetYaxis().SetNdivisions( 508, False )
 		ratio.SetStats( 0 )
 		ratio.Draw("E")
 		pad1.Update()

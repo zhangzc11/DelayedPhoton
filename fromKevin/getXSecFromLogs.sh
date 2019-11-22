@@ -9,6 +9,7 @@ echo "Copying log tar files"
 
 ## GET LOGS FROM EOS
 timestamp=$(ls ${path})
+echo "cp ${path}/${timestamp}/0000/log/cmsRun_*.log.tar.gz ."
 cp ${path}/${timestamp}/0000/log/cmsRun_*.log.tar.gz .
 
 echo "Extracting xsecs..."

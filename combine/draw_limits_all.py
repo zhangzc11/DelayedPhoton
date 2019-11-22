@@ -7,14 +7,14 @@ import array
 lumi_2016 = 35922.0
 lumi_2017 = 41530.0
 lumi = lumi_2016+lumi_2017
-outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/PreApp_Apr2019/orderByPt/'
+outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/ARCReview_June2019/orderByPt/'
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
 ctau_points = [10.0, 50, 100, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
-tree_dir = "limitTrees_v17"
-plot_tag = "_v17"
+tree_dir = "limitTrees_v18"
+plot_tag = "_v18"
 
 drawObs=True
 gROOT.SetBatch(True)
@@ -28,7 +28,7 @@ np.set_printoptions(linewidth=200)
 
 os.system("mkdir -p "+outputDir)
 os.system("mkdir -p "+outputDir+"/limits")
-os.system("cp draw_limits.py "+outputDir+"/limits")
+os.system("cp draw_limits_all.py "+outputDir+"/limits")
 #os.system("mkdir -p ../data")
 #################plot settings###########################
 
@@ -41,14 +41,14 @@ axisTitleSizeRatioY   = 0.15
 axisLabelSizeRatioY   = 0.108
 axisTitleOffsetRatioY = 0.32
 
-leftMargin   = 0.12
-rightMargin  = 0.05
-topMargin    = 0.07
-bottomMargin = 0.12
+leftMargin   = 0.18
+rightMargin  = 0.15
+topMargin    = 0.05
+bottomMargin = 0.14
 bottomMargin2 = 0.22
 
 
-myC = TCanvas( "myC", "myC", 200, 10, 800, 800 )
+myC = TCanvas( "myC", "myC", 200, 10, 700, 600 )
 myC.SetHighLightColor(2)
 myC.SetFillColor(0)
 myC.SetBorderMode(0)
@@ -426,7 +426,7 @@ for ctau_this in ctau_points:
 	graph_limit_vs_mass_2016_exp_limit.Draw("Lsame")
 	graph_limit_vs_mass_2016_Th_limit.Draw("Lsame")
 
-	drawCMS2(myC, 13, lumi_2016)
+	drawCMS3(myC, 13, lumi_2016)
 
 	leg_limit_vs_mass_2016 = TLegend(0.25,0.62,0.9,0.89)
 
@@ -497,7 +497,7 @@ for ctau_this in ctau_points:
 	graph_limit_vs_mass_2017CAT1_exp_limit.Draw("Lsame")
 	graph_limit_vs_mass_2017CAT1_Th_limit.Draw("Lsame")
 
-	drawCMS2(myC, 13, lumi_2017)
+	drawCMS3(myC, 13, lumi_2017)
 
 	leg_limit_vs_mass_2017CAT1 = TLegend(0.25,0.62,0.9,0.89)
 
@@ -568,7 +568,7 @@ for ctau_this in ctau_points:
 	graph_limit_vs_mass_2017CAT2_exp_limit.Draw("Lsame")
 	graph_limit_vs_mass_2017CAT2_Th_limit.Draw("Lsame")
 
-	drawCMS2(myC, 13, lumi_2017)
+	drawCMS3(myC, 13, lumi_2017)
 
 	leg_limit_vs_mass_2017CAT2 = TLegend(0.25,0.62,0.9,0.89)
 
@@ -641,7 +641,7 @@ for ctau_this in ctau_points:
 	graph_limit_vs_mass_2017_exp_limit.Draw("Lsame")
 	graph_limit_vs_mass_2017_Th_limit.Draw("Lsame")
 
-	drawCMS2(myC, 13, lumi_2017)
+	drawCMS3(myC, 13, lumi_2017)
 
 	leg_limit_vs_mass_2017 = TLegend(0.25,0.62,0.9,0.89)
 
@@ -712,7 +712,7 @@ for ctau_this in ctau_points:
 	graph_limit_vs_mass_2016And2017_exp_limit.Draw("Lsame")
 	graph_limit_vs_mass_2016And2017_Th_limit.Draw("Lsame")
 
-	drawCMS2(myC, 13, lumi)
+	drawCMS3(myC, 13, lumi)
 
 	leg_limit_vs_mass_2016And2017 = TLegend(0.25,0.62,0.9,0.89)
 
@@ -779,7 +779,7 @@ for ctau_this in ctau_points:
 
 	graph_limit_vs_mass_2016_Th_limit.Draw("Lsame")
 
-	drawCMS2(myC, 13, lumi)
+	drawCMS3(myC, 13, lumi)
 
 	leg_limit_vs_mass = TLegend(0.25,0.60,0.9,0.89)
 
@@ -1031,7 +1031,7 @@ print lambda_point_boundary_exp_m1sig_2016And2017
 print "obs (2016And2017) exclusion lambda boundary for different ctau:"
 print lambda_point_boundary_obs_2016And2017
 
-myC2D = TCanvas( "myC2D", "myC2D", 200, 10, 800, 800 )
+myC2D = TCanvas( "myC2D", "myC2D", 200, 10, 700, 600 )
 myC2D.SetHighLightColor(2)
 myC2D.SetFillColor(0)
 myC2D.SetBorderMode(0)
@@ -1046,6 +1046,9 @@ myC2D.SetLogy(1)
 myC2D.SetLogx(1)
 myC2D.SetLogy(1)
 myC2D.SetLogx(0)
+myC2D.SetTickx(1)
+myC2D.SetTicky(1)
+
 
 lambda_point_boundary_exp_pm1sig_2016 = []
 lambda_point_boundary_exp_pm1sig_2017 = []
@@ -1082,9 +1085,9 @@ graph_exclusion_exp_2016.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp_2016.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp_2016.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2016.GetXaxis().SetLimits(100.0, 650.0)
 graph_exclusion_exp_2016.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2016.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2016.GetYaxis().SetRangeUser(9.0,5.0e6)
 graph_exclusion_exp_2016.SetTitle("")
 
 graph_exclusion_exp_2016.SetMarkerStyle(19)
@@ -1160,7 +1163,7 @@ graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 
 ####legend
-leg_2d_exclusion_2016 = TLegend(0.28,0.64,0.92,0.91)
+leg_2d_exclusion_2016 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2016.SetBorderSize(0)
 leg_2d_exclusion_2016.SetTextSize(0.03)
 leg_2d_exclusion_2016.SetLineColor(1)
@@ -1179,11 +1182,11 @@ leg_2d_exclusion_2016.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamm
 
 leg_2d_exclusion_2016.Draw()
 
-drawCMS2(myC2D, 13, lumi_2016)
+drawCMS3(myC2D, 13, lumi_2016)
 
 #Lambda axis
-f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-A1_lambda = TGaxis(100.0, 0.02,600.0,0.02,"f1",1010)
+f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 451.17)
+A1_lambda = TGaxis(100.0, 0.6,650.0,0.6,"f1",1010,"NI")
 A1_lambda.SetLabelFont(42)
 A1_lambda.SetLabelSize(0.035)
 A1_lambda.SetTextFont(42)
@@ -1209,9 +1212,9 @@ graph_exclusion_exp_2017CAT1.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017CAT1.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp_2017CAT1.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017CAT1.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp_2017CAT1.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2017CAT1.GetXaxis().SetLimits(100.0, 650.0)
 graph_exclusion_exp_2017CAT1.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2017CAT1.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2017CAT1.GetYaxis().SetRangeUser(9.0,5.0e6)
 graph_exclusion_exp_2017CAT1.SetTitle("")
 
 graph_exclusion_exp_2017CAT1.SetMarkerStyle(19)
@@ -1255,7 +1258,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2017CAT1 = TLegend(0.28,0.64,0.92,0.91)
+leg_2d_exclusion_2017CAT1 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2017CAT1.SetBorderSize(0)
 leg_2d_exclusion_2017CAT1.SetTextSize(0.03)
 leg_2d_exclusion_2017CAT1.SetLineColor(1)
@@ -1274,7 +1277,7 @@ leg_2d_exclusion_2017CAT1.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #
 
 leg_2d_exclusion_2017CAT1.Draw()
 
-drawCMS2(myC2D, 13, lumi_2017)
+drawCMS3(myC2D, 13, lumi_2017)
 
 A1_lambda.Draw()
 
@@ -1295,9 +1298,9 @@ graph_exclusion_exp_2017CAT2.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017CAT2.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp_2017CAT2.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017CAT2.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp_2017CAT2.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2017CAT2.GetXaxis().SetLimits(100.0, 650.0)
 graph_exclusion_exp_2017CAT2.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2017CAT2.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2017CAT2.GetYaxis().SetRangeUser(9.0,5.0e6)
 graph_exclusion_exp_2017CAT2.SetTitle("")
 
 graph_exclusion_exp_2017CAT2.SetMarkerStyle(19)
@@ -1342,7 +1345,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2017CAT2 = TLegend(0.28,0.64,0.92,0.91)
+leg_2d_exclusion_2017CAT2 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2017CAT2.SetBorderSize(0)
 leg_2d_exclusion_2017CAT2.SetTextSize(0.03)
 leg_2d_exclusion_2017CAT2.SetLineColor(1)
@@ -1361,7 +1364,7 @@ leg_2d_exclusion_2017CAT2.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #
 
 leg_2d_exclusion_2017CAT2.Draw()
 
-drawCMS2(myC2D, 13, lumi_2017)
+drawCMS3(myC2D, 13, lumi_2017)
 
 A1_lambda.Draw()
 
@@ -1382,9 +1385,9 @@ graph_exclusion_exp_2017.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp_2017.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2017.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp_2017.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2017.GetXaxis().SetLimits(100.0, 650.0)
 graph_exclusion_exp_2017.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2017.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2017.GetYaxis().SetRangeUser(9.0,5.0e6)
 graph_exclusion_exp_2017.SetTitle("")
 
 graph_exclusion_exp_2017.SetMarkerStyle(19)
@@ -1429,7 +1432,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2017 = TLegend(0.28,0.64,0.92,0.91)
+leg_2d_exclusion_2017 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2017.SetBorderSize(0)
 leg_2d_exclusion_2017.SetTextSize(0.03)
 leg_2d_exclusion_2017.SetLineColor(1)
@@ -1448,7 +1451,7 @@ leg_2d_exclusion_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamm
 
 leg_2d_exclusion_2017.Draw()
 
-drawCMS2(myC2D, 13, lumi_2017)
+drawCMS3(myC2D, 13, lumi_2017)
 
 A1_lambda.Draw()
 
@@ -1469,9 +1472,9 @@ graph_exclusion_exp_2016And2017.GetXaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016And2017.GetYaxis().SetTitleSize( axisTitleSize )
 graph_exclusion_exp_2016And2017.GetYaxis().SetTitleOffset( axisTitleOffset )
 graph_exclusion_exp_2016And2017.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} [GeV]")
-graph_exclusion_exp_2016And2017.GetXaxis().SetLimits(100.0, 600.0)
+graph_exclusion_exp_2016And2017.GetXaxis().SetLimits(100.0, 650.0)
 graph_exclusion_exp_2016And2017.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} [cm]")
-graph_exclusion_exp_2016And2017.GetYaxis().SetRangeUser(0.5,1.0e7)
+graph_exclusion_exp_2016And2017.GetYaxis().SetRangeUser(9.0,5.0e6)
 graph_exclusion_exp_2016And2017.SetTitle("")
 
 graph_exclusion_exp_2016And2017.SetMarkerStyle(19)
@@ -1516,7 +1519,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2016And2017 = TLegend(0.28,0.64,0.92,0.91)
+leg_2d_exclusion_2016And2017 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2016And2017.SetBorderSize(0)
 leg_2d_exclusion_2016And2017.SetTextSize(0.03)
 leg_2d_exclusion_2016And2017.SetLineColor(1)
@@ -1535,7 +1538,7 @@ leg_2d_exclusion_2016And2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 Te
 
 leg_2d_exclusion_2016And2017.Draw()
 
-drawCMS2(myC2D, 13, lumi)
+drawCMS3(myC2D, 13, lumi)
 
 A1_lambda.Draw()
 
@@ -1572,7 +1575,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2016_2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016_2017 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2016_2017.SetBorderSize(0)
 leg_2d_exclusion_2016_2017.SetTextSize(0.03)
 leg_2d_exclusion_2016_2017.SetLineColor(1)
@@ -1595,7 +1598,7 @@ leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV 
 
 leg_2d_exclusion_2016_2017.Draw()
 
-drawCMS2(myC2D, 13, lumi)
+drawCMS3(myC2D, 13, lumi)
 
 A1_lambda.Draw()
 
@@ -1634,7 +1637,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2016_2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016_2017 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2016_2017.SetBorderSize(0)
 leg_2d_exclusion_2016_2017.SetTextSize(0.03)
 leg_2d_exclusion_2016_2017.SetLineColor(1)
@@ -1657,7 +1660,7 @@ leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV 
 
 leg_2d_exclusion_2016_2017.Draw()
 
-drawCMS2(myC2D, 13, lumi_2017)
+drawCMS3(myC2D, 13, lumi_2017)
 
 A1_lambda.Draw()
 
@@ -1688,7 +1691,7 @@ graph_exclusion_cms_8TeV_1g.Draw("Fsames")
 graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 ####legend
-leg_2d_exclusion_2016_2017 = TLegend(0.35,0.64,0.92,0.91)
+leg_2d_exclusion_2016_2017 = TLegend(0.2,0.64,0.84,0.91)
 leg_2d_exclusion_2016_2017.SetBorderSize(0)
 leg_2d_exclusion_2016_2017.SetTextSize(0.03)
 leg_2d_exclusion_2016_2017.SetLineColor(1)
@@ -1709,7 +1712,7 @@ leg_2d_exclusion_2016_2017.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV 
 
 leg_2d_exclusion_2016_2017.Draw()
 
-drawCMS2(myC2D, 13, lumi)
+drawCMS3(myC2D, 13, lumi)
 
 A1_lambda.Draw()
 

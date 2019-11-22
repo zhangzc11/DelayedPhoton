@@ -189,6 +189,10 @@ ey_E_sigma_time_diff = np.zeros(N_E_points)
 ey_E_sigma_time_diff_corr = np.zeros(N_E_points)
 
 
+gStyle.SetOptFit(1)
+
+myC.SetLogy(1)
+
 for i in range(0, N_E_points):
 	x_E[i] = 0.5*(E_divide[i+1]+E_divide[i])
 	ex_E[i] = 0.5*(E_divide[i+1]-E_divide[i])
@@ -197,8 +201,8 @@ for i in range(0, N_E_points):
 	cut_1e_this = cut+" && ele1E > "+str(E_low_this)+" && ele1E < "+str(E_high_this)
 	cut_2e_this = cut+" && ele1E > "+str(E_low_this)+" && ele1E < "+str(E_high_this)+" && ele2E < "+str(E_high_this)
 
-	hist_1e_this_data = TH1F("hist_1e_this_data_"+str(i),"hist_1e_this_data_"+str(i), 60, -1.5, 1.5)
-	hist_2e_this_data = TH1F("hist_2e_this_data_"+str(i),"hist_2e_this_data_"+str(i), 60, -1.5, 1.5)
+	hist_1e_this_data = TH1F("hist_1e_this_data_"+str(i),"hist_1e_this_data_"+str(i), 120, -3.0, 3.0)
+	hist_2e_this_data = TH1F("hist_2e_this_data_"+str(i),"hist_2e_this_data_"+str(i), 120, -3.0, 3.0)
 	tree_data.Draw("t1>>hist_1e_this_data_"+str(i), cut_1e_this)
 	tree_data.Draw("t1-t2>>hist_2e_this_data_"+str(i), cut_2e_this)
 	hist_1e_this_data.Draw()
@@ -215,8 +219,8 @@ for i in range(0, N_E_points):
 	ey_E_sigma_time_data[i] = result_1e_this_data[3]
 
 
-	hist_1e_this_MC = TH1F("hist_1e_this_MC_"+str(i),"hist_1e_this_MC_"+str(i), 60, -1.5, 1.5)
-	hist_2e_this_MC = TH1F("hist_2e_this_MC_"+str(i),"hist_2e_this_MC_"+str(i), 60, -1.5, 1.5)
+	hist_1e_this_MC = TH1F("hist_1e_this_MC_"+str(i),"hist_1e_this_MC_"+str(i), 120, -3.0, 3.0)
+	hist_2e_this_MC = TH1F("hist_2e_this_MC_"+str(i),"hist_2e_this_MC_"+str(i), 120, -3.0, 3.0)
 	tree_MC.Draw("t1>>hist_1e_this_MC_"+str(i),  "(weight*pileupWeight) * " + cut_1e_this)
 	tree_MC.Draw("t1-t2>>hist_2e_this_MC_"+str(i),  "(weight*pileupWeight) * " + cut_2e_this)
 	hist_1e_this_MC.Draw()
@@ -241,8 +245,8 @@ for i in range(0, N_E_points):
 
 
 
-	hist_1e_this_MC_corr = TH1F("hist_1e_this_MC_corr_"+str(i),"hist_1e_this_MC_corr_"+str(i), 60, -1.5, 1.5)
-	hist_2e_this_MC_corr = TH1F("hist_2e_this_MC_corr_"+str(i),"hist_2e_this_MC_corr_"+str(i), 60, -1.5, 1.5)
+	hist_1e_this_MC_corr = TH1F("hist_1e_this_MC_corr_"+str(i),"hist_1e_this_MC_corr_"+str(i), 120, -3.0, 3.0)
+	hist_2e_this_MC_corr = TH1F("hist_2e_this_MC_corr_"+str(i),"hist_2e_this_MC_corr_"+str(i), 120, -3.0, 3.0)
 	tree_MC.Draw("t1_SmearToData>>hist_1e_this_MC_corr_"+str(i),  "(weight*pileupWeight) * " + cut_1e_this)
 	tree_MC.Draw("t1_SmearToData-t2_SmearToData>>hist_2e_this_MC_corr_"+str(i),  "(weight*pileupWeight) * " + cut_2e_this)
 	hist_1e_this_MC_corr.Draw()
@@ -267,6 +271,8 @@ for i in range(0, N_E_points):
 	ey_E_sigma_time_diff_corr[i] = np.sqrt(4.0*y_E_sigma_time_data[i]*y_E_sigma_time_data[i]*ey_E_sigma_time_data[i]*ey_E_sigma_time_data[i]+4.0*y_E_sigma_time_MC_corr[i]*y_E_sigma_time_MC_corr[i]*ey_E_sigma_time_MC_corr[i]*ey_E_sigma_time_MC_corr[i])/(2.0*y_E_sigma_time_diff_corr[i])
 
 
+gStyle.SetOptFit(0)
+myC.SetLogy(0)
 
 print "y_E_mean_data:"
 print y_E_mean_data

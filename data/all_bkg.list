@@ -1,0 +1,24 @@
+/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_
+WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 1345.0
+WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 359.7
+WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 48.91
+WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 12.05 
+WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 5.501
+WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 1.329
+WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 0.03216
+TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8 831.76
+WGGJets_TuneCUETP8M1_13TeV_madgraphMLM_pythia8 1.715
+DiPhotonJetsBox_M40_80-Sherpa 308.3
+DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 5349.0
+GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 20790.0
+GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 9238.0
+GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 2305.0
+GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 274.4
+GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 93.46
+QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 1712000.0
+QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 347700.0 
+QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 32100.0
+QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 6831.0
+QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 1207.0
+QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 119.9
+QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 25.24

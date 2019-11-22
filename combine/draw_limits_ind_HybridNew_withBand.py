@@ -4,25 +4,30 @@ from Aux import *
 import numpy as np
 import array
 
-lumi_2016 = 35922.0
-lumi_2017 = 41530.0
+lumi_2016 = 35900.0
+lumi_2017 = 41500.0
 lumi = lumi_2016+lumi_2017
 
-#lumis = [lumi_2016, lumi_2017, lumi_2017, lumi_2017, lumi]
-#years_to_plot = ['2016', '2017', '2017CAT1', '2017CAT2', '2016And2017']
-#labels = ['#gamma#gamma (2016)', '#gamma(#gamma) (2017)', '#gamma (2017)', '#gamma#gamma (2017)', '#gamma(#gamma) (2016 + 2017)']
+lumis = [lumi_2016, lumi_2017, lumi_2017, lumi_2017, lumi]
+years_to_plot = ['2016', '2017', '2017CAT1', '2017CAT2', '2016And2017']
+labels = ['#gamma#gamma (2016)', '#gamma(#gamma) (2017)', '#gamma (2017)', '#gamma#gamma (2017)', '#gamma(#gamma) (2016 + 2017)']
+labels_withoutY = ['35.9 fb^{-1} (13 TeV), #gamma#gamma', '41.5 fb^{-1} (13 TeV), #gamma(#gamma)', '41.5 fb^{-1} (13 TeV), #gamma', '41.5 fb^{-1} (13 TeV), #gamma#gamma', '77.4 fb^{-1} (13 TeV), #gamma, #gamma#gamma']
 
-lumis = [lumi]
-years_to_plot = ['2016And2017']
-labels = ['#gamma(#gamma) (2016 + 2017)']
+
+#lumis = [lumi]
+#years_to_plot = ['2016And2017']
+#labels = ['#gamma(#gamma) (2016 + 2017)']
+#labels_withoutY = ['#gamma(#gamma)']
 
 outputDir = '/data/zhicaiz/www/sharebox/DelayedPhoton/ARCReview_June2019/orderByPt/'
 
 lambda_points = [100, 150, 200, 250, 300, 350, 400]
 ctau_points = [10.0, 50, 100, 200, 400, 600, 800, 1000, 1200, 10000]
 
-tree_dir = "limitTrees_v18_HybridNew"
-plot_tag = "_v18_HybridNew"
+#tree_dir = "limitTrees_v20_HybridNew"
+#plot_tag = "_v20_HybridNew"
+tree_dir = "limitTrees_v20v18mix_HybridNew"
+plot_tag = "_v20v18mix_HybridNew"
 
 drawObs=True
 gROOT.SetBatch(True)
@@ -64,6 +69,7 @@ for idx_year in range(len(years_to_plot)):
         year_this = years_to_plot[idx_year]
         lumi_this = lumis[idx_year]
         label_this = labels[idx_year]
+        label_this_withoutY = labels_withoutY[idx_year]
 
 	myC = TCanvas( "myC", "myC", 200, 10, 700, 600 )
 	myC.SetHighLightColor(2)
@@ -78,10 +84,14 @@ for idx_year in range(len(years_to_plot)):
 	myC.SetFrameBorderMode(0)
 	myC.SetLogy(1)
 	myC.SetLogx(1)
+	myC.SetTickx(1)
+        myC.SetTicky(1)
 
 	r_exp_2d_grid_ = np.zeros((N_ctau, N_lambda))
 	r_exp_p1sig_2d_grid_ = np.zeros((N_ctau, N_lambda))
 	r_exp_m1sig_2d_grid_ = np.zeros((N_ctau, N_lambda))
+	r_exp_p2sig_2d_grid_ = np.zeros((N_ctau, N_lambda))
+	r_exp_m2sig_2d_grid_ = np.zeros((N_ctau, N_lambda))
 	r_obs_p1sig_2d_grid_ = np.zeros((N_ctau, N_lambda))
 	r_obs_m1sig_2d_grid_ = np.zeros((N_ctau, N_lambda))
 	r_obs_2d_grid_ = np.zeros((N_ctau, N_lambda))
@@ -209,6 +219,8 @@ for idx_year in range(len(years_to_plot)):
 			r_exp_2d_grid_[index_ctau][index_lambda] = limits_[2]
 			r_exp_p1sig_2d_grid_[index_ctau][index_lambda] = limits_[3]
 			r_exp_m1sig_2d_grid_[index_ctau][index_lambda] = limits_[1]
+			r_exp_p2sig_2d_grid_[index_ctau][index_lambda] = limits_[4]
+			r_exp_m2sig_2d_grid_[index_ctau][index_lambda] = limits_[0]
 			r_obs_p1sig_2d_grid_[index_ctau][index_lambda] = limits_[5]+(eth_xsec_this/th_xsec_this)
 			r_obs_m1sig_2d_grid_[index_ctau][index_lambda] = limits_[5]-(eth_xsec_this/th_xsec_this)
 			r_obs_2d_grid_[index_ctau][index_lambda] = limits_[5]
@@ -261,6 +273,8 @@ for idx_year in range(len(years_to_plot)):
 
 		graph_limit_vs_mass__exp1sigma_limit.SetFillColor(kGreen)
 		graph_limit_vs_mass__exp2sigma_limit.SetFillColor(kYellow)
+		graph_limit_vs_mass__exp1sigma_limit.SetLineColor(kGreen)
+		graph_limit_vs_mass__exp2sigma_limit.SetLineColor(kYellow)
 
 		graph_limit_vs_mass__exp_limit.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} (GeV)")
 		graph_limit_vs_mass__exp_limit.GetXaxis().SetLimits(100.0,600.0)
@@ -284,9 +298,9 @@ for idx_year in range(len(years_to_plot)):
 
 		drawCMS3(myC, 13, lumi_this)
 
-		leg_limit_vs_mass_ = TLegend(0.2,0.62,0.84,0.89)
+		leg_limit_vs_mass_ = TLegend(0.38,0.66,0.81,0.92)
 
-		leg_limit_vs_mass_.SetHeader("c#tau_{#tilde{#chi}_{1}^{0}} = "+str(ctau_this)+" cm,  #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
+		leg_limit_vs_mass_.SetHeader(label_this+", c#tau_{#tilde{#chi}_{1}^{0}} = "+ctau_this_str+" cm")
 		leg_limit_vs_mass_.SetBorderSize(0)
 		leg_limit_vs_mass_.SetTextSize(0.03)
 		leg_limit_vs_mass_.SetLineColor(1)
@@ -314,6 +328,8 @@ for idx_year in range(len(years_to_plot)):
 		index_lambda = index_lambda + 1
 
 		xValue_ctau = []
+		xValue_ctau_exp1sigma = []
+		xValue_ctau_exp2sigma = []
 
 		yValue_limit_this_Th = []
 		yValue_limit_this__exp = []
@@ -323,10 +339,127 @@ for idx_year in range(len(years_to_plot)):
 		
 		index_ctau = - 1
 		for ctau_this in ctau_points:
-			th_xsec_this, eth_xsec_this = getXsecBR(lambda_this, ctau_this)
-			yValue_limit_this_Th.append(th_xsec_this)
-			xValue_ctau.append(ctau_this)
+			index_ctau = index_ctau + 1
+			if r_exp_2d_grid_[index_ctau][index_lambda] > 0.0:
+				th_xsec_this, eth_xsec_this = getXsecBR2(lambda_this, ctau_this)
+				yValue_limit_this_Th.append(th_xsec_this)
+				xValue_ctau.append(ctau_this)
+				xValue_ctau_exp1sigma.append(ctau_this)
+				xValue_ctau_exp2sigma.append(ctau_this)
+				yValue_limit_this__exp.append(r_exp_2d_grid_[index_ctau][index_lambda]*th_xsec_this)
+				yValue_limit_this__exp1sigma.append(r_exp_p1sig_2d_grid_[index_ctau][index_lambda]*th_xsec_this)
+				yValue_limit_this__exp2sigma.append(r_exp_p2sig_2d_grid_[index_ctau][index_lambda]*th_xsec_this)
+				yValue_limit_this__obs.append(r_obs_2d_grid_[index_ctau][index_lambda]*th_xsec_this)
+		NPoints_ctau = len(xValue_ctau)
+	
+		for i in range(len(ctau_points)):
+			ctau_this = ctau_points[len(ctau_points)-1-i]
+			index_ctau = len(ctau_points)-1-i
+			if r_exp_2d_grid_[index_ctau][index_lambda] > 0.0:
+				th_xsec_this, eth_xsec_this = getXsecBR2(lambda_this, ctau_this)
+				xValue_ctau_exp1sigma.append(ctau_this)
+				xValue_ctau_exp2sigma.append(ctau_this)
+				yValue_limit_this__exp1sigma.append(r_exp_m1sig_2d_grid_[index_ctau][index_lambda]*th_xsec_this)
+				yValue_limit_this__exp2sigma.append(r_exp_m2sig_2d_grid_[index_ctau][index_lambda]*th_xsec_this)
 
+		print "drawing limit vs ctau plots for Lambda = "+str(lambda_this)
+		print "xValue_ctau"
+		print xValue_ctau
+		print "yValue_limit_this__exp"
+		print yValue_limit_this__exp
+		print "yValue_limit_this__obs"
+		print yValue_limit_this__obs
+		print "xValue_ctau_exp1sigma"
+		print xValue_ctau_exp1sigma
+		print "yValue_limit_this__exp1sigma"
+		print yValue_limit_this__exp1sigma
+		print "xValue_ctau_exp2sigma"
+		print xValue_ctau_exp2sigma
+		print "yValue_limit_this__exp2sigma"
+		print yValue_limit_this__exp2sigma
+
+
+		myC.SetLogy(1)
+		myC.SetLogx(1)
+
+		#
+		graph_limit_vs_ctau__obs_limit = TGraph(NPoints_ctau, np.array(xValue_ctau), np.array(yValue_limit_this__obs))
+		graph_limit_vs_ctau__Th_limit = TGraph(NPoints_ctau, np.array(xValue_ctau), np.array(yValue_limit_this_Th))
+		graph_limit_vs_ctau__exp_limit = TGraph(NPoints_ctau, np.array(xValue_ctau), np.array(yValue_limit_this__exp))
+		graph_limit_vs_ctau__exp1sigma_limit = TGraph(2*NPoints_ctau, np.array(xValue_ctau_exp1sigma), np.array(yValue_limit_this__exp1sigma))
+		graph_limit_vs_ctau__exp2sigma_limit = TGraph(2*NPoints_ctau, np.array(xValue_ctau_exp2sigma), np.array(yValue_limit_this__exp2sigma))
+
+		graph_limit_vs_ctau__obs_limit.SetMarkerStyle(22)
+		graph_limit_vs_ctau__obs_limit.SetMarkerSize(1.5)
+		graph_limit_vs_ctau__obs_limit.SetLineColor(kBlack)
+		graph_limit_vs_ctau__obs_limit.SetLineWidth(3)
+
+		graph_limit_vs_ctau__Th_limit.SetMarkerStyle(22)
+		graph_limit_vs_ctau__Th_limit.SetMarkerSize(1.5)
+		graph_limit_vs_ctau__Th_limit.SetLineColor(kRed)
+		graph_limit_vs_ctau__Th_limit.SetLineWidth(2)
+
+		graph_limit_vs_ctau__exp_limit.SetMarkerStyle(19)
+		graph_limit_vs_ctau__exp_limit.SetMarkerSize(1.5)
+		graph_limit_vs_ctau__exp_limit.SetLineColor(kBlack)
+		graph_limit_vs_ctau__exp_limit.SetLineWidth(3)
+		graph_limit_vs_ctau__exp_limit.SetLineStyle(kDashed)
+
+		graph_limit_vs_ctau__exp1sigma_limit.SetFillColor(kGreen)
+		graph_limit_vs_ctau__exp2sigma_limit.SetFillColor(kYellow)
+		graph_limit_vs_ctau__exp1sigma_limit.SetLineColor(kGreen)
+		graph_limit_vs_ctau__exp2sigma_limit.SetLineColor(kYellow)
+
+		graph_limit_vs_ctau__exp_limit.GetXaxis().SetTitle("c#tau_{#tilde{#chi}^{0}_{1}} (cm)")
+		graph_limit_vs_ctau__exp_limit.GetXaxis().SetLimits(9.0,10000.0)
+		graph_limit_vs_ctau__exp_limit.GetYaxis().SetTitle("95% CL upper limit on cross section (pb)")
+		if lambda_this == 100:
+			graph_limit_vs_ctau__exp_limit.GetYaxis().SetRangeUser(1e-2,1e3)
+		elif lambda_this == 150:
+			graph_limit_vs_ctau__exp_limit.GetYaxis().SetRangeUser(1e-3,1e2)
+		else:
+			graph_limit_vs_ctau__exp_limit.GetYaxis().SetRangeUser(1e-4,1e1)
+
+		graph_limit_vs_ctau__exp_limit.SetTitle("")
+
+		graph_limit_vs_ctau__exp_limit.Draw("LA")
+
+		graph_limit_vs_ctau__exp_limit.GetXaxis().SetTitleSize( axisTitleSize )
+		graph_limit_vs_ctau__exp_limit.GetXaxis().SetTitleOffset( axisTitleOffset )
+		graph_limit_vs_ctau__exp_limit.GetYaxis().SetTitleSize( axisTitleSize )
+		graph_limit_vs_ctau__exp_limit.GetYaxis().SetTitleOffset( axisTitleOffset )
+
+		graph_limit_vs_ctau__exp2sigma_limit.Draw("Fsame")
+		graph_limit_vs_ctau__exp1sigma_limit.Draw("Fsame")
+		if drawObs:
+			graph_limit_vs_ctau__obs_limit.Draw("Lsame")
+		graph_limit_vs_ctau__exp_limit.Draw("Lsame")
+		graph_limit_vs_ctau__Th_limit.Draw("Lsame")
+
+		drawCMS3(myC, 13, lumi_this)
+
+		leg_limit_vs_ctau_ = TLegend(0.38,0.66,0.81,0.92)
+
+		leg_limit_vs_ctau_.SetHeader(label_this+", #Lambda = "+str(lambda_this)+" TeV")
+		leg_limit_vs_ctau_.SetBorderSize(0)
+		leg_limit_vs_ctau_.SetTextSize(0.03)
+		leg_limit_vs_ctau_.SetLineColor(1)
+		leg_limit_vs_ctau_.SetLineStyle(1)
+		leg_limit_vs_ctau_.SetLineWidth(1)
+		leg_limit_vs_ctau_.SetFillColor(0)
+		leg_limit_vs_ctau_.SetFillStyle(1001)
+
+		leg_limit_vs_ctau_.AddEntry(graph_limit_vs_ctau__Th_limit, "Theoretical cross section", "L")
+		if drawObs:
+			leg_limit_vs_ctau_.AddEntry(graph_limit_vs_ctau__obs_limit, "Observed  95% CL upper limit", "L")
+		leg_limit_vs_ctau_.AddEntry(graph_limit_vs_ctau__exp_limit, "Expected  95% CL upper limit", "L")
+		leg_limit_vs_ctau_.AddEntry(graph_limit_vs_ctau__exp1sigma_limit, "#pm 1 #sigma Expected", "F")
+		leg_limit_vs_ctau_.AddEntry(graph_limit_vs_ctau__exp2sigma_limit, "#pm 2 #sigma Expected", "F")
+		leg_limit_vs_ctau_.Draw()
+
+                myC.SaveAs(outputDir+"/limits"+"/limit_vs_ctau_"+year_this+"_lambda"+str(lambda_this)+plot_tag+".pdf")
+                myC.SaveAs(outputDir+"/limits"+"/limit_vs_ctau_"+year_this+"_lambda"+str(lambda_this)+plot_tag+".png")
+                myC.SaveAs(outputDir+"/limits"+"/limit_vs_ctau_"+year_this+"_lambda"+str(lambda_this)+plot_tag+".C")
 
 
 
@@ -433,7 +566,7 @@ for idx_year in range(len(years_to_plot)):
 	#####ATLAS 8TeV
 	lambda_atlas_8TeV_2g = np.array([82.5 , 102.5,   140,   160,   180,   200,   220, 260,  300, 302.58, 300, 260, 220, 200 ])
 	t_atlas_8TeV_2g = np.array([ 121.81, 90.94, 46.63, 36.12, 27.18, 20.26, 14.59, 7.47, 2.6, 1.83, 1.31, 0.61, 0.39, 0.30 ])
-	ctau_atlas_8TeV_2g = t_atlas_8TeV_2g * 30.0
+	ctau_atlas_8TeV_2g = t_atlas_8TeV_2g * 30.0 * 0.01
 	mass_atlas_8TeV_2g = lambda_atlas_8TeV_2g*1.454 - 6.0
 	graph_exclusion_atlas_8TeV_2g = TGraph(14, mass_atlas_8TeV_2g, ctau_atlas_8TeV_2g)
 	graph_exclusion_atlas_8TeV_2g.SetLineColor(8)
@@ -442,21 +575,23 @@ for idx_year in range(len(years_to_plot)):
 
 	######CMS 7TeV
 	mass_cms_7TeV_1g = np.array([100., 145., 157., 179., 192., 216., 221., 218., 218., 221., 216., 192., 179., 157., 145., 100.])
-	ctau_cms_7TeV_1g  = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 10., 25.0, 50.0, 100.0, 200.0, 400.0, 600.0, 600.0])
+	ctau_cms_7TeV_1g  = 0.01*np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 10., 25.0, 50.0, 100.0, 200.0, 400.0, 600.0, 600.0])
 	graph_exclusion_cms_7TeV_1g = TGraph(16, mass_cms_7TeV_1g, ctau_cms_7TeV_1g)
-	graph_exclusion_cms_7TeV_1g.SetFillColorAlpha(kYellow, 0.6)
-	graph_exclusion_cms_7TeV_1g.SetLineColorAlpha(kYellow, 0.6)
+	#graph_exclusion_cms_7TeV_1g.SetFillColorAlpha(kAzure+10, 0.6)
+	graph_exclusion_cms_7TeV_1g.SetLineColorAlpha(kAzure+10, 0.6)
+	graph_exclusion_cms_7TeV_1g.SetLineWidth(3)
+	graph_exclusion_cms_7TeV_1g.SetLineStyle(9)
 
 	######CMS 8TeV, single photon
 	mass_cms_8TeV_1g = np.array([139.51,  168.16, 197.17, 226.17, 264.65, 283.83, 254.65, 226.17, 197.17, 171.36, 139.51])
-	ctau_cms_8TeV_1g  = np.array([3.5164, 2.4777, 2.7902, 2.9517, 4.2685, 6.53,   15.188, 26.828, 38.797, 46.219, 43.147])*29.9792458
+	ctau_cms_8TeV_1g  = 0.01*np.array([3.5164, 2.4777, 2.7902, 2.9517, 4.2685, 6.53,   15.188, 26.828, 38.797, 46.219, 43.147])*29.9792458
 	graph_exclusion_cms_8TeV_1g = TGraph(11, mass_cms_8TeV_1g, ctau_cms_8TeV_1g)
 	graph_exclusion_cms_8TeV_1g.SetFillColorAlpha(kAzure+10, 0.65)
 	graph_exclusion_cms_8TeV_1g.SetLineColorAlpha(kAzure+10, 0.65)
 
 	######CMS 8TeV, two photons
 	mass_cms_8TeV_2g = np.array([198., 227., 256., 256., 227., 198.])
-	ctau_cms_8TeV_2g  = np.array([0.4, 2, 9, 9, 25., 50.])
+	ctau_cms_8TeV_2g  = 0.01*np.array([0.4, 2, 9, 9, 25., 50.])
 	graph_exclusion_cms_8TeV_2g = TGraph(6, mass_cms_8TeV_2g, ctau_cms_8TeV_2g)
 	graph_exclusion_cms_8TeV_2g.SetFillColorAlpha(kGray, 0.6)
 	graph_exclusion_cms_8TeV_2g.SetLineColorAlpha(kGray, 0.6)
@@ -466,24 +601,24 @@ for idx_year in range(len(years_to_plot)):
 
 	#Lambda axis
 	f1_lambda = TF1("f1","(x+6.00)/1.454",72.902, 416.78)
-        A1_lambda = TGaxis(100.0, 0.6,600.0,0.6,"f1",1010,"NI")
+        A1_lambda = TGaxis(100.0, 0.0125,600.0,0.0125,"f1",1010,"NI")
 	A1_lambda.SetLabelFont(42)
 	A1_lambda.SetLabelSize(0.035)
 	A1_lambda.SetTextFont(42)
-	A1_lambda.SetTextSize(1.2)
+	A1_lambda.SetTextSize(1.3)
 	A1_lambda.SetTitle("#Lambda (TeV)")
 	A1_lambda.SetTitleSize(0.04)
 	A1_lambda.SetTitleOffset(0.9)
 
 	### only
-	graph_exclusion_exp_ = TGraph(len(lambda_point_boundary_exp_), np.array(1.454*lambda_point_boundary_exp_-6.0), np.array(ctau_points))
-	graph_exclusion_exp_p1sig_ = TGraph(len(lambda_point_boundary_exp_p1sig_), np.array(1.454*lambda_point_boundary_exp_p1sig_-6.0), np.array(ctau_points))
-	graph_exclusion_exp_m1sig_ = TGraph(len(lambda_point_boundary_exp_m1sig_), np.array(1.454*lambda_point_boundary_exp_m1sig_-6.0), np.array(ctau_points))
-	graph_exclusion_exp_pm1sig_ = TGraph(len(lambda_point_boundary_exp_pm1sig_), np.array(1.454*np.array(lambda_point_boundary_exp_pm1sig_)-6.0), np.array(ctau_points_loop))
-	graph_exclusion_obs_ = TGraph(len(lambda_point_boundary_obs_), np.array(1.454*lambda_point_boundary_obs_-6.0), np.array(ctau_points))
-	graph_exclusion_obs_p1sig_ = TGraph(len(lambda_point_boundary_obs_p1sig_), np.array(1.454*lambda_point_boundary_obs_p1sig_-6.0), np.array(ctau_points))
-	graph_exclusion_obs_m1sig_ = TGraph(len(lambda_point_boundary_obs_m1sig_), np.array(1.454*lambda_point_boundary_obs_m1sig_-6.0), np.array(ctau_points))
-	graph_exclusion_obs_pm1sig_ = TGraph(len(lambda_point_boundary_obs_pm1sig_), np.array(1.454*np.array(lambda_point_boundary_obs_pm1sig_)-6.0), np.array(ctau_points_loop))
+	graph_exclusion_exp_ = TGraph(len(lambda_point_boundary_exp_), np.array(1.454*lambda_point_boundary_exp_-6.0), 0.01*np.array(ctau_points))
+	graph_exclusion_exp_p1sig_ = TGraph(len(lambda_point_boundary_exp_p1sig_), np.array(1.454*lambda_point_boundary_exp_p1sig_-6.0), 0.01*np.array(ctau_points))
+	graph_exclusion_exp_m1sig_ = TGraph(len(lambda_point_boundary_exp_m1sig_), np.array(1.454*lambda_point_boundary_exp_m1sig_-6.0), 0.01*np.array(ctau_points))
+	graph_exclusion_exp_pm1sig_ = TGraph(len(lambda_point_boundary_exp_pm1sig_), np.array(1.454*np.array(lambda_point_boundary_exp_pm1sig_)-6.0), 0.01*np.array(ctau_points_loop))
+	graph_exclusion_obs_ = TGraph(len(lambda_point_boundary_obs_), np.array(1.454*lambda_point_boundary_obs_-6.0), 0.01*np.array(ctau_points))
+	graph_exclusion_obs_p1sig_ = TGraph(len(lambda_point_boundary_obs_p1sig_), np.array(1.454*lambda_point_boundary_obs_p1sig_-6.0), 0.01*np.array(ctau_points))
+	graph_exclusion_obs_m1sig_ = TGraph(len(lambda_point_boundary_obs_m1sig_), np.array(1.454*lambda_point_boundary_obs_m1sig_-6.0), 0.01*np.array(ctau_points))
+	graph_exclusion_obs_pm1sig_ = TGraph(len(lambda_point_boundary_obs_pm1sig_), np.array(1.454*np.array(lambda_point_boundary_obs_pm1sig_)-6.0), 0.01*np.array(ctau_points_loop))
 
 	graph_exclusion_exp_.GetXaxis().SetTitleSize( axisTitleSize )
 	graph_exclusion_exp_.GetXaxis().SetTitleOffset( axisTitleOffset )
@@ -491,8 +626,8 @@ for idx_year in range(len(years_to_plot)):
 	graph_exclusion_exp_.GetYaxis().SetTitleOffset( axisTitleOffset )
 	graph_exclusion_exp_.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} (GeV)")
 	graph_exclusion_exp_.GetXaxis().SetLimits(100.0, 600.0)
-	graph_exclusion_exp_.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} (cm)")
-	graph_exclusion_exp_.GetYaxis().SetRangeUser(9.0,5.0e6)
+	graph_exclusion_exp_.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} (m)")
+	graph_exclusion_exp_.GetYaxis().SetRangeUser(0.09,5.0e3)
 	graph_exclusion_exp_.SetTitle("")
 
 	graph_exclusion_exp_.SetMarkerStyle(19)
@@ -545,31 +680,34 @@ for idx_year in range(len(years_to_plot)):
 		graph_exclusion_obs_.Draw("Lsames")
 
 	graph_exclusion_atlas_8TeV_2g.Draw("Lsames")
-	graph_exclusion_cms_7TeV_1g.Draw("Fsames")
-	graph_exclusion_cms_8TeV_1g.Draw("Fsames")
-	graph_exclusion_cms_8TeV_2g.Draw("Fsames")
+	graph_exclusion_cms_7TeV_1g.Draw("Lsames")
+	#graph_exclusion_cms_8TeV_1g.Draw("Fsames")
+	#graph_exclusion_cms_8TeV_2g.Draw("Fsames")
 
 	####legend
-	leg_2d_exclusion_ = TLegend(0.2,0.64,0.84,0.91)
+	leg_2d_exclusion_ = TLegend(0.21,0.70,0.6,0.92)
+	leg_2d_exclusion_.SetMargin(0.5)
 	leg_2d_exclusion_.SetBorderSize(0)
 	leg_2d_exclusion_.SetTextSize(0.03)
+	leg_2d_exclusion_.SetTextFont(42)
 	#leg_2d_exclusion_.SetLineColor(1)
 	#leg_2d_exclusion_.SetLineStyle(1)
 	#leg_2d_exclusion_.SetLineWidth(1)
 	leg_2d_exclusion_.SetFillColor(0)
 	leg_2d_exclusion_.SetFillStyle(1001)
 
-	leg_2d_exclusion_.AddEntry(graph_exclusion_exp_, "CMS Exp (#pm 1 #sigma) 13 TeV "+label_this, "LF")
+	leg_2d_exclusion_.SetHeader(" GMSB SPS8")
+	leg_2d_exclusion_.AddEntry(graph_exclusion_exp_, "CMS expected (#pm 1 #sigma) "+label_this_withoutY, "LF")
 	if drawObs:
-		leg_2d_exclusion_.AddEntry(graph_exclusion_obs_, "CMS Obs 13 TeV "+label_this, "L")
-	leg_2d_exclusion_.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS Obs 8 TeV #gamma#gamma", "L")
-	leg_2d_exclusion_.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
-	leg_2d_exclusion_.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
-	leg_2d_exclusion_.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS Obs 7 TeV #gamma", "F")
+		leg_2d_exclusion_.AddEntry(graph_exclusion_obs_, "CMS observed "+label_this_withoutY, "L")
+	leg_2d_exclusion_.AddEntry(graph_exclusion_atlas_8TeV_2g, "ATLAS observed 20.3 fb^{-1} (8 TeV), #gamma#gamma", "L")
+	#leg_2d_exclusion_.AddEntry(graph_exclusion_cms_8TeV_2g, "CMS Obs 8 TeV #gamma#gamma", "F")
+	#leg_2d_exclusion_.AddEntry(graph_exclusion_cms_8TeV_1g, "CMS Obs 8 TeV #gamma", "F")
+	leg_2d_exclusion_.AddEntry(graph_exclusion_cms_7TeV_1g, "CMS observed 4.9 fb^{-1} (7 TeV), #gamma", "L")
 
 	leg_2d_exclusion_.Draw("same")
 
-	drawCMS3(myC2D, 13, lumi_this)
+	#drawCMS3(myC2D, 13, lumi_this)
 
 	A1_lambda.Draw("same")
 
@@ -581,15 +719,15 @@ for idx_year in range(len(years_to_plot)):
 	##2D color map
 	myC2D.SetLogz(1)
 	
-	stops = np.array([0.0, 1.0])
-	red = np.array([0.0, 0.8])
-	green = np.array([0.3, 1.0])
-	blue = np.array([0.5, 1.0])
+	#stops = np.array([0.0, 1.0])
+	#red = np.array([0.0, 0.8])
+	#green = np.array([0.3, 1.0])
+	#blue = np.array([0.5, 1.0])
 
-	#stops = np.array([0.00, 0.34, 0.61, 0.84, 1.00])
-        #red= np.array([0.50, 0.50, 1.00, 1.00, 1.00])
-        #green = np.array([ 0.50, 1.00, 1.00, 0.60, 0.50])
-        #blue = np.array([1.00, 1.00, 0.50, 0.40, 0.50])
+	stops = np.array([0.00, 0.34, 0.61, 0.84, 1.00])
+        red= np.array([0.50, 0.50, 1.00, 1.00, 1.00])
+        green = np.array([ 0.50, 1.00, 1.00, 0.60, 0.50])
+        blue = np.array([1.00, 1.00, 0.50, 0.40, 0.50])
 
 	TColor.CreateGradientColorTable(len(stops), stops, red, green, blue, 255)
 	#gStyle.SetPalette(70)	
@@ -601,17 +739,21 @@ for idx_year in range(len(years_to_plot)):
 	for idx in range(len(lambda_points)-1):
 		xbins_th2.append(0.5*(lambda_points[idx]+lambda_points[idx+1])*1.454 - 6.0)
 	xbins_th2.append(600.0)
+	
 	ybins_th2.append(9.0)
 	for idx in range(len(ctau_points)-1):
 		ybins_th2.append(0.5*(ctau_points[idx]+ctau_points[idx+1]))
 	ybins_th2.append(1.2e4)
 	ybins_th2.append(1.0e5)
 	
-	h2_limit_obs = TH2F("h2_limit_obs","h2_limit_obs", len(xbins_th2)-1, np.array(xbins_th2), len(ybins_th2)-1, np.array(ybins_th2))
+	h2_limit_obs = TH2F("h2_limit_obs","h2_limit_obs", len(xbins_th2)-1, np.array(xbins_th2), len(ybins_th2)-1, 0.01*np.array(ybins_th2))
+	h2_limit_obs_cm = TH2F("h2_limit_obs_cm","h2_limit_obs_cm", len(xbins_th2)-1, np.array(xbins_th2), len(ybins_th2)-1, np.array(ybins_th2))
 	for ix in range(len(xbins_th2)-1):
 		for iy in range(len(ybins_th2)-2):
 			h2_limit_obs.SetBinContent(ix+1, iy+1, limit_obs_2d_grid_[iy][ix])
+			h2_limit_obs_cm.SetBinContent(ix+1, iy+1, limit_obs_2d_grid_[iy][ix])
 		h2_limit_obs.SetBinContent(ix+1, len(ybins_th2)-1, 1.0e-6)
+		h2_limit_obs_cm.SetBinContent(ix+1, len(ybins_th2)-1, 1.0e-6)
 
 	print "xbins_th2"
 	print xbins_th2	
@@ -620,7 +762,7 @@ for idx_year in range(len(years_to_plot)):
 	#h2_limit_obs = interpolate2D(h2_limit_obs, epsilon=1,smooth=1,multiplyNbinsX=10, multiplyNbinsY=200)
 
 	f1_lambda_color = TF1("f1_color","(x+6.00)/1.454",72.902, 416.78)
-        A1_lambda_color = TGaxis(100.0, 1.5,600.0,1.5,"f1_color",1010,"NI")
+        A1_lambda_color = TGaxis(100.0, 0.015,600.0,0.015,"f1_color",1010,"NI")
 	A1_lambda_color.SetLabelFont(42)
 	A1_lambda_color.SetLabelSize(0.035)
 	A1_lambda_color.SetTextFont(42)
@@ -634,13 +776,13 @@ for idx_year in range(len(years_to_plot)):
 	h2_limit_obs.GetXaxis().SetTitleOffset( axisTitleOffset )
 	h2_limit_obs.GetYaxis().SetTitleSize( axisTitleSize )
 	h2_limit_obs.GetYaxis().SetTitleOffset( axisTitleOffset )
-	h2_limit_obs.GetZaxis().SetTitleSize( axisTitleSize )
-	h2_limit_obs.GetZaxis().SetTitleOffset( axisTitleOffset)
+	h2_limit_obs.GetZaxis().SetTitleSize( axisTitleSize  - 0.005)
+	h2_limit_obs.GetZaxis().SetTitleOffset( axisTitleOffset + 0.1)
 	h2_limit_obs.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} (GeV)")
 	h2_limit_obs.GetZaxis().SetRangeUser(1e-3, 1.0)
 	#h2_limit_obs.GetXaxis().SetLimits(100.0, 600.0)
-	h2_limit_obs.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} (cm)")
-	h2_limit_obs.GetZaxis().SetTitle("95% CL upper limit on cross section (pb)")
+	h2_limit_obs.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} (m)")
+	h2_limit_obs.GetZaxis().SetTitle("Observed 95% CL upper limit on cross section (pb)")
 	h2_limit_obs.SetTitle("")
 	h2_limit_obs.Draw("COLZ")
 	#h2_limit_obs.GetYaxis().SetRangeUser(9.0,1.0e5)
@@ -658,7 +800,7 @@ for idx_year in range(len(years_to_plot)):
 	leg_2d_exclusion_color.SetTextSize(0.03)
 	leg_2d_exclusion_color.SetFillColor(0)
 	leg_2d_exclusion_color.SetFillStyle(1001)
-	leg_2d_exclusion_color.SetHeader("    pp #rightarrow #tilde{g}#tilde{g},  #tilde{g} #rightarrow #tilde{#chi}^{0}_{1} #rightarrow #gamma #tilde{G}")
+	leg_2d_exclusion_color.SetHeader(" GMSB SPS8") 
 
 	leg_2d_exclusion_color.AddEntry(graph_exclusion_exp_, "Expected (#pm 1 #sigma_{experiment}) "+label_this, "L")
 	if drawObs:
@@ -671,37 +813,41 @@ for idx_year in range(len(years_to_plot)):
 	LExpP.SetLineColor(kRed - 0)
 	LExpP.SetLineWidth(1)
 	LExpP.SetLineStyle(kDashed)
-	LExpP.SetPoint(0, 119.0, 3.8e4)
-	LExpP.SetPoint(1, 206.0, 3.8e4)
+	LExpP.SetPoint(0, 119.0, 3.8e2)
+	LExpP.SetPoint(1, 206.0, 3.8e2)
 	LExpP.Draw("same")	
 	
 	LExpM = TGraph(2)
 	LExpM.SetLineColor(kRed - 0)
 	LExpM.SetLineWidth(1)
 	LExpM.SetLineStyle(kDashed)
-	LExpM.SetPoint(0, 119.0, 2.8e4)
-	LExpM.SetPoint(1, 206.0, 2.8e4)
+	LExpM.SetPoint(0, 119.0, 2.8e2)
+	LExpM.SetPoint(1, 206.0, 2.8e2)
 	LExpM.Draw("same")	
 
-	drawCMS3(myC2D, 13, lumi_this)
+	drawCMS3_supp(myC2D, 13, lumi_this)
 	A1_lambda_color.Draw("same")
 
         myC2D.SaveAs(outputDir+"/limits"+"/limit_color_2D_"+year_this+plot_tag+".pdf")
         myC2D.SaveAs(outputDir+"/limits"+"/limit_color_2D_"+year_this+plot_tag+".png")
         myC2D.SaveAs(outputDir+"/limits"+"/limit_color_2D_"+year_this+plot_tag+".C")
 
-	h2_limit_obs = interpolate2D(h2_limit_obs, epsilon=1,smooth=1,multiplyNbinsX=10, multiplyNbinsY=200)
+	h2_limit_obs = interpolate2D(h2_limit_obs_cm, epsilon=1,smooth=1,multiplyNbinsX=100, multiplyNbinsY=5, scaleY = 0.01)
 	h2_limit_obs.GetXaxis().SetTitleSize( axisTitleSize )
 	h2_limit_obs.GetXaxis().SetTitleOffset( axisTitleOffset )
 	h2_limit_obs.GetYaxis().SetTitleSize( axisTitleSize )
-	h2_limit_obs.GetYaxis().SetTitleOffset( axisTitleOffset )
-	h2_limit_obs.GetZaxis().SetTitleSize( axisTitleSize )
-	h2_limit_obs.GetZaxis().SetTitleOffset( axisTitleOffset)
+	h2_limit_obs.GetYaxis().SetTitleOffset( axisTitleOffset)
+	h2_limit_obs.GetZaxis().SetTitleSize( axisTitleSize - 0.005)
+	h2_limit_obs.GetZaxis().SetTitleOffset( axisTitleOffset + 0.1)
+	#h2_limit_obs.GetZaxis().SetTitleSize( axisTitleSize)
+	#h2_limit_obs.GetZaxis().SetTitleOffset( axisTitleOffset)
 	h2_limit_obs.GetXaxis().SetTitle("M_{#tilde{#chi}^{0}_{1}} (GeV)")
 	h2_limit_obs.GetZaxis().SetRangeUser(1e-3, 1.0)
 	#h2_limit_obs.GetXaxis().SetLimits(100.0, 600.0)
-	h2_limit_obs.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} (cm)")
-	h2_limit_obs.GetZaxis().SetTitle("95% CL upper limit on cross section (pb)")
+	h2_limit_obs.GetYaxis().SetTitle("c#tau_{#tilde{#chi}_{1}^{0}} (m)")
+	h2_limit_obs.GetZaxis().SetTitle("Observed 95% CL upper limit on cross section (pb)")
+	#h2_limit_obs.GetZaxis().SetTitle("Observed 95% CL upper limit on #sigma (pb)")
+	#h2_limit_obs.GetZaxis().SetTitle("Obs. 95% CL upper limit on cross section (pb)")
 	h2_limit_obs.SetTitle("")
 	h2_limit_obs.Draw("COLZ")
 
@@ -713,7 +859,7 @@ for idx_year in range(len(years_to_plot)):
 	leg_2d_exclusion_color.Draw("same")
 	LExpP.Draw("same")	
 	LExpM.Draw("same")	
-	drawCMS3(myC2D, 13, lumi_this)
+	drawCMS3_supp(myC2D, 13, lumi_this)
 	A1_lambda_color.Draw("same")
         myC2D.SaveAs(outputDir+"/limits"+"/limit_color_2D_"+year_this+plot_tag+"_smooth.pdf")
         myC2D.SaveAs(outputDir+"/limits"+"/limit_color_2D_"+year_this+plot_tag+"_smooth.png")

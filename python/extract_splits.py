@@ -4,7 +4,7 @@ import numpy as np
 #logfiledir = '../scripts_condor/ABCD_cut_obsexp10/ABCD_2x2/log_noBDT_ABCD/'
 logfiledir = '../scripts_condor/log_noBDT_ABCD_binAndDatacard/'
 
-ctaus = ['0_001', '0_1', '10', '200', '400', '600', '800', '1000', '1200', '10000']
+ctaus = ['10', '50', '100', '200', '400', '600', '800', '1000', '1200', '10000']
 lambdas = ['100', '150', '200', '250', '300', '350', '400']
 
 

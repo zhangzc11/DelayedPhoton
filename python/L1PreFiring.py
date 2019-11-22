@@ -149,7 +149,9 @@ def draw_var_twoCuts(filename, label, cut1, cut2, cut1label, cut2label, varName,
 	myC.SaveAs(outputDir+"/stack/checkL1PreFiring_"+varName+"_"+label+".png")
 	myC.SaveAs(outputDir+"/stack/checkL1PreFiring_"+varName+"_"+label+".C")
 
-cut_normal = "(weight*pileupWeight*triggerEffSFWeight*photonEffSF) * ((HLTDecision[81] == 1)&&pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1passSmajorTight && pho1Sminor<0.4 && pho1R9 > 0.9&& pho1passSigmaIetaIetaTight&& pho1passHoverETight&&n_Jets > 2&&nTightMuons == 0&& n_Photons == 2&&Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho2SigmaIetaIeta<0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso<30.0 && pho2sumNeutralHadronEt<30.0 && pho2trkSumPtHollowConeDR03 < 30.0) "	
+cut_normal = "(weight*pileupWeight*triggerEffSFWeight*photonEffSF) * ((HLTDecision[81] == 1)&&pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1passSmajorTight && pho1Sminor<0.4 && pho1R9 > 0.9&& pho1passSigmaIetaIetaTight&& pho1passHoverETight&&n_Jets > 2&&nTightMuons == 0&& n_Photons == 2&&Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0 && pho2SigmaIetaIeta<0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso<30.0 && pho2sumNeutralHadronEt<30.0 && pho2trkSumPtHollowConeDR03 < 30.0) "	
+
+
 cut_L1PreFiring = cut_normal + " * (!hasJetL1PreFiring)"
 
 time_binning = np.array([-2.0, 0.0, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 1.8, 2.1, 2.4, 3.0, 20.0])

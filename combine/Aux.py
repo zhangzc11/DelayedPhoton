@@ -157,7 +157,7 @@ def drawCMS3_supp(myC, energy, lumi):
         tlatex.SetTextAlign(11)
 
 
-def interpolate2D(hist,epsilon=1,smooth=0,multiplyNbinsX=3,multiplyNbinsY=30,diagonalOffset=0,fixLSP0=False,refHist=None):
+def interpolate2D(hist,epsilon=1,smooth=0,multiplyNbinsX=3,multiplyNbinsY=30,diagonalOffset=0,fixLSP0=False,refHist=None, scaleY=1.0):
     x = array('d',[])
     y = array('d',[])
     z = array('d',[])
@@ -225,7 +225,7 @@ def interpolate2D(hist,epsilon=1,smooth=0,multiplyNbinsX=3,multiplyNbinsY=30,dia
     #print "ybins_th2: ==="
     #print ybins_th2 
 
-    hist2 = rt.TH2F("hist2","hist2", len(xbins_th2)-1, np.array(xbins_th2), len(ybins_th2)-1, np.array(ybins_th2))
+    hist2 = rt.TH2F("hist2","hist2", len(xbins_th2)-1, np.array(xbins_th2), len(ybins_th2)-1, scaleY*np.array(ybins_th2))
 
     for ix in range(len(xbins_th2)-1):
         for iy in range(len(ybins_th2)-2):

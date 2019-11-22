@@ -13,8 +13,8 @@ lambda_points = [100, 150, 200, 250, 300, 350, 400]
 ctau_points = [10.0, 200, 400, 600, 800, 1000, 1200, 10000]
 
 
-tree_dir = "limitTrees_v15"
-plot_tag = "_v15"
+tree_dir = "limitTrees_v16"
+plot_tag = "_v16"
 
 drawObs=False
 gROOT.SetBatch(True)

@@ -16,10 +16,40 @@ float rightMargin  = 0.05;
 float topMargin    = 0.09;
 float bottomMargin = 0.12;
 
-TString outputDir="/data/zhicaiz/www/sharebox/DelayedPhoton/06Mar2019/orderByPt/";
+TString outputDir="/data/zhicaiz/www/sharebox/DelayedPhoton/ARCReview_June2019/orderByPt/";
 
 //mkdir(outputDir, S_IRWXU | S_IRWXG | S_IRWXO);
 //mkdir(outputDir+"/ZeeTiming/", S_IRWXU | S_IRWXG | S_IRWXO);
+
+float * singGausFit(TH1F *hist){
+	if(hist->Integral() < 100.0){
+		float result[4] = {0};
+		float * pointer = new float[4];
+		for(int i=0; i<4; i++) pointer[i] = result[i];
+		return pointer;
+	}
+
+	float x_mean=hist->GetMean();
+	float x_stddev=hist->GetStdDev();
+	float x_min=x_mean - 2.0*x_stddev;
+	float x_max=x_mean + 2.0*x_stddev;
+	float sig = x_stddev;
+	TF1 * tf1_singGaus = new TF1("tf1_singGaus","gaus(0)", x_min,x_max);
+	tf1_singGaus->SetParameters(hist->Integral(),0.5*(x_min+x_max),sig);
+	hist->Fit("tf1_singGaus","B","",x_min,x_max);
+	float meanEff = tf1_singGaus->GetParameter(1);
+	float emeanEff = tf1_singGaus->GetParError(1);
+	float sigEff = abs(tf1_singGaus->GetParameter(2));
+	float esigEff = tf1_singGaus->GetParError(2);
+
+	float result[4] = {meanEff,emeanEff,sigEff,esigEff};
+
+	float * pointer = new float[4];
+	for(int i=0; i<4; i++) pointer[i] = result[i];
+	delete tf1_singGaus;
+	return pointer;
+}
+
 
 float * doubGausFit(TH1F *hist){
 	if(hist->Integral() < 100.0){
@@ -100,30 +130,63 @@ void DrawCMS(TCanvas *myC, int energy, float lumi)
         tlatex->SetTextAlign(11);
 };
 
-void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
+void DrawCMSstyle(TCanvas *myC, int energy, float lumi, TString title)
+{
+        myC->cd();
+  auto cms_pave = new TPaveText(0.20,0.855,0.3,0.895,"NDC");
+  cms_pave->SetFillColorAlpha(0,0);
+  cms_pave->SetTextFont(61);
+  cms_pave->AddText("CMS");
+  cms_pave->Draw("same");
+
+  auto prelim_pave = new TPaveText(0.25,0.855,0.45,0.89,"NDC");
+  prelim_pave->SetFillColorAlpha(0,0);
+  prelim_pave->SetTextFont(52);
+  prelim_pave->AddText("Preliminary");
+  prelim_pave->Draw("same");
+
+  auto lumi_pave = new TPaveText(0.218,0.80,0.478,0.86,"NDC");
+  lumi_pave->SetFillColorAlpha(0,0);
+  lumi_pave->SetTextFont(42);
+  lumi_pave->AddText("2016: 35.9 fb^{-1} (13 TeV)");
+  lumi_pave->Draw("same");
+ 
+  auto label_pave = new TPaveText(0.6,0.855,0.8,0.895,"NDC");
+  label_pave->SetFillColorAlpha(0,0);
+  label_pave->SetTextFont(42);
+  label_pave->AddText(title);
+  label_pave->Draw("same");
+
+};
+
+void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label, TString title){
 	cout<<"draw time resolution vs Aeff plots for "<<label<<endl;
 	cout<<"data sampel size  = "<<tree_data->GetEntries()<<endl;	
 	cout<<"MC sampel size  = "<<tree_MC->GetEntries()<<endl;	
 
 	gStyle->SetOptFit(1);
 	gStyle->SetOptStat(0);
+	gStyle->SetOptTitle(0);
 
-	TCanvas * myC = new TCanvas( "myC", "myC", 200, 10, 800, 800 );
-	myC->SetHighLightColor(2);
+	TCanvas * myC = new TCanvas( "myC", "myC", 0, 0, 700, 600 );
+
+	myC->Range(1.478223,-1.31174,3.682881,0.1140644);
 	myC->SetFillColor(0);
 	myC->SetBorderMode(0);
 	myC->SetBorderSize(2);
-	myC->SetLeftMargin( leftMargin );
-	myC->SetRightMargin( rightMargin );
-	myC->SetTopMargin( topMargin );
-	myC->SetBottomMargin( bottomMargin );
+	myC->SetLogy(1);
+	myC->SetGridx();
+	myC->SetGridy();
+	myC->SetLeftMargin(0.18);
+	myC->SetRightMargin(0.15);
+	myC->SetTopMargin(0.08);
+	myC->SetFrameFillStyle(0);
 	myC->SetFrameBorderMode(0);
+	myC->SetFrameFillStyle(0);
 	myC->SetFrameBorderMode(0);
-	
-	//const int N_Eeff_points = 10;	
-	//float Eeff_divide[11] = {200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0, 700.0, 900.0, 2000.0};	
-	const int N_Eeff_points = 15;	
-	float Eeff_divide[16] = {75.0, 100.0, 125.0, 150.0, 175.0, 225.0, 275.0, 325.0, 375.0, 475.0, 600.0, 750.0, 950.0, 1275.0, 1700.0, 2250.0};
+
+	const int N_Eeff_points = 12;	
+	float Eeff_divide[13] = {75.0, 100.0, 125.0, 150.0, 175.0, 225.0, 275.0, 325.0, 375.0, 475.0, 600.0, 750.0, 1700.0};
 	
 	float x_Eeff[N_Eeff_points] = {0};
 	float ex_Eeff[N_Eeff_points] = {0};
@@ -145,18 +208,19 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 		float Eeff_low_this = Eeff_divide[i];
 		float Eeff_high_this = Eeff_divide[i+1];
 		TString cut_2e_this = ("E2>1.0 && (E1/pedestal1)*(E2/pedestal2)/sqrt((E1/pedestal1)*(E1/pedestal1)+(E2/pedestal2)*(E2/pedestal2)) > "+std::to_string(Eeff_low_this)+" && (E1/pedestal1)*(E2/pedestal2)/sqrt((E1/pedestal1)*(E1/pedestal1)+(E2/pedestal2)*(E2/pedestal2)) < "+std::to_string(Eeff_high_this)).c_str();
+		TString cut_2e_this_MC = ("E2>1.0 && (E1/(1.47*pedestal1))*(E2/(1.47*pedestal2))/sqrt((E1/(1.47*pedestal1))*(E1/(1.47*pedestal1))+(E2/(1.47*pedestal2))*(E2/(1.47*pedestal2))) > "+std::to_string(Eeff_low_this)+" && (E1/(1.47*pedestal1))*(E2/(1.47*pedestal2))/sqrt((E1/(1.47*pedestal1))*(E1/(1.47*pedestal1))+(E2/(1.47*pedestal2))*(E2/(1.47*pedestal2))) < "+std::to_string(Eeff_high_this)).c_str();
 ;
 		TH1F * hist_2e_this_data = new TH1F(("hist_2e_this_data_"+std::to_string(i)).c_str(),("hist_2e_this_data_"+std::to_string(i)).c_str(), 60, -1.5, 1.5);
 		tree_data->Draw(("t1-t2>>hist_2e_this_data_"+std::to_string(i)).c_str(), cut_2e_this);
 		hist_2e_this_data->Draw();
-		float * result_2e_this_data = doubGausFit(hist_2e_this_data);
-		myC->SaveAs(outputDir+"/ZeeTiming/fits/iEeffFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+".png");		
+		float * result_2e_this_data = singGausFit(hist_2e_this_data);
+		myC->SaveAs(outputDir+"/ZeeTiming/style_plots/fits/iEeffFit_xtal_"+std::to_string(i)+"_dt_data_CLK_"+label+".png");		
 
 		TH1F * hist_2e_this_MC = new TH1F(("hist_2e_this_MC_"+std::to_string(i)).c_str(),("hist_2e_this_MC_"+std::to_string(i)).c_str(), 60, -1.5, 1.5);
-		tree_MC->Draw(("t1-t2>>hist_2e_this_MC_"+std::to_string(i)).c_str(), cut_2e_this);
+		tree_MC->Draw(("t1-t2>>hist_2e_this_MC_"+std::to_string(i)).c_str(), cut_2e_this_MC);
 		hist_2e_this_MC->Draw();
-		float * result_2e_this_MC = doubGausFit(hist_2e_this_MC);
-		myC->SaveAs(outputDir+"/ZeeTiming/fits/iEeffFit_xtal_"+std::to_string(i)+"_dt_MC_CLK_"+label+".png");		
+		float * result_2e_this_MC = singGausFit(hist_2e_this_MC);
+		myC->SaveAs(outputDir+"/ZeeTiming/style_plots/fits/iEeffFit_xtal_"+std::to_string(i)+"_dt_MC_CLK_"+label+".png");		
 
 		y_Eeff_sigma_dt_data[i] = (result_2e_this_data[2]);
 		ey_Eeff_sigma_dt_data[i] = (result_2e_this_data[3]);
@@ -178,71 +242,73 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	myC->SetGridy(1);
 	myC->SetGridx(1);
 	myC->SetLogx(1);
-	//myC->SetLogy(1);
+	myC->SetLogy(1);
 
 	TGraphErrors *gr_Eeff_sigma_dt_data  =  new TGraphErrors(N_Eeff_points, x_Eeff, y_Eeff_sigma_dt_data, ex_Eeff, ey_Eeff_sigma_dt_data);
-	gr_Eeff_sigma_dt_data->Draw("AP");
-	gr_Eeff_sigma_dt_data->SetMarkerColor(kBlue);
-	gr_Eeff_sigma_dt_data->SetLineColor(kBlue);
-	gr_Eeff_sigma_dt_data->SetLineWidth(2);
+	gr_Eeff_sigma_dt_data->Draw("AEPZ");
+	gr_Eeff_sigma_dt_data->SetMarkerColor(kRed);
+	gr_Eeff_sigma_dt_data->SetLineColor(kRed);
+	gr_Eeff_sigma_dt_data->SetLineWidth(1);
+	gr_Eeff_sigma_dt_data->SetMarkerStyle(20);
+	gr_Eeff_sigma_dt_data->SetMarkerSize(0.6);
 	gr_Eeff_sigma_dt_data->SetTitle("");
 	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitle("A_{eff}/#sigma_{n}");
-	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitle("#sigma_{t1-t2} [ns]");
-	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleSize( axisTitleSize - 0.02 );
-	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleOffset( axisTitleOffset  + 0.6);
-	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleSize( axisTitleSize );
-	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleOffset( axisTitleOffset +0.5 );
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetNdivisions(505);
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleSize( 0.035 );
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleOffset( 1.0 );
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetTitleFont( 42 );
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetLabelFont( 42 );
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetLabelOffset( 0.007 );
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitle("#sigma(#Deltat) (ns)");
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleSize( 0.035 );
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleOffset( 1.0 );
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetLabelFont( 42 );
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetTitleFont( 42 );
+	gr_Eeff_sigma_dt_data->GetYaxis()->SetLabelOffset( 0.007 );
 	gr_Eeff_sigma_dt_data->GetYaxis()->SetRangeUser(0.07,1.00);
-	gr_Eeff_sigma_dt_data->GetXaxis()->SetRangeUser(75,2250);
-	gr_Eeff_sigma_dt_data->GetXaxis()->SetMoreLogLabels();
-	gr_Eeff_sigma_dt_data->GetYaxis()->SetMoreLogLabels();
+	gr_Eeff_sigma_dt_data->GetXaxis()->SetLimits(75.,2250.);
+	//gr_Eeff_sigma_dt_data->GetXaxis()->SetMoreLogLabels();
+	//gr_Eeff_sigma_dt_data->GetYaxis()->SetMoreLogLabels();
 
-	TF1 * tf1_dt_vs_Eeff_data = new TF1("tf1_dt_vs_Eeff_data","sqrt([0]/(x*x)+[1])", min_aeff, max_aeff);
-	tf1_dt_vs_Eeff_data->SetLineColor(kBlue);
-	tf1_dt_vs_Eeff_data->SetParameters(50.0*50.0, 0.1*0.1);
+	TF1 * tf1_dt_vs_Eeff_data = new TF1("tf1_dt_vs_Eeff_data","sqrt([0]/(x*x)+[1])",75, 2250);
+	tf1_dt_vs_Eeff_data->SetLineColor(kBlack);
+	tf1_dt_vs_Eeff_data->SetParameters(25.0*25.0, 0.1*0.1);
 	gr_Eeff_sigma_dt_data->Fit("tf1_dt_vs_Eeff_data","","",min_aeff, max_aeff);
+	tf1_dt_vs_Eeff_data->Draw("same");
 	float fit_dt_a_data = tf1_dt_vs_Eeff_data->GetParameter(0);
 	float efit_dt_a_data = tf1_dt_vs_Eeff_data->GetParError(0);
 	float fit_dt_b_data = tf1_dt_vs_Eeff_data->GetParameter(1);
 	float efit_dt_b_data = tf1_dt_vs_Eeff_data->GetParError(1);
 
 	TGraphErrors * gr_Eeff_sigma_dt_MC  =  new TGraphErrors(N_Eeff_points, x_Eeff, y_Eeff_sigma_dt_MC, ex_Eeff, ey_Eeff_sigma_dt_MC);
-	gr_Eeff_sigma_dt_MC->SetMarkerColor(kRed);
-	gr_Eeff_sigma_dt_MC->SetLineColor(kRed);
-	gr_Eeff_sigma_dt_MC->SetLineWidth(2);
-	gr_Eeff_sigma_dt_MC->Draw("Psame");
+	gr_Eeff_sigma_dt_MC->SetMarkerColor(kBlue);
+	gr_Eeff_sigma_dt_MC->SetLineColor(kBlue);
+	gr_Eeff_sigma_dt_MC->SetMarkerStyle(21);
+	gr_Eeff_sigma_dt_MC->SetMarkerSize(0.6);
+	gr_Eeff_sigma_dt_MC->SetLineWidth(1);
+	gr_Eeff_sigma_dt_MC->Draw("EPZsame");
 
-	TF1 * tf1_dt_vs_Eeff_MC = new TF1("tf1_dt_vs_Eeff_MC","sqrt([0]/(x*x)+[1])", min_aeff, max_aeff);
-	tf1_dt_vs_Eeff_MC->SetLineColor(kRed);
-	tf1_dt_vs_Eeff_MC->SetParameters(50.0*50.0, 0.01*0.01);
+	TF1 * tf1_dt_vs_Eeff_MC = new TF1("tf1_dt_vs_Eeff_MC","sqrt([0]/(x*x)+[1])", 75, 2250);
+	tf1_dt_vs_Eeff_MC->SetLineColor(kBlack);
+	tf1_dt_vs_Eeff_MC->SetParameters(40.0*40.0, 0.1*0.1);
 	gr_Eeff_sigma_dt_MC->Fit("tf1_dt_vs_Eeff_MC","","",min_aeff, max_aeff);
+	tf1_dt_vs_Eeff_MC->Draw("same");
 	float fit_dt_a_MC = tf1_dt_vs_Eeff_MC->GetParameter(0);
 	float efit_dt_a_MC = tf1_dt_vs_Eeff_MC->GetParError(0);
 	float fit_dt_b_MC = tf1_dt_vs_Eeff_MC->GetParameter(1);
 	float efit_dt_b_MC = tf1_dt_vs_Eeff_MC->GetParError(1);
 
-	TLegend * leg_sigma_dt = new TLegend(0.18,0.84,0.48,0.90);
-	leg_sigma_dt->SetNColumns(3);
-	leg_sigma_dt->SetBorderSize(0);
-	leg_sigma_dt->SetTextSize(0.03);
-	leg_sigma_dt->SetLineColor(1);
-	leg_sigma_dt->SetLineStyle(1);
-	leg_sigma_dt->SetLineWidth(1);
-	leg_sigma_dt->SetFillColor(0);
-	leg_sigma_dt->SetFillStyle(1001);
-	leg_sigma_dt->AddEntry(gr_Eeff_sigma_dt_data, "data", "lep");
-	leg_sigma_dt->AddEntry(gr_Eeff_sigma_dt_MC, "MC", "lep");
+	auto leg = new TLegend(0.215,0.715,0.415,0.80);
+  	leg->SetFillColorAlpha(0,0);
+	leg->SetBorderSize(0);
+        leg->SetLineColor(1);
+        leg->SetLineStyle(1);
+        leg->SetFillStyle(1001);
+	leg->SetTextFont(42);
+  	leg->AddEntry(gr_Eeff_sigma_dt_data,"Data","epl");
+  	leg->AddEntry(gr_Eeff_sigma_dt_MC,"Simulation","epl");
 
-	leg_sigma_dt->Draw();
-
-	TLatex * tlatex = new TLatex();
-	tlatex->SetNDC();
-	tlatex->SetTextAngle(0);
-	tlatex->SetTextColor(1);
-	tlatex->SetTextFont(63);
-	tlatex->SetTextAlign(11);
-	tlatex->SetTextSize(25);
-	tlatex->DrawLatex(0.55, 0.85, "#sigma = #frac{N}{A_{eff}/#sigma_{n}} #oplus #sqrt{2} C");
+	leg->Draw("same");
 
 	float N_data=sqrt(abs(fit_dt_a_data));
 	float eN_data=abs(efit_dt_a_data)/(2.0*sqrt(abs(fit_dt_a_data)));
@@ -254,33 +320,82 @@ void drawTimeResoVsAeff(TTree * tree_data, TTree * tree_MC, TString label){
 	float C_MC=sqrt(abs(fit_dt_b_MC)/2.0);
 	float eC_MC=abs(efit_dt_b_MC)/(4.0*sqrt(abs(fit_dt_b_MC)/2.0));
 
-	tlatex->SetTextColor(kBlue);
-	tlatex->DrawLatex(0.55, 0.78, Form("N^{data} = %.1f #pm %.1f ns", N_data, eN_data));
-	tlatex->DrawLatex(0.55, 0.71, Form("C^{data} = %.3f #pm %.3f ns", C_data, eC_data));
-	tlatex->SetTextColor(kRed);
-	tlatex->DrawLatex(0.55, 0.64, Form("N^{MC} = %.1f #pm %.1f ns", N_MC, eN_MC));
-	tlatex->DrawLatex(0.55, 0.57, Form("C^{MC} = %.3f #pm %.3f ns", C_MC, eC_MC));
+	auto form_pave = new TPaveText(0.55,0.73,0.8,0.85,"NDC");
+	form_pave->SetFillColorAlpha(0,0);
+	form_pave->SetTextFont(42);
+	form_pave->SetTextAlign(11);
+	form_pave->AddText("#sigma(#Deltat)=#frac{N}{A_{eff}/#sigma_{n}} #oplus #sqrt{2}C");
+	form_pave->Draw("same");
 
-	DrawCMS(myC, 13, 35922.0);
+	auto fit_pave = new TPaveText(0.55,0.565,0.8,0.735,"NDC");
+	fit_pave->SetFillColorAlpha(0,0);
+	fit_pave->SetTextAlign(11);
+	fit_pave->SetTextFont(42);
+	fit_pave->AddText(Form("N^{Data} = %.1f #pm %.1f ns", N_data, eN_data));
+	fit_pave->AddText(Form("C^{Data} = %.3f #pm %.3f ns", C_data, eC_data));
+	fit_pave->AddText(Form("N^{Sim} = %.1f #pm %.1f ns", N_MC, eN_MC));
+	fit_pave->AddText(Form("C^{Sim} = %.3f #pm %.3f ns", C_MC, eC_MC));
+	fit_pave->Draw("same");
 
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".png");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".C");
+
+	TGaxis *gaxis = new TGaxis(75,1,2250,1,75*0.0618, 2250*0.0618,505,"-G");
+	gaxis->SetLabelOffset(0.005);
+	gaxis->SetLabelSize(0.035);
+	gaxis->SetTickSize(0.03);
+	gaxis->SetGridLength(0);
+	gaxis->SetTitleOffset(1);
+	gaxis->SetTitleSize(0.035);
+	gaxis->SetTitleColor(1);
+	gaxis->SetTitleFont(42);
+	gaxis->SetLabelFont(42);
+	gaxis->SetTitle("E (GeV)");
+	gaxis->SetNoExponent(1);
+	gaxis->Draw("same");
+	myC->Modified();
+	myC->cd();
+
+	DrawCMSstyle(myC, 13, 35922.0, title);
+
+	myC->SaveAs(outputDir+"/ZeeTiming/style_plots/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_"+label+".pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/style_plots/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_"+label+".png");
+	myC->SaveAs(outputDir+"/ZeeTiming/style_plots/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_"+label+".C");
+
+	//TFile *file_plot = new TFile((outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_"+label+".root"), "RECREATE");
+	//gr_Eeff_sigma_dt_data->Write("gr_data");
+	//gr_Eeff_sigma_dt_MC->Write("gr_mc");
+	//file_plot->Close();
+
+	//data onlu
+	delete fit_pave;
+	delete tf1_dt_vs_Eeff_MC;
+	delete leg;
 	
-	myC->SetLogy(1);
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.pdf");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.png");
-	myC->SaveAs(outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+"_logY.C");
+	gr_Eeff_sigma_dt_data->Draw("AEPZ");
+	tf1_dt_vs_Eeff_data->Draw("same");
+
+	gr_Eeff_sigma_dt_data->SetMarkerColor(kBlack);
+        gr_Eeff_sigma_dt_data->SetLineColor(kBlack);
+	tf1_dt_vs_Eeff_data->SetLineColor(kRed+1);
+	DrawCMSstyle(myC, 13, 35922.0, title);
+	gaxis->Draw("same");
+	form_pave->Draw("same");
 	
-	TFile *file_plot = new TFile((outputDir+"/ZeeTiming/TimingReso_xtals_dt_vs_Eeff_sigma_Data_vs_MC_2016_select_CLK_"+label+".root"), "RECREATE");
-	gr_Eeff_sigma_dt_data->Write("gr_data");
-	gr_Eeff_sigma_dt_MC->Write("gr_mc");
-	file_plot->Close();
+	auto fit_pave2 = new TPaveText(0.55,0.650,0.8,0.735,"NDC");
+	fit_pave2->SetFillColorAlpha(0,0);
+	fit_pave2->SetTextAlign(11);
+	fit_pave2->SetTextFont(42);
+	fit_pave2->AddText(Form("N = %.1f #pm %.1f ns", N_data, eN_data));
+	fit_pave2->AddText(Form("C = %.3f #pm %.3f ns", C_data, eC_data));
+	fit_pave2->Draw("same");
+
+	myC->SaveAs(outputDir+"/ZeeTiming/style_plots/TimingReso_xtals_dt_vs_Eeff_sigma_DataOnly_"+label+".pdf");
+	myC->SaveAs(outputDir+"/ZeeTiming/style_plots/TimingReso_xtals_dt_vs_Eeff_sigma_DataOnly_"+label+".png");
+	myC->SaveAs(outputDir+"/ZeeTiming/style_plots/TimingReso_xtals_dt_vs_Eeff_sigma_DataOnly_"+label+".C");
+	
 	
 	delete myC;
 	delete gr_Eeff_sigma_dt_data;
 	delete tf1_dt_vs_Eeff_data;
-	delete tf1_dt_vs_Eeff_MC;
 
 }
 
@@ -1459,15 +1574,14 @@ void TimingCorr_crystal_rings_vs_Eeff()
 
 	}
 	//draw time resolution vs. effective amplitude
-	drawTimeResoVsAeff(tree_out_neighboring_data, tree_out_neighboring_MC, "neighboring");
+	drawTimeResoVsAeff(tree_out_neighboring_data, tree_out_neighboring_MC, "inclusive", "EB");
 	
-	drawTimeResoVsAeff(tree_out_ring1_data, tree_out_ring1_MC, "ring1");
-	drawTimeResoVsAeff(tree_out_ring2_data, tree_out_ring2_MC, "ring2");
-	drawTimeResoVsAeff(tree_out_sameTrigTower_data, tree_out_sameTrigTower_MC, "sameTrigTower");
-	drawTimeResoVsAeff(tree_out_diffTrigTower_data, tree_out_diffTrigTower_MC, "diffTrigTower");
-	drawTimeResoVsAeff(tree_out_sameTrigTowerNeighbor_data, tree_out_sameTrigTowerNeighbor_MC, "sameTrigTowerNeighbor");
-	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighbor_data, tree_out_diffTrigTowerNeighbor_MC, "diffTrigTowerNeighbor");
-	
+	//drawTimeResoVsAeff(tree_out_ring1_data, tree_out_ring1_MC, "ring1");
+	//drawTimeResoVsAeff(tree_out_ring2_data, tree_out_ring2_MC, "ring2");
+	//drawTimeResoVsAeff(tree_out_sameTrigTower_data, tree_out_sameTrigTower_MC, "sameTT", "EB same RO unit");
+	//drawTimeResoVsAeff(tree_out_diffTrigTower_data, tree_out_diffTrigTower_MC, "diffTT", "EB diff. RO unit");
+	drawTimeResoVsAeff(tree_out_sameTrigTowerNeighbor_data, tree_out_sameTrigTowerNeighbor_MC, "sameTT", "EB same RO unit");
+	drawTimeResoVsAeff(tree_out_diffTrigTowerNeighbor_data, tree_out_diffTrigTowerNeighbor_MC, "diffTT", "EB diff. RO unit");
 
 	file_out->Close();
 }

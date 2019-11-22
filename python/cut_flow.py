@@ -6,17 +6,23 @@ import array
 
 from config_noBDT import weight_cut
 
+from Aux import getXsecBR
+
+
 fileNameData = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/DelayedPhoton_DoubleEG_2016All_GoodLumi.root'
-fileNameSig1 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau200cm_13TeV-pythia8.root'
-fileNameSig2 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau0_1cm_13TeV-pythia8.root'
+fileNameSig1 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau10cm_13TeV-pythia8.root'
+fileNameSig2 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau200cm_13TeV-pythia8.root'
 fileNameSig3 = '/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/withcut/GMSB_L200TeV_Ctau1200cm_13TeV-pythia8.root'
 
-gROOT.SetBatch(True)
+xsec_Sig1, exsec_Sig1 =  getXsecBR(200,10)
+xsec_Sig2, exsec_Sig2 =  getXsecBR(200,200)
+xsec_Sig3, exsec_Sig3 =  getXsecBR(200,1200)
 
+gROOT.SetBatch(True)
 cut_blind = "(pho1ClusterTime_SmearToData < 1 || t1MET < 300)"
 cut_preSelection = " 1>0 "
 cut_trigger = "(HLTDecision[81] == 1)"
-cut_nPhotons = " n_Photons == 2"
+cut_nPhotons = " n_Photons == 2 && pho2SigmaIetaIeta<0.03 && pho2HoverE < 0.1 && pho2ecalPFClusterIso<30.0 && pho2sumNeutralHadronEt<30.0 && pho2trkSumPtHollowConeDR03 < 30.0"
 cut_photonID_Pt = "pho1Pt > 70"
 pho1passSigmaIetaIetaTight = "pho1passSigmaIetaIetaTight"
 pho1passHoverETight = "&& pho1passHoverETight"
@@ -30,14 +36,15 @@ cut_photonID_SigmaIetaIeta = "pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoT
 cut_photonID_HoverE = "pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1passSmajorTight && pho1Sminor<0.4 && pho1R9 > 0.9 && "+pho1passSigmaIetaIetaTight+pho1passHoverETight
 cut_photonID = "pho1Pt > 70 && abs(pho1Eta)<1.4442 && pho1passIsoTight_comboIso && pho1passEleVeto  && pho1passSmajorTight && pho1Sminor<0.4 && pho1R9 > 0.9&& "+pho1passSigmaIetaIetaTight+pho1passHoverETight
 cut_nJets = "n_Jets > 2"
-cut_lepVeto = "nTightMuons == 0"
-cut_MET_filter = "Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1 && Flag_badChargedCandidateFilter == 1 && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
+cut_MET_filter = "Flag_HBHENoiseFilter == 1 && Flag_HBHEIsoNoiseFilter ==1 && Flag_goodVertices == 1 && Flag_eeBadScFilter == 1 && Flag_EcalDeadCellTriggerPrimitiveFilter == 1 && Flag_CSCTightHaloFilter == 1  && Flag_badMuonFilter == 1 && Flag_badGlobalMuonFilter == 0 && Flag_duplicateMuonFilter ==0"
+
+cut_MET_filters = ["Flag_HBHENoiseFilter == 1", "Flag_HBHEIsoNoiseFilter ==1", "Flag_goodVertices == 1", "Flag_eeBadScFilter == 1", "Flag_EcalDeadCellTriggerPrimitiveFilter == 1", "Flag_CSCTightHaloFilter == 1 ", "Flag_badMuonFilter == 1", "Flag_badGlobalMuonFilter == 0", "Flag_duplicateMuonFilter ==0"]
+cut_MET_filters = ["Flag_goodVertices == 1", "Flag_CSCTightHaloFilter == 1 ", "Flag_HBHENoiseFilter == 1", "Flag_HBHEIsoNoiseFilter ==1", "Flag_EcalDeadCellTriggerPrimitiveFilter == 1", "Flag_badMuonFilter == 1", "Flag_badGlobalMuonFilter == 0", "Flag_duplicateMuonFilter ==0", "Flag_eeBadScFilter == 1"]
 
 
-print "final cut ===> "+weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_lepVeto + "&&"+cut_nPhotons+"&&"+cut_MET_filter+")"
+print "final cut ===> "+weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_nPhotons+"&&"+cut_MET_filter+")"
 
 
-'''
 inputDir = "/mnt/hadoop/store/group/phys_susy/razor/Run2Analysis/DelayedPhotonAnalysis/2016/orderByPt/skim_noBDT/"
 
 tableFileName = "./cut_flow_Table.txt"
@@ -63,18 +70,23 @@ print n_photonIDData
 
 n_nJetsData = treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets)
 print n_nJetsData
-n_lepVetoData = treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto)
-print n_lepVetoData
-n_nPhotonsData = treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_lepVeto +"&&"+cut_nPhotons)
+n_nPhotonsData = treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_nPhotons)
 print n_nPhotonsData
-n_MET_filterData = treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_lepVeto +"&&"+cut_nPhotons+"&&"+cut_MET_filter)
+
+ns_MET_filterData = []
+cum_MET_filter = ""
+for idx in range(len(cut_MET_filters)):
+	cum_MET_filter = cum_MET_filter + " && " + cut_MET_filters[idx]
+	ns_MET_filterData.append(treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_nPhotons+cum_MET_filter))
+
+n_MET_filterData = treeData.GetEntries(cut_blind+"&&"+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&" + cut_nPhotons+"&&"+cut_MET_filter)
 print n_MET_filterData
 
 #Sig1
 fileSig1 = TFile(fileNameSig1)
 hNEventsThis_Sig1 = fileSig1.Get("NEvents")
 N_total_Sig1 = hNEventsThis_Sig1.GetBinContent(1)
-lumi_xs_Sig1 = 0.00174708*35922.0/N_total_Sig1
+lumi_xs_Sig1 = xsec_Sig1*35922.0/N_total_Sig1
 N_beforePreselection_Sig1 =  lumi_xs_Sig1*N_total_Sig1
 treeSig1 = fileSig1.Get("DelayedPhoton")
 hist_blindSig1 = TH1F("hist_blindSig1","hist_blindSig1",100,0,100)
@@ -90,7 +102,6 @@ hist_photonID_SigmaIetaIetaSig1 = TH1F("hist_photonID_SigmaIetaIetaSig1","hist_p
 hist_photonID_HoverESig1 = TH1F("hist_photonID_HoverESig1","hist_photonID_HoverESig1",100,0,100)
 hist_photonIDSig1 = TH1F("hist_photonIDSig1","hist_photonIDSig1",100,0,100)
 hist_nJetsSig1 = TH1F("hist_nJetsSig1","hist_nJetsSig1",100,0,100)
-hist_lepVetoSig1 = TH1F("hist_lepVetoSig1","hist_lepVetoSig1",100,0,100)
 hist_nPhotonsSig1 = TH1F("hist_nPhotonsSig1","hist_nPhotonsSig1",100,0,100)
 hist_MET_filterSig1 = TH1F("hist_MET_filterSig1","hist_MET_filterSig1",100,0,100)
 treeSig1.Draw("NPU>>hist_blindSig1",weight_cut+"("+cut_preSelection+")")
@@ -123,13 +134,19 @@ print n_photonIDSig1
 treeSig1.Draw("NPU>>hist_nJetsSig1",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+")")
 n_nJetsSig1 = lumi_xs_Sig1*hist_nJetsSig1.Integral()
 print n_nJetsSig1
-treeSig1.Draw("NPU>>hist_lepVetoSig1",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+")")
-n_lepVetoSig1 = lumi_xs_Sig1*hist_lepVetoSig1.Integral()
-print n_lepVetoSig1
-treeSig1.Draw("NPU>>hist_nPhotonsSig1",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+"&&"+cut_nPhotons+")")
+treeSig1.Draw("NPU>>hist_nPhotonsSig1",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+")")
 n_nPhotonsSig1 = lumi_xs_Sig1*hist_nPhotonsSig1.Integral()
 print n_nPhotonsSig1
-treeSig1.Draw("NPU>>hist_MET_filterSig1",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+"&&"+cut_nPhotons+"&&"+cut_MET_filter+")")
+
+ns_MET_filterSig1 = []
+cum_MET_filter = ""
+for idx in range(len(cut_MET_filters)):
+	cum_MET_filter = cum_MET_filter + " && " + cut_MET_filters[idx]
+	hist_MET_filterSig1_this = TH1F("hist_MET_filterSig1_idx"+str(idx),"",100,0,100)
+	treeSig1.Draw("NPU>>hist_MET_filterSig1_idx"+str(idx),weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+cum_MET_filter+")")
+	ns_MET_filterSig1.append(lumi_xs_Sig1*hist_MET_filterSig1_this.Integral())
+
+treeSig1.Draw("NPU>>hist_MET_filterSig1",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+"&&"+cut_MET_filter+")")
 n_MET_filterSig1 = lumi_xs_Sig1*hist_MET_filterSig1.Integral()
 print n_MET_filterSig1
 print n_blindSig1/np.sqrt(n_blindSig1)
@@ -140,7 +157,7 @@ print int(100.0*n_triggerSig1/n_blindSig1)
 fileSig2 = TFile(fileNameSig2)
 hNEventsThis_Sig2 = fileSig2.Get("NEvents")
 N_total_Sig2 = hNEventsThis_Sig2.GetBinContent(1)
-lumi_xs_Sig2 = 0.00172168*35922.0/N_total_Sig2
+lumi_xs_Sig2 = xsec_Sig2*35922.0/N_total_Sig2
 N_beforePreselection_Sig2 =  lumi_xs_Sig2*N_total_Sig2
 treeSig2 = fileSig2.Get("DelayedPhoton")
 hist_blindSig2 = TH1F("hist_blindSig2","hist_blindSig2",100,0,100)
@@ -156,7 +173,6 @@ hist_photonID_SigmaIetaIetaSig2 = TH1F("hist_photonID_SigmaIetaIetaSig2","hist_p
 hist_photonID_HoverESig2 = TH1F("hist_photonID_HoverESig2","hist_photonID_HoverESig2",100,0,100)
 hist_photonIDSig2 = TH1F("hist_photonIDSig2","hist_photonIDSig2",100,0,100)
 hist_nJetsSig2 = TH1F("hist_nJetsSig2","hist_nJetsSig2",100,0,100)
-hist_lepVetoSig2 = TH1F("hist_lepVetoSig2","hist_lepVetoSig2",100,0,100)
 hist_nPhotonsSig2 = TH1F("hist_nPhotonsSig2","hist_nPhotonsSig2",100,0,100)
 hist_MET_filterSig2 = TH1F("hist_MET_filterSig2","hist_MET_filterSig2",100,0,100)
 treeSig2.Draw("NPU>>hist_blindSig2",weight_cut+"("+cut_preSelection+")")
@@ -189,13 +205,20 @@ print n_photonIDSig2
 treeSig2.Draw("NPU>>hist_nJetsSig2",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+")")
 n_nJetsSig2 = lumi_xs_Sig2*hist_nJetsSig2.Integral()
 print n_nJetsSig2
-treeSig2.Draw("NPU>>hist_lepVetoSig2",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+")")
-n_lepVetoSig2 = lumi_xs_Sig2*hist_lepVetoSig2.Integral()
-print n_lepVetoSig2
-treeSig2.Draw("NPU>>hist_nPhotonsSig2",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+"&&"+cut_nPhotons+")")
+treeSig2.Draw("NPU>>hist_nPhotonsSig2",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+")")
 n_nPhotonsSig2 = lumi_xs_Sig2*hist_nPhotonsSig2.Integral()
 print n_nPhotonsSig2
-treeSig2.Draw("NPU>>hist_MET_filterSig2",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+"&&"+cut_nPhotons+"&&"+cut_MET_filter+")")
+
+ns_MET_filterSig2 = []
+cum_MET_filter = ""
+for idx in range(len(cut_MET_filters)):
+	cum_MET_filter = cum_MET_filter + " && " + cut_MET_filters[idx]
+	hist_MET_filterSig2_this = TH1F("hist_MET_filterSig2_idx"+str(idx),"",100,0,100)
+	treeSig2.Draw("NPU>>hist_MET_filterSig2_idx"+str(idx),weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+cum_MET_filter+")")
+	ns_MET_filterSig2.append(lumi_xs_Sig2*hist_MET_filterSig2_this.Integral())
+
+
+treeSig2.Draw("NPU>>hist_MET_filterSig2",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+"&&"+cut_MET_filter+")")
 n_MET_filterSig2 = lumi_xs_Sig2*hist_MET_filterSig2.Integral()
 print n_MET_filterSig2
 print n_blindSig2/np.sqrt(n_blindSig2)
@@ -206,7 +229,7 @@ print int(100.0*n_triggerSig2/n_blindSig2)
 fileSig3 = TFile(fileNameSig3)
 hNEventsThis_Sig3 = fileSig3.Get("NEvents")
 N_total_Sig3 = hNEventsThis_Sig3.GetBinContent(1)
-lumi_xs_Sig3 = 2.07166*35922.0/N_total_Sig3
+lumi_xs_Sig3 = xsec_Sig3*35922.0/N_total_Sig3
 
 N_beforePreselection_Sig3 =  lumi_xs_Sig3*N_total_Sig3
 treeSig3 = fileSig3.Get("DelayedPhoton")
@@ -223,7 +246,6 @@ hist_photonID_SigmaIetaIetaSig3 = TH1F("hist_photonID_SigmaIetaIetaSig3","hist_p
 hist_photonID_HoverESig3 = TH1F("hist_photonID_HoverESig3","hist_photonID_HoverESig3",100,0,100)
 hist_photonIDSig3 = TH1F("hist_photonIDSig3","hist_photonIDSig3",100,0,100)
 hist_nJetsSig3 = TH1F("hist_nJetsSig3","hist_nJetsSig3",100,0,100)
-hist_lepVetoSig3 = TH1F("hist_lepVetoSig3","hist_lepVetoSig3",100,0,100)
 hist_nPhotonsSig3 = TH1F("hist_nPhotonsSig3","hist_nPhotonsSig3",100,0,100)
 hist_MET_filterSig3 = TH1F("hist_MET_filterSig3","hist_MET_filterSig3",100,0,100)
 treeSig3.Draw("NPU>>hist_blindSig3",weight_cut+"("+cut_preSelection+")")
@@ -256,13 +278,21 @@ print n_photonIDSig3
 treeSig3.Draw("NPU>>hist_nJetsSig3",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+")")
 n_nJetsSig3 = lumi_xs_Sig3*hist_nJetsSig3.Integral()
 print n_nJetsSig3
-treeSig3.Draw("NPU>>hist_lepVetoSig3",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+")")
-n_lepVetoSig3 = lumi_xs_Sig3*hist_lepVetoSig3.Integral()
-print n_lepVetoSig3
-treeSig3.Draw("NPU>>hist_nPhotonsSig3",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+"&&"+cut_nPhotons+")")
+treeSig3.Draw("NPU>>hist_nPhotonsSig3",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+")")
 n_nPhotonsSig3 = lumi_xs_Sig3*hist_nPhotonsSig3.Integral()
 print n_nPhotonsSig3
-treeSig3.Draw("NPU>>hist_MET_filterSig3",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_lepVeto+"&&"+cut_nPhotons+"&&"+cut_MET_filter+")")
+
+ns_MET_filterSig3 = []
+cum_MET_filter = ""
+for idx in range(len(cut_MET_filters)):
+	cum_MET_filter = cum_MET_filter + " && " + cut_MET_filters[idx]
+	hist_MET_filterSig3_this = TH1F("hist_MET_filterSig3_idx"+str(idx),"",100,0,100)
+	treeSig3.Draw("NPU>>hist_MET_filterSig3_idx"+str(idx),weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+cum_MET_filter+")")
+	ns_MET_filterSig3.append(lumi_xs_Sig3*hist_MET_filterSig3_this.Integral())
+
+
+
+treeSig3.Draw("NPU>>hist_MET_filterSig3",weight_cut+"("+cut_trigger+"&&"+cut_photonID+"&&"+cut_nJets+"&&"+cut_nPhotons+"&&"+cut_MET_filter+")")
 n_MET_filterSig3 = lumi_xs_Sig3*hist_MET_filterSig3.Integral()
 print n_MET_filterSig3
 print n_blindSig3/np.sqrt(n_blindSig3)
@@ -273,7 +303,7 @@ print int(100.0*n_triggerSig3/n_blindSig3)
 f1=open(tableFileName, 'a')
 
 print >> f1, "\\multirow{2}{*}{cuts} & \\multirow{2}{*}{nEvents in data} & \multicolumn{3}{*}{nEvents in signal} \\\\"
-print >> f1, " & & $\\Lambda=200, c\\tau=200$ & $\\Lambda=200, c\\tau=0.1$ & $\\Lambda=100, c\\tau=1200$ \\\\"
+print >> f1, " & & $\\Lambda=200, c\\tau=10$ & $\\Lambda=200, c\\tau=200$ & $\\Lambda=200, c\\tau=1200$ \\\\"
 print >> f1,  "without cut & "+ "- & "+"%.2f " % N_beforePreselection_Sig1 + "(100\\%) & "+ "%.2f " % N_beforePreselection_Sig2 + "(100\\%) & "+"%.2f " % N_beforePreselection_Sig3 + "(100\\%)"+ "\\\\"
 print >> f1,  "with pre-selection ($p_T>40$, $|\\eta|<1.4442$, eVeto) & "+ "%.0f " % n_blindData + "(100\\%)& "+"%.2f " % n_blindSig1 + "("+"%.1f"%float(100.0*n_blindSig1/N_beforePreselection_Sig1)+"\\%) & "+ "%.2f " % n_blindSig2 + "("+"%.1f"%float(100.0*n_blindSig2/N_beforePreselection_Sig2)+"\\%) & "+ "%.2f " % n_blindSig3 + "("+"%.1f"%float(100.0*n_blindSig3/N_beforePreselection_Sig3)+"\\%) "+ "\\\\"
 print >> f1,  "+ trigger path& "+"%.0f" % n_triggerData+"("+"%.1f"%float(100.0*n_triggerData/n_blindData)+"\\%)  & "+"%.2f"%n_triggerSig1 + "("+"%.1f"%float(100.0*n_triggerSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_triggerSig2 + "("+"%.1f"%float(100.0*n_triggerSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_triggerSig3 + "("+"%.1f"%float(100.0*n_triggerSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
@@ -286,8 +316,10 @@ print >> f1,  "+ photon $R_{9}$ cut& "+"%.0f" % n_photonID_R9Data+"("+"%.1f"%flo
 print >> f1,  "+ photon $\\sigma_i\\etai\\eta$ cut& "+"%.0f" % n_photonID_SigmaIetaIetaData+"("+"%.1f"%float(100.0*n_photonID_SigmaIetaIetaData/n_blindData)+"\\%)  & "+"%.2f"%n_photonID_SigmaIetaIetaSig1 + "("+"%.1f"%float(100.0*n_photonID_SigmaIetaIetaSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_photonID_SigmaIetaIetaSig2 + "("+"%.1f"%float(100.0*n_photonID_SigmaIetaIetaSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_photonID_SigmaIetaIetaSig3 + "("+"%.1f"%float(100.0*n_photonID_SigmaIetaIetaSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
 print >> f1,  "+ photon $H/E$ cut& "+"%.0f" % n_photonID_HoverEData+"("+"%.1f"%float(100.0*n_photonID_HoverEData/n_blindData)+"\\%)  & "+"%.2f"%n_photonID_HoverESig1 + "("+"%.1f"%float(100.0*n_photonID_HoverESig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_photonID_HoverESig2 + "("+"%.1f"%float(100.0*n_photonID_HoverESig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_photonID_HoverESig3 + "("+"%.1f"%float(100.0*n_photonID_HoverESig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
 print >> f1,  "+ nJets cut& "+"%.0f" % n_nJetsData+"("+"%.1f"%float(100.0*n_nJetsData/n_blindData)+"\\%)  & "+"%.2f"%n_nJetsSig1 + "("+"%.1f"%float(100.0*n_nJetsSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_nJetsSig2 + "("+"%.1f"%float(100.0*n_nJetsSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_nJetsSig3 + "("+"%.1f"%float(100.0*n_nJetsSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
-print >> f1,  "+ lepton Veto cut& "+"%.0f" % n_lepVetoData+"("+"%.1f"%float(100.0*n_lepVetoData/n_blindData)+"\\%)  & "+"%.2f"%n_lepVetoSig1 + "("+"%.1f"%float(100.0*n_lepVetoSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_lepVetoSig2 + "("+"%.1f"%float(100.0*n_lepVetoSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_lepVetoSig3 + "("+"%.1f"%float(100.0*n_lepVetoSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
-print >> f1,  "+ nPhotons cut& "+"%.0f" % n_nPhotonsData+"("+"%.1f"%float(100.0*n_nPhotonsData/n_blindData)+"\\%)  & "+"%.2f"%n_nPhotonsSig1 + "("+"%.1f"%float(100.0*n_nPhotonsSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_nPhotonsSig2 + "("+"%.1f"%float(100.0*n_nPhotonsSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_nPhotonsSig3 + "("+"%.1f"%float(100.0*n_nPhotonsSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
+print >> f1,  "+ 2nd Photon ID & "+"%.0f" % n_nPhotonsData+"("+"%.1f"%float(100.0*n_nPhotonsData/n_blindData)+"\\%)  & "+"%.2f"%n_nPhotonsSig1 + "("+"%.1f"%float(100.0*n_nPhotonsSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_nPhotonsSig2 + "("+"%.1f"%float(100.0*n_nPhotonsSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_nPhotonsSig3 + "("+"%.1f"%float(100.0*n_nPhotonsSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
+
+for idx in range(len(cut_MET_filters)):
+	print >> f1,  "+ "+cut_MET_filters[idx]+" & "+"%.0f" % ns_MET_filterData[idx]+"("+"%.1f"%float(100.0*ns_MET_filterData[idx]/n_blindData)+"\\%)  & "+"%.2f"%ns_MET_filterSig1[idx] + "("+"%.1f"%float(100.0*ns_MET_filterSig1[idx]/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%ns_MET_filterSig2[idx] + "("+"%.1f"%float(100.0*ns_MET_filterSig2[idx]/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%ns_MET_filterSig3[idx] + "("+"%.1f"%float(100.0*ns_MET_filterSig3[idx]/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
+
 print >> f1,  "+ MET filters & "+"%.0f" % n_MET_filterData+"("+"%.1f"%float(100.0*n_MET_filterData/n_blindData)+"\\%)  & "+"%.2f"%n_MET_filterSig1 + "("+"%.1f"%float(100.0*n_MET_filterSig1/N_beforePreselection_Sig1)+"\\%) & "+"%.2f"%n_MET_filterSig2 + "("+"%.1f"%float(100.0*n_MET_filterSig2/N_beforePreselection_Sig2)+"\\%) & "+"%.2f"%n_MET_filterSig3 + "("+"%.1f"%float(100.0*n_MET_filterSig3/N_beforePreselection_Sig3)+"\\%) "+"\\\\"
 
-'''

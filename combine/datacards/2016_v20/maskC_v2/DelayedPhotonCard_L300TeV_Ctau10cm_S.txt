@@ -1,0 +1,36 @@
+Combination of DelayedPhotonCard_L300TeV_Ctau10cm.txt
+imax 4 number of bins
+jmax 1 number of processes minus 1
+kmax 10 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+shapes *         ch1_ch00  FAKE
+shapes *         ch1_ch01  FAKE
+shapes *         ch1_ch10  FAKE
+shapes *         ch1_ch11  FAKE
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1_ch00  ch1_ch10  ch1_ch01  ch1_ch11
+observation  16139     18826     41        62      
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                    ch1_ch00  ch1_ch00  ch1_ch10  ch1_ch10  ch1_ch01  ch1_ch01  ch1_ch11  ch1_ch11
+process                                sig       bkg       sig       bkg       sig       bkg       sig       bkg     
+process                                0         1         0         1         0         1         0         1       
+rate                                   3.914199  1         10.08899  1         6.276841  1         15.84363  1       
+----------------------------------------------------------------------------------------------------------------------------------
+CMSLumi_2016            lnN            1.025     -         1.025     -         1.025     -         1.025     -       
+ClosureC                lnN            -         -         -         -         -         -         -         1.9     
+EGMVID_SF               lnN            1.02      -         1.02      -         1.02      -         1.02      -       
+JetECorrection          lnN            1.015     -         1.015     -         1.015     -         1.015     -       
+JetEResolution_2016     lnN            1.015     -         1.015     -         1.015     -         1.015     -       
+PhotonEScale            lnN            1.01      -         1.01      -         1.01      -         1.01      -       
+PhotonESmear            lnN            1.01      -         1.01      -         1.01      -         1.01      -       
+PhotonTimeShift         lnN            1.015     -         1.015     -         1.015     -         1.015     -       
+PhotonTimeSmear         lnN            1.005     -         1.005     -         1.005     -         1.005     -       
+TriggerEff_SF           lnN            1.02      -         1.02      -         1.02      -         1.02      -       
+NA_2016       rateParam ch1_ch10 bkg 13702.48  
+x1_2016       rateParam ch1_ch10 bkg 1.170964e+00  
+NA_2016       rateParam ch1_ch01 bkg 13702.48  
+y1_2016       rateParam ch1_ch01 bkg 2.977137e-03  
+NA_2016       rateParam ch1_ch11 bkg 13702.48  
+x1_2016       rateParam ch1_ch11 bkg 1.170964e+00  
+y1_2016       rateParam ch1_ch11 bkg 2.977137e-03  
+NA_2016       rateParam ch1_ch00 bkg 13702.48  

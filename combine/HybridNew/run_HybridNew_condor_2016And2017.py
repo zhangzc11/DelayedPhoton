@@ -27,14 +27,14 @@ if __name__ == "__main__":
 
 			mean_r_2016And2017 = int(limits_Asymptotic_2016And2017[5]*100.0)/100.0
 			print "2016And2017: generating toys for "+this_sig+" with r from "+str(mean_r_2016And2017*0.5)+" to "+str(mean_r_2016And2017*1.7) +" wiht step of "+str(mean_r_2016And2017*0.07)
-                        for r in np.arange(mean_r_2016And2017*0.3, mean_r_2016And2017*1.7, mean_r_2016And2017*0.07):
+                        for r in np.arange(mean_r_2016And2017*0.1, mean_r_2016And2017*1.7, mean_r_2016And2017*0.07):
 				print "generating toy for r = "+str(r)
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
-                        for r in np.arange(mean_r_2016And2017*1.7, mean_r_2016And2017*4.0, mean_r_2016And2017*0.2):
+                        for r in np.arange(mean_r_2016And2017*1.7, mean_r_2016And2017*5.0, mean_r_2016And2017*0.2):
 				print "generating toy for r = "+str(r)
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
@@ -42,12 +42,12 @@ if __name__ == "__main__":
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --singlePoint "+str(r)+" --saveToys --saveHybridResult -T 2000 --clsAcc 0 -s -1 -n "+this_sig+"_2016And2017")
 				
-			os.system("hadd higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.quant0.975.root higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.*quant0.975.root")			
-			os.system("hadd higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.quant0.84.root higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.*quant0.840.root")	
+			os.system("hadd higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120*root")			
+
 			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root -n "+this_sig+"_2016And2017_Observed --plot=plots/limit_obs_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")	
 			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root --expectedFromGrid 0.5 -n "+this_sig+"_2016And2017_Exp0p5 --plot=plots/limit_exp0p5_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
-			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.quant0.84.root --expectedFromGrid 0.84 -n "+this_sig+"_2016And2017_Exp0p84 --plot=plots/limit_exp0p84_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
+			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root --expectedFromGrid 0.84 -n "+this_sig+"_2016And2017_Exp0p84 --plot=plots/limit_exp0p84_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
 			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root --expectedFromGrid 0.16 -n "+this_sig+"_2016And2017_Exp0p16 --plot=plots/limit_exp0p16_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
-			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.quant0.975.root --expectedFromGrid 0.975 -n "+this_sig+"_2016And2017_Exp0p975 --plot=plots/limit_exp0p975_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
+			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root --expectedFromGrid 0.975 -n "+this_sig+"_2016And2017_Exp0p975 --plot=plots/limit_exp0p975_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
 			os.system("combine combine/datacard_GMSB_"+this_sig+"_2016And2017.txt -M HybridNew --LHCmode LHC-limits --readHybridResults --grid=higgsCombine"+this_sig+"_2016And2017.HybridNew.mH120.merged.root --expectedFromGrid 0.025 -n "+this_sig+"_2016And2017_Exp0p025 --plot=plots/limit_exp0p025_scan_"+this_sig+"_2016And2017.png --cminDefaultMinimizerTolerance=0.001 --cminDefaultMinimizerStrategy=2")
 
